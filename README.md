@@ -1,2 +1,2 @@
-# crispr-analyzer
-CRISPR-analyzer
+# CRISPRAnalyzeR
+CRISPRAnalyzeR
