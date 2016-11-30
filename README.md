@@ -9,11 +9,15 @@ CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and docum
 CRISPRAnalyzeR has been specifically developed to provide a fully-interactive, hollistic and exploratory analysis of pooled CRISPR Screens especially for those people that perform the screens themselves.
 You can easily analyse your screen using 6 different hit calling methods, 2 essential gene calling methods as well as perform gene annotation anrichment and gene set analysis - all in a convenient web-browser interface.
 
+**All you need is your sequencing data and the pooled CRISPR screen library file (we provide you with the most common ones) - and CRISPRAnalyzeR will help you to go from rawdata to potential followup candidates!**
+
+![CRISPRAnalyzeR_scheme](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzer_screen_scheme.png)
+
 ## What makes CRISPRAnalyzeR the perfect tool to analyze pooled CRISPR Screens?
 
 CRISPRAnalyzeR uses what we call a **guided-analysis** approach. This means you will be **guided through the whole analysis, focusing on the most important things - your data**.
 
-### The principle CRISPRANalyzeR Analysis Workflow
+### The principle CRISPRAnalyzeR Analysis Workflow
 ![The principle Workflow](https://github.com/boutroslab/crispr-analyzer/blob/master/images/workflow3.png)
 
 CRISPAnalyzeR consists of **four sections**:
@@ -59,3 +63,7 @@ Additional Software Packages | **See list below!** | All included in container
 
 ## How to perform an Analysis using CRISPRAnalyzeR
 *YOUTUBE VID HERE*
+
+## Pre-made sgRNA library FASTA files
+
+## Common settings for published CRISPR libraries
