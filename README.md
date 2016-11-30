@@ -56,3 +56,6 @@ Additional Software Packages | **See list below!** | All included in container
 ## How to install CRISPRAnalyzeR using the provided Source Code
 
 ## How to install CRISPRAnalyzeR using the provided Docker Container
+
+## How to perform an Analysis using CRISPRAnalyzeR
+*YOUTUBE VID HERE*
