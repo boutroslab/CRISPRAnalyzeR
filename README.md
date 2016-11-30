@@ -26,3 +26,33 @@ CRISPAnalyzeR consists of **four sections**:
 
 **Analysing CRISPR Screens has never been easier - and has never been so much fun!**
 
+
+## How to download the CRISPRAnalyzeR
+
+#### Please check our [live demo](http://crispr-analyzer.dkfz.de), which you can also use to analyse your screening data.
+
+You can get the CRISPRAnalyzeR suite as source code or as a ready-to-use Docker Container.
+
+#### Minimum System Requirements
+CRISPRAnalyzeR is based on R Shiny-Server and uses many different R packages and tools.
+For a source code installation, we recommend the use of Ubuntu.
+
+ | Source Code Installation | Docker Container Installation
+----|---|----
+Operating System|Ubuntu|Any supported OS by Docker
+CPU|Dual Core (Quad Core recommended)| Dual Core (Quad Core recommended)
+RAM|8 GB| 8GB
+HDD|512 GB (SSD recommended)| 512 GB (SSD recommended)
+Additional Software Packages | **See list below!** | All included in container
+
+
+### Source Code
+
+
+### Ready-to-use Docker Container
+
+## What CRISPRANalyzeR offers you
+
+## How to install CRISPRAnalyzeR using the provided Source Code
+
+## How to install CRISPRAnalyzeR using the provided Docker Container
