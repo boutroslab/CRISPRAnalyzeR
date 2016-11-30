@@ -11,14 +11,16 @@ You can easily analyse your screen using 6 different hit calling methods, 2 esse
 
 **All you need is your sequencing data and the pooled CRISPR screen library file (we provide you with the most common ones) - and CRISPRAnalyzeR will help you to go from rawdata to potential followup candidates!**
 
-![CRISPRAnalyzeR_scheme](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzer_screen_scheme.png)
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzer_screen_scheme.png" alt="alt text" width="50%" style="align:center;" >
+
 
 ## What makes CRISPRAnalyzeR the perfect tool to analyze pooled CRISPR Screens?
 
 CRISPRAnalyzeR uses what we call a **guided-analysis** approach. This means you will be **guided through the whole analysis, focusing on the most important things - your data**.
 
 ### The principle CRISPRAnalyzeR Analysis Workflow
-![The principle Workflow](https://github.com/boutroslab/crispr-analyzer/blob/master/images/workflow3.png)
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/workflow3.png" alt="alt text" width="50%" style="align:center;" >
+
 
 CRISPAnalyzeR consists of **four sections**:
 - Screen Quality Estimation
@@ -26,7 +28,8 @@ CRISPAnalyzeR consists of **four sections**:
 - Hit Confirmation with extensive Gene information, sgRNA information, Gene Set Analysis and much more
 - Download of the interactive report that provides a comprehensive documentation of your screen
 
-![The four sections](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5-columns_small.png)
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5-columns_small.png" alt="alt text" width="50%" style="align:center;" >
+
 
 **Analysing CRISPR Screens has never been easier - and has never been so much fun!**
 
