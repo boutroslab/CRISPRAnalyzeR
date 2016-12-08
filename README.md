@@ -18,17 +18,17 @@ You can easily analyse your screen using 6 different hit calling methods, 2 esse
 
 CRISPRAnalyzeR uses what we call a **guided-analysis** approach. This means you will be **guided through the whole analysis, focusing on the most important things - your data**.
 
-### The principle CRISPRAnalyzeR Analysis Workflow
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/workflow3.png" alt="alt text" width="50%" style="align:center;" >
-
-
-CRISPAnalyzeR consists of **four sections**:
+In brief, CRISPAnalyzeR consists of **four sections**:
 - Screen Quality Estimation
 - Hit Calling using multiple published hit calling methods
 - Hit Confirmation with extensive Gene information, sgRNA information, Gene Set Analysis and much more
 - Download of the interactive report that provides a comprehensive documentation of your screen
 
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5-columns_small.png" alt="alt text" width="50%" style="align:center;" >
+
+### The principle CRISPRAnalyzeR Guided-Analysis Workflow
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/workflow3.png" alt="alt text" width="50%" style="align:center;" >
+
 
 
 **Analysing CRISPR Screens has never been easier - and has never been so much fun!**
