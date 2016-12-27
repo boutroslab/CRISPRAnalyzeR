@@ -24,10 +24,10 @@ In brief, CRISPAnalyzeR consists of **four sections**:
 - Hit Confirmation with extensive Gene information, sgRNA information, Gene Set Analysis and much more
 - Download of the interactive report that provides a comprehensive documentation of your screen
 
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5-columns_small.png" alt="alt text" width="50%" style="align:center;" >
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns.png" alt="alt text" width="50%" style="align:center;" >
 
 ### The principle CRISPRAnalyzeR Guided-Analysis Workflow
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/workflow3.png" alt="alt text" width="50%" style="align:center;" >
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_workflow.png" alt="alt text" width="50%" style="align:center;" >
 
 
 
