@@ -130,7 +130,23 @@ More information can be found at the [Enrichr Help Page](http://amp.pharm.mssm.e
 ## How to perform an Analysis using CRISPRAnalyzeR
 *YOUTUBE VID HERE*
 
-## Sample Data
+## Download Sample Data
+
+CRISPRAnalyzeR comes with read count sample data that can be accessed from the help on the data upload section.
+
+Moreover, we offer additional sample data that you can download from our website:
+
+### Drug Resistance Screen Data (12000 sgRNAs)
+This data was published before in
+[F. Heigwer\*, T. Zhan\*, M. Breinig, J. Winter, D. Brügemann, S. Leible, M. Boutros, CRISPR library designer (CLD): software for multispecies design of single guide RNA libraries, Genome Biol., 2016, DOI:10.1186/s13059-016-0915-2](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0915-2 "Access manuscript directly")
+
+#### Download Read Count Data
+You can download pre-made read count files for data analysis from [here](http://crispr-analyzer.dkfz.de/fasta/CRISPRAnalyzeR_Readcount_sample-data.zip)
+
+#### Download FASTQ Sequencing Data
+You can download FASTQ Sequencing files from [here](http://crispr-analyzer.dkfz.de/fasta/CRISPRAnalyzeR_NGSFASTQ_sample-data.zip)
+
+### Toronto Knockout Library Data (90000 sgRNAs)
 
 ## Pre-made sgRNA library FASTA files
 
