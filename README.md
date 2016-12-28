@@ -111,10 +111,19 @@ config[["COSMIC_database"]] <- "CosmicMutantExport.tsv" # NULL if not available
 *Please note that the COSMIC database is loaded during the analysis procedure and requires 1 GB of RAM.*
 
 ### Enrichr API
+[Enrichr](http://amp.pharm.mssm.edu/Enrichr/) offers API access for a gene set analysis.
 By default, CRISPRAnalyzeR has the Enrichr API access disabled.
-You can activate the Enrichr API access during the installation by setting XXXXX.
+You can activate the Enrichr API access during the installation by setting `EnrichR` to `TRUE`.
+As an alternative you can edit the `config.R` in the main folder of CRISPRAnalyzeR:
+`# EnrichR
+# Enrichr is TRuE by default, but for commercial use a license HAS to be OBTAINED!
+config[["EnrichR"]] <- TRUE # False if inactive`
 
 Please not that you require a license for commercial use.
+A license can be obtained by contacting [the Mount Sinai Technology Development](http://www.ip.mountsinai.org/).
+
+More information can be found at the [Enrichr Help Page](http://amp.pharm.mssm.edu/Enrichr/help#terms).
+
 
 ## How to perform an Analysis using CRISPRAnalyzeR
 *YOUTUBE VID HERE*
