@@ -68,8 +68,9 @@ Additional Software Packages | **See list below!** | All included in container
 
 
 #### Licenses
-CRISPRAnalyzeR is published under the GPL-2 license and is free for non-commercial use only.
-**Please note that Highcharts and the Enrichr database require additional licensing for commercial use**.
+CRISPRAnalyzeR is published under the GPL-2 license and is **free for non-commercial use only**.
+While CRISPRAnalyzeR does not require an additional license for commercial use itself, some included tools strictly require additional licensing.
+**Please note that Highcharts, the COSMIC database and the Enrichr API access require additional licensing for commercial use**.
 
 
 ### Source Code
@@ -79,14 +80,35 @@ CRISPRAnalyzeR is published under the GPL-2 license and is free for non-commerci
 
 ## What CRISPRANalyzeR offers you
 
-## How to install CRISPRAnalyzeR using the provided Source Code
+## How to Install CRISPRAnalyzeR using the provided Source Code
 
-## How to install CRISPRAnalyzeR using the provided Docker Container
+## How to Install CRISPRAnalyzeR using the provided Docker Container
+
+## How to Install CRISPRAnalyzeR using the provided Docker File
+
+## How to Start and Restart the CRISPRAnalyzeR
 
 ## How to use the COSMIC Database and Enrichr API
-### COSMIC
+### COSMIC (Catalogue Of Somatic Mutations In Cancer)
+
+The COSMIC database can be found [here](https://cancer.sanger.ac.uk/cosmic).
 By default, we do not provide the COSMIC database due to licensing compatibility.
 In case you want to use the COSMIC database, please proceed as follows.
+
+- Visit the [COSMIC Database Website](https://cancer.sanger.ac.uk/cosmic)
+- If you aim for a commercial use, please see the [COSMIC Licensing Information Page](https://cancer.sanger.ac.uk/cosmic/license)
+- Head to the [COSMIC download section](https://cancer.sanger.ac.uk/cosmic/download)
+- Download the __COSMIC Mutation Data__ database file
+- Extract the CosmicMutantExport.tsv.gz file to the __database__ folder within the CRISPR AnalyzeR
+- Open the __config.R__ in the main folder of the CRISPRAnalyzeR Shiny directory and edit it 
+```r
+# COSMIC database file, needs to be located in database_path
+# DEFAULT is NULL, as CRISPRAnalyzeR is not provided with COSMIC Database
+config[["COSMIC_database"]] <- "CosmicMutantExport.tsv" # NULL if not available
+```
+- Restart the CRISPRAnalyzeR
+
+*Please note that the COSMIC database is loaded during the analysis procedure and requires 1 GB of RAM.*
 
 ### Enrichr API
 By default, CRISPRAnalyzeR has the Enrichr API access disabled.
