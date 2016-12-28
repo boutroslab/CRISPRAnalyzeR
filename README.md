@@ -115,9 +115,11 @@ config[["COSMIC_database"]] <- "CosmicMutantExport.tsv" # NULL if not available
 By default, CRISPRAnalyzeR has the Enrichr API access disabled.
 You can activate the Enrichr API access during the installation by setting `EnrichR` to `TRUE`.
 As an alternative you can edit the `config.R` in the main folder of CRISPRAnalyzeR:
-```# EnrichR
+```r
+# EnrichR
 # Enrichr is TRuE by default, but for commercial use a license HAS to be OBTAINED!
-config[["EnrichR"]] <- TRUE # False if inactive```
+config[["EnrichR"]] <- TRUE # False if inactive
+```
 
 Please not that you require a license for commercial use.
 A license can be obtained by contacting [the Mount Sinai Technology Development](http://www.ip.mountsinai.org/).
