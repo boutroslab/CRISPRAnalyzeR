@@ -4,7 +4,9 @@ Welcome to the CRISPRAnalyzeR Github page!
 
 CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and documentation of pooled CRISPR Screens.
 
-#### See the live-demo of [CRISPRAnalyzeR](http://crispr-analyzer.dkfz.de)
+#### See the [CRISPRAnalyzeR](http://crispr-analyzer.dkfz.de) in action!
+
+**You can use the provided CRISPRAnalyzeR web-service or download the suite for installation within your lab/company.**
 
 CRISPRAnalyzeR has been specifically developed to provide a fully-interactive, hollistic and exploratory analysis of pooled CRISPR Screens especially for those people that perform the screens themselves.
 You can easily analyse your screen using 6 different hit calling and 1 essential gene calling methods as well as perform gene annotation enrichment, gene set analysis and get detailed information about your sgRNAs - all in a convenient web-browser interface.
@@ -12,7 +14,7 @@ You can easily analyse your screen using 6 different hit calling and 1 essential
 **All you need is your sequencing data and the pooled CRISPR screen library file (we provide you with the most common ones) - and CRISPRAnalyzeR will help you to go from rawdata to potential followup candidates!**
 
 
-## What makes CRISPRAnalyzeR the perfect tool to analyze pooled CRISPR Screens?
+## What makes CRISPRAnalyzeR the perfect suite to analyze pooled CRISPR Screens?
 
 CRISPRAnalyzeR uses a **guided-analysis** approach. This means you will be **guided through the whole analysis, so that you can focus on the most important thing - your data**.
 
@@ -78,7 +80,6 @@ While CRISPRAnalyzeR does not require an additional license for commercial use i
 
 ### Ready-to-use Docker Container
 
-## What CRISPRANalyzeR offers you
 
 ## How to Install CRISPRAnalyzeR using the provided Source Code
 
@@ -248,3 +249,6 @@ ENSG00000053900_GAAGCGGGATCTCATTGCTT	92
 The first column describes which sgRNA identifier (must be the same as in the sgRNA library FASTA file) was used, the second column describes how many reads were present for this unique sgRNA.
 
 **Please note that all sgRNA identifiers need to be unique.**
+
+
+## What CRISPRAnalyzeR offers you
