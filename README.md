@@ -213,7 +213,9 @@ Moreover, **the gene identifier needs to be a part of the unique sgRNA identifie
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/regex2.png" alt="alt text" width="50%" style="align:center;" >
 
 so that CRISPRAnalyzeR knows which sgRNA belongs to which gene.
-**Please note that all sgRNA identifiers need to be unique**
+
+**Please note that all sgRNA identifiers need to be unique.**
+
 
 ## Format of Raw Sequencing Data (.fastq.gz)
 
@@ -230,7 +232,7 @@ AAACACCGGTTTTGAAACTGCGGACACGTTTAGAGCTAGAAATAGCAAGTTA
 GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
 ```
 
-For easier use and faster data handling, CRISPRAnalyzeR required **gzipped FASTQ files (.fastq.gz)**.
+For easier use and faster data handling, CRISPRAnalyzeR required **gzipped FASTQ files (.fastq.gz)**.  
 **FASTQ files are usually provided in a gzipped format by the sequencing facility.**
 
 ## Format of Read Count Files (.txt)
@@ -245,4 +247,4 @@ ENSG00000053900_GAAGCGGGATCTCATTGCTT	92
 ```
 The first column describes which sgRNA identifier (must be the same as in the sgRNA library FASTA file) was used, the second column describes how many reads were present for this unique sgRNA.
 
-**Please note that all sgRNA identifiers need to be unique**
+**Please note that all sgRNA identifiers need to be unique.**
