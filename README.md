@@ -179,7 +179,7 @@ If you use FASTQ sequencing files directly, CRISPRAnalyzeR requires the use of a
 **However, the CRISPRAnalzyeR comes with some pre-defined settings for commonly used screening libraries and their vector systems.**
 In case you don't know which is the best setting for your screen, please do not hesitate and create an issue or write me an email.
 
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/FASTQ_regex.png" alt="alt text" width="50%" style="align:center;" >
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/FASTQ_regex.png" alt="alt text" width="80%" style="align:center;" >
 
 | Plasmid Name |	Lab	 |Addgene ID |	Regular Expression |
 |--------------|------|-----------|--------------------|
@@ -210,7 +210,7 @@ GAGATGCCTCGTAAGGCCAT
 
 Moreover, **the gene identifier needs to be a part of the unique sgRNA identifier** as shown here
 
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/regex2.png" alt="alt text" width="30%" style="align:center;" >
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/regex2.png" alt="alt text" width="50%" style="align:center;" >
 
 so that CRISPRAnalyzeR knows which sgRNA belongs to which gene.
 
