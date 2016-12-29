@@ -1,5 +1,5 @@
 ![CRISPRAnalyzeR](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzR_logo5.png)
-# CRISPRAnalyzeR - Fully-interactive Analysis and Documentation of Pooled CRISPR Screens
+# CRISPRAnalyzeR - Fully-interactive Analysis and Documentation Suite for Pooled CRISPR Screens
 Welcome to the CRISPRAnalyzeR Github page!
 
 CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and documentation of pooled CRISPR Screens.
