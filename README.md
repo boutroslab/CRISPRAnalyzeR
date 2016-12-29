@@ -136,6 +136,9 @@ CRISPRAnalyzeR comes with read count sample data that can be accessed from the h
 
 Moreover, we offer additional sample data that you can download from our website:
 
+- Drug Resistance Screen Data from CRISPR Library Designer
+- Essential Genes Screen Data using the TKOv1 library
+
 ### Drug Resistance Screen Data (12000 sgRNAs)
 This data was published before in
 [F. Heigwer\*, T. Zhan\*, M. Breinig, J. Winter, D. Brügemann, S. Leible, M. Boutros, CRISPR library designer (CLD): software for multispecies design of single guide RNA libraries, Genome Biol., 2016, DOI:10.1186/s13059-016-0915-2](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0915-2 "Access manuscript directly")
@@ -170,7 +173,21 @@ You can use them along with your read count (please see the format) or raw NGS s
 |Human Lentiviral sgRNA sub libraries |	Sabatini |	24336569	| [here](https://www.addgene.org/crispr/libraries/) |	not available yet |
 
 
-## Common settings for published CRISPR libraries
+## FASTQ Common Extraction Settings for published CRISPR libraries
+If you use FASTQ sequencing files directly, CRISPRAnalyzeR requires the use of a so-called 'regular expression' to extract the sgRNA target sequence from your sequencing data.
+
+**However, the CRISPRAnalzyeR comes with some pre-defined settings for commonly used screening libraries and their vector systems.**
+In case you don't know which is the best setting for your screen, please do not hesitate and create an issue or write me an email.
+
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/FASTQ_regex.png" alt="alt text" width="50%" style="align:center;" >
+
+| Plasmid Name |	Lab	 |Addgene ID |	Regular Expression |
+|--------------|------|-----------|--------------------|
+| Lenticrisp V2 |	Feng Zhang |	[52961](https://www.addgene.org/52961)	| **Default** `ACC(.{20,21})G` |
+| Lentiguide (Puro)	| Feng Zhang |	[52963](https://www.addgene.org/52963) |	**Default** `ACC(.{20,21})G` |
+| Human Lentivirus Library V1 |	Haoquan Wu |	[69763](https://www.addgene.org/69763) |	`GTTT(.{20})G` |
+| pLCKO (Moffat TKO) |	Moffat |	[73311](https://www.addgene.org/73311)	| `ACCG(.{20,21})G` |
+| pU6-sgRNA EF1Alpha-puro-T2A-BFP (CRISPRa/i) |	Weissman |	[60955](https://www.addgene.org/60955), [62217](https://www.addgene.org/62217), [60956](https://www.addgene.org/60956)	| `GTTG(.{20})G` |
 
 
 # How must the Data be Formatted?
@@ -179,6 +196,23 @@ CRISPRAnalyzeR requires you to upload a sgRNA library FASTA file which contains 
 Moreover, you can either use your sequencing data directly as gzipped FASTQ files (.fastq.gz) or already calculated, non-normalized, read count files (.txt).
 
 ## Format of sgRNA library FASTA File
+A sgRNA library file must be in FASTA format and include the unique sgRNA identifier as well as the target sequence in 5'->3' direction.
+Please make sure **that only the exact target sequence is used here**.
+
+```
+>ENSG00000006042_0_4299.561
+GGAGCCCTCTGAGTTAGAAC 
+>ENSG00000006042_5_4299.588
+GAAGATGCCTCGTAAGGCCA 
+>ENSG00000006042_6_4299.588
+GAGATGCCTCGTAAGGCCAT 
+```
+
+Moreover, **the gene identifier needs to be a part of the unique sgRNA identifier** as shown here
+
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/regex2.png" alt="alt text" width="30%" style="align:center;" >
+
+so that CRISPRAnalyzeR knows which sgRNA belongs to which gene.
 
 ## Format of Raw Sequencing Data (.fastq.gz)
 
