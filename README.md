@@ -263,3 +263,22 @@ The first column describes which sgRNA identifier (must be the same as in the sg
 
 
 ## What CRISPRAnalyzeR offers you
+
+### Included Hit Calling Methods
+
+CRISPRAnalyzeR combines the power of several previously used CRISPR Analysis Workflows and **incorporates them into a streamlined, straight-forward and convenient data analysis workflow.**
+
+**You run one analysis and get the information of 8 different analysis workflows**
+
+We implemented SIX analysis workflows based on differentially expressed read counts:
+- Wilcoxon Test
+- DESeq2 (based on gene-level read counts)
+- MAGeCK
+- sgRSEA
+- edgeR
+
+Furthermore, we implmented TWO analysis workflows based on bayesion models that specifically identify gene essentiality/dropouts:
+- BAGEL
+- ScreenBEAM
+
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_HC.png" alt="alt text" width="30%" style="align:center;" >
