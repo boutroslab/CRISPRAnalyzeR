@@ -4,7 +4,9 @@ Welcome to the CRISPRAnalyzeR Github page!
 
 CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and documentation of pooled CRISPR Screens.
 
-#### See the [CRISPRAnalyzeR](http://crispr-analyzer.dkfz.de) in action!
+
+**See [CRISPRAnalyzeR](http://crispr-analyzer.dkfz.de) in action! You can even go and analyse your own data right away!**
+
 
 **You can use the provided CRISPRAnalyzeR web-service or download the suite for installation within your lab/company.**
 
@@ -76,6 +78,15 @@ While CRISPRAnalyzeR does not require an additional license for commercial use i
 
 
 ### Source Code
+
+#### Additional Required Software
+
+Software | Version | Link 
+---------|---------|------
+Bowtie2 | 2.29 | http://bowtie-bio.sourceforge.net/bowtie2/index.shtml
+CRISPR ReEvaluation Tool | Latest | https://github.com/boutroslab/Supplemental-Material
+PERL | 5 | https://www.perl.org/
+Python | > 3.52 | https://www.python.org/ 
 
 
 ### Ready-to-use Docker Container
