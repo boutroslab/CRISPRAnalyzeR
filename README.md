@@ -9,7 +9,7 @@ CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and docum
 
 ---
 
-#CRISPRAnalyzeR will be available for download soon - stay tuned!
+#<i class="fa fa-info" aria-hidden="true"></i> CRISPRAnalyzeR will be available for download soon - stay tuned!
 
 ---
 
@@ -91,7 +91,8 @@ Software | Version | Link
 Bowtie2 | 2.29 | http://bowtie-bio.sourceforge.net/bowtie2/index.shtml
 CRISPR ReEvaluation Tool | Latest | https://github.com/boutroslab/Supplemental-Material
 PERL | 5 | https://www.perl.org/
-Python | > 3.52 | https://www.python.org/ 
+Python | 2.7.11 | https://www.python.org/ 
+Python Scipy | latest | https://www.scipy.org/
 
 
 ### Ready-to-use Docker Container
