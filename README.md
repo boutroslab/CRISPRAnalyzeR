@@ -288,3 +288,12 @@ Furthermore, we implmented TWO analysis workflows based on bayesion models that 
 - ScreenBEAM
 
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_HC.png" alt="alt text" width="30%" style="align:center;" >
+
+
+# Contact
+
+**Jan Winter - jan.winter@dkfz-heidelberg.de**
+
+@winterj86
+
+*Manuscript in preparation*
