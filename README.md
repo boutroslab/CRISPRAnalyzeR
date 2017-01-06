@@ -99,6 +99,7 @@ Python Scipy | latest | https://www.scipy.org/
 
 ### Ready-to-use Docker Container
 
+---
 
 ## How to Install CRISPRAnalyzeR using the provided Source Code
 
@@ -107,6 +108,8 @@ Python Scipy | latest | https://www.scipy.org/
 ## How to Install CRISPRAnalyzeR using the provided Docker File
 
 ## How to Start and Restart the CRISPRAnalyzeR
+
+---
 
 ## How to use the COSMIC Database and Enrichr API
 ### COSMIC (Catalogue Of Somatic Mutations In Cancer)
@@ -150,6 +153,8 @@ More information can be found at the [Enrichr Help Page](http://amp.pharm.mssm.e
 ## How to perform an Analysis using CRISPRAnalyzeR
 *YOUTUBE VID HERE*
 
+---
+
 ## Download Sample Data
 
 CRISPRAnalyzeR comes with read count sample data that can be accessed from the help on the data upload section.
@@ -175,7 +180,9 @@ This data was published in
 [Steinhart,Z. et al. (2016) Genome-wide CRISPR screens reveal a Wnt-FZD5 signaling circuit as a druggable vulnerability of RNF43-mutant pancreatic tumors. Nat. Med.](http://www.nature.com/nm/journal/vaop/ncurrent/full/nm.4219.html)
 
 #### Download Read Count Data
-You can download raw read count data including a TKO sgNRA library FASTA file from [here]((http://crispr-analyzer.dkfz.de/fasta/CRISPRAnalyzeR_TKO_FZD5_CRISPR_SampleData.zip)
+You can download raw read count data including a TKO sgNRA library FASTA file from [here](http://crispr-analyzer.dkfz.de/fasta/CRISPRAnalyzeR_TKO_FZD5_CRISPR_SampleData.zip)
+
+---
 
 ## Pre-made sgRNA library FASTA files
 
@@ -290,6 +297,8 @@ Furthermore, we implmented TWO analysis workflows based on bayesion models that 
 - ScreenBEAM
 
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_HC.png" alt="alt text" width="30%" style="align:center;" >
+
+---
 
 
 # Contact
