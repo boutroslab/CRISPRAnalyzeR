@@ -7,6 +7,11 @@ CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and docum
 
 **See [CRISPRAnalyzeR](http://crispr-analyzer.dkfz.de) in action! You can even go and analyse your own data right away!**
 
+---
+
+#CRISPRAnalyzeR will be available for download soon - stay tuned!
+
+---
 
 **You can use the provided CRISPRAnalyzeR web-service or download the suite for installation within your lab/company.**
 
