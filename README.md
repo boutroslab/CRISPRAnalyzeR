@@ -65,6 +65,9 @@ It contains **4 different steps**, each filled with nice visualizations, interac
 
 You can get the CRISPRAnalyzeR suite as source code or as a ready-to-use Docker Container.
 
+**The idea of installing CRISPRAnalyzeR is to provide a single installation within a Lab/Institute, so that everyone can access it via the web browser.  
+However, you can also also install CRISPRAnalyzeR on your local machine only.**
+
 #### Minimum System Requirements
 CRISPRAnalyzeR is based on R Shiny-Server and uses many different R packages and tools.
 For a source code installation, we recommend the use of Ubuntu.
@@ -99,11 +102,63 @@ Python Scipy | latest | https://www.scipy.org/
 
 ### Ready-to-use Docker Container
 
+<img src="./images/large_h-trans.png" width="30%">
+
+CRISPRAnalyzeR is available for a platform-independent installation as a so called Docker container.
+
+__Two different versions are available:__
+* __Version A__ - CRISPRAnalyzeR __without__ local sgRNA re-evaluation
+* __Version B__ - CRISPRAnalyzeR __WITH__ local sgRNA-re-evaluation
+
+CRISPRAnalyzeR re-evaluates every sgRNA during the analysis process. Thus, it needs to map each sgRNA against the reference genome.  
+In __Version A__, mapping is performed by the E-CRISP webservice and requires a fast internet connection (> 10 mbit/s).  
+In __Version B__, mapping is performed locally and does not require a fast internet connection. Since the human genome reference is included in this version, the Docker container exceeds the size of 50 GB.  
+Furthermore, addiitonal reference genomes e.g. for mouse or zebrafish, must be downloaded separately.
+
 ---
 
 ## How to Install CRISPRAnalyzeR using the provided Source Code
 
+---
+
 ## How to Install CRISPRAnalyzeR using the provided Docker Container
+
+### General Description
+
+1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
+2. Install the downloaded file
+3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
+   A small docker symbol in the taskbar will tell you that docker is ready.
+4. Download the CRISPRAnalyzeR docker files
+
+   __Version A WITHOUT local sgRNA re-evaluation__  
+   [**Download CRISPRAnalyzeR 0.98RC Version A**]()
+   
+   __Version B WITH local sgRNA re-evaluation__  
+   [**Download CRISPRAnalyzeR 0.98RC Version B**]()
+   
+5. Open a Terminal (macOS and Linux) or Commandline (Windows)
+6. Tell Docker that you have downloaded CRISPRAnalyzeR by typing  
+   ```
+   docker load -i __PATHTOFILE__/CRISPRAnalyzeR_VersionA.tar.gz
+   ```
+   
+   Docker will start to _install_ CRISPRAnalyzeR for later use!
+   
+7. Once Docker has finished with the installation, you can RUN the CRISPRAnalyzeR and provide several parameters to it.
+   
+   __To run CRISPRAnalyzeR with the default settings (see below)__, just type the following into your Terminal / Command Line  
+   ```
+   docker run crispranalyzer
+   ```
+   
+   **However, you can adjust multiple parameters when starting the CRISPRAnalyzeR
+
+### Installation Tutorial MAC
+
+### Installation Tutorial Windows
+
+### Installation Tutorial Ubuntu
 
 ## How to Install CRISPRAnalyzeR using the provided Docker File
 
