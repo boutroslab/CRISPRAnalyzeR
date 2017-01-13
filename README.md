@@ -149,10 +149,30 @@ Furthermore, addiitonal reference genomes e.g. for mouse or zebrafish, must be d
    
    __To run CRISPRAnalyzeR with the default settings (see below)__, just type the following into your Terminal / Command Line  
    ```
-   docker run crispranalyzer
+   docker run --rm -p 3838:3838 crispranalyzer
    ```
    
-   **However, you can adjust multiple parameters when starting the CRISPRAnalyzeR
+8. Access the CRISPRAnalyzeR via your webbrowser: http://localhost:3838/crispranalyzer
+   
+   **However, you can adjust multiple parameters when starting the CRISPRAnalyzeR!**
+   
+#### Available Paramaters to start CRISPRAnalyzeR
+
+CRISPRAnalyzeR has been designed to be installed once on a machine and then accessed via a webbrowser. Therefore, you can adjust all parameters during the start of the CRISPRAnalyzeR.
+
+Paramater | Meaning | Default Value | Accepted Values 
+----------|---------|---------------|-----------------
+websockets_behind_proxy | use Websocket protocol | TRUE | TRUE or FALSE
+verbose_logfiles | output of log files | TRUE | TRUE or FALSE
+database_path | Directory where database files are located | ./database | any path
+COSMIC_database | Directory in which the COSMIC database is located | NULL | any path
+disable_EnrichR | Whether to Disable the Enrichr API access | FALSE | TRUE or FALSE
+EnrichR_URL | URL to the Enrichr API | http://amp.pharm.mssm.edu/Enrichr/ | Any URL
+ecrispr_databasepath | Path to E-CRISP reference genomes | ./database | any path
+bowtie_threads | Number of bowtie2 threads for mapping | 4 | any number
+proxy_url | URL to your Proxy server | NULL | URL or NULL to inactivate
+proxy_port | Proxy server Port | NULL |Port number of NULL to inactivate
+
 
 ### Installation Tutorial MAC
 
