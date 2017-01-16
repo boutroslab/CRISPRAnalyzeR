@@ -33,7 +33,7 @@ In brief, CRISPAnalyzeR consists of **four sections**, all paired with a great u
 - Hit Confirmation with extensive Gene information, sgRNA information, Gene Set Analysis and much more
 - Download of the interactive report that provides a comprehensive documentation of your screen
 
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns.png" alt="alt text" width="50%" style="align:center;" >
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns.png" alt="alt text" width="30%" style="align:center;" >
 
 ### The principle CRISPRAnalyzeR Guided-Analysis Workflow
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_workflow.png" alt="alt text" width="50%" style="align:center;" >
@@ -46,17 +46,9 @@ In brief, CRISPAnalyzeR consists of **four sections**, all paired with a great u
 CRISPRAnalyzeR is easy-to-use and assists you with the analysis of your screening data.
 It contains **4 different steps**, each filled with nice visualizations, interactive tables and all the information you need.
 
-#### Quality Control
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_QC.png" alt="alt text" width="50%" style="align:center;" >
 
-#### Hit Calling
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_HC.png" alt="alt text" width="50%" style="align:center;" >
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns_single.png" alt="alt text" width="80%" style="align:center;" >
 
-#### Hit Confirmation and Gene Annotation
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_HConfirmation.png" alt="alt text" width="50%" style="align:center;" >
-
-#### Interactive OFFLINE Report Containing all the Data
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_Report.png" alt="alt text" width="50%" style="align:center;" >
 
 
 ## How to download the CRISPRAnalyzeR
