@@ -36,7 +36,7 @@ In brief, CRISPAnalyzeR consists of **four sections**, all paired with a great u
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns.png" alt="alt text" width="30%" style="align:center;" >
 
 ### The principle CRISPRAnalyzeR Guided-Analysis Workflow
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns_single.png" alt="alt text" width="100%" style="align:center;" >
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_workflow4.png" alt="alt text" width="100%" style="align:center;" >
 
 
 **Analysing CRISPR Screens has never been easier - and has never been so much fun!**
@@ -51,7 +51,7 @@ It contains **4 different steps**, each filled with nice visualizations, interac
 
 
 
-## How to download the CRISPRAnalyzeR
+# How to download the CRISPRAnalyzeR
 
 #### Please check our [live demo](http://crispr-analyzer.dkfz.de), which you can also use to analyse your screening data.
 
@@ -60,7 +60,7 @@ You can get the CRISPRAnalyzeR suite as source code or as a ready-to-use Docker 
 **The idea of installing CRISPRAnalyzeR is to provide a single installation within a Lab/Institute, so that everyone can access it via the web browser.  
 However, you can also also install CRISPRAnalyzeR on your local machine only.**
 
-#### Minimum System Requirements
+### Minimum System Requirements
 CRISPRAnalyzeR is based on R Shiny-Server and uses many different R packages and tools.
 For a source code installation, we recommend the use of Ubuntu.
 
@@ -73,15 +73,15 @@ HDD|512 GB (SSD recommended)| 512 GB (SSD recommended)
 Additional Software Packages | **See list below!** | All included in container
 
 
-#### Licenses
+### Licenses
 CRISPRAnalyzeR is published under the GPL-2 license and is **free for non-commercial use only**.
 While CRISPRAnalyzeR does not require an additional license for commercial use itself, some included tools strictly require additional licensing.
 **Please note that Highcharts, the COSMIC database and the Enrichr API access require additional licensing for commercial use**.
 
 
-### Source Code
+## Source Code
 
-#### Additional Required Software
+### Additional Required Software
 
 Software | Version | Link 
 ---------|---------|------
@@ -92,7 +92,7 @@ Python | 2.7.11 | https://www.python.org/
 Python Scipy | latest | https://www.scipy.org/
 
 
-### Ready-to-use Docker Container
+## Ready-to-use Docker Container
 
 <img src="./images/large_h-trans.png" width="30%">
 
@@ -107,15 +107,17 @@ In __Version A__, mapping is performed by the E-CRISP webservice and requires a 
 In __Version B__, mapping is performed locally and does not require a fast internet connection. Since the human genome reference is included in this version, the Docker container exceeds the size of 50 GB.  
 Furthermore, addiitonal reference genomes e.g. for mouse or zebrafish, must be downloaded separately.
 
----
-
-## How to Install CRISPRAnalyzeR using the provided Source Code
+<img src="./images/CRISPR_AnalyzeR_VersionA-B.png" width="100%">
 
 ---
 
-## How to Install CRISPRAnalyzeR using the provided Docker Container
+# How to Install CRISPRAnalyzeR using the provided Source Code
 
-### General Description
+---
+
+# How to Install CRISPRAnalyzeR using the provided Docker Container
+
+## General Description
 
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
 2. Install the downloaded file
@@ -143,15 +145,16 @@ Furthermore, addiitonal reference genomes e.g. for mouse or zebrafish, must be d
    ```
    docker run --rm -p 3838:3838 crispranalyzer
    ```
+   **However, you can adjust multiple parameters when starting the CRISPRAnalyzeR!**
    
 8. __Access the CRISPRAnalyzeR via your webbrowser: http://localhost:3838/CRISPRAnalyzeR__
    
 
-**However, you can adjust multiple parameters when starting the CRISPRAnalyzeR!**
+
 
 ---
 
-#### Available Paramaters to start CRISPRAnalyzeR
+## Available Paramaters to start CRISPRAnalyzeR
 
 CRISPRAnalyzeR has been designed to be installed once on a machine and then accessed via a webbrowser. Therefore, you can adjust all parameters during the start of the CRISPRAnalyzeR.
 
@@ -169,13 +172,11 @@ proxy_url | URL to your Proxy server | NULL | URL or NULL to inactivate
 proxy_port | Proxy server Port | NULL |Port number of NULL to inactivate
 
 
-### Installation Tutorial macOS
+## Installation Tutorial macOS
 
-### Installation Tutorial Windows
+## Installation Tutorial Windows
 
-### Installation Tutorial Ubuntu
-
-## How to Install CRISPRAnalyzeR using the provided Docker File
+## Installation Tutorial Ubuntu
 
 ## How to Start and Restart the CRISPRAnalyzeR
 
