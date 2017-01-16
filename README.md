@@ -96,7 +96,7 @@ Python Scipy | latest | https://www.scipy.org/
 
 <img src="./images/large_h-trans.png" width="30%">
 
-CRISPRAnalyzeR is available for a platform-independent installation as a so called Docker container.
+CRISPRAnalyzeR is available for a **platform-independent installation** as a so called Docker container.
 
 __Two different versions are available:__
 * __Version A__ - CRISPRAnalyzeR __without__ local sgRNA re-evaluation
