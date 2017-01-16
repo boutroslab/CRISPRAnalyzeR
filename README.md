@@ -41,7 +41,7 @@ In brief, CRISPAnalyzeR consists of **four sections**, all paired with a great u
 
 **Analysing CRISPR Screens has never been easier - and has never been so much fun!**
 
-### What does CRISPRAnalyzeR offer?
+# What CRISPRAnalyzeR offers you
 
 CRISPRAnalyzeR is easy-to-use and assists you with the analysis of your screening data.
 It contains **4 different steps**, each filled with nice visualizations, interactive tables and all the information you need.
@@ -49,7 +49,33 @@ It contains **4 different steps**, each filled with nice visualizations, interac
 
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns_single.png" alt="alt text" width="80%" style="align:center;" >
 
+## EIGHT Hit Calling Methods
 
+CRISPRAnalyzeR combines the power of several CRISPR Analysis Workflows and **incorporates them into a streamlined, straight-forward and convenient workflow.**
+
+**You run one analysis and get the information of 8 different analysis workflows**
+
+We implemented SIX analysis workflows based on differentially expressed read counts:
+- Wilcoxon Test
+- DESeq2 (based on gene-level read counts)
+- MAGeCK
+- sgRSEA
+- edgeR
+
+Furthermore, we implmented TWO analysis workflows based on bayesion models that specifically identify gene essentiality/dropouts:
+- BAGEL
+- ScreenBEAM
+
+## Hit Confirmation
+
+__Use various external ressources to enrich information about your favourite candidate - all within the app and included in your report!__
+
+<img src="./images/CRISPRAnalyzeR_gene_annotation.png" width="50%">
+
+## Interactive Report
+
+[![CRISPRAnalyzeR Report Preview](./images/CRISPRAnalyzeR_YT_report1.png)](https://www.youtube.com/embed/eusAj4LrSik)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/eusAj4LrSik" frameborder="0" allowfullscreen></iframe>
 
 # How to download the CRISPRAnalyzeR
 
@@ -347,29 +373,6 @@ The first column describes which sgRNA identifier (must be the same as in the sg
 
 **Please note that all sgRNA identifiers need to be unique.**
 
-
-## What CRISPRAnalyzeR offers you
-
-### Included Hit Calling Methods
-
-CRISPRAnalyzeR combines the power of several previously used CRISPR Analysis Workflows and **incorporates them into a streamlined, straight-forward and convenient data analysis workflow.**
-
-**You run one analysis and get the information of 8 different analysis workflows**
-
-We implemented SIX analysis workflows based on differentially expressed read counts:
-- Wilcoxon Test
-- DESeq2 (based on gene-level read counts)
-- MAGeCK
-- sgRSEA
-- edgeR
-
-Furthermore, we implmented TWO analysis workflows based on bayesion models that specifically identify gene essentiality/dropouts:
-- BAGEL
-- ScreenBEAM
-
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_HC.png" alt="alt text" width="30%" style="align:center;" >
-
----
 
 
 # Contact
