@@ -36,7 +36,7 @@ In brief, CRISPAnalyzeR consists of **four sections**, all paired with a great u
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns.png" alt="alt text" width="30%" style="align:center;" >
 
 ### The principle CRISPRAnalyzeR Guided-Analysis Workflow
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_workflow.png" alt="alt text" width="50%" style="align:center;" >
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns_single.png" alt="alt text" width="100%" style="align:center;" >
 
 
 **Analysing CRISPR Screens has never been easier - and has never been so much fun!**
@@ -144,10 +144,13 @@ Furthermore, addiitonal reference genomes e.g. for mouse or zebrafish, must be d
    docker run --rm -p 3838:3838 crispranalyzer
    ```
    
-8. Access the CRISPRAnalyzeR via your webbrowser: http://localhost:3838/CRISPRAnalyzeR
+8. __Access the CRISPRAnalyzeR via your webbrowser: http://localhost:3838/CRISPRAnalyzeR__
    
-   **However, you can adjust multiple parameters when starting the CRISPRAnalyzeR!**
-   
+
+**However, you can adjust multiple parameters when starting the CRISPRAnalyzeR!**
+
+---
+
 #### Available Paramaters to start CRISPRAnalyzeR
 
 CRISPRAnalyzeR has been designed to be installed once on a machine and then accessed via a webbrowser. Therefore, you can adjust all parameters during the start of the CRISPRAnalyzeR.
@@ -166,7 +169,7 @@ proxy_url | URL to your Proxy server | NULL | URL or NULL to inactivate
 proxy_port | Proxy server Port | NULL |Port number of NULL to inactivate
 
 
-### Installation Tutorial MAC
+### Installation Tutorial macOS
 
 ### Installation Tutorial Windows
 
