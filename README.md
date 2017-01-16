@@ -152,7 +152,7 @@ Furthermore, addiitonal reference genomes e.g. for mouse or zebrafish, must be d
    docker run --rm -p 3838:3838 crispranalyzer
    ```
    
-8. Access the CRISPRAnalyzeR via your webbrowser: http://localhost:3838/crispranalyzer
+8. Access the CRISPRAnalyzeR via your webbrowser: http://localhost:3838/CRISPRAnalyzeR
    
    **However, you can adjust multiple parameters when starting the CRISPRAnalyzeR!**
    
