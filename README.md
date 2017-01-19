@@ -75,7 +75,7 @@ __Use various external ressources to enrich information about your favourite can
 ## Interactive Report
 
 [![CRISPRAnalyzeR Report Preview](./images/CRISPRAnalyzeR_YT_report1.png)](https://www.youtube.com/embed/eusAj4LrSik)
-<iframe width="560" height="315" src="https://www.youtube.com/embed/eusAj4LrSik" frameborder="0" allowfullscreen></iframe>
+
 
 # How to download the CRISPRAnalyzeR
 
@@ -199,6 +199,10 @@ proxy_port | Proxy server Port | NULL |Port number of NULL to inactivate
 
 
 ## Installation Tutorial macOS
+
+[![CRISPRAnalyzeR Report Preview](./images/CRISPRAnalyzeR_YT_macos.png)](https://www.youtube.com/watch?v=j_Cy3y9Uo1U&feature=youtu.be)
+
+
 
 ## Installation Tutorial Windows
 
