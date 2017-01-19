@@ -397,4 +397,4 @@ The first column describes which sgRNA identifier (must be the same as in the sg
 [![CRISPRAnalyzeR Data Upload](./images/CRISPRAnalyzeR_YT_upload_readcount.png)](https://www.youtube.com/watch?v=J2WJFAo2OTY)
 
 ## Assessing Screen Quality
-[![CRISPRAnalyzeR Tutorial on Screen Quality](./images/CCRISPRAnalyzeR_YT_tutorial_SQ.png)](https://www.youtube.com/watch?v=zIC8OZBX_5U)
+[![CRISPRAnalyzeR Tutorial on Screen Quality](./images/CRISPRAnalyzeR_YT_tutorial_SQ.png)](https://www.youtube.com/watch?v=zIC8OZBX_5U)
