@@ -385,4 +385,13 @@ The first column describes which sgRNA identifier (must be the same as in the sg
 
 @winterj86
 
-*Manuscript in preparation*
+*Manuscript submitted*
+
+
+
+---
+
+# Tutorials
+
+## Upload Read Count Data and Setup Screen
+[![CRISPRAnalyzeR Report Preview](./images/CRISPRAnalyzeR_YT_upload_readcount.png)](https://www.youtube.com/watch?v=J2WJFAo2OTY)
