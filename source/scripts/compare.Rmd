@@ -1,0 +1,84 @@
+<!-- 
+save as 'compare.Rmd'
+child of 'report.Rmd'
+--> 
+
+
+
+
+
+<!--make Comparison tab for every Gene-->
+```{r compare_eval, include=FALSE, message=FALSE}
+compareBool <- rep(FALSE, 20)
+if(length(geneList$compare) != 0) compareBool[1:length(geneList$compare)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=compareBool[counter]}
+if(length(geneList$compare) != 0){
+  cat("# Gene Comparisons\n\n")
+#  cat("This section gives provides another view on sgRNAs for genes of interest. Here, sgRNAs of different genes are compared via violin plots. Values are normalized fold-change, Z-score, and sgRNA-binding sites. Values are also aggregated within the treatment groups. Each subsection displays one group of genes which was investigated and saved by the user.")
+  
+    cat("This section containes the sgRNA population comparison between selected genes. Each subsection displays one group of genes which was investigated and saved by the user. All provided information is based on normalized values.")
+}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```
+
+```{r, eval=compareBool[counter], child='compareChild.Rmd'}
+```

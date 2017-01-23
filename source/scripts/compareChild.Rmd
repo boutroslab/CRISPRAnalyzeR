@@ -1,0 +1,83 @@
+<!-- 
+save as 'compareChild.Rmd'
+child of 'compare.Rmd'
+--> 
+
+
+```{r, results='asis', eval=compareBool[counter]}
+genes <- geneList$compare[[counter]]$genes
+cat("##", paste(genes, collapse = ", "), sprintf("(%s)", counter))
+```
+
+
+ 
+### Readcount Untreated Group
+
+This violin plots shows the normalized read counts of each sgRNA for the selected genes within the samples marked as the untreated group. The width of the violine gives you an impression of the sgRNA population density.
+
+```{r}
+df <- rawGenes$rawGenes
+target <- info$comparePos
+nontarget <- info$compareNeg
+violin(df = df, target = target, nontarget = nontarget, genes = genes, 
+                 type = "untreated", range = 1.5, h = NULL, ylim = NULL, horizontal = FALSE, border = "black", 
+                 lty = 1, lwd = 1, rectCol = rgb(0,0,0,150, maxColorValue=255), colMed = "white", pchMed = 16, 
+                 add = FALSE, wex = 1, drawRect = TRUE, smdensity = TRUE)
+```
+
+### Readcount Treated Group
+
+This violin plot shows the normalized read counts of all sgRNAs for the selected genes within the samples that have been set as part of the treated group.
+
+```{r}
+violin(df = df, target = target, nontarget = nontarget, genes = genes, 
+                 type = "treated", range = 1.5, h = NULL, ylim = NULL, horizontal = FALSE, border = "black", 
+                 lty = 1, lwd = 1, rectCol = rgb(0,0,0,150, maxColorValue=255), colMed = "white", pchMed = 16, 
+                 add = FALSE, wex = 1, drawRect = TRUE, smdensity = TRUE)
+```
+
+### Log2 Foldchange
+
+The plot shows the log2-transformed fold change of all sgRNAs for the selected genes between your treated and untreated group.
+
+```{r}
+violin(df = df, target = target, nontarget = nontarget, genes = genes, type = "log2foldchange",
+                 range = 1.5, h = NULL, ylim = NULL, horizontal = FALSE, border = "black", lty = 1, lwd = 1,
+                 rectCol = rgb(0,0,0,150, maxColorValue=255), colMed = "white", pchMed = 16, add = FALSE, wex = 1,
+                 drawRect = TRUE, smdensity = TRUE)
+```
+
+### Z-Scores
+
+This plot shows the z-score of sgRNAs for the selected genes.
+
+```{r}
+violin(df = df, target = target, nontarget = nontarget, genes = genes, type = "z.score.foldchange",
+                 range = 1.5, h = NULL, ylim = NULL, horizontal = FALSE, border = "black", lty = 1, lwd = 1,
+                 rectCol=rgb(0,0,0,150, maxColorValue=255), colMed = "white", pchMed = 16, add = FALSE, wex = 1, 
+                 drawRect = TRUE, smdensity = TRUE)
+```
+
+### sgRNA Binding Sites
+
+This plot displays the number of predicted genomic binding sites of all sgRNAs for the selected genes. Genomic binding sites are predicted using [E-CRISP](http://www.e-crisp.org/E-CRISP/) with ignoring the first nucleotide and allowing up to two mismatches in total.
+
+```{r}
+violin(df = df, target = target, nontarget = nontarget, genes = genes, type = "offtargets", 
+                 range = 1.5, h = NULL, ylim = NULL, horizontal = FALSE, border = "black", lty = 1, lwd = 1,
+                 rectCol=rgb(0,0,0,150, maxColorValue=255), colMed = "white", pchMed = 16, add = FALSE, wex = 1, 
+                 drawRect = TRUE, smdensity = TRUE)
+```
+
+
+
+```{r}
+counter <- counter + 1
+```
+
+
+
+
+
+
+

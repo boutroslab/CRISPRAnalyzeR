@@ -1,0 +1,2165 @@
+<!-- 
+save as 'screenQuality.Rmd'
+child of 'report.Rmd'
+--> 
+
+
+
+<!--FastQ Quality Plots-->
+```{r}
+fqQCbool <- if(extractedFiles$rqc == "") FALSE else TRUE
+```
+```{r, eval=fqQCbool, child='sqFastQqcChild.Rmd'}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Readcount Plots-->
+
+# Screen Readcount
+
+This section is a screen overview with descriptive statistics in raw and normalized data.
+Normalization is done with a method from the [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) package that moderates dispersion.
+
+## Overview
+
+Below are descriptive statistics about sgRNA and gene readcounts.
+
+### sgRNA Readcount Statistics
+
+```{r}
+df <- results$statsGeneral$basic$sgRNA
+Table_small(df, filename = "sgRNA_basic_stats")
+```
+
+### Gene Readcount Statistics
+
+```{r}
+df <- results$statsGeneral$basic$Gene
+Table_small(df, filename = "Gene_basic_stats")
+```
+
+## Readcount Distribution
+
+In general readcounts are expected to follow an over-dispersed poisson distribution.
+Depending on your experiment you might expect the overall readcount of certain samples to be lower than others.
+In addition, several effects -- like drop outs for example -- can manifest as distinct peaks or outliers.
+
+### Pseudodensity
+
+These pseudodensity curves are based on normalized, log2-transformed readcount histograms for each sample.
+(You can drag a rectangle to zoom in)
+
+```{r sq_readcountsDistro}
+Plot_coverage_readDistro( results$readDistribution, bApp = FALSE )
+```
+
+### Boxplots
+
+These are the normalized, log2-transformed read count distributions.
+(Click on the Legend to exclude/include outliers)
+
+```{r sq_readcountsDistroBoxGene}
+Plot_coverage_readDistroBox( results$readDistributionBoxNorm, bApp = FALSE , type = "Gene")
+```
+
+
+```{r, results='asis'}
+posBool <- as.logical(results$ctrls$pos)
+negBool <- as.logical(results$ctrls$non)
+if( any(c(posBool, negBool)) ) cat("## Controls\n\n")
+cat("Below are descriptive statistics about gene readcounts of genes defined as control for each sample.\n\n")
+```
+
+<!--Controls-->
+```{r, results='asis', eval=posBool}
+cat("### Positive Controls\n\n")
+```
+```{r, eval=posBool}
+df <- results$statsGeneral$ctrl.p
+Table_small( df, type = "ctrl" , filename ="sqStats_ctrl_pos")
+```
+
+```{r, results='asis', eval=negBool}
+cat("### Non-targeting Controls\n\n")
+```
+```{r, eval=negBool}
+df <- results$statsGeneral$ctrl.n
+Table_small( df, type = "ctrl", filename ="sqStats_ctrl_pos")
+```
+
+
+## Readcount Depth
+
+This plot shows the readcount of each gene divided by the number of sgRNAs that contributed to it.
+Spikes indicate a higher readcount per sgRNA for this particular gene. One would expect no outstanding spikes within the untreated datasets
+However, spikes within the treated datasets indicate a read count enrichment per sgRNA for this particular gene. 
+positive and non-targeting controls are highlighted in red and blue respectively.
+
+
+```{r sq_readcountDepth_eval, include=FALSE, message=FALSE}
+# pro coding inc...
+# I can't loop in a chunk if I want highcharter plots to render correctly
+# here I just create the plot 20 times
+# every chunk is checked whether it should be evaluated
+# a bool arr is used for checking
+# only problem: if more than 20 needed, only 20 will be rendered
+datasets <- c(results$compare[[1]], results$compare[[2]])
+datasetBool <- rep(FALSE, 20)
+datasetBool[1:length(datasets)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Readcounts
+
+This table contains the readcoutns of each sgRNA in each sample.
+This is the basis for all plots and statistics in this report.
+As an overview for each sample tables with descriptive statistics about each gene in each sample are attached.
+
+```{r sq_readcountsGenes}
+df <- results$readcount
+Table_big(df)
+```
+
+```{r sq_readcountsTable_eval, include=FALSE, message=FALSE}
+# pro coding inc...
+# I can't loop in a chunk if I want highcharter plots to render correctly
+# here I just create the plot 20 times
+# every chunk is checked whether it should be evaluated
+# a bool arr is used for checking
+# only problem: if more than 20 needed, only 20 will be rendered
+datasets <- c(results$compare[[1]], results$compare[[2]])
+datasetBool <- rep(FALSE, 20)
+datasetBool[1:length(datasets)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Table_big(results$statsGeneral$dataset, dataset)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Unmapped-->
+
+# sgRNA Coverage
+
+Missing sgRNAs are the number of sgRNAs which were defined in the sgRNA library but are not present in the dataset.
+Missing genes are the number of genes for which all sgRNAs were not present in the dataset.
+Depending on the experiment certain sgRNAs or genes might be expected to be missing.
+
+## Missing sgRNAs and Genes
+
+### Missing Genes
+
+This number of genes did not result in any read count and are therefore considered missing in the respective sample.
+
+```{r sq_coverageGenes}
+Plot_coverage_unmapped( results$unmappedGenes, "gene", bApp = FALSE )
+```
+
+### Missing sgRNAs
+
+This number of sgRNAs did not result in read counts and are therefore considered missing in the respective sample.
+
+```{r sq_coverageSgRNAs}
+Plot_coverage_unmapped( results$unmappedGenes, "sgRNA", bApp = FALSE )
+```
+
+### \% Missing Non-targeting sgRNAs
+
+This is the percentage of missing sgRNAs among the genes specified as non-targeting controls.
+
+```{r sq_coverageNonTsgRNA}
+if( results$ctrls$non == FALSE ){
+    Plot_blank("hc", msg = "No non-targeting controls were defined.")
+} else {
+    Plot_coverage_unmapped( results$unmappedGenes, "non", bApp = FALSE )
+}
+```
+
+### \% Missing Postive sgRNAs
+
+This is the percentage of missing sgRNAs among the genes specified as positive controls.
+
+```{r sq_coveragePosSgRNA}
+if( results$ctrls$pos == FALSE ){
+  Plot_blank("hc", msg = "No positive controls were defined.")
+} else {
+  Plot_coverage_unmapped( results$unmappedGenes, "pos", bApp = FALSE )
+}
+```
+
+## Designs per Gene 
+
+These plots provide and overview of the representation of sgRNAs per gene within your data.
+In case every gene is covered by all sgRNAs, a single column at 100\% is expected.
+Moreover, genes with a low percentage of present sgRNAs might also show a reduced read count. 
+
+```{r sq_designsGene_eval, include=FALSE, message=FALSE}
+# pro coding inc...
+# I can't loop in a chunk if I want highcharter plots to render correctly
+# here I just create the plot 20 times
+# every chunk is checked whether it should be evaluated
+# a bool arr is used for checking
+# only problem: if more than 20 needed, only 20 will be rendered
+datasets <- c(results$compare[[1]], results$compare[[2]])
+datasetBool <- rep(FALSE, 20)
+datasetBool[1:length(datasets)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+```{r, results='asis', eval=datasetBool[counter]}
+cat("###", datasets[counter])
+```
+```{r, eval=datasetBool[counter]}
+dataset <- datasets[counter]
+counter <- counter + 1
+Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Sample Comparison
+
+In this chapter single samples are comapred to visualize replicate quality and effects in different samples.
+
+## Overview
+
+Normalized readcount foldchanges or Z-Ratios between all samples on both gene and sgRNA level are shown in this section.
+
+### Foldchange of Gene Effects
+
+```{r, message=FALSE, warning=FALSE}
+highcharts.sampleComp(results$sampleList, sample = NULL, type = "genes", plot = "boxplot", 
+                      sorted = TRUE, info = "log2fc" , theme = TRUE, addline=FALSE)
+```
+
+### Z-Ratio of Gene Effects
+
+```{r, message=FALSE, warning=FALSE}
+highcharts.sampleComp(results$sampleList, sample = NULL, type = "genes", plot = "boxplot", 
+                      sorted = TRUE, info = "zratio" , theme = TRUE, addline=FALSE)
+```
+
+### Foldchange of sgRNA Effects
+
+```{r, message=FALSE, warning=FALSE}
+highcharts.sampleComp(results$sampleList, sample = NULL, type = "sgrna", plot = "boxplot", 
+                      sorted = TRUE, info = "log2fc" , theme = TRUE, addline=FALSE)
+```
+
+
+
+
+
+
+
+
+
+
+<!-- ## Pairwise Comparisons -->
+<!-- braucht geneList -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r sq_splom_eval, include=FALSE, message=FALSE}
+# pro coding inc...
+# I can't loop in a chunk if I want highcharter plots to render correctly
+# here I just create the plot 20 times
+# every chunk is checked whether it should be evaluated
+# a bool arr is used for checking
+# only problem: if more than 20 needed, only 20 will be rendered
+nPlots <- geneList$SPLOM
+plotsBool <- rep(FALSE, 20)
+if(length(nPlots) > 0) plotsBool[1:length(nPlots)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+cat("## Scatter Plot Matrices\n\n")
+cat("Scatter plot matrices, which were saved by the user, are provided below.\n\n")
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
+inf <- geneList$SPLOM[[counter]]
+```
+```{r, results='asis', eval=plotsBool[counter]}
+cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
+if(inf$blog) cat(" Axis are log10 transformed.")
+cat("\n\n\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS
+Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r sq_scatter_eval, include=FALSE, message=FALSE}
+nPlots <- geneList$replicates
+plotsBool <- rep(FALSE, 20)
+if(length(nPlots) > 0) plotsBool[1:length(nPlots)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("## Single Scatter Plots\n\n")
+cat("These are scatter plots, saved by the user.\n\n")
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--PCA plot-->
+
+# PCA
+
+Sometimes a principal component analysis to visualize high-dimensional data.
+Here, genes are represented as data points with their score in each principal component.
+Vectors show the coefficients of each sample to the principal component.
+Controls that are supposed to show an effect, should be separable from the data crowd on the first principal component.
+Vectors of replicates should point in a similar direction.
+
+```{r sq_pca}
+Plot_pca(pca = results$pca$genes, title = "Principal Component Analysis", 
+         subtitle = NULL, export = TRUE, legend = TRUE, scale=8) 
+```
+
+
+
+
+
+
+
+<!--Heatmap-->
+
+```{r, include=FALSE, message=FALSE}
+headderBool <- length(geneList$heatmap) > 0
+```
+```{r, results='asis', eval=headderBool}
+cat('# Heatmaps\n\n')
+```
+
+```{r, eval=headderBool}
+HTML("<div><p>This section contains all heatmaps the user created during the analysis.</div></p>")
+```
+
+```{r sq_heatmap_eval, include=FALSE, message=FALSE}
+nPlots <- geneList$heatmap
+plotsBool <- rep(FALSE, 20)
+if(length(nPlots) > 0) plotsBool[1:length(nPlots)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+
+```{r, results='asis', eval=plotsBool[counter]}
+show <- geneList$heatmap[[counter]]$show
+type <- geneList$heatmap[[counter]]$type
+checks <- geneList$heatmap[[counter]]$checks
+tp <- if(type == "enriched") "within the top 5% of reads." else "within the lowest 5% of reads."
+txt <- switch (show,
+  geneabundance = "is the abundance of readcounts summed up for each gene compared to all reads in the dataset.",
+  genereadcount = "are readcounts summed up for each gene.",
+  genethreshold = paste("is the percentage of sgRNA for each gene having a readcount", tp),
+  sgrnaabundance = "is the abundance of a single sgRNA compared to all reads in the dataset.",
+  sgrnareadcount = "are sgRNA readcounts.",
+  unmapped = "the percentage of missing sgRNAs per Gene."
+)
+cat("## Heatmap:", show, sprintf("(%s)", counter), "\n\n")
+cat("Shown", txt)
+if("log" %in% checks) cat(" Colors represent the decadic logarithm of values shown.")
+cat("\n(The plot is still interactive and can be zoomed)")
+```
+```{r, eval=plotsBool[counter], out.width='100%'}
+df <- geneList$heatmap[[counter]]$plot
+df
+```
+```{r, include=FALSE}
+counter <- counter + 1
+```
+

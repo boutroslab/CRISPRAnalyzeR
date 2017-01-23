@@ -1,0 +1,153 @@
+/*        Header           */
+.skin-blue .main-header .logo {
+    background-color: #4285f4;
+} /* logo */
+.skin-blue .main-header .logo:hover {
+    background-color: #1e74c5;
+} /* logo when hovered */
+.skin-blue .main-header .navbar {
+    background-color: #4285f4;
+} /* navbar (rest of the header) */
+
+
+/*             Sidebar                */
+.skin-blue .main-sidebar {
+    background-color: #eeeeee;
+} /* main sidebar */
+.skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
+    background-color: #dddddd;
+} /* active selected tab in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a{
+    background-color: #eeeeee;
+    color: #000000;
+} /* other links in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
+    background-color: #929292;
+} /* other links in the sidebarmenu when hovered */                    
+.skin-blue .main-header .navbar .sidebar-toggle:hover{
+    background-color: #1e74c5;
+} /* toggle button when hovered  */
+.skin-blue .sidebar-menu > li.active > a, .skin-blue .sidebar-menu > li:hover > a {
+  border-left-color: #dddddd;
+} /* little stripe on left of selected tab */
+
+
+/*                   Body                 */
+.content-wrapper, .right-side {
+  background-color: #ffffff;
+} /* background of dashboard body */
+
+
+/*                   Boxes                 */
+.box.box-solid.box-primary > .box-header {
+    background: #00ff18 none repeat scroll 0 0; /* solid header col */
+    color: #fff; /* text col */
+} /* box, solid header, status primary */
+.box.box-solid.box-primary {
+  border: 1px solid #00ff18; 
+} /* thin box border */
+.box { /* background colour */
+  background: #ffffff none repeat scroll 0 0;
+} /* box, light header */
+/* solid box status primary */
+.bg-light-blue, .label-primary, .modal-primary .modal-body {
+  background-color: #3c8dbc !important;
+} /* background colour */
+.box.box-primary {
+  border-top-color: #4285f4;
+} /* usual (not solid) box headder colour */
+.box.box-danger {
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+} /* danger Box */
+
+
+/*                Tabset Box                */
+/* box tabset, light header, status primary */
+.nav-tabs-custom > .nav-tabs { 
+  border-bottom-color: #4285f4;
+} /* thin line seperating nav tabs from box content */
+.nav-tabs-custom > .nav-tabs > li.active > a {
+  border-right-color: #4285f4;
+} /* thin line on the right of first selected nav tab */
+.nav-tabs-custom {
+  background: #ffffff none repeat scroll 0 0;
+} /* background of nav tabs that are not selected */
+.nav-tabs-custom > .nav-tabs > li.active > a {
+  border-left-color: #ffffff;
+  border-right-color: #ffffff;
+} /* border colours of activated nav tab selected in the middle */
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: #4285f4;
+  border-bottom-color: #ffffff;
+} /* thicker top border of selected nav tab */
+
+
+/*                       Notifications                */
+.skin-blue .main-header .navbar .nav > li > a {
+  color: #fff;
+} /* dropdown toggle (notification menus */
+.text-success {
+  color: #3c763d;
+} /* icon colour of message in notification of status sucess */
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a, .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a, .navbar-nav > .tasks-menu > .dropdown-menu > li .menu > li > a {
+}
+a {
+  color: #111111;
+} /*   color of text in dropdown */
+
+
+/*                Action Button              */
+.btn-default {
+  background-color: #4285f4;
+  border-color: #4285f4;
+  color: #ffffff; /* font col */
+} /* enabled button */
+.btn-default.disabled, .btn-default.disabled.active, .btn-default.disabled.focus, .btn-default.disabled:active, .btn-default.disabled:focus, .btn-default.disabled:hover, .btn-default[disabled], .btn-default.active[disabled], .btn-default.focus[disabled], .btn-default[disabled]:active, .btn-default[disabled]:focus, .btn-default[disabled]:hover, fieldset[disabled] .btn-default, fieldset[disabled] .btn-default.active, fieldset[disabled] .btn-default.focus, fieldset[disabled] .btn-default:active, fieldset[disabled] .btn-default:focus, fieldset[disabled] .btn-default:hover {
+  background-color: #6381b3;
+  color: #dedede;
+} /* disabled button */
+
+
+/*                  other                   */
+hr {
+  border-color: #eee -moz-use-text-color -moz-use-text-color;
+} /* hr() horizontal line */
+
+
+
+
+
+
+/*     Radio Button 
+input[type='radio'] {
+    -webkit-appearance:none;
+    width:20px;
+    height:20px;
+    border:1px solid darkgray;
+    border-radius:50%;
+    outline:none;
+    box-shadow:0 0 5px 0px gray inset;
+}
+input[type='radio']:hover {
+    box-shadow:0 0 5px 0px orange inset;
+}
+input[type='radio']:before {
+    content:'';
+    display:block;
+    width:60%;
+    height:60%;
+    margin: 20% auto;    
+    border-radius:50%;    
+}
+input[type='radio']:checked:before {
+    background:green;
+}
+*/
+
+
+
+
+

@@ -1,0 +1,179 @@
+<!-- 
+save as 'init.Rmd'
+child of 'report.Rmd'
+--> 
+
+
+
+<!--info file loading--> 
+```{r init, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE , dpi=200) # out.width='\\maxwidth', 
+if( is.na(params$info) ) stop("parameter info unknown") else infoFile <- params$info
+# infoFile <- "report.info"
+
+# retrieve information
+info <- list()
+x <- scan(infoFile, what = "", sep = "\n")
+x <- strsplit(x, split = ";", fixed = TRUE)
+for( i in 1:length(x) ) info[[x[[i]][1]]] <- x[[i]][-1]
+
+logDir <- info$logDir
+userID <- info$userID
+userDir <- info$userDir
+
+# create log for troubleshooting
+logFile <- file.path(logDir, "report.log")
+log <- paste(userID, ": report.r starting at", Sys.time())
+if( !file.exists(logFile) ) write(log, logFile) else write(log, logFile, append = TRUE)  
+
+# some progress updates for communication with app
+progress <- 0.1
+outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
+write(outInfo, infoFile)
+
+# extract grouping
+groups <- list()
+m <- ">>Groups start<<"
+i <- which(names(info) == m) + 1
+while( m != ">>Groups end<<" ){
+  groups[[names(info[i])]] <- info[[i]]
+  i <- i + 1
+  m <- names(info[i])
+}
+
+# make bools
+inclSQ <- as.logical(info$inclSQ)
+inclHC <- as.logical(info$inclHC)
+inclOV <- as.logical(info$inclOV)
+inclSG <- as.logical(info$inclSG)
+inclCO <- as.logical(info$inclCO)
+inclAN <- as.logical(info$inclAN)
+inclGS <- as.logical(info$inclGS)
+```
+
+
+
+<!--libraries and functions--> 
+```{r loadFunctions, include=FALSE, message=FALSE}
+######################
+#### Try Function ####
+######################
+# wrapping expressionin try, and taking care of log and info file writing if there was an error
+# arguments:  expr    the expression to be evaluated
+#             place   chr str specifying the info message that will be shown to user
+#             logFile chr str path of logging file
+#             userID  chr str of user ID
+#             userDir chr str of tmp user directory
+# value:  if no error occured, result of expression
+#         if error occured stop with a error message
+# side effects: if error occured, writes on logging and info file
+tryFunction <- function( expr, place, log = logFile, ID = userID, dir = userDir ){
+  res <- try(expr)
+  if( class(res) == "try-error" ){
+    
+    write(paste(ID, ": try-error occured"), log, append = TRUE)
+    write(paste(ID, ":", res[1]), log, append = TRUE)
+    
+    info <- switch(place,
+      sq = "Something went wrong when rendering the Screen Quality part.<br/>",
+      hc = "Something went wrong when rendering the Hit Calling part.<br/>",
+      id = "Something went wrong when rendering the In-Depth Analysis part.<br/>",
+      an = "Something went wrong when rendering the Annotation part.<br/>"
+    )
+    
+    outInfo <- c(paste("progress", 1, sep = ";"), paste("info", info, sep = ";"))
+    write(outInfo, file.path(dir, "analysis.info"))
+   
+    write(paste(ID, ": analysis.r quit at", Sys.time()), log, append = TRUE)
+    quit(save = "no", status = 1)
+  } else return(res)
+}
+
+library(shiny)
+library(ggplot2)
+library(highcharter)
+library(reshape2)
+library(tidyr)
+library(DT)
+library(VennDiagram)
+
+# somewhere these packages are loaded an mask the namespace
+# unloadNamespace("Gviz")
+# unloadNamespace("seqinr")
+
+source(file.path(info$appDir, "functions_server.r"))
+x <- list.files(info$funDir)
+for(i in x) source(file.path(info$funDir, i))
+```
+
+
+
+<!--read data--> 
+```{r loadData}
+results <- list(
+        "pca" = readRDS(file.path(userDir, "PCA.rds")),
+        "statsGeneral" = readRDS(file.path(userDir, "statsGeneral.rds")),
+        "unmappedGenes" = readRDS(file.path(userDir, "unmappedGenes.rds")),
+        "readDistribution" = readRDS(file.path(userDir, "readDistribution.rds")),
+        "readDistributionBox" = readRDS(file.path(userDir, "readDistributionBox.rds")),
+        "readDistributionBoxNorm" = readRDS(file.path(userDir, "readDistributionBoxNorm.rds")),
+        "readDepth" = readRDS(file.path(userDir, "readDepth.rds")),
+        "geneDesigns" = readRDS(file.path(userDir, "geneDesigns.rds")),
+        "readCountVS" = readRDS(file.path(userDir, "readCountVS.rds")),
+        
+        "wilcox" = readRDS(file.path(userDir, "wilcox.rds")),
+        "deseq" = readRDS(file.path(userDir, "deseq.rds")),
+        "mageck" = readRDS(file.path(userDir, "mageck.rds")),
+        "rsea" = readRDS(file.path(userDir, "rsea.rds")),
+        "edger" = readRDS(file.path(userDir, "edger.rds")),
+        "zratio" = readRDS(file.path(userDir, "zratio.rds")),
+        
+        "hitOverview" = readRDS(file.path(userDir, "hitOverview.rds")),
+        "hitOverview_info" = readRDS(file.path(userDir, "hitOverview_info.rds")),
+        "vennEnriched" = readRDS(file.path(userDir, "vennEnriched.rds")),
+        "vennDepleted" = readRDS(file.path(userDir, "vennDepleted.rds")),
+                         
+        "readcount" = readRDS(file.path(userDir, "readcount.rds")),
+        "normalizedReadcount" = readRDS(file.path(userDir, "normalizedReadcount.rds")),
+        "aggregatedReadcount" = readRDS(file.path(userDir, "aggregatedReadcount.rds")),
+        
+        "compare" = readRDS(file.path(userDir, "compare.rds")),
+        "ctrls" = readRDS(file.path(userDir, "ctrls.rds")),
+        
+        "uniqueGenes" = readRDS(file.path(userDir, "uniqueGenes.rds")),
+        "sampleList" = readRDS(file.path(userDir, "sampleList.rds"))
+        )
+
+
+# load rawGenes if there
+# if not, disable part of report
+if(file.exists(file.path(userDir, "rawGenes.rds"))) {
+  rawGenes <- list("rawGenes" = readRDS(file.path(userDir, "rawGenes.rds")))
+} else {
+  inclSG <- FALSE
+  inclCO <- FALSE
+}
+
+extractedFiles <- list()
+x <- scan(file.path(userDir, "fastq_extraction.info"), what="", sep="\n", quiet = TRUE)
+xlist <- strsplit(x, split = ";", fixed = TRUE) 
+for( i in 1:length(xlist) ) extractedFiles[[xlist[[i]][1]]] <- xlist[[i]][-1]
+
+if( extractedFiles[["rqc"]] != "empty" ) {
+  rqc.qa <- readRDS(file = extractedFiles$rqc)
+  extractedFiles$rqc <- rqc.qa
+} else  extractedFiles$rqc <- ""
+
+# load and reverse geneList
+geneList <- readRDS(file.path(userDir, "geneList.rds"))
+for(i in names(geneList)) geneList[[i]] <- rev(geneList[[i]])
+```
+
+
+
+
+
+
+
+
+

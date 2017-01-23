@@ -1,0 +1,22 @@
+<!-- 
+save as 'annoChild.Rmd'
+child of 'anno.Rmd'
+--> 
+
+
+```{r, results='asis'}
+df <- geneList$anno[[counter]]$data
+genes <- unique(df[,1])
+cat("##", paste(genes, collapse = ", "), sprintf("(%s)", counter))
+```
+
+These annotations were requested by the user.
+
+```{r}
+Table_DT(df, colNames = colnames(df), bRownames = FALSE, class = "stripe hover")
+```
+
+```{r, include=FALSE, results='hide', warning=FALSE}
+counter <- counter + 1
+```
+

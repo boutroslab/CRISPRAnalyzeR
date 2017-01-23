@@ -1,0 +1,363 @@
+
+
+
+/*        Header           */
+.skin-blue .main-header .logo {
+    background-color: #4CAF50;
+} /* logo */
+.skin-blue .main-header .logo:hover {
+    background-color: #4CAF50;
+} /* logo when hovered */
+.skin-blue .main-header .navbar {
+    background-color: #4CAF50;
+} /* navbar (rest of the header) */
+
+.main-header .logo {
+    height: 60px !important;
+    width: 240px !important;
+}
+
+/*             Sidebar                */
+.skin-blue .main-sidebar {
+    background-color: #eeeeee;
+} /* main sidebar */
+.skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
+    background-color: #dddddd;
+} /* active selected tab in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a{
+    background-color: #eeeeee;
+    color: #000000;
+} /* other links in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
+    background-color: #BDBDBD;
+} /* other links in the sidebarmenu when hovered */                    
+.skin-blue .main-header .navbar .sidebar-toggle:hover{
+    background-color: #4CAF50;
+} /* toggle button when hovered  */
+.skin-blue .sidebar-menu > li.active > a, .skin-blue .sidebar-menu > li:hover > a {
+  border-left-color: #4CAF50;
+} /* little stripe on left of selected tab */
+
+.left-side, .main-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 60px !important;
+    min-height: 100%;
+    width: 240px !important;
+    z-index: 810;
+}
+
+
+/*                   Body                 */
+.content-wrapper, .right-side {
+  background-color: #ffffff;
+} /* background of dashboard body */
+body {
+font-size: 16px !important;
+font-weight: 200 !important;
+line-height: 1.5 !important;
+}
+
+
+/*                   Boxes                 */
+.box.box-solid.box-primary > .box-header {
+    background: #4CAF50 none repeat scroll 0 0; /* solid header col */
+    color: #fff; /* text col */
+} /* box, solid header, status primary */
+.box.box-solid.box-primary {
+  border: 1px solid #4CAF50; 
+} /* thin box border */
+.box { /* background colour */
+  background: #ffffff none repeat scroll 0 0;
+} /* box, light header */
+/* solid box status primary */
+.bg-light-blue, .label-primary, .modal-primary .modal-body {
+  background-color: #2196F3 !important;
+} /* background colour */
+.box.box-primary {
+  border-top-color: #4CAF50;
+} /* usual (not solid) box headder colour */
+.box {
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-right:  1px solid rgba(0, 0, 0, 0.1);
+  border-left:  1px solid rgba(0, 0, 0, 0.1);
+
+} /* for boxes in general turn shadow off and add thin grey border (not top) */
+.box.box-danger {
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+} /* danger Box */
+
+
+
+.col-sm-12 {
+padding-left: 4%;
+padding-right: 4%;
+}
+
+.col-sm-6 {
+padding-left: 5%;
+padding-right: 5%;
+}
+
+.media-body {
+width:auto !important;
+}
+
+.logo {
+height: 60px;
+}
+
+/*                Tabset Box                */
+/* box tabset, light header, status primary */
+.nav-tabs-custom > .nav-tabs { 
+  border-bottom-color: #4CAF50;
+} 
+
+.nav-tabs-custom > .nav-tabs > li.active { 
+  border-bottom-color: #4CAF50;
+  /* border-top-color: #4CAF50; */
+  border-top: 1px solid transparent;
+} /* thin line seperating nav tabs from box content */
+.nav-tabs-custom > .nav-tabs > li.active > a {
+    /* background-color: #4CAF50; */
+    color: #4CAF50;
+    font-weight: bold;
+    /* border-top-color: #4CAF50; */
+    border-bottom: 3px solid #4CAF50;
+    border-left: 0px;
+    border-right: 0px;
+/*border-left-color: #ffffff;
+  border-right-color: #ffffff; */
+}
+.nav-tabs-custom > .nav-tabs > li.active > a:hover {
+  background-color: #4CAF50;
+  color: #FFFFFF;
+	border-top-color: #4CAF50;
+  border-bottom-color: #ffffff;
+  border-left: 0px;
+  border-right: 0px;
+/*border-left-color: #ffffff;
+  border-right-color: #ffffff; */
+} 
+
+ /* thin line on the right of first selected nav tab */
+.nav-tabs-custom {
+  background: #ffffff none repeat scroll 0 0;
+  /*border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-right:  1px solid rgba(0, 0, 0, 0.1) !important;
+  border-left:  1px solid rgba(0, 0, 0, 0.1) !important;*/
+	box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1) !important;
+} /* background of nav tabs that are not selected */
+
+/* border colours of activated nav tab selected in the middle */
+/* thicker top border of selected nav tab */
+
+.nav-tabs-custom>.nav-tabs>li {
+     /*border-top: 0px solid transparent; */
+     /*margin-bottom: 0px; */
+    /* border-top: 3px solid transparent; */
+    /* margin-bottom: -2px; */
+    margin-right: 5px;
+}
+
+
+/*                       Notifications                */
+.skin-blue .main-header .navbar .nav > li > a {
+  color: #fff;
+} /* dropdown toggle (notification menus */
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a, .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a, .navbar-nav > .tasks-menu > .dropdown-menu > li .menu > li > a {
+}
+a {
+  color: #111111;
+} /*   color of text in dropdown */
+.alert-success, .bg-green, .callout.callout-success, .label-success, .modal-success .modal-body {
+  background-color: #4CAF50 !important;
+} /* bkg color of little number of notification menu */
+.bg-light-blue, .label-primary, .modal-primary .modal-body {
+  background-color: #4CAF50 !important;
+} /* that other little number notitfication thingy */
+
+
+/*                Action Button              */
+.btn-default {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+  color: #ffffff; /* font col */
+} /* enabled button */
+.btn-default.disabled, .btn-default.disabled.active, .btn-default.disabled.focus, .btn-default.disabled:active, .btn-default.disabled:focus, .btn-default.disabled:hover, .btn-default[disabled], .btn-default.active[disabled], .btn-default.focus[disabled], .btn-default[disabled]:active, .btn-default[disabled]:focus, .btn-default[disabled]:hover, fieldset[disabled] .btn-default, fieldset[disabled] .btn-default.active, fieldset[disabled] .btn-default.focus, fieldset[disabled] .btn-default:active, fieldset[disabled] .btn-default:focus, fieldset[disabled] .btn-default:hover {
+  background-color: #A5D6A7;
+  color: #EEEEEE;
+} /* disabled button */
+#addReport_sgRNA, #addReport_SPLOM, #addReport_replicates, #addReport_heatmap, #addReport_overview, #addReport_compare, #addReport_anno, #addReport_enr{
+        background-color: #dddddd;
+        color: #000000;
+}
+
+
+/*      Download Tables         */
+table#downloads_table{
+    width: 1000px;
+}
+table#downloads_table tr {
+    border-bottom: 1px solid #ddd;
+}
+table#downloads_table th {
+    padding: 15px;
+}
+
+
+
+/*                  other                   */
+hr {
+  border-color: #eee -moz-use-text-color -moz-use-text-color;
+} /* hr() horizontal line */
+
+
+/* COLOR DEFINITIONS */
+
+.text-muted {
+  color: #616161;
+}
+.text-primary {
+  color: #4CAF50;
+}
+a.text-primary:hover {
+  color: #388E3C;
+}
+.text-success {
+  color: #4CAF50;
+}
+a.text-success:hover {
+  color: #388E3C;
+}
+.text-info {
+  color: #2196F3;
+}
+a.text-info:hover {
+  color: #1976D2;
+}
+.text-warning {
+  color: #FF9800;
+}
+a.text-warning:hover {
+#F57C00;
+}
+.text-danger {
+  color: #F44336;
+}
+a.text-danger:hover {
+  color: #D32F2F;
+}
+.bg-primary {
+  color: #fff;
+  background-color: #4CAF50;
+}
+a.bg-primary:hover {
+  background-color: #388E3C;
+}
+.bg-success {
+	color: #fff;
+  background-color: #4CAF50;
+}
+a.bg-success:hover {
+  background-color: #388E3C;
+}
+.bg-info {
+color:#fff;
+  background-color: #2196F3;
+}
+a.bg-info:hover {
+  background-color: #1976D2;
+}
+.bg-warning {
+color:#fff;
+  background-color: #FF9800;
+}
+a.bg-warning:hover {
+  background-color: #F57C00;
+}
+.bg-danger {
+color:#fff;
+  background-color: #F44336;
+}
+a.bg-danger:hover {
+  background-color: #D32F2F;
+}
+
+.container {
+width:100% !important;
+}
+
+
+/*     Radio Button 
+input[type='radio'] {
+    -webkit-appearance:none;
+    width:20px;
+    height:20px;
+    border:1px solid darkgray;
+    border-radius:50%;
+    outline:none;
+    box-shadow:0 0 5px 0px gray inset;
+}
+input[type='radio']:hover {
+    box-shadow:0 0 5px 0px orange inset;
+}
+input[type='radio']:before {
+    content:'';
+    display:block;
+    width:60%;
+    height:60%;
+    margin: 20% auto;    
+    border-radius:50%;    
+}
+input[type='radio']:checked:before {
+    background:green;
+}
+*/
+
+.alert-info {
+background-color:#A5D6A7 !important;
+color: rgba(0, 0, 0, 0.65) !important;
+border: 0px
+}
+
+
+.alert-warning {
+background-color:#F44336 !important;
+border: 0px
+}
+
+.alert-success {
+background-color:#43A047 !important;
+border: 0px
+}
+
+
+.cloud {
+    display: inline;
+    list-style-type: none;
+    width: 100%;
+}
+.cloud li {
+    list-style: none;
+    display: inline;
+    color: #4CAF50;
+}
+.cloud li:nth-of-type(3n + 1) {
+    font-size: 1.5em;
+    color: #2196F3;
+}
+.cloud li:nth-of-type(4n+3) {
+    font-size: 2em;
+    color: #FF9800;
+}
+.cloud li:nth-of-type(5n - 3) {
+    font-size: 1em;
+    color: #F44336;
+}

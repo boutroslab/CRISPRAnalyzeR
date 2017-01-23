@@ -1,0 +1,390 @@
+
+/*        Header           */
+.skin-blue .main-header .logo {
+    background-color: #f4b943;
+} /* logo */
+.skin-blue .main-header .logo:hover {
+    background-color: #f4b943;
+} /* logo when hovered */
+.skin-blue .main-header .navbar {
+    background-color: #f4b943;
+} /* navbar (rest of the header) */
+
+/*
+ * Skin: custom google color skin made out of the blue skin
+ * ----------
+ */
+/* navbar (rest of the header) */
+.skin-blue .main-header .navbar {
+ 	background-color: #2196F3;
+ 	color: #ffffff;
+}        
+
+.skin-blue .main-header .navbar .nav > li > a {
+  color: #ffffff;
+}
+.skin-blue .main-header .navbar .nav > li > a:hover,
+.skin-blue .main-header .navbar .nav > li > a:active,
+.skin-blue .main-header .navbar .nav > li > a:focus,
+.skin-blue .main-header .navbar .nav .open > a,
+.skin-blue .main-header .navbar .nav .open > a:hover,
+.skin-blue .main-header .navbar .nav .open > a:focus,
+.skin-blue .main-header .navbar .nav > .active > a {
+  background: #1976D2;
+  color: #ffffff;
+}
+/* sidebar button */
+.skin-blue .main-header .navbar .sidebar-toggle {
+ color: #ffffff;
+}
+/* toggle button when hovered  */        
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+ color: #ffffff;
+  background: #1976D2;
+}
+
+@media (max-width: 767px) {
+  .skin-blue .main-header .navbar .dropdown-menu li.divider {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .skin-blue .main-header .navbar .dropdown-menu li a {
+    color: #fff;
+  }
+  .skin-blue .main-header .navbar .dropdown-menu li a:hover {
+    background: #0D47A1;
+  }
+}
+/* logo */
+.skin-blue .main-header .logo {
+    background-color: #2196F3;
+    color: #ffffff;
+}
+
+/* logo when hovered */
+.skin-blue .main-header .logo:hover {
+    background-color: #1976D2;
+}
+
+.skin-blue .main-header li.user-header {
+  background-color: #2196F3;
+}
+.skin-blue .content-header {
+  background: transparent;
+}
+.skin-blue .wrapper,
+.skin-blue .main-sidebar,
+.skin-blue .left-side {
+  background-color: #222d32;
+}
+.skin-blue .user-panel > .info,
+.skin-blue .user-panel > .info > a {
+  color: #fff;
+}
+.skin-blue .sidebar-menu > li.header {
+  color: #4b646f;
+  background: #1a2226;
+}
+.skin-blue .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+}
+
+
+
+/* Side bar active tab */
+
+.skin-blue .sidebar-menu > li:hover > a,
+.skin-blue .sidebar-menu > li.active > a {
+    color: #fff;
+    /* background: #1e282c; */
+    border-left-color: #FF9800;
+}
+.skin-blue .sidebar-menu > li > .treeview-menu {
+  margin: 0 1px;
+  background: #2c3b41;
+}
+.skin-blue .sidebar a {
+  color: #b8c7ce;
+}
+.skin-blue .sidebar a:hover {
+  text-decoration: none;
+}
+.skin-blue .treeview-menu > li > a {
+  color: #8aa4af;
+}
+.skin-blue .treeview-menu > li.active > a,
+.skin-blue .treeview-menu > li > a:hover {
+  color: #ffffff;
+}
+.skin-blue .sidebar-form {
+  border-radius: 3px;
+  border: 1px solid #374850;
+  margin: 10px 10px;
+}
+.skin-blue .sidebar-form input[type="text"],
+.skin-blue .sidebar-form .btn {
+  box-shadow: none;
+  background-color: #374850;
+  border: 1px solid transparent;
+  height: 35px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.skin-blue .sidebar-form input[type="text"] {
+  color: #666;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+}
+.skin-blue .sidebar-form input[type="text"]:focus,
+.skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  background-color: #fff;
+  color: #666;
+}
+.skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  border-left-color: #fff;
+}
+.skin-blue .sidebar-form .btn {
+  color: #999;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
+}
+.skin-blue.layout-top-nav .main-header > .logo {
+  background-color: #F5F5F5;
+  color: #ffffff;
+  border-bottom: 0 solid transparent;
+}
+.skin-blue.layout-top-nav .main-header > .logo:hover {
+  background-color: #E0E0E0;
+}
+
+/* Main Body text color */
+body {
+color: rgba(0, 0, 0, 0.87)
+}
+
+
+
+
+/*             Sidebar                */
+.skin-blue .main-sidebar {
+    background-color: #f4b943;
+} /* main sidebar */
+.skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
+    background-color: #ff0000;
+} /* active selected tab in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a{
+    background-color: #00ff00;
+    color: #000000;
+} /* other links in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
+    background-color: #ff69b4;
+} /* other links in the sidebarmenu when hovered */                    
+.skin-blue .main-header .navbar .sidebar-toggle:hover{
+    background-color: #ff69b4;
+} /* toggle button when hovered  */
+
+
+/*                   Body                 */
+.content-wrapper, .right-side {
+  background-color: #111111;
+} /* background of dashboard body */
+
+
+/*                   Boxes                 */
+.box.box-solid.box-primary > .box-header {
+    background: #ff69b4 none repeat scroll 0 0; /* solid header col */
+    color: #fff; /* text col */
+} /* box, solid header, status primary */
+.box.box-solid.box-primary {
+  border: 1px solid #3c8dbc; 
+} /* thin box border */
+.box { /* background colour */
+  background: #555 none repeat scroll 0 0;
+} /* box, light header */
+/* solid box status primary */
+.bg-light-blue, .label-primary, .modal-primary .modal-body {
+  background-color: #3c8dbc !important;
+} /* background colour */
+
+
+/*                Tabset Box                */
+/* box tabset, light header, status primary */
+.nav-tabs-custom > .nav-tabs { 
+  border-bottom-color: #123456;
+} /* thin line seperating nav tabs from box content */
+.nav-tabs-custom > .nav-tabs > li.active > a {
+  border-right-color: #638201;
+} /* thin line on the right of first selected nav tab */
+.nav-tabs-custom {
+  background: #999 none repeat scroll 0 0;
+} /* background of nav tabs that are not selected */
+.nav-tabs-custom > .nav-tabs > li.active > a {
+  border-left-color: #f4f4f4;
+  border-right-color: #638201;
+} /* border colours of activated nav tab selected in the middle */
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: #555555;
+} /* thicker top border of selected nav tab */
+
+
+/*                       Notifications                */
+.skin-blue .main-header .navbar .nav > li > a {
+  color: #fff;
+} /* dropdown toggle (notification menus */
+.text-success {
+  color: #3c763d;
+} /* icon colour of message in notification of status sucess */
+
+
+/*                  other                   */
+hr {
+  border-color: #eee -moz-use-text-color -moz-use-text-color;
+} /* hr() horizontal line */
+
+
+
+/* sidebar sublinks in treeview */
+.skin-blue .sidebar-menu>li>.treeview-menu {
+    margin: 0 1px;
+    background: #EEEEEE;
+}
+
+/* other links in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a{
+    background-color: #EEEEEE;
+    color: #212121;
+}
+
+/* other links in the sidebarmenu when hovered */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
+    /*background-color: #ff69b4;*/
+    background-color: #E0E0E0;
+    color: #212121;
+}
+
+/* Sidebar left border HOVER*/
+.skin-blue .sidebar-menu > li > a {
+    border-left: 3px solid transparent;
+}
+
+        
+
+
+/* CONTENT Wrapper general */
+.content-wrapper {
+    min-height: 100%;
+    /*background-color: #FAFAFA;*/
+    background-color: #ffffff;
+    z-index: 800;
+    color: rgba(0, 0, 0, 0.87)
+}
+
+/* active selected tab in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
+    background-color: #757575;
+    color: #fff;
+}
+
+ /* BOXES AND OTHER COLOR STUFF */
+ 
+ 
+/* BOX top color */
+box.box-info {
+    border-top-color: #2196F3 !important;
+}
+
+/* Define light-blue color in Theme skin.blue used */
+.bg-light-blue {
+    background-color: #2196F3 !important;
+}
+/* Define light-blue color in Theme skin.blue used */
+.bg-blue {
+    background-color: #2196F3 !important;
+}
+
+/* Solid Boxes Header */
+.box.box-solid.box-primary>.box-header {
+    color: #fff;
+    background: #2196F3;
+}
+
+/* Tabs hover streifen */
+.nav-tabs-custom > .nav-tabs > li.active {
+    border-top-color: #2196F3;
+}
+
+
+/* COLOR DEFINITIONS */
+
+.text-muted {
+  color: #616161;
+}
+.text-primary {
+  color: #388E3C;
+}
+a.text-primary:hover {
+  color: #2E7D32;
+}
+.text-success {
+  color: #4CAF50;
+}
+a.text-success:hover {
+  color: #388E3C;
+}
+.text-info {
+  color: #2196F3;
+}
+a.text-info:hover {
+  color: #1976D2;
+}
+.text-warning {
+  color: #FF9800;
+}
+a.text-warning:hover {
+#F57C00;
+}
+.text-danger {
+  color: #F44336;
+}
+a.text-danger:hover {
+  color: #D32F2F;
+}
+.bg-primary {
+  color: #fff;
+  background-color: #388E3C;
+}
+a.bg-primary:hover {
+  background-color: #2E7D32;
+}
+.bg-success {
+	color: #fff;
+  background-color: #4CAF50;
+}
+a.bg-success:hover {
+  background-color: #388E3C;
+}
+.bg-info {
+color:#fff;
+  background-color: #2196F3;
+}
+a.bg-info:hover {
+  background-color: #1976D2;
+}
+.bg-warning {
+color:#fff;
+  background-color: #FF9800;
+}
+a.bg-warning:hover {
+  background-color: #F57C00;
+}
+.bg-danger {
+color:#fff;
+  background-color: #F44336;
+}
+a.bg-danger:hover {
+  background-color: #D32F2F;
+}

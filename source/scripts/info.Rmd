@@ -1,0 +1,112 @@
+<!-- 
+save as 'info.Rmd'
+child of 'report.Rmd'
+--> 
+
+
+
+
+<!--User provided text about screen--> 
+
+## Experiment
+
+### Scope
+
+```{r info_scope, results='asis'}
+cat(info$scope, "<br/>")
+```
+
+### Procedure
+
+```{r info_procedure, results='asis'}
+cat(info$procedure, "<br/>")
+```
+
+```{r info_groups, results='asis'}
+cat("<dl>")
+cat("<dt>Organism</dt>")
+cat("<dd>", info$report_organism, "</dd>")
+cat("<dt>Cell Line</dt>")
+cat("<dd>", info$report_cellline, "</dd>")
+cat("<dt>Experimentator</dt>")
+cat("<dd>", info$report_experimentator, "</dd>")
+cat("<dt>Plasmid used</dt>")
+cat("<dd>", info$report_plasmid, "</dd>")
+cat("<dt>sgRNA Library Name</dt>")
+cat("<dd>", info$report_library, "</dd>")
+cat("<dt>Number of Cells per sgRNA (Coverage)</dt>")
+cat("<dd>", info$report_coverage, "</dd>")
+cat("<dt>Treatment</dt>")
+cat("<dd>", info$report_treatment, "</dd>")
+cat("<dt>Sequencing Primer</dt>")
+cat("<dd>", info$report_seqprimer, "</dd>")
+cat("<dt>Sequencing</dt>")
+cat("<dd>", info$report_seqkit, "</dd>")
+cat("</dl>")
+```
+
+### Comments
+
+```{r info_comments, results='asis'}
+cat(info$comment, "<br/>")
+```
+
+
+<!--All relevant setup info of Screen--> 
+
+## Data
+
+### Files
+
+```{r info_files}
+df <- rbind(data.frame(name = "sgRNA library", filename = info$libName),
+            data.frame(name = info$seqGenNames, filename = info$seqNames))
+Table_DT(df, class = "stripe hover", dom = "t", buttons = NULL, pageLen = nrow(df))
+```
+
+### Experimental Design
+
+```{r, results='asis'}
+cat("<dl>")
+cat("<dt>Groups</dt>")
+cat("<dd>", info$report_organism, "</dd>")
+cat("<dt>Positive Controls</dt>")
+cat("<dd>", if(length(info$comparePos) == 0) "none" else paste(info$comparePos, collapse = "</dd><dd>"), "</dd>")
+cat("<dt>Non-targeting Controls</dt>")
+cat("<dd>", if(length(info$compareNeg) == 0) "none" else paste(info$compareNeg, collapse = "</dd><dd>"), "</dd>")
+cat("<dt>Random Picks</dt>")
+cat("<dd>", info$analysisWilcoxRand, " (for Wilcox only)</dd>")
+cat("</dl>")
+```
+
+### Analysis Parameters
+
+```{r info_data, results='asis'}
+cat("Regular Expression for Gene ID extraction in sgRNA library was '", info$g.extractpattern, "'. ")
+if(as.logical(info$extracted)){
+  cat("Regular Expression for sgRNA target extraction in fastQ files used was'", info$targetRegex, "'. ")
+  if(as.logical(info$reverse)) cat("Reverse alignment was done. ")
+  cat("Bowtie sensitivity was set to", info$bt2Sensitivity, ", ")
+  cat("Bowtie quality to", info$bt2Quality, ".<br/>")
+} else {
+  cat("Readcount files were provided, no fastQ extraction was necessary. <br/>")
+}
+```
+
+```{r info_hc, results='asis'}
+cat("<dl>")
+cat("<dt>Adjusted p value thresholds</dt>")
+cat("<dd>Wilcox:", info$analysisWilcoxPval, "</dd>")
+cat("<dd>DESeq2:", info$analysisDeseq2Pval, "</dd>")
+cat("<dd>MAGeCK:", info$analysisMageckPval, "</dd>")
+cat("<dd>sgRSEA:", info$analysisSgrseaPval, "</dd>")
+cat("<dd>EdgeR:", info$analysisEdgerPval, "</dd>")
+cat("<dt>Normalization</dt>")
+cat("<dd>Normalized to homeoscadastic distribution by dispersion estimates using DESeq2.</dd>")
+cat("</dl><br/>")
+```
+
+
+
+
+

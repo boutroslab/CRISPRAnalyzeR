@@ -1,0 +1,48 @@
+<!-- 
+save as 'cosmicChild.Rmd'
+child of 'overviewChild.Rmd'
+--> 
+
+
+
+
+
+### COSMIC Mutation Database
+
+Additional information about cancer related mutations is retrieved from the [COSMIC](https://cancer.sanger.ac.uk/cosmic) database.
+For each gene of interest, all detected mutations of various cancer samples present in the COSMIC database are visualized.
+
+#### All Data
+
+```{r}
+Table_DT(indepth_geneOverview$cosmic$mutation, colNames = c("Gene", "Sample name", "Primary site", "Mutation AA", "Mutation Description", "Mutation position", "Resistance Mutation"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_Mutations", sep=""))
+```
+
+#### Mutation Types
+
+```{r}
+plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Mutation Description`, title = "Type of Mutation", subtitle = paste("in ", indepthOverviewGene ,sep=""), ylab ="Occurence in COSMIC database", xlab =" Type of Mutation", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_TypeMutations", sep=""))
+```
+
+#### Tumor Types
+
+```{r}
+plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Tumour origin`, title = "Tumor Origin", subtitle = paste("for ", indepthOverviewGene ,sep=""), ylab ="Occurence in COSMIC database", xlab =" Type of Tumor", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_TumorOrigin", sep=""))
+```
+
+#### Tumor Sites
+
+```{r}
+plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Primary site`, title = "Primary Site of Tissue", subtitle = paste("for ", indepthOverviewGene ,sep=""), ylab ="Occurence in COSMIC database", xlab = "Primary Site", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_TumorPrimarySite", sep=""))
+```
+
+#### Samples
+
+```{r}
+plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Sample name`, title = "Samples", subtitle = paste("in which mutations for ", indepthOverviewGene , " occured",sep=""), ylab ="Number of mutations", xlab = "Primary Site", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_Samples", sep=""))
+```
+
+
+
+
+

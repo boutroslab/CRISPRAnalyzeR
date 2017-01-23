@@ -1,0 +1,856 @@
+<!-- 
+save as 'sgRNAChild.Rmd'
+child of 'sgRNA.Rmd'
+--> 
+
+```{r, results='asis', eval=gseBool[counter]}
+enrichment <- geneList$GSE[[counter]]
+cat("##", paste(enrichment$genes, collapse = ", "), sprintf("(%s)", counter))
+```
+
+### Pathways
+
+The following pathway databases were accessed:
+[WikiPathways 2016](http://www.wikipathways.org/index.php/Download_Pathways), 
+[KEGG 2016](http://www.kegg.jp/kegg/download/), 
+[Biocarta 2016](https://cgap.nci.nih.gov/Pathways/BioCarta_Pathways), 
+[Reactome 2016](http://www.reactome.org/pages/download-data/), 
+[NCI-Nature 2016](https://wiki.nci.nih.gov/pages/viewpage.action?pageId=315491760), 
+[Panther 2016](http://www.pantherdb.org/pathway/).
+The results are shown below as graphs and tabulars for each database.
+
+#### Wiki Pathways
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "WikiPathways_2016")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "Wiki Pathways",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "WikiPathways_2016" )
+  }
+```
+
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "WikiPathways_2016")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_WikiPathways_2016" )
+```
+
+
+#### KEGG
+
+```{r}
+  filtered <-  dplyr::filter(enrichment$enrichr, database == "KEGG_2016")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "KEGG",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "KEGG_2016" )
+  }
+```
+
+```{r}
+  filtered <-  dplyr::filter(enrichment$enrichr, database == "KEGG_2016")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_KEGG_2016" )
+```
+
+
+#### Biocarta
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "Biocarta_2016")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "Biocarta",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Biocarta_2016" )
+  }
+```
+
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "Biocarta_2016")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Biocarta_2016" )
+```
+
+
+#### Reactome
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "Reactome_2016")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "Reactome",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Reactome_2016" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "Reactome_2016")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Reactome_2016" )
+```
+
+
+#### NCI Nature 2016
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-Nature_2016")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "NCI Nature",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "NCI-Nature_2016" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-Nature_2016")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_NCI-Nature_2016" )
+```
+
+
+#### Panther 2016
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "Panther_2016")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "Panther",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Panther_2016" )
+  }
+```
+
+```{r}
+Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_NCI-Panther_2016" )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/><br/>
+
+### Transcription
+
+Gene Set Analysis was performed using different databases for transcriptional information provided by the Enrichr service.
+The following databases were accessed:
+[ChEA 2015](http://amp.pharm.mssm.edu/lib/cheadownload.jsp), 
+[TRANSFAC and JASPAR PWMs](http://jaspar.genereg.net/), 
+[ENCODE and ChEA Consensus TFs from ChIP-X](http://amp.pharm.mssm.edu/Enrichr/geneSetLibrary?mode=text&libraryName=ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X), 
+[TargetScan microRNA Targets](http://www.targetscan.org/cgi-bin/targetscan/data_download.cgi?db=vert_61), 
+[Transcription Factor PPIs](http://amp.pharm.mssm.edu/Enrichr/geneSetLibrary?mode=text&libraryName=Transcription_Factor_PPIs).
+The results are shown below as graphs and tabulars for each database.
+
+#### ChEA 2015 Data
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "ChEA_2015")
+
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+     Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "ChEA 2015",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GeneSetEnrichment_ChEA_2015" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "ChEA_2015")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+          dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+          formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+          pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_ChEA_2015" )
+```
+
+
+#### TRANSFAC and JASPAR PWMs
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "TRANSFAC_and_JASPAR_PWMs")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "TRANSFAC and JASPAR",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GeneSetEnrichment_TRANSFAC_and_JASPAR_PWMs" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "TRANSFAC_and_JASPAR_PWMs")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_TRANSFAC_and_JASPAR_PWMs" )
+```
+
+
+
+#### ENCODE and ChEA Consensus TFs from ChIP-X
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "ENCODE and ChEA Transcription Factor ChIP-X",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GeneSetEnrichment_ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X" )
+```
+
+
+
+#### TargetScan microRNA
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "TargetScan_microRNA")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "TargetScan microRNA",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "TargetScan_microRNA" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "TargetScan_microRNA")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_TargetScan_microRNA" )
+```
+
+
+
+#### Transcription Factor PPIs
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "Transcription_Factor_PPIs")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "Transcription Factor Interactions",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Transcription_Factor_PPIs" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "Transcription_Factor_PPIs")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Transcription_Factor_PPIs" )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/><br/>
+
+### Ontologies
+
+Enrichr was used to retrieve a Gene Ontology Gene set analysis from the Gene Ontology Consortium.
+The following databases were accessed:
+[GO Biological Process 2015](http://www.geneontology.org/page/download-annotations), 
+[GO Cellular Component 2015](http://www.geneontology.org/page/download-annotations), 
+[GO Molecular Function 2015](http://www.geneontology.org/page/download-annotations).
+The results are shown below as graphs and tabulars for each database.
+
+#### GO Biological Process
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Biological_Process_2015")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "GO Biological Process 2015",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GO_Biological_Process_2015" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Biological_Process_2015")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_GO_Biological_Process_2015" )
+```
+
+
+
+#### GO Molecular Function
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Molecular_Function_2015")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "GO Molecular Function 2015",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GO_Molecular_Function_2015" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Molecular_Function_2015")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_GO_Molecular_Function_2015" )
+```
+
+
+
+#### GO Cellular Component
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Cellular_Component_2015")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "GO Cellular Component 2015",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GO_Cellular_Component_2015" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Cellular_Component_2015")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_GO_Cellular_Component_2015" )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/><br/>
+
+### Diseases
+
+Enrichr was used to retrieve data from the Online Mendelian Inheritance in Man Database.
+The [OMIM](http://www.omim.org/) database wwas accessed.
+The results are shown below as graphs and tabulars.
+
+#### OMIM Diseases
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "OMIM_Disease")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "OMIM Disease",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "OMIM_Disease" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "OMIM_Disease")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_OMIM_Disease" )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/><br/>
+
+### Cell Types
+
+Enrichr was used to retrieve genetic information about cell lines.
+The following databases were accessed:
+[Cancer Cell Line Encyclopedia](https://portals.broadinstitute.org/ccle/data/browseData), 
+[NCI-60 Cancer Cell Lines](http://biogps.org/downloads/).
+The results are shown below as graphs and tabulars for each database.
+
+#### Cancer Cell Line Encyclopedia
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "Cancer_Cell_Line_Encyclopedia")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "Cancer Cell Line Encyclopedia",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Cancer_Cell_Line_Encyclopedia" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "Cancer_Cell_Line_Encyclopedia")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Cancer_Cell_Line_Encyclopedia" )
+```
+
+
+
+#### NCI-60 Cancer Cell Line Panel
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-60_Cancer_Cell_Lines")
+  
+  tt <- tagList(
+    shiny::tags$strong("{point.name}"), shiny::tags$br(),
+    shiny::tags$div("Score : {point.y:.5f}", shiny::tags$br(),
+                    shiny::tags$div("Adjusted P-Value : {point.qval:.5f}"), shiny::tags$br(),
+                    shiny::tags$div("Genes associated: {point.genes}")
+    )
+  ) %>% as.character()
+  
+  if(nrow(filtered) == 0)
+  {
+    Plot_blank(device="hc", msg = "No data available")
+  } else {
+    # Create Highcharter plot
+    Plot_bar( seriesNames = c("score"),
+              catName = "category",
+              data = filtered, 
+              tooltip = tt,
+              title = "NCI-60 Cancer Cell Lines",
+              subtitle = "Gene Set Enrichment",
+              xLab = "Score",
+              yLab = "Annotation",
+              zoom = "x",
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "NCI-60_Cancer_Cell_Lines" )
+  }
+```
+
+```{r}
+filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-60_Cancer_Cell_Lines")
+  
+  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
+           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_NCI-60_Cancer_Cell_Lines" )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+counter <- counter + 1
+```
+
+
+
+
+
+
+

@@ -1,0 +1,123 @@
+<!-- 
+save as 'sgRNAChild.Rmd'
+child of 'sgRNA.Rmd'
+--> 
+
+```{r, results='asis', eval=sgRNABool[counter]}
+gene <- geneList$sgRNA[[counter]]$gene
+cat("##", gene, sprintf("(%s)", counter))
+```
+
+
+### Readcount
+
+The normalized read-counts of sgRNAs for the gene of interest are shown.
+
+```{r}
+datasets <- c(results$compare[[1]], results$compare[[2]])
+normData <- results$normalizedReadcount
+rawData <- results$readcount
+pol <- FALSE
+norm <- TRUE
+Plot_sgRNA_readcount( gene, datasets, normData, rawData, bPolar = pol, bNorm = norm, bApp = FALSE )
+```
+
+### Log2 Foldchange
+
+The log2 fold-change in normalized read-counts of sgRNAs for the gene of interest are shown.
+
+```{r}
+groups <- names(results$compare)
+df <- rawGenes$rawGenes
+sorted <- TRUE
+Plot_sgRNA_foldchanges( gene, groups, df, bSort = sorted, bApp = FALSE )
+```
+
+### Genomic Binding Sites
+
+These are the number of predicted binding sites of each sgRNA for the gene of interest.
+The re-evaluation feature of [E-CRISP](http://www.e-crisp.org/E-CRISP/aboutpage.html) was used with a maximum of 1 5' unspecific leading base and a maximum of 2 mismatches within target sequence allowed.
+
+```{r}
+df <- rawGenes$rawGenes
+pol <- FALSE
+sorted <- TRUE
+Plot_sgRNA_offtarget( gene, "offtargets", df, bSort = sorted, bPolar = pol, bApp = FALSE )
+```
+
+### Z-Score
+
+These are [Z-scores](https://en.wikipedia.org/wiki/Standard_score)/ standard scores (difference to mean, devided by standard deviation) of all sgRNAs for the gene of interest. The Z-score's mean is 0, its standard deviation 1.
+
+```{r}
+groups <- names(results$compare)
+df <- rawGenes$rawGenes
+sorted <- TRUE
+Plot_sgRNA_zScores( gene, groups, df, bSort = sorted, bApp = FALSE )
+```
+
+### Efficiency Scores
+
+These are commonly used scores to score sgRNA efficiency.
+*Seed GC* is the relative GC content of the 8 basepairs proximal to the PAM sequence.
+The *Doench* score is an efficiency score introduced by [Doench **et al.**](http://www.nature.com/nbt/journal/v32/n12/abs/nbt.3026.html).
+The *Doench* score is an efficiency score introduced by [Xu **et al.**](https://dash.harvard.edu/handle/1/27002088).
+
+```{r}
+scores <- c("seed_GC", "doench_score", "xu_score")
+df <- rawGenes$rawGenes
+pol <- FALSE
+Plot_sgRNA_scores( gene, scores, df, type = "effic", bPolar = pol, bApp = FALSE )
+```
+
+### E-CRISP Scores
+
+[E-CRISP](http://www.e-crisp.org/E-CRISP/aboutpage.html) provides several other scores about sgRNA specificity, annotations, efficiency, coding sequence (CDS), and exon targeting. These scores are presented here.
+
+```{r}
+scores <- c("Spec.Score", "Anno.Score", "Eff.Score", "CDS_score", "exon_score")
+df <- rawGenes$rawGenes
+pol <- FALSE
+Plot_sgRNA_scores( gene, scores, df, type = "ecrisp", bPolar = pol, bApp = FALSE )
+```
+
+### sgRNA Sequences
+
+The actual sgRNA sequences with fold-changes, Z-scores, and the number of predicted binding sites is given here.
+
+```{r}
+df <- rawGenes$rawGenes
+df <- df[ df$genes == gene, ]
+df <- df[, c("designs", "log2foldchange","z.score.foldchange","offtargets", "sequence")]
+df$log2foldchange <- round(as.numeric(df$log2foldchange), digits=2)
+df$z.score.foldchange <- round(as.numeric(df$z.score.foldchange), digits=2)
+df$offtargets <- round(as.numeric(df$offtargets), digits=0)
+Table_DT(df, colNames = c("sgRNAs", "Foldchange (log2)", "Z-Score (Foldchange)","Targets", "Target Sequence"), bRownames = FALSE, class = "stripe hover", ordering = list(1, 'asc'))
+```
+
+### sgRNA Binding Sites
+
+Shown here are sgRNAs with predicted targets within an annotated gene or between two genes (intergenic). 
+In case a sgRNA targets the same target more than once, the predicted target is only listed once. 
+The re-evaluation feature of [E-CRISP](http://www.e-crisp.org/E-CRISP/aboutpage.html) was used with a maximum of 1 5' unspecific leading base and a maximum of 2 mismatches within target sequence allowed.
+
+```{r}
+df <- rawGenes$rawGenes
+df <- df[ df$genes == gene, ]
+df <- df[, c("designs","offtargets", "target")]
+df$offtargets <- round(as.numeric(df$offtargets), digits=0)
+Table_DT(df, colNames = c("sgRNAs", "Targets", "Predicted Binding Sites"), bRownames = FALSE, class = "stripe hover", ordering = list(1, 'asc'))
+```
+
+
+
+```{r}
+counter <- counter + 1
+```
+
+
+
+
+
+
+

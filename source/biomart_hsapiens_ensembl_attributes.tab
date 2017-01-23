@@ -1,0 +1,200 @@
+name	description
+ensembl_gene_id	Ensembl Gene ID
+ensembl_transcript_id	Ensembl Transcript ID
+ensembl_peptide_id	Ensembl Protein ID
+ensembl_exon_id	Ensembl Exon ID
+description	Description
+chromosome_name	Chromosome Name
+start_position	Gene Start (bp)
+end_position	Gene End (bp)
+strand	Strand
+band	Band
+transcript_start	Transcript Start (bp)
+transcript_end	Transcript End (bp)
+transcription_start_site	Transcription Start Site (TSS)
+transcript_length	Transcript length (including UTRs and CDS)
+transcript_tsl	Transcript Support Level (TSL)
+transcript_gencode_basic	GENCODE basic annotation
+transcript_appris	APPRIS annotation
+external_gene_name	Associated Gene Name
+external_gene_source	Associated Gene Source
+external_transcript_name	Associated Transcript Name
+external_transcript_source_name	Associated Transcript Source
+transcript_count	Transcript count
+percentage_gc_content	% GC content
+gene_biotype	Gene type
+transcript_biotype	Transcript type
+source	Source (gene)
+transcript_source	Source (transcript)
+status	Status (gene)
+transcript_status	Status (transcript)
+version	Version (gene)
+transcript_version	Version (transcript)
+phenotype_description	Phenotype description
+source_name	Source name
+study_external_id	Study External Reference
+go_id	GO Term Accession
+name_1006	GO Term Name
+definition_1006	GO Term Definition
+go_linkage_type	GO Term Evidence Code
+namespace_1003	GO domain
+goslim_goa_accession	GOSlim GOA Accession(s)
+goslim_goa_description	GOSlim GOA Description
+arrayexpress	ArrayExpress
+chembl	ChEMBL ID(s)
+ccds	CCDS ID
+dbass5_id	Database of Aberrant 5' Splice Sites (DBASS5) IDs
+dbass5_name	DBASS5 Gene Name
+embl	EMBL (Genbank) ID
+ens_hs_transcript	Ensembl Human Transcript IDs
+ens_hs_translation	Ensembl Human Translation IDs
+ens_lrg_gene	LRG to Ensembl link gene
+ens_lrg_transcript	LRG to Ensembl link transcript
+entrezgene	EntrezGene ID
+entrezgene_transcript_name	EntrezGene transcript name ID
+hpa	Human Protein Atlas Antibody ID
+ottg	VEGA gene ID(s) (OTTG)
+ottt	VEGA transcript ID(s) (OTTT)
+ottp	VEGA protein ID(s) (OTTP)
+hgnc_id	HGNC ID(s)
+hgnc_symbol	HGNC symbol
+hgnc_transcript_name	HGNC transcript name
+merops	MEROPS ID
+mim_morbid_accession	MIM Morbid Accession
+mim_morbid_description	MIM Morbid Description
+mim_gene_accession	MIM Gene Accession
+mim_gene_description	MIM Gene Description
+mirbase_accession	miRBase Accession(s)
+mirbase_id	miRBase ID(s)
+mirbase_transcript_name	miRBase transcript name
+pdb	PDB ID
+protein_id	Protein (Genbank) ID [e.g. AAA02487]
+pubmed	PubMed ID [e.g. 7716543]
+reactome	Reactome ID
+reactome_gene	Reactome gene ID [e.g. REACT_1006]
+reactome_transcript	Reactome transcript ID [e.g. REACT_11045]
+refseq_mrna	RefSeq mRNA [e.g. NM_001195597]
+refseq_mrna_predicted	RefSeq mRNA predicted [e.g. XM_001125684]
+refseq_ncrna	RefSeq ncRNA [e.g. NR_002834]
+refseq_ncrna_predicted	RefSeq ncRNA predicted [e.g. XR_108264]
+refseq_peptide	RefSeq Protein ID [e.g. NP_001005353]
+refseq_peptide_predicted	RefSeq Predicted Protein ID [e.g. XP_001720922]
+rfam	Rfam ID
+rfam_transcript_name	Rfam transcript name
+rnacentral	RNACentral ID
+ucsc	UCSC ID
+unigene	Unigene ID
+uniparc	UniParc
+uniprot_sptrembl	UniProt/TrEMBL Accession
+uniprot_swissprot	UniProt/SwissProt Accession
+uniprot_genename	UniProt Gene Name
+uniprot_genename_transcript_name	Uniprot Transcript Name
+wikigene_name	WikiGene Name
+wikigene_id	WikiGene ID
+wikigene_description	WikiGene Description
+codelink	Codelink probe
+illumina_humanwg_6_v1	Illumina HumanWG 6 v1 probe
+illumina_humanwg_6_v2	Illumina HumanWG 6 v2 probe
+illumina_humanwg_6_v3	Illumina HumanWG 6 v3 probe
+illumina_humanht_12_v3	Illumina Human HT 12 V3 probe 
+illumina_humanht_12_v4	Illumina Human HT 12 V4 probe 
+illumina_humanref_8_v3	Illumina Human Ref 8 V3 probe
+phalanx_onearray	Phalanx OneArray probe
+family	Ensembl Protein Family ID(s)
+family_description	Ensembl Family Description
+pirsf	PIRSF ID
+superfamily	SUPERFAMILY ID
+superfamily_start	SUPERFAMILY start
+superfamily_end	SUPERFAMILY end
+smart	SMART ID
+hamap	HAMAP Accession ID
+hamap_start	HAMAP start
+hamap_end	HAMAP end
+profile	Pfscan ID
+profile_start	Pfscan start
+profile_end	Pfscan end
+prosite	ScanProsite ID
+prosite_start	ScanProsite start
+prosite_end	ScanProsite end
+prints	PRINTS ID
+prints_start	PRINTS start
+prints_end	PRINTS end
+pfam	Pfam ID
+pfam_start	Pfam start
+pfam_end	Pfam end
+tigrfam	TIGRFAM ID
+gene3d	Gene3D ID
+gene3d_start	Gene3D start
+gene3d_end	Gene3D end
+hmmpanther	HMMPanther ID
+hmmpanther_start	HMMPanther start
+hmmpanther_end	HMMPanther end
+interpro	Interpro ID
+interpro_short_description	Interpro Short Description
+interpro_description	Interpro Description
+interpro_start	Interpro start
+interpro_end	Interpro end
+transmembrane_domain	Transmembrane domain (tmhmm)
+transmembrane_domain_start	Transmembrane domain (tmhmm) start
+transmembrane_domain_end	Transmembrane domain (tmhmm) end
+signal_domain	signal peptide
+signal_domain_start	signal peptide start
+signal_domain_end	signal peptide end
+ncoils	coiled coil (ncoils)
+ncoils_start	coiled coil (ncoils) start
+ncoils_end	coiled coil (ncoils) end
+5_utr_start	5' UTR Start
+5_utr_end	5' UTR End
+3_utr_start	3' UTR Start
+3_utr_end	3' UTR End
+cds_length	CDS Length
+exon_chrom_start	Exon Chr Start (bp)
+exon_chrom_end	Exon Chr End (bp)
+is_constitutive	Constitutive Exon
+rank	Exon Rank in Transcript
+phase	phase
+cdna_coding_start	cDNA coding start
+cdna_coding_end	cDNA coding end
+genomic_coding_start	Genomic coding start
+genomic_coding_end	Genomic coding end
+cds_start	CDS Start
+cds_end	CDS End
+variation_name	Variant Name
+germ_line_variation_source	Variant Source
+source_description	Variant source description
+allele	Variant Alleles
+validated	Variant supporting evidence
+mapweight	Mapweight
+minor_allele	Minor allele
+minor_allele_freq	Minor allele frequency
+minor_allele_count	Minor allele count
+clinical_significance	Clinical significance
+transcript_location	Transcript location (bp)
+snp_chromosome_strand	Variant Chromosome Strand
+peptide_location	Protein location (aa)
+chromosome_start	Chromosome position start (bp)
+chromosome_end	Chromosome position end (bp)
+polyphen_prediction_2076	PolyPhen prediction
+polyphen_score_2076	PolyPhen score
+distance_to_transcript_2076	Distance to transcript
+cds_start_2076	CDS Start
+cds_end_2076	CDS End
+peptide_shift	Protein Allele
+synonymous_status	Variant Consequence
+allele_string_2076	Consequence specific allele
+transcript_exon_intron	Unspliced (Transcript)
+gene_exon_intron	Unspliced (Gene)
+transcript_flank	Flank (Transcript)
+gene_flank	Flank (Gene)
+coding_transcript_flank	Flank-coding region (Transcript)
+coding_gene_flank	Flank-coding region (Gene)
+5utr	5' UTR
+3utr	3' UTR
+gene_exon	Exon sequences
+cdna	cDNA sequences
+coding	Coding sequence
+peptide	Protein
+upstream_flank	upstream_flank
+downstream_flank	downstream_flank
+cdna_coding_start	CDS start (within cDNA)
+cdna_coding_end	CDS end (within cDNA)

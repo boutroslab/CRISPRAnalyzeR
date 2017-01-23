@@ -1,0 +1,88 @@
+---
+title: "CRISPR-AnalyzeR Report"
+params: 
+  info: 
+    value: unknown
+---
+
+# Screen Information
+
+![](../www/images/CRISPRAnalyzR_logo5.png "CRISPRAnalzyeR Report")
+
+**Date of Report Generation:** "`r format(Sys.time(), '%d %B, %Y')`"
+
+This report has been generated with CRISPRAnalyzeR, a software suite to analyze and document pooled CRISPR/Cas9 screens in an interactive and exploratory way.  
+
+**Please note:**  
+All tables and figures are still interactive and do not require internet access.  
+
+
+<!--load files, data, libraries--> 
+```{r, child='init.Rmd'}
+```
+
+<!--general information about screen--> 
+```{r, child='info.Rmd'}
+```
+
+
+<!--Part quality controls--> 
+```{r, results='asis', eval=inclSQ}
+cat("# (PART) Screen Quality {-}")
+```
+```{r, child='screenQuality.Rmd', eval=inclSQ}
+```
+
+
+<!--Part Hit Calling-->
+```{r, results='asis', eval=inclHC}
+cat("# (PART) Hit Calling {-}")
+```
+```{r, child='hitCalling.Rmd', eval=inclHC}
+```
+
+
+<!--Part Hit Confirmation-->
+```{r}
+idBool <- if( any(c(inclSG, inclOV, inclCO, inclAN, inclGS)) ) TRUE else FALSE # if none was checked (downloads tab)
+if( length(geneList$sgRNA) + length(geneList$overview) + 
+    length(geneList$anno) + length(geneList$compare) + length(geneList$GSE) < 1 ) idBool <- FALSE # if there are no genes saved
+```
+```{r, results='asis', eval=idBool}
+cat("# (PART) Hit Confirmation {-}")
+```
+
+<!--overview--> 
+```{r, child='overview.Rmd', eval=inclOV}
+```
+
+<!--sgRNAs--> 
+```{r, child='sgRNA.Rmd', eval=inclSG}
+```
+
+<!--gene set enrichment--> 
+```{r, child='gse.Rmd', eval=inclGS}
+```
+
+<!--compare--> 
+```{r, child='compare.Rmd', eval=inclCO}
+```
+
+<!--annotate--> 
+```{r, child='anno.Rmd', eval=inclAN}
+```
+
+<!--credits-->
+
+# Credits
+
+CRISPRAnalyzeR has been developed by **Jan Winter** and **Marc Schwering** at the **German Cancer Research Center**.  
+For further information please visit our Website at  
+
+[GitHub](https://github.com/boutroslab/CRISPRAnalyzeR)
+[Website](http://crispr-analyzer.dkfz.de)  
+
+
+Please also don't forget to cite our paper  
+
+

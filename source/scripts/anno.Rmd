@@ -1,0 +1,83 @@
+<!-- 
+save as 'anno.Rmd'
+child of 'report.Rmd'
+--> 
+
+
+
+
+
+<!--make sgRNA Tab for every Gene-->
+```{r anno_eval, include=FALSE, message=FALSE}
+annoBool <- rep(FALSE, 20)
+if(length(geneList$anno) != 0) annoBool[1:length(geneList$anno)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=annoBool[counter]}
+if(length(geneList$anno) != 0){
+  cat("# Gene Annotations\n\n")
+  # cat("In this section certain gene annotations from [ensembl](http://www.ensembl.org/index.html) were retrieved for genes of interest. Each subsection is one call the user chose to save.")
+  cat("This section contains information from the Gene Annotation. All selected genes and annotation which have been retrieved from [ensembl](http://www.ensembl.org/index.html) are shown here.")
+}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```
+
+```{r, eval=annoBool[counter], child='annoChild.Rmd'}
+```

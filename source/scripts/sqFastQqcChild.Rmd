@@ -1,0 +1,98 @@
+<!-- 
+save as 'sqFastQqcChild'
+child of 'screenQuality.Rmd'
+--> 
+
+
+
+<!--FastQ Quality Plots-->
+
+# FastQ Quality
+
+For FastQ quality control the Bioconductor package [Rqc](https://www.bioconductor.org/packages/release/bioc/html/Rqc.html) was used.
+The following sections show several visualizations use to estimate sequencing quality.
+
+
+## Cycle specific GC Content
+
+This line plot shows the average GC content for each sequencing cycle. It can show a GC content bias.
+
+```{r}
+if( extractedFiles$rqc == "" ){
+  "No Fastq.gz files uploaded or an error occured during FASTQ analysis."
+} else print(extractedFiles$rqc[["GCcontent"]])
+```
+
+## Cycle specific Quality Distribution
+
+The bar plot shows the proportion of quality calls per cycle. Colors are presented in a gradient Red-Blue, where red identifies calls of lower quality.
+
+```{r}
+if( extractedFiles$rqc == "" ){
+  "No Fastq.gz files uploaded or an error occured during FASTQ analysis."
+} else print(extractedFiles$rqc[["cycleqcmap"]])
+```
+
+## Cycle specific Average Quality
+
+This describes the average quality scores for each cycle of sequencing. 
+
+```{r}
+if( extractedFiles$rqc == "" ){
+  "No Fastq.gz files uploaded or an error occured during FASTQ analysis."
+} else print(extractedFiles$rqc[["QCcycle"]])
+```
+
+```{r}
+if( extractedFiles$rqc == "" ){
+  "No Fastq.gz files uploaded or an error occured during FASTQ analysis."
+} else print(extractedFiles$rqc[["AverageQualityPlot"]])
+```
+
+```{r}
+if( extractedFiles$rqc == "" ){
+  "No Fastq.gz files uploaded or an error occured during FASTQ analysis."
+} else print(extractedFiles$rqc[["ReadQualityPlot"]])
+```
+
+## Cycle specific Base Call Proportion
+
+These bar/line plots describe the proportion of each nucleotide called for every cycle of sequencing. 
+
+```{r}
+if( extractedFiles$rqc == "" ){
+  "No Fastq.gz files uploaded or an error occured during FASTQ analysis."
+} else print(extractedFiles$rqc[["CycleBasecall"]])
+```
+
+```{r}
+if( extractedFiles$rqc == "" ){
+  "No Fastq.gz files uploaded or an error occured during FASTQ analysis."
+} else print(extractedFiles$rqc[["CycleBasecallLine"]])
+```
+
+## Read Frequency
+
+This plot shows the proportion of reads that appeared many times. 
+
+```{r}
+if( extractedFiles$rqc == "" ){
+  "No Fastq.gz files uploaded or an error occured during FASTQ analysis."
+} else print(extractedFiles$rqc[["ReadFrequency"]])
+```
+
+## Read Width
+
+This is a barplot that presents the distribuition of the lengths of the reads available in the FASTQ file. 
+
+```{r}
+if( extractedFiles$rqc == "" ){
+  "No Fastq.gz files uploaded or an error occured during FASTQ analysis."
+} else print(extractedFiles$rqc[["Width"]])
+```
+
+
+
+
+
+

@@ -1,0 +1,83 @@
+<!-- 
+save as 'overview.Rmd'
+child of 'report.Rmd'
+--> 
+
+
+
+
+
+<!--make overview Tab for every Gene-->
+```{r genes_eval_ov, include=FALSE, message=FALSE}
+ovBool <- rep(FALSE, 20)
+if(length(geneList$overview) != 0) ovBool[1:length(geneList$overview)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=ovBool[counter]}
+if(length(geneList$overview) != 0){
+  cat("# Gene Overviews\n\n")
+  cat("This section is an overview about the genes of interest. It provides gene information retrieved from various databases, gene and sgRNA models, Gene Ontology terms, mutations and performances in this and other published screens. Each subsection contains the overview of one gene which the user investigated and saved.")
+}
+```
+
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```
+
+```{r, eval=ovBool[counter], child='overviewChild.Rmd'}
+```

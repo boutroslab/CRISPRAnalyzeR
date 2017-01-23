@@ -1,0 +1,84 @@
+<!-- 
+save as 'sgRNA.Rmd'
+child of 'report.Rmd'
+--> 
+
+
+
+
+
+<!--make sgRNA Tab for every Gene-->
+```{r genes_eval, include=FALSE, message=FALSE}
+sgRNABool <- rep(FALSE, 20)
+if(length(geneList$sgRNA) != 0) sgRNABool[1:length(geneList$sgRNA)] <- TRUE
+counter <- 1
+```
+
+```{r, results='asis', eval=sgRNABool[counter]}
+if(length(geneList$sgRNA) != 0){
+  cat("# sgRNAs\n\n")
+  cat("This section provides information about the individual sgRNAs for the gene of interest. This includes performance in this screen, different scores, the sgRNA sequence, and predicted sgRNA binding sites. Certain scores and binding sites are retrieved from [E-CRISP](http://www.e-crisp.org/E-CRISP/aboutpage.html). Each subsections contains the information to one gene which the user investigated and saved.")
+}
+```
+
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+  

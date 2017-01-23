@@ -1,0 +1,399 @@
+<!-- 
+save as 'overviewChild.Rmd'
+child of 'overview.Rmd'
+--> 
+
+```{r, results='asis', eval=ovBool[counter]}
+gene <- geneList$overview[[counter]]$gene
+cat("##", gene, sprintf("(%s)", counter))
+```
+
+
+### General Gene Information
+
+This paragraph provides general information about the gene of interest from [Ensembl](http://www.ensembl.org/index.html), [EnrichR](http://amp.pharm.mssm.edu/Enrichr/) and [KEGG](http://www.genome.jp/kegg/).
+
+```{r}
+indepthOverviewGene <- geneList$overview[[counter]]$gene
+indepth_geneOverview <- geneList$overview[[counter]]$indepth_geneOverview
+indepth_GVIZ_gene_data <- geneList$overview[[counter]]$indepth_GVIZ_gene_data
+indepth_GVIZ_sgrna_data <- geneList$overview[[counter]]$indepth_GVIZ_sgrna_data
+```
+
+#### Gene Information
+
+```{r}
+                HTML('<div class="col-md-6">')
+                  HTML('
+                          <table class="table">
+                          <tbody>
+                          <tr>
+                          <td><strong>Gene Symbol</strong></td>
+                          <td>')
+HTML(paste("<i class='fa fa-external-link fa-fw'></i>&nbsp;<strong><a href='http://www.genecards.org/cgi-bin/carddisp.pl?gene=",unique(indepth_geneOverview()$data$hgnc_symbol),"' target='_blank'>",unique(indepth_geneOverview$data$hgnc_symbol),"</a></strong>", sep=""))
+                  HTML('</td>
+                          </tr>
+                          <tr>
+                          <td><strong>Ensembl Gene ID</strong></td>
+                          <td>')
+organism <- switch(info$annoDataset, homo_sapiens = "Homo_sapiens", mus_musculus = "Mus_musculus", dario_rerio = "Dario_rerio")
+HTML(paste("<i class='fa fa-external-link fa-fw'></i>&nbsp;<strong><a href='http://www.ensembl.org/", organism,"/Gene/Summary?db=core;g=", unique(indepth_geneOverview()$data$ensembl_gene_id),"' target='_blank'>",unique(indepth_geneOverview$data$ensembl_gene_id),"</a></strong>", sep="", collapse=""))
+                  HTML('</td>
+                          </tr>
+                          <tr>
+                          <td><strong>Gene Description</strong></td>
+                          <td>')
+HTML(as.character(unique(indepth_geneOverview$data$description)))
+                  HTML('</td>
+                          </tr>
+                          <tr>
+                   <td><strong>Uniprot ID</strong></td>
+                          <td>')
+uniqueuniprot <- unique(indepth_geneOverview$data$uniprot_swissprot)
+uniqueuniprot <- uniqueuniprot[uniqueuniprot != ""]
+HTML(as.character(paste("<i class='fa fa-external-link fa-fw'></i>&nbsp;<strong><a href='http://www.uniprot.org/uniprot/",uniqueuniprot,"' target='_blank'>", uniqueuniprot,"</a></strong>", sep="", collapse = "<br/>")))
+                  HTML('</td>
+                          </tr>
+                          <tr>
+                          <td><strong>NCBI Gene ID</strong></td>
+                          <td>')
+HTML(as.character(paste(paste("<i class='fa fa-external-link fa-fw'></i>&nbsp;<strong><a href='http://www.ncbi.nlm.nih.gov/gene/?term=",unique(indepth_geneOverview$data$entrezgene),"' target='_blank'>", unique(indepth_geneOverview$data$entrezgene),"</a></strong>", sep="", collapse = "<br/>"), collapse = "; ")))
+                  HTML('</td>
+                          </tr>
+                          </tbody>
+                          </table>')
+                     HTML('</div>')
+                     HTML(paste(rep("<br/>", 8), collapse = ""))
+```
+
+
+
+#### Performance in Screen
+
+```{r}
+HTML('<div class="col-md-6">')
+                    HTML('<table class="table">
+                      <tbody>
+                         <tr>
+                         <td>
+                         <strong>Log2 Foldchange</strong>
+                         </td>
+                         <td>')
+HTML(round(as.numeric(results$deseq$data$genes[results$deseq$data$genes$genes == indepthOverviewGene, "log2FoldChange"]), digits = 5))
+                  HTML('</td>
+                        </tr>
+                        <tr>
+                       <td><strong>Z-Ratio</strong></td>
+                       <td>')
+HTML(round(as.numeric(results$wilcox$data[indepthOverviewGene , "p.value"]), digits = 5))
+                  HTML('</td>
+                      </tr>
+                      <tr>
+                      <td><strong>Wilcoxon p-value</strong></td>
+                      <td>')
+HTML(round(as.numeric(results$wilcox$data[indepthOverviewGene , "p.value"]), digits = 5))
+                  HTML('</td>
+                      </tr>
+                      <tr>
+                      <td><strong>DESeq2 p-value</strong></td>
+                      <td>')
+HTML(round(as.numeric(results$deseq$data$genes[results$deseq$data$genes$genes == indepthOverviewGene, "padj"]), digits = 5))
+                  HTML('</td>
+                      </tr>
+                      <tr>
+                      <td><strong>MAGeCK p-value</strong></td>
+                      <td>')
+HTML(paste("<i>Enriched:</i>", round(as.numeric(results$mageck$data$genes[results$mageck$data$genes$genes == indepthOverviewGene, "pos"]), digits = 5) ,"<i>Depleted:</i>", round(as.numeric(results$mageck$data$genes[results$mageck$data$genes$genes == indepthOverviewGene, "pos"]), digits = 5), sep=" "))
+                  HTML('</td>
+                      </tr>
+                      <tr>
+                      <td><strong>sgRSEA p-value</strong></td>
+                      <td>')
+HTML(paste("<i>Enriched:</i>", round(as.numeric(results$rsea$data$gene.pos[rownames(results$rsea$data$gene.pos) == indepthOverviewGene, "FDR.pos"]), digits = 5), "<i>Depleted:</i>", round(as.numeric(results$rsea$data$gene.neg[rownames(results$rsea$data$gene.neg) == indepthOverviewGene, "FDR.neg"]), digits = 5), sep=" "))
+                  HTML('</td>
+                      </tr>
+                      <tr>
+                      <td><strong>edgeR p-value</strong></td>
+                      <td>')
+HTML(round(as.numeric(results$edger$data$genes[rownames(results$edger$data$genes) == indepthOverviewGene,"FDR"]), digits = 5))
+                  HTML('</td>
+                      </tr>
+                      </tbody>
+                      </table>')
+                     HTML('</div>')
+                     HTML(paste(rep("<br/>", 11), collapse = ""))
+```
+
+
+
+#### KEGG
+
+```{r}
+data <- indepth_geneOverview$kegg$name
+                   shiny::tags$p(class="text-left",HTML("<strong>Other Gene Names</strong>"),HTML("</br>") , 
+HTML(if(length(data) > 0 && data != "") data else "No data available"))
+                   
+data <- paste(sapply(names(indepth_geneOverview$kegg$pathway), function(x) paste0('<i class="fa fa-external-link fa-fw"></i>&nbsp;<a href="http://www.genome.jp/dbget-bin/www_bget?', x, '" target="_blank">', indepth_geneOverview$kegg$pathway[[x]], '</a>')), collapse = '<br/>')
+                   shiny::tags$p(class="text-left",HTML("<strong>Associated Pathways</strong>"),HTML("</br>") , 
+HTML(if(data == "") "No data available" else data) )
+
+data <- paste(sapply(names(indepth_geneOverview$kegg$disease), function(x) paste0('<i class="fa fa-external-link fa-fw"></i>&nbsp;<a href="http://www.genome.jp/dbget-bin/www_bget?ds:', x, '" target="_blank">', indepth_geneOverview$kegg$disease[[x]], '</a>')), collapse = '<br/>')
+                   shiny::tags$p(class="text-left",HTML("<strong>Associated Diseases</strong>"),HTML("</br>") , 
+HTML(if(data == "") "No data available" else data) )
+                   
+data <- indepth_geneOverview$kegg$motif
+                   shiny::tags$p(class="text-left",HTML("<strong>Motifs</strong>"),HTML("</br>") , 
+HTML(if(length(data) > 0 && data != "") data else "No data available"))
+                   
+data <- paste(indepth_geneOverview$kegg$dblinks, collapse="</br>")
+                   shiny::tags$p(class="text-left",HTML("<strong>Presence in other Databases</strong>"),HTML("</br>") , 
+HTML(if(data == "") "No data available" else data) )
+                   
+data <- paste(sapply(names(indepth_geneOverview$kegg$structure), function(x) paste0('<i class="fa fa-external-link fa-fw"></i>&nbsp;<a href="http://www.rcsb.org/pdb/explore/explore.do?structureId=', x, '" target="_blank">', indepth_geneOverview$kegg$structure[[x]], '</a>')), collapse = '<br/>')
+                   shiny::tags$p(class="text-left",HTML("<strong>Associated Crystal Structures</strong>"),HTML("</br>") , 
+HTML(if(data == "") "No data available" else data) )
+                   
+                   shiny::tags$p(class="text-left", width="85%", shiny::tags$span(width="20%" , HTML("<strong>Amino Acid Sequence</strong>")), shiny::tags$span(width="80%" , HTML(paste0("<pre>",gsub("(.{50})", "\\1</br>", as.character(indepth_geneOverview$kegg$aa)))) )) 
+```
+
+
+
+#### Further Information
+
+```{r}
+data <- (dplyr::filter(indepth_geneOverview$enrichr, database == "ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X", database == "ChEA 2015") %>% dplyr::select(category))$category
+chipseqbinding <- if(length(data) > 0) paste(data, collapse = "<br>") else "No data available"
+
+data <- (dplyr::filter(indepth_geneOverview$enrichr, database == "TargetScan_microRNA") %>% dplyr::select(category))$category
+targetscanmirna <- if(length(data) > 0) paste(data, collapse = "<br>") else "No data available"
+
+data <- (dplyr::filter(indepth_geneOverview$enrichr, database == "Transcription_Factor_PPIs", database == "TRANSFAC_and_JASPAR_PWMs") %>% dplyr::select(category))$category
+tfppi <- if(length(data) > 0) paste(data, collapse = "<br>") else "No data available"
+
+                          shiny::tags$p(class="text-left",HTML("<strong>", "The following genes bind to the promoter region of your gene:","</strong>"), HTML("</br>"), HTML(chipseqbinding) )
+                          shiny::tags$p(class="text-left",HTML("<strong>", "Your gene is a predicted target of the following miRNAs:","</strong>"), HTML("</br>"), HTML(targetscanmirna) )
+                          shiny::tags$p(class="text-left",HTML("<strong>", "Physical interaction with your gene has been reported for:","</strong>"), HTML("</br>"), 
+                          HTML(tfppi) )
+```
+
+
+
+
+
+
+
+
+### Gene Model
+
+This is a genomic view similar to a genome browser, which includes gene information.
+Transcripts and interesting genomic regions near the gene of interest are shown.
+It uses data from [Ensembl](http://www.ensembl.org/index.html).
+
+```{r}
+res <- indepth_GVIZ_gene_data
+if( !is.null(res) && length(res) > 0 && class(res) != "character" ){
+  Gviz::plotTracks(c(res[["itrack"]], res[["refTrack"]], res[["generegionTrack"]], res[["biomTrack"]], res[["dTrack"]]),  
+                       groupAnnotation = "id", red="darkred", green="grey")
+} else {
+  HTML("<div style='color:red'>Not available. There was something wrong with the plot.</div><br/>")  
+}
+```
+
+
+
+
+
+
+
+### sgRNA Model
+
+This is a genomic view similar to a genome browser, which includes sgRNA information.
+The effects and locations of individual sgRNAs in the gene model are shown.
+It uses data from [Ensembl](http://www.ensembl.org/index.html).
+
+```{r}
+res <- indepth_GVIZ_sgrna_data
+if( !is.null(res) && length(res) > 0 && class(res) != "character" ){
+  if( is.null(res[["sgrnaTrack"]]) || is.null(res[["dTrack"]]) || is.null(res[["featureTrack"]]) || is.null(res[["motifTrack"]]) ) {
+    Gviz::plotTracks(c(res[["itrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]]), from = res[["from"]] , to = res[["to"]] )
+  } else {
+    Gviz::plotTracks(c(res[["itrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]], 
+                     res[["sgrnaTrack"]], res[["dTrack"]], res[["featureTrack"]], res[["motifTrack"]]), 
+                   from = res[["from"]] , to = res[["to"]], chromosome = res[["chromosome"]] )
+  }
+} else {
+  HTML("<div style='color:red'>Not available. There was something wrong with the plot.</div>")  
+}
+```
+
+
+
+
+
+
+
+### Published Screens
+
+[GenomeCRISPR](http://genomecrispr.dkfz.de/#!/) is a database curating high-throughput CRISPR/Cas screens. 
+If the gene of interest was targeted, or one of the sgRNAs was used in a published screen before it will be shown here.
+
+#### Reported Gene
+
+The gene of interest has already been assayed in the following published CRISPR screens.
+
+```{r}
+gcrispr_gene_header <- '<table class="table">
+<thead>
+  <tr>
+  <th style="width:10%;">Pubmed ID</th>
+  <th style="width:20%;">Title</th>
+  <th style="width:70%;">Abstract</th>
+  </tr>
+  </thead>
+  <tbody>'
+  
+gcrispr_gene_footer <- '</tbody>
+  </table>'
+  
+gcrispr_gene_body <- ""
+  # make table
+for( i in 1:length(indepth_geneOverview$genomecrispr$genes) ){
+gcrispr_gene_body2 <- paste( '<tr>
+                                 <td style="width:10%;">
+                                 <a href="http://www.ncbi.nlm.nih.gov/pubmed/', indepth_geneOverview$genomecrispr$genes[[i]]$pubmed, '" target="_blank">', indepth_geneOverview$genomecrispr$genes[[i]]$pubmed, '</a>
+                                 </td>
+                                 <td style="width:20%;">', indepth_geneOverview$genomecrispr$genes[[i]]$title, '</td>
+                                 <td style="width:70%;">', indepth_geneOverview$genomecrispr$genes[[i]]$abstract,'</td>
+                                 </tr>', sep="")
+    gcrispr_gene_body <- paste0(gcrispr_gene_body, gcrispr_gene_body2)
+}
+HTML(paste0(gcrispr_gene_header, gcrispr_gene_body, gcrispr_gene_footer))
+```
+
+#### Reported Phenotype
+
+In previous screens, authors reported the following phenotypes for the gene of interest.
+
+```{r}
+data <- indepth_geneOverview$genomecrispr$sgrnas
+if(!is.null(data)) Table_DT(data, colNames = c("Pubmed ID", "Cell Line", "Screening Condition", "Hit?", "sgRNA Sequence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", indepthOverviewGene ,"_PublishedCRISPRScreens", sep="")) else HTML("No Data available")
+```
+
+#### Reported sgRNA
+
+The same sgRNAs have been used in the following previously published screens.
+
+```{r}
+data <- indepth_geneOverview$genomecrispr$sgrnas2
+if(!is.null(data)) Table_DT(data, colNames = c("Pubmed ID", "Cell Line", "Screening Condition", "Hit?", "sgRNA Sequence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", indepthOverviewGene , "_sgRNAs",sep="")) else HTML("No Data available")
+```
+
+
+
+
+
+
+
+
+### Gene Performance
+
+This is a brief overview of how the gene of interest performed compared to all other genes.
+
+#### Log2-Fold-Change
+
+```{r, warning=FALSE, message=FALSE}
+gene.plotdistribution(data = results$deseq$data$genes, gene = indepthOverviewGene , type = "log2fc", sgrna=FALSE, tooltip = paste("Log2 FoldChange:", "{point.log2FoldChange}", sep=" "), title = "Log2 Foldchanges", subtitle = "for all genes", xLab = "Genes", yLab = "Log2 FoldChange", zoom = "x", crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL, filename = paste("GeneOverview_", indepthOverviewGene , "LOG2FC", sep="") )
+```
+
+#### Z-Ratio
+
+```{r, warning=FALSE, message=FALSE}
+gene.plotdistribution(data = results$zratio, gene = indepthOverviewGene , type = "zratio", sgrna=FALSE, tooltip = paste("Z-Ratio:", "{point.zratio}", sep=" "), title = "Z-Ratios", subtitle = "for all genes", xLab = "Genes", yLab = "Z-Ratio between Treated and Untreated", zoom = "x", crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL , filename = paste("GeneOverview_", indepthOverviewGene , "Z-Ratio", sep=""))
+```
+
+#### Individual sgRNAs
+
+```{r}
+data <- indepth_geneOverview$sgrna.dt
+if(!is.null(data)) Table_DT(data, colNames = c("sgRNA", "Log2 FoldChange", "DESeq2 Adjusted P-Value", "Sequence", "Gene"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_",indepthOverviewGene , "Log2FC_sgRNAs", sep="")) else HTML("No data available")
+```
+
+```{r, warning=FALSE, message=FALSE}
+gene.plotdistribution(data = indepth_geneOverview$sgrna.dt, gene = indepthOverviewGene , type = "log2fc", sgrna=TRUE, tooltip = paste("Log2 FoldChange:", "{point.y}", sep=" "), title = "Log2 FoldChange", subtitle = "for all sgRNA", xLab = "sgRNAs", yLab = "Log2 FoldChange", zoom = "x", crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL, filename = paste("GeneOverview_", indepthOverviewGene , "LOG2FC_sgRNAs", sep="") )
+```
+
+
+
+<!-- COSMIC -->
+```{r}
+COSMICBool <- if(is.null(indepth_geneOverview$cosmic)) FALSE else TRUE
+```
+```{r, eval=COSMICBool, child='cosmicChild.Rmd'}
+```
+
+
+
+
+### Gene Ontology
+
+Information from the [Gene Ontology Consortium](http://geneontology.org/) was retrieved. 
+The gene of interest is annotated with the following Gene Ontology terms.
+
+#### Cellular Component
+
+```{r}
+data <- indepth_geneOverview$GO$table$cellular_component
+if(!is.null(data)) Table_DT(data, colNames = c("Type", "GO IDs", "Evidence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_",indepthOverviewGene , "GeneOntology_CellularComponents", sep="")) else HTML("No data available")
+```
+
+```{r, warning=FALSE, message=FALSE}
+plotGO <- goview(golist = indepth_geneOverview$GO, term = "cellular_component", userdir = userDir)
+knitr::include_graphics(plotGO$plot$cellular_component)
+```
+
+
+#### Biological Process
+
+```{r}
+data <- indepth_geneOverview$GO$table$biological_process
+if(!is.null(data)) Table_DT(data, colNames = c("Type", "GO IDs", "Evidence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_",indepthOverviewGene , "GeneOntology_BiologicalProcess", sep="")) else HTML("No data available")
+```
+
+```{r, warning=FALSE, message=FALSE}
+plotGO <- goview(golist = indepth_geneOverview$GO, term = "biological_process", userdir = userDir)
+knitr::include_graphics(plotGO$plot$biological_process)
+```
+
+
+#### Molecular Function
+
+```{r}
+data <- indepth_geneOverview$GO$table$molecular_function
+if(!is.null(data)) Table_DT(data, colNames = c("Type", "GO IDs", "Evidence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_",indepthOverviewGene , "GeneOntology_MolecularFunction", sep="")) else HTML("No data available")
+```
+
+```{r, warning=FALSE, message=FALSE}
+plotGO <- goview(golist = indepth_geneOverview$GO, term = "molecular_function", userdir = userDir)
+knitr::include_graphics(plotGO$plot$molecular_function)
+```
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+counter <- counter + 1
+```
+
+
+
+
+
+
+

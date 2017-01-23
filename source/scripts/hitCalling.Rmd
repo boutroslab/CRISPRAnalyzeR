@@ -1,0 +1,674 @@
+
+
+
+```{r, include=FALSE, message=FALSE}
+tooltip_hcCandidates <- tagList(
+  tags$h3("{point.genes}"),
+  tags$table(style = "width:100%", 
+    tags$tr(tags$td(strong("Method")), tags$td(strong("Hit"))),
+    tags$tr(tags$td("Wilcox"), tags$td("{point.wilcoxSign}")),
+    tags$tr(tags$td("DESeq2"), tags$td("{point.deseqSign}")),
+    tags$tr(tags$td("MAGeCK"), tags$td("{point.mageckSign}")),
+    tags$tr(tags$td("sgRSEA"), tags$td("{point.rseaSign}")),
+    tags$tr(tags$td("EdgeR"), tags$td("{point.edgerSign}"))
+  )
+) %>% as.character()
+```
+
+
+# Gene Ranking
+
+This section shows gene rankings according to different analysis methods.
+5 common analysis methods for detecting differentially represented genes by sgRNAs were applied.
+These are methods specialized for RNA sequencing analysis.
+Additionally, a ranking by Z-ratios and method for identifying essential genes are added.
+It is not uncommon that each analysis method identifies completely different genes as differentially expressed.
+That is because they all impose different assumptions to the underlying data.
+Since the results for all of them are shown here, we encourage a consensus approach when identifying differentially expressed genes.
+
+Note that in different analysis methods the adjusted p values can have a different meaning.
+So, you should not compare the adjusted p values across different methods.
+You can however compare how the methods rank certain genes.
+
+
+
+## Wilcox
+
+The Wilcox implementation is based on a two-sided Mann-Whitney-U test, which compares the sgRNA population foldchange (between your treatment groups) of each gene to either the population of the non-targeting control (if specified) or randomly picked sgRNAs. Finally a P-value correction according to Benjamini-Hochberg is applied to correct for multiple testing. 
+
+### P Value Distribution
+
+The p value distribution for random data is a flat distribution.
+If this analysis method performed well it should assign low p values to data points which is do not seem to be randomly distributed.
+So, if there are differential genes present there should be a peak in the histogram towards 0.
+The rest of the histogram should still be more or less flat.
+If the histogram shows other shapes the analysis method might not have worked well.
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$wilcox$info$pval
+df <- results$wilcox$data$p.value.unadjusted
+Plot_performance( data = df, thresh = t, bApp =  FALSE, type="distribution", method = "Wilcoxon" , filename = "HitCalling_Wilcox_PValueDistribution")
+```
+
+### Ranked P Values
+
+This is a mere ranking of adjusted p values.
+Maybe there is a clear cut in the level of p values visible.
+If so, here you could find out which genes belong to this group.
+The p value threshold might not have separated the genes appropriately.
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$wilcox$info$pval
+df <- results$wilcox$data
+Plot_performance( data = df, thresh = t, method = "wilcox", bApp = FALSE , filename = "HitCalling_Wilcox_RankedPValue")
+```
+
+
+### P Value vs LFC
+
+This scatter plot shows adjusted p values in combination with their fold-changes of normalized readcounts.
+The p value does not directly relate to the fold-change.
+Some genes might show a huge fold-change but still have a low p value and vice versa.
+These analysis methods usually "downgrade" the significance if the fold-change is to high or to low.
+However, a gene with low p value and low fold-change might be significant but not biologically interesting.
+
+```{r, message=FALSE, warning=FALSE}
+d <- results$hitOverview_info
+d2 <- results$hitOverview
+t <- results$wilcox$info$pval
+Plot_candidates( d, d2, t, "wilcox", bApp = FALSE )
+```
+
+### Data
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "en"
+th <- results$wilcox$info$pval
+sign <- FALSE
+df <- results$wilcox$data
+Table_hcPerf( df, sign, th, radio, "wilcox" )
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "de"
+th <- results$wilcox$info$pval
+sign <- FALSE
+df <- results$wilcox$data
+Table_hcPerf( df, sign, th, radio, "wilcox" )
+```
+
+
+
+
+
+
+
+
+
+## DESeq2
+
+The DESeq2 implementation is based on the DESeq2 R package. It uses the summed read counts of all sgRNAs for a given gene and tests for differential effects based on a negative binomial distribution model. In brief, eead counts for all sgRNAs are summed up to obtain the total read count per gene. DESeq2 analysis is performed on these read counts, which includes normalization, estimation of size-factors and variance stabilization using a parametric fit. A Wald test for difference in log2-foldchanges between both conditions is done to determine enrichment/depletion effects. For more information about DESeq2, please see the DESeq2 manual available at [Bioconductor](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) or the publication. [^fn4]
+
+[^fn4]: Love MI, Huber W and Anders S (2014). “Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.” Genome Biology, 15, pp. 550. doi: 10.1186/s13059-014-0550-8.
+
+### P Value Distribution
+
+The p value distribution for random data is a flat distribution.
+If this analysis method performed well it should assign low p values to data points which is do not seem to be randomly distributed.
+So, if there are differential genes present there should be a peak in the histogram towards 0.
+The rest of the histogram should still be more or less flat.
+If the histogram shows other shapes the analysis method might not have worked well.
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$deseq$info$pval
+df <- results$deseq$data$genes$pvalue
+Plot_performance( data = df, thresh = t, bApp= FALSE, type="distribution", method = "DESEq2" , filename = "HitCalling_DESeq2_PValueDistribution")
+```
+
+### Ranked P Values
+
+This is a mere ranking of adjusted p values.
+Maybe there is a clear cut in the level of p values visible.
+If so, here you could find out which genes belong to this group.
+The p value threshold might not have separated the genes appropriately.
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$deseq$info$pval
+df <- as.data.frame(results$deseq$data[[1]])
+Plot_performance( data = df, thresh = t, bApp=FALSE, method = "deseq", filename = "HitCalling_DESEq2_RankedPValue")
+```
+
+### P Value vs LFC
+
+This scatter plot shows adjusted p values in combination with their fold-changes of normalized readcounts.
+The p value does not directly relate to the fold-change.
+Some genes might show a huge fold-change but still have a low p value and vice versa.
+These analysis methods usually "downgrade" the significance if the fold-change is to high or to low.
+However, a gene with low p value and low fold-change might be significant but not biologically interesting.
+
+```{r, message=FALSE, warning=FALSE}
+d <- results$hitOverview_info
+d2 <- results$hitOverview
+t <- results$deseq$info$pval
+Plot_candidates( d, d2, t, "deseq", bApp = FALSE )
+```
+
+### Data
+
+These are the results of this analysis method.
+It includes the data that was plotted and some values specific to the analysis method.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "en"
+th <- results$deseq$info$pval
+sign <- FALSE
+df <- as.data.frame(results$deseq$data[[1]])
+Table_hcPerf( df, sign, th, radio, "deseq" )
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "de"
+th <- results$deseq$info$pval
+sign <- FALSE
+df <- as.data.frame(results$deseq$data[[1]])
+Table_hcPerf( df, sign, th, radio, "deseq" )
+```
+
+
+
+
+
+
+## MAGeCK
+
+MAGeCK is a stand-alone algorithm to perform hit calling in pooled CRISPR screens. MAgeCK is based on a RRA ranking algorithm to identify hit candidates. [^fn40]
+
+[^fn40]: Li, et al. MAGeCK enables robust identification of essential genes from genome-scale CRISPR/Cas9 knockout screens. Genome Biology 15:554 (2014)
+
+### P Value Distribution
+
+The p value distribution for random data is a flat distribution.
+If this analysis method performed well it should assign low p values to data points which is do not seem to be randomly distributed.
+So, if there are differential genes present there should be a peak in the histogram towards 0.
+The rest of the histogram should still be more or less flat.
+If the histogram shows other shapes the analysis method might not have worked well.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$mageck$info$pval
+df <- results$mageck$data$genes$pos
+Plot_performance( data = df, thresh = t,bApp=FALSE, type="distribution", method = "MAGeCK Enriched" , filename = "HitCalling_MAGeCK_PValueDistribution_Enrichment")
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$mageck$info$pval
+df <- results$mageck$data$genes$neg
+Plot_performance( data = df, thresh = t, bApp = FALSE, type="distribution", method = "MAGeCK Depleted" , filename = "HitCalling_MAGeCK_PValueDistribution_Depletion")
+```
+
+### Ranked P Values
+
+This is a mere ranking of adjusted p values.
+Maybe there is a clear cut in the level of p values visible.
+If so, here you could find out which genes belong to this group.
+The p value threshold might not have separated the genes appropriately.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$mageck$info$pval
+df <- results$mageck$data[[1]]
+Plot_performance( data = df, thresh = t, bApp = FALSE, method = "mageckEn" , filename = "HitCalling_MAGeCK_RankedPValue_Enrichment")
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$mageck$info$pval
+df <- results$mageck$data[[1]]
+Plot_performance( data = df, thresh = t, bApp=FALSE, method =  "mageckDe" , filename = "HitCalling_MAGeCK_RankedPValue_Depletion")
+```
+
+### P Value vs LFC
+
+This scatter plot shows adjusted p values in combination with their fold-changes of normalized readcounts.
+The p value does not directly relate to the fold-change.
+Some genes might show a huge fold-change but still have a low p value and vice versa.
+These analysis methods usually "downgrade" the significance if the fold-change is to high or to low.
+However, a gene with low p value and low fold-change might be significant but not biologically interesting.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+d <- results$hitOverview_info
+d2 <- results$hitOverview 
+t <- results$mageck$info$pval
+Plot_candidates( d, d2, t, "mageckEn", bApp = FALSE )
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+d <- results$hitOverview_info
+d2 <- results$hitOverview 
+t <- results$mageck$info$pval
+Plot_candidates( d, d2, t, "mageckDe", bApp = FALSE )
+```
+
+### Data
+
+These are the results of this analysis method.
+It includes the data that was plotted and some values specific to the analysis method.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "en"
+th <- results$mageck$info$pval
+sign <- FALSE
+df <- results$mageck$data[[1]]
+Table_hcPerf( df, sign, th, radio, "mageck" )
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "de"
+th <- results$mageck$info$pval
+sign <- FALSE
+df <- results$mageck$data[[1]]
+Table_hcPerf( df, sign, th, radio, "mageck" )
+```
+
+
+
+
+
+
+
+
+
+
+## sgRSEA
+
+sgRSEA is based on the sgRSEA R package (Enrichment Analysis of CRISPR/Cas9 Knockout Screen Data), which is available at the [R CRAN page](https://cran.r-project.org/web/packages/sgRSEA/index.html). in brief, sgRSEA is based on a single-guide RNA Set Enrichment Analysis. First, sgRNAs are ranked by a signal-to-noise ratio. Then, the distribution of sgRNA ranks of a sgRNA set is compared with the overall distribution using a so-called enrichment score, which is based on a one-sided Kolmogorov Smirnov statistic and reflects the degree to which a sgRNA set is overrepresented at the top/the bottom of the ranked list. 
+
+### P Value Distribution
+
+The p value distribution for random data is a flat distribution.
+If this analysis method performed well it should assign low p values to data points which is do not seem to be randomly distributed.
+So, if there are differential genes present there should be a peak in the histogram towards 0.
+The rest of the histogram should still be more or less flat.
+If the histogram shows other shapes the analysis method might not have worked well.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$rsea$info$pval
+df <- as.data.frame(results$rsea$data$gene.pos)
+df <- df$p.value.pos
+Plot_performance( data = df, thresh = t, bApp = FALSE , type="distribution", method = "RSEA Enriched",  filename = "HitCalling_sgRSEA_PValueDistribution_Enrichment")
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$rsea$info$pval
+df <- as.data.frame(results$rsea$data$gene.neg)
+df <- df$p.value.neg
+Plot_performance( data = df, thresh = t, bApp = FALSE , type="distribution", method = "RSEA Depleted",  filename = "HitCalling_sgRSEA_PValueDistribution_Depletion")
+```
+
+### Ranked P Values
+
+This is a mere ranking of adjusted p values.
+Maybe there is a clear cut in the level of p values visible.
+If so, here you could find out which genes belong to this group.
+The p value threshold might not have separated the genes appropriately.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$rsea$info$pval
+df <- as.data.frame(results$rsea$data$gene.pos)
+Plot_performance( data = df, thresh = t, bApp = FALSE, method = "sgrseaEn" ,  filename = "HitCalling_sgRSEA_RankedPValue_Enrichment")
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$rsea$info$pval
+df <- as.data.frame(results$rsea$data$gene.neg)
+Plot_performance( data = df, thresh = t, bApp = FALSE, method = "sgrseaDe",  filename = "HitCalling_sgRSEA_RankedPValue_Depletion")
+```
+
+### P Value vs LFC
+
+This scatter plot shows adjusted p values in combination with their fold-changes of normalized readcounts.
+The p value does not directly relate to the fold-change.
+Some genes might show a huge fold-change but still have a low p value and vice versa.
+These analysis methods usually "downgrade" the significance if the fold-change is to high or to low.
+However, a gene with low p value and low fold-change might be significant but not biologically interesting.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+d <- results$hitOverview_info
+d2 <- results$hitOverview
+t <- results$rsea$info$pval
+Plot_candidates( d, d2, t, "sgrseaEn", bApp = FALSE )
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+d <- results$hitOverview_info
+d2 <- results$hitOverview
+t <- results$rsea$info$pval
+Plot_candidates( d, d2, t, "sgrseaDe", bApp = FALSE )
+```
+
+### Data
+
+These are the results of this analysis method.
+It includes the data that was plotted and some values specific to the analysis method.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "en"
+th <- results$rsea$info$pval
+sign <- FALSE
+df <- results$rsea$data
+Table_hcPerf( df, sign, th, radio, "sgrsea" )
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "de"
+th <- results$rsea$info$pval
+sign <- FALSE
+df <- results$rsea$data
+Table_hcPerf( df, sign, th, radio, "sgrsea" )
+```
+
+
+
+
+
+
+
+
+
+## EdgeR
+
+In brief, all read count data is modelled using an overdispersed Poisson model. Gene dispersions are then estimated by conditional maximum likelihood and shrunk using an empirical Bayes procedure. Finally, differential expression is assessed using an adapted Fisher's exact test. EdgeR analysis has been implemented as previously published in  [^fn5]
+
+[^fn5]: Dai,Z. et al. (2014) edgeR: a versatile tool for the analysis of shRNA-seq and CRISPR-Cas9 genetic screens. F1000Research, 3, 95.
+
+### P Value Distribution
+
+The p value distribution for random data is a flat distribution.
+If this analysis method performed well it should assign low p values to data points which is do not seem to be randomly distributed.
+So, if there are differential genes present there should be a peak in the histogram towards 0.
+The rest of the histogram should still be more or less flat.
+If the histogram shows other shapes the analysis method might not have worked well.
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$edger$info$pval
+df <- results$edger$data$genes$PValue
+Plot_performance(data = df, thresh = t,bApp = FALSE, type="distribution", method = "EdgeR", filename = "HitCalling_EdgeR_PValueDistribution" )
+```
+
+### Ranked P Values
+
+This is a mere ranking of adjusted p values.
+Maybe there is a clear cut in the level of p values visible.
+If so, here you could find out which genes belong to this group.
+The p value threshold might not have separated the genes appropriately.
+
+```{r, message=FALSE, warning=FALSE}
+t <- results$edger$info$pval
+df <- results$edger$data$genes
+Plot_performance( data = df, thresh = t, bApp = FALSE, method =  "edger" ,  filename = "HitCalling_EdgeR_RankedPValue")
+```
+
+### P Value vs LFC
+
+This scatter plot shows adjusted p values in combination with their fold-changes of normalized readcounts.
+The p value does not directly relate to the fold-change.
+Some genes might show a huge fold-change but still have a low p value and vice versa.
+These analysis methods usually "downgrade" the significance if the fold-change is to high or to low.
+However, a gene with low p value and low fold-change might be significant but not biologically interesting.
+
+```{r, message=FALSE, warning=FALSE}
+d <- results$hitOverview_info
+d2 <- results$hitOverview
+t <- results$edger$info$pval
+Plot_candidates( d, d2, t, "edger", bApp = FALSE )
+```
+
+### Data
+
+These are the results of this analysis method.
+It includes the data that was plotted and some values specific to the analysis method.
+
+#### Enriched
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "en"
+th <- results$edger$info$pval
+sign <- FALSE
+df <- results$edger$data$genes
+Table_hcPerf( df, sign, th, radio, "edger" )
+```
+
+#### Depleted
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "de"
+th <- results$edger$info$pval
+sign <- FALSE
+df <- results$edger$data$genes
+Table_hcPerf( df, sign, th, radio, "edger" )
+```
+
+
+
+
+
+## Z Ratio
+
+A Z-Ratio is calculated between your two treatment groups for each sample and was originally used for microarray data. 
+The Z-Ratio has been implemented as previously published. [^fn6]
+
+[^fn6]: Analysis of Microarray Data Using Z Score Transformation. Chris Cheadle, Marquis P. Vawter, William J. Freed, Kevin G. Becker J Mol Diagn. 2003 May; 5(2): 73–81. doi: 10.1016/S1525-1578(10)60455-2
+
+
+### Z Ratio Distribution
+
+```{r}
+t <- 1.96
+df <- results$zratio$zratio
+Plot_performance( data = df, thresh = t , bApp = FALSE, type="distribution", method = "Z-Ratio" , filename = "HitCalling_Z-Ratio_ZRatioDistribution")
+```
+
+### Ranked Z Ratios
+
+```{r}
+t <- 1.96
+df <- results$zratio
+Plot_performance( data = df, thresh = t , bApp = FALSE, method = "zratio", type=NULL, filename = "HitCalling_Z-Ratio_RankedZRatio" )
+```
+
+### Z Ratio vs LFC
+
+```{r, message=FALSE, warning=FALSE}
+d <- results$hitOverview_info
+d2 <- results$zratio
+t <- 1.96
+Plot_candidates( d, d2, t, "zratio", bApp = FALSE )
+```
+
+### Data
+
+These are the results of this analysis method.
+It includes the data that was plotted and some values specific to the analysis method.
+
+```{r, message=FALSE, warning=FALSE}
+df <- results$zratio
+Table_DT(data = df, colNames = c("Gene","Z-Score Untreated", "Z-Score Treated", "Z-Ratio"), 
+      bRownames = FALSE, style = "default", class = "display", dom = "flrtip", ordering = NULL, 
+      alignment = list(centre = NULL, justify = NULL, left = NULL), 
+      formatCurr = NULL, formatPerc = NULL, formatRoun = NULL, buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+      bResponsive = FALSE )
+```
+
+
+
+
+## BAGEL
+
+Description missing.
+
+### Log2 Bayes Factor Distribution
+
+```{r}
+ if( is.null(results$bagel$info) ){
+    Plot_blank("hc", msg = "No BAGEL data available")
+} else {
+  t <- results$bagel$info$cutoff
+  df <- results$bagel$data$BF
+  Plot_performance( data = df, thresh = t, bApp =  FALSE, type = "distribution", method = "bagel" , filename = "HitCalling_BAGEL_BayesFactorsDistribution")
+}
+```
+
+### Ranked by log2 of Bayes Factor
+
+```{r}
+if( is.null(results$bagel$info) ){
+    Plot_blank("hc", msg = "No BAGEL data available")
+} else {
+  t <- results$bagel$info$cutoff
+  df <- results$bagel$data
+  Plot_performance( data = df, thresh = t, method = "bagel", bApp = FALSE , filename = "HitCalling_BAGEL_RankBayesFactors")
+}
+```
+
+### Data
+
+These are the results of this analysis method.
+It includes the data that was plotted and some values specific to the analysis method.
+
+```{r, message=FALSE, warning=FALSE}
+if( is.null(results$bagel$info) ){
+    Table_blank(msg = "No BAGEL data available")
+} else {
+  th <- results$bagel$info$cutoff
+  sign <- FALSE
+  df <- results$bagel$data
+  Table_hcPerf( df, sign, th, radio, "bagel" , filename = "HitCalling_BAGEL")
+}
+```
+
+
+
+## ScreenBEAM
+
+ScreenBEAM was implemented as described in the paper [^fn9]
+
+[^fn9]: Yu,J. et al. (2015) ScreenBEAM: a novel meta-analysis algorithm for functional genomics screens via Bayesian hierarchical modeling. 
+
+### P-Value Distribution
+
+```{r}
+if( is.null(results$screenbeam$info) ){
+    Plot_blank("hc", msg = "No ScreenBEAM Data available")
+} else {
+    t <- results$screenbeam$info$cutoff
+    df <- results$screenbeam$data$pval
+    Plot_performance( data = df, thresh = t, bApp =  FALSE, type="distribution", method = "screenbeam" , filename = "HitCalling_ScreenBEAM_PvalDistribution")
+  }
+```
+
+### Ranked by FDR
+
+```{r}
+if( is.null(results$screenbeam$info) ){
+    Plot_blank("hc", msg = "No ScreenBEAM Data available")
+} else {
+    t <- results$screenbeam$info$cutoff
+    df <- results$screenbeam$data
+    Plot_performance( data = df, thresh = t, method = "screenbeam", bApp = FALSE , filename = "HitCalling_ScreenBEAM_RankPval")
+  }
+```
+
+### Data
+
+These are the results of this analysis method.
+It includes the data that was plotted and some values specific to the analysis method.
+
+```{r, message=FALSE, warning=FALSE}
+if( is.null(results$screenbeam$info) ){
+    Table_blank(msg = "No ScreenBEAM Data available")
+} else {
+    radio = NULL
+    th <- results$screenbeam$info$cutoff
+    sign <- FALSE
+    df <- results$screenbeam$data
+    Table_hcPerf( df, sign, th, radio, "screenbeam" , filename = "HitCalling_ScreenBEAM")
+  }
+```
+
+
+
+
+
+
+
+
+
+
+
+
+# Summary
+
+These are two summary tables showing foldchanges and adjusted p values of methods *Wilcox*, *DESeq2*, *MAGeCK*, *sgRSEA*, and *EdgeR* for each gene.
+If a consensus approach is used to identify significantly enriched or depleted genes, these tables can be used.
+They are interactive, and by sorting relevant columns one can see the top genes according to specific a set of analysis methods combined.
+
+## Enriched
+
+Gene foldchanges and adjusted p values of methods *Wilcox*, *DESeq2*, *MAGeCK*, *sgRSEA*, and *EdgeR* for enrichment.
+
+```{r, message=FALSE, warning=FALSE}
+sign <- list(wilcox = F, deseq = F, mageck = F, rsea = F, edger = F)
+th <- list(wilcox = results$wilcox$info$pval, deseq = results$deseq$info$pval, 
+       mageck = results$mageck$info$pval,
+       rsea = results$rsea$info$pval, edger = results$edger$info$pval)
+radio <- "en"
+df <- results$hitOverview
+Table_hcOverview( df, radio, sign, th )
+```
+
+
+## Depleted
+
+Gene foldchanges and adjusted p values of methods *Wilcox*, *DESeq2*, *MAGeCK*, *sgRSEA*, and *EdgeR* for depletion.
+
+```{r, message=FALSE, warning=FALSE}
+radio <- "de"
+Table_hcOverview( df, radio, sign, th )
+```

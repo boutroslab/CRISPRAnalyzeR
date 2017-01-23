@@ -1,0 +1,71 @@
+ID	String
+statusanalysis	CRISPRAnalyzeR has not run any analysis yet.
+statusinfo	Please wait until CRISPRAnalyzeR has finished the re-annotation of your sgRNAs.
+checkfinal1	Files were not sucessfully uploaded yet. Please go back to 'Data' to do this.<br/>
+checkfinal2	CRISPRAnalyzeR has not finished uploading and checking your files.<br/>
+checkfinal3	Some information in the 'Set Groups and Identifier' tab is not entered yet. Please correct that first.<br/>
+checkfinal4	Some information in this tab is not entered correctly yet. Please correct it first.<br/>
+checkresults	For further assistence please briefly describe your problem by sending us a ticket or posting it to the forum.<br>
+checkheatmap	Is there something wrong with the results?<br/>
+checkinfo	For further assistence please briefly describe your problem in the input form on our help page.<br>
+checkhit1	You did not enter a gene name yet.<br/>
+checkhit2	Please select at least 1 track each for the Genomic View plot.<br/>
+checkhitannotation1	You did not enter a gene name yet.<br/>
+checkhitannotation2	Please select at least 1 annotation feature.<br/>
+checkhitresults	For further assistence please briefly describe your problem in the input form on our help page.<br>
+checkseqfilesprogress1	Checking Uploaded Sequencing Files
+checkseqfiles1	You will compare 2 conditions, so we expect at least 2 sequencing files.<br/>
+checkseqfiles2	There is an empty file name.<br/>
+checkseqfiles3	Please use unique files.<br/>
+checkseqfiles4	Please only use characters, numbers, or "_" in your files names as those are used for data processing.<br/>
+checkseqfiles5	Please only upload compressed FASTQ files. Compression is usually done using the gzip command. <br/> By default, your sequencing company should provide you with already compressed files (*.fastq.gz).<br/>
+checkseqfiles6	There is an empty file name.<br/>
+checkseqfiles7	Please use unique file names.<br/>
+checkseqfiles8	Please only use numbers, characters, or "_" in your file names.<br/>
+checkseqfiles9	Honestly, I don't even know how this happened, but 2 datapaths are the same.<br/>
+checkseqfilesprogress2	Filenames checked
+checkseqfilesprogress3	Check FASTQ files
+checkseqfilesprogress4	Check FASTQ regular expression
+checkseqfiles10	The entered FASTQ regular exression did only work in approximately
+checkseqfiles11	% of sequences within your FASTQ files.<br/>This is an indication for a wrong FASTQ Regular Expression or a bad quality of your sequencing library.
+checkseqfilesprogress5	Checking Readcount Data
+checkseqfiles12	Please make sure your Readcount file <strong>
+checkseqfiles13	</strong> is properly formatted.<br/>Your sgRNA identifier must be separated by a tabular from the read count for this sgRNA.<br/>In this case it seems you have not only digits where we expect read counts (excluding the header).<br/>Please see the help for more information.<br/><br/>
+checkseqfiles14	</strong> is properly formatted.<br/>Your sgRNA identifier must be separated by a tabular from the read count for this sgRNA.<br/>In this case, it seems you have more than two columns that are separated by a tabular.<br/>Please see the help for more information.<br/>
+checklibfileprogress1	Checking sgRNA Library File
+checklibfileprogress2	checking filenames
+checklibfileprogress3	Check Regular Expressions
+checklibfile1	There is an empty file name.<br/>
+checklibfile2	Don't use special characters like *, # or % in your file name<br/>
+checklibfile3	Please upload a fasta file (*.fasta).<br/>
+checklibfile4	Provide a regular expression for gene extraction.<br/>
+checklibfile5	The provided regex
+checklibfile6	does not contain two capturing groups () to catch the gene as well as the sgRNA identifier part.<br/>Please see the little help symbol next to the select file button.<br/>
+checklibfile7	The provided regex
+checklibfile8	doesn't work with this file.<br/>
+checklibfile9	You have empty lines in your sgRNA library FASTA file.<br/>
+checklibfile10	The sgRNA identifiers in the provided sgRNA library file are not unique.<br/> Please make sure only unique identifiers are used.<br/>
+checklibfile11	The regular expression revealed a problem with your sgRNA identifier.<br/>Either the selected regular expression is not correct or you have missing/incorrect entries in your sgRNA library file.<br/>Please make sure every sgRNA identifier consists of a gene identifier and a unique sgRNA identifier part.<br/>
+checklibfile12	The regular expression revealed a problem with your sgRNA identifier.<br/>Either the selected regular expression is not correct or you have missing/incorrect entries in your sgRNA library file.<br/>
+checklibfile13	The regular expression revealed a problem with your gene identifier as part of your sgRNA identifier.<br/>Either the selected regular expression is not correct or you have missing/incorrect entries in your sgRNA library file.<br/>
+checklibfile14	The regular expression revealed a problem with your gene/sgRNA identifier as part of your sgRNA identifier.<br/>Either the selected regular expression cannot discriminate between the gene and sgRNA part of your identifier<br/> or you have missing/incorrect entries in your sgRNA library file.<br/> As an example, this was found to be the case for sgRNA
+checkgroupnames1	For a comparison at least 2 groups are needed.<br/>
+checkgroupnames2	Each group should have a unique name.<br/>
+checkgroupnames3	There is a group without a name.<br/>
+checkgroupnames4	Please don't use weird characters like *, # or % in your group name<br/>
+checkgroupnames5	Please use no spaces in your group names. Use '_' instead<br/>
+checkgroups1	Some groups don't have any files associated with them.<br/>
+checkgroups3	Some files belong two more than one group.
+checkgroups2	Some groups don't have any files associated with them.<br/>
+checkextract	Provide a regular expression for target sequence extraction.<br/>
+checkextractedfiles	For further assistence please briefly describe your problem in the input form on our help page.<br>
+checkcompare1	Positive control
+checkcompare2	was not found in sgRNA library.
+checkcompare3	Non-targeting control
+checkanalysissettings1	There are some P values < 0 or > 1. That doesn't really make sense.<br/>
+checkanalysissettings2	Please enter a sgRNA read count Threshold.<br/>
+checkanalysissettings3	Please use positive numbers only.<br/>
+checkanalysissettings4	Please use numbers for sgRNA read count thresholds only.<br/>
+noanalysisrunyet	CRISPRAnalyzeR has not performed an analysis yet.
+bagelerror	BAGEL analysis could not be performed.
+screenbeamerror	ScreenBEAM analysis was not performed.
