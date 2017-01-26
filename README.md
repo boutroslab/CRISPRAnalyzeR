@@ -165,7 +165,29 @@ Download the reference genome you need
 
 # How to Install CRISPRAnalyzeR using the provided Docker Container
 
-## General Description
+You can install the CRISPRAnalyzeR by two ways:
+1. Directly run the latest version from the online resource
+2. Download and install CRISPRAnalyzeR on your machine before running it
+
+## Run directly from online resource
+
+1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
+2. Install the downloaded file
+3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
+   A small docker symbol in the taskbar will tell you that docker is ready.
+4. Download and run the CRISPRAnalyzeR directly from the online repository
+   ```
+   docker run boutroslab/crispranalyzer:latest
+   ```
+   
+   If you want to run a specific version, just replace the `latest` with the specific version number
+   
+   ```
+   docker run boutroslab/crispranalyzer:0.99
+   ```
+
+
+## General Installation
 
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
 2. Install the downloaded file
@@ -174,8 +196,16 @@ Download the reference genome you need
 4. Download the CRISPRAnalyzeR docker files
 
   __Download the docker container__
-    * [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.99-RC.tar.gz)
-    * [CRISPRAnalyzeR 0.98](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.98-RC.tar.gz)
+  ```
+  docker pull boutroslab/crispranalyzer:latest
+  ```
+  
+  
+  __Alternatively, you can also download the files separately__
+  * [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.99-RC.tar.gz)
+  * [CRISPRAnalyzeR 0.98](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.98-RC.tar.gz)
+    
+
 
    
 5. Open a Terminal (macOS and Linux) or Commandline (Windows)
