@@ -83,6 +83,14 @@ __Use various external ressources to enrich information about your favourite can
 
 You can get the CRISPRAnalyzeR suite as source code or as a ready-to-use Docker Container.
 
+---
+
+__Scroll down for the download options.__ 
+
+__Please also check the minimum system requirements and licensing information.__
+
+---
+
 **The idea of installing CRISPRAnalyzeR is to provide a single installation within a Lab/Institute, so that everyone can access it via the web browser.  
 However, you can also also install CRISPRAnalyzeR on your local machine only.**
 
@@ -118,22 +126,36 @@ Python | 2.7.11 | https://www.python.org/
 Python Scipy | latest | https://www.scipy.org/
 
 
-## Ready-to-use Docker Container
+## Download Ready-to-use Docker Container
 
 <img src="./images/large_h-trans.png" width="30%">
 
 CRISPRAnalyzeR is available for a **platform-independent installation** as a so called Docker container.
 
-__Two different versions are available:__
-* __Version A__ - CRISPRAnalyzeR __without__ local sgRNA re-evaluation
-* __Version B__ - CRISPRAnalyzeR __WITH__ local sgRNA-re-evaluation
+
+__Download the docker container__
+* [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.99-RC.tar.gz)
+* [CRISPRAnalyzeR 0.98](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.98-RC.tar.gz)
+
 
 CRISPRAnalyzeR re-evaluates every sgRNA during the analysis process. Thus, it needs to map each sgRNA against the reference genome.  
-In __Version A__, mapping is performed by the E-CRISP webservice and requires a fast internet connection (> 10 mbit/s).  
-In __Version B__, mapping is performed locally and does not require a fast internet connection. Since the human genome reference is included in this version, the Docker container exceeds the size of 50 GB.  
-Furthermore, addiitonal reference genomes e.g. for mouse or zebrafish, must be downloaded separately.
+This can be performed locally (does not require a fast internet connection) or via e-crisp.org (requires fast internet >10 mbit).
 
-<img src="./images/CRISPR_AnalyzeR_VersionA-B.png" width="100%">
+By default, CRISPRAnalyzeR uses e-crisp.org to re-evaluate your sgrRNAs
+
+### How to setup CRISPRAnalyzeR for local re-evaluation of sgRNAs
+
+
+You can download the human reference genome and tell CRISPRAnalyzeR to perform the re-evaulation locally on your computer. For this, you require at least 60GB of disk space and a fast computer.
+
+__Step 1: Download the reference genome__  
+Download the reference genome you need
+* [Homo Sapiens](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/homo_sapiens.tar.gz)
+* [Mus Musculus](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/mus_musculus.tar.gz)
+* [Danio Rerio](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/danio_rerio.tar.gz)
+
+
+
 
 ---
 
