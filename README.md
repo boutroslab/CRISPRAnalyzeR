@@ -173,11 +173,10 @@ Download the reference genome you need
    A small docker symbol in the taskbar will tell you that docker is ready.
 4. Download the CRISPRAnalyzeR docker files
 
-   __Version A WITHOUT local sgRNA re-evaluation__  
-   [**Download CRISPRAnalyzeR 0.98RC Version A**]()
-   
-   __Version B WITH local sgRNA re-evaluation__  
-   [**Download CRISPRAnalyzeR 0.98RC Version B**]()
+  __Download the docker container__
+    * [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.99-RC.tar.gz)
+    * [CRISPRAnalyzeR 0.98](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.98-RC.tar.gz)
+
    
 5. Open a Terminal (macOS and Linux) or Commandline (Windows)
 6. Tell Docker that you have downloaded CRISPRAnalyzeR by typing  
