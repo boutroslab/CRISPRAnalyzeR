@@ -134,7 +134,7 @@ CRISPRAnalyzeR is available for a **platform-independent installation** as a so 
 
 
 __Download the docker container__
-* [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.99-RC.tar.gz)
+* [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-wlr-0.99-RC.tar )
 * [CRISPRAnalyzeR 0.98](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.98-RC.tar.gz)
 
 
@@ -202,7 +202,7 @@ You can install the CRISPRAnalyzeR by two ways:
   
   
   __Alternatively, you can also download the files separately__
-  * [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.99-RC.tar.gz)
+  * [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-wlr-0.99-RC.tar )
   * [CRISPRAnalyzeR 0.98](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.98-RC.tar.gz)
     
 
