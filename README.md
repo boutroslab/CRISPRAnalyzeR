@@ -125,8 +125,7 @@ PERL | 5 | https://www.perl.org/
 Python | 2.7.11 | https://www.python.org/ 
 Python Scipy | latest | https://www.scipy.org/
 
-
-## Download Ready-to-use Docker Container
+# How to Install CRISPRAnalyzeR using the provided Docker Container
 
 <img src="./images/large_h-trans.png" width="30%">
 
@@ -143,39 +142,20 @@ This can be performed locally (does not require a fast internet connection) or v
 
 By default, CRISPRAnalyzeR uses e-crisp.org to re-evaluate your sgrRNAs
 
-### How to setup CRISPRAnalyzeR for local re-evaluation of sgRNAs
-
-
-You can download the human reference genome and tell CRISPRAnalyzeR to perform the re-evaulation locally on your computer. For this, you require at least 60GB of disk space and a fast computer.
-
-__Step 1: Download the reference genome__  
-Download the reference genome you need
-* [Homo Sapiens](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/homo_sapiens.tar.gz)
-* [Mus Musculus](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/mus_musculus.tar.gz)
-* [Danio Rerio](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/danio_rerio.tar.gz)
-
-
-
-
----
-
-# How to Install CRISPRAnalyzeR using the provided Source Code
-
----
-
-# How to Install CRISPRAnalyzeR using the provided Docker Container
-
 You can install the CRISPRAnalyzeR by two ways:
 1. Directly run the latest version from the online resource
 2. Download and install CRISPRAnalyzeR on your machine before running it
 
-## Run directly from online resource
+__Please have a look at the installation tutorials below, which will assist you with the installation__
+
+## Run and install directly from online resource (recommended)
 
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
 2. Install the downloaded file
 3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
    A small docker symbol in the taskbar will tell you that docker is ready.
-4. Download and run the CRISPRAnalyzeR directly from the online repository
+4. Open a terminal or command line (macOS: Terminal; Windows: cmd.exe)
+4. Download and run the CRISPRAnalyzeR directly from the online repository (without additional settings)
    ```
    docker run boutroslab/crispranalyzer:latest
    ```
@@ -186,8 +166,9 @@ You can install the CRISPRAnalyzeR by two ways:
    docker run boutroslab/crispranalyzer:0.99
    ```
 
+5. Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.
 
-## General Installation
+## Run and install after downloading files
 
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
 2. Install the downloaded file
@@ -196,22 +177,20 @@ You can install the CRISPRAnalyzeR by two ways:
 4. Download the CRISPRAnalyzeR docker files
 
   __Download the docker container__
+  * [CRISPRAnalyzeR - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-latest.tar)
+  * [CRISPRAnalyzeR 0.99 RC](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.99.tar)
+    
+    
+  __Alternatively, you can also download the files using docker after starting a terminal or command line
   ```
   docker pull boutroslab/crispranalyzer:latest
   ```
-  
-  
-  __Alternatively, you can also download the files separately__
-  * [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-wlr-0.99-RC.tar )
-  * [CRISPRAnalyzeR 0.98](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.98-RC.tar.gz)
-    
-
 
    
 5. Open a Terminal (macOS and Linux) or Commandline (Windows)
 6. Tell Docker that you have downloaded CRISPRAnalyzeR by typing  
    ```
-   docker load -i __PATHTOFILE__/CRISPRAnalyzeR_VersionA.tar.gz
+   docker load -i __PATHTOFILE__/crispranalyzer-latest.tar
    ```
    
    Docker will start to _install_ CRISPRAnalyzeR for later use!
@@ -220,14 +199,12 @@ You can install the CRISPRAnalyzeR by two ways:
    
    __To run CRISPRAnalyzeR with the default settings (see below)__, just type the following into your Terminal / Command Line  
    ```
-   docker run --rm -p 3838:3838 crispranalyzer
+   docker run --rm -p 3838:3838 boutroslab/crispranalyzer:latest
    ```
    **However, you can adjust multiple parameters when starting the CRISPRAnalyzeR!**
    
 8. __Access the CRISPRAnalyzeR via your webbrowser: http://localhost:3838/CRISPRAnalyzeR__
    
-
-
 
 ---
 
@@ -248,6 +225,23 @@ bowtie_threads | Number of bowtie2 threads for mapping | 4 | any number
 proxy_url | URL to your Proxy server | NULL | URL or NULL to inactivate
 proxy_port | Proxy server Port | NULL |Port number of NULL to inactivate
 
+### How to use the parameters
+
+All parameter can be attach by the following:
+
+```bash
+docker run -rm -p -e PARAMETER1 -e PARAMETER2 -e PAREMETER3 3838:3838 boutroslab/crispranalyzer:latest
+```
+
+this means you always need to add `-e` in front of the parameters, e.g.:
+
+```bash
+-e websockets_behind_proxy=TRUE
+-e verbose_logfiles=TRUE
+-e bowtie_threads=4
+```
+
+
 
 ## Installation Tutorial macOS
 
@@ -260,6 +254,40 @@ proxy_port | Proxy server Port | NULL |Port number of NULL to inactivate
 ## Installation Tutorial Ubuntu
 
 ## How to Start and Restart the CRISPRAnalyzeR
+
+
+
+
+### How to setup CRISPRAnalyzeR for local re-evaluation of sgRNAs
+
+
+You can download the human reference genome and tell CRISPRAnalyzeR to perform the re-evaulation locally on your computer. For this, you require at least 60GB of disk space and a fast computer.
+
+__Step 1: Download the reference genome__  
+Download the reference genome you need
+* [Homo Sapiens](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/homo_sapiens.tar.gz)
+* [Mus Musculus](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/mus_musculus.tar.gz)
+* [Danio Rerio](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/danio_rerio.tar.gz)
+
+__Step 2: Extract the files to a folder (*DATABASEFOLDER*) of your desire__
+Extract the downloaded file using gunzip (macOS/Linux) or Zip (Windows) to a *DATABASEFOLDER* of your desire.
+Please note that you need to know the exact path to the *DATABASEFOLDER*!
+e.g. /home/user1/databases
+
+__Step 3: start CRISPRAnalyzeR and tell it where you files are__
+Using the command line, start CRISPRAnalyzeR and provide the database path
+
+```bash
+
+```
+
+
+---
+
+# How to Install CRISPRAnalyzeR using the provided Source Code
+
+---
+
 
 ---
 
