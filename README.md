@@ -151,16 +151,16 @@ __Please have a look at the installation tutorials below, which will assist you 
 4. Open a terminal or command line (macOS: Terminal; Windows: cmd.exe)
 4. Download and run the CRISPRAnalyzeR directly from the online repository (without additional settings)
    ```
-   docker run boutroslab/crispranalyzer:latest
+   docker run -rm -p 3838:3838 boutroslab/crispranalyzer:latest
    ```
    
    If you want to run a specific version, just replace the `latest` with the specific version number
    
    ```
-   docker run boutroslab/crispranalyzer:0.99
+   docker run -rm -p 3838:3838 boutroslab/crispranalyzer:0.99
    ```
 
-5. Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.
+5. __Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.__
 
 ## Run and install with local downloading of container file
 
@@ -175,15 +175,17 @@ __Please have a look at the installation tutorials below, which will assist you 
   * [CRISPRAnalyzeR 0.99 RC](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.99.tar)
     
     
-  __Alternatively, you can also download the files using docker after starting a terminal or command line
+  __Alternatively, you can also download and install it using docker after starting a terminal or command line__
   ```
   docker pull boutroslab/crispranalyzer:latest
   ```
 
    
 5. Open a Terminal (macOS and Linux) or Commandline (Windows)
-6. Tell Docker that you have downloaded CRISPRAnalyzeR by typing  
+6. Tell Docker that you have downloaded CRISPRAnalyzeR by typing (only if downloaded via web browser!)  
    ```
+   # This is only required if you have downloaded the files via the web browser!
+   
    docker load -i __PATHTOFILE__/crispranalyzer-latest.tar
    ```
    
