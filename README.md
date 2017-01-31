@@ -153,6 +153,7 @@ __Please have a look at the installation tutorials below, which will assist you 
    ```
    docker run --rm -p 3838:3838 boutroslab/crispranalyzer:latest
    ```
+   It is important to keep the __3838:3838__ as this tells the software how to access it via the browser.
    
    If you want to run a specific version, just replace the `latest` with the specific version number
    
@@ -161,6 +162,7 @@ __Please have a look at the installation tutorials below, which will assist you 
    ```
 
 5. __Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.__
+6. Access CRISPRAnalyzeR using your web-browser - __http://localhost:3838/CRISPRAnalyzeR__
 
 ## Run and install with local downloading of container file
 
