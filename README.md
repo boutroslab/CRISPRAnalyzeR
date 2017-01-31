@@ -243,7 +243,7 @@ this means you always need to add `-e` in front of the parameters, e.g.:
 
 ## Installation Tutorial macOS
 
-[![CRISPRAnalyzeR Report Preview](./images/CRISPRAnalyzeR_YT_macos.png)](https://www.youtube.com/watch?v=j_Cy3y9Uo1U&feature=youtu.be)
+[![CRISPRAnalyzeR Report Preview](./images/CRISPRAnalyzeR_YT_macos.png)](https://youtu.be/IFPojCjW0ns)
 
 
 
