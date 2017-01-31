@@ -131,12 +131,6 @@ Python Scipy | latest | https://www.scipy.org/
 
 CRISPRAnalyzeR is available for a **platform-independent installation** as a so called Docker container.
 
-
-__Download the docker container__
-* [CRISPRAnalyzeR 0.99 RC - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-wlr-0.99-RC.tar )
-* [CRISPRAnalyzeR 0.98](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.98-RC.tar.gz)
-
-
 CRISPRAnalyzeR re-evaluates every sgRNA during the analysis process. Thus, it needs to map each sgRNA against the reference genome.  
 This can be performed locally (does not require a fast internet connection) or via e-crisp.org (requires fast internet >10 mbit).
 
@@ -168,7 +162,7 @@ __Please have a look at the installation tutorials below, which will assist you 
 
 5. Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.
 
-## Run and install after downloading files
+## Run and install with local downloading of container file
 
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
 2. Install the downloaded file
