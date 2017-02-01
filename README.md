@@ -109,8 +109,20 @@ Additional Software Packages | **See list below!** | All included in container
 
 ### Licenses
 CRISPRAnalyzeR is published under the GPL-2 license and is **free for non-commercial use only**.
-While CRISPRAnalyzeR does not require an additional license for commercial use itself, some included tools strictly require additional licensing.
+While CRISPRAnalyzeR does not require an additional license for commercial use itself, some included tools strictly require additional licensing.  
 **Please note that Highcharts, the COSMIC database and the Enrichr API access require additional licensing for commercial use**.
+
+__Highcharts Licensing Options__
+https://shop.highsoft.com/
+
+__COSMIC Licensing Options__
+https://cancer.sanger.ac.uk/cosmic/license
+
+__ENRICHR Licensing Options__
+http://www.ip.mountsinai.org/
+
+
+__It is your responsibility to obtain all required licenses in case of commercial usage!__
 
 
 ## Source Code
