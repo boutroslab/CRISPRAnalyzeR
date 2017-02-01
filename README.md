@@ -162,6 +162,7 @@ __Please have a look at the installation tutorials below, which will assist you 
    ```
 
 5. __Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.__
+
 6. Access CRISPRAnalyzeR using your web-browser - __http://localhost:3838/CRISPRAnalyzeR__
 
 ## Run and install with local downloading of container file
@@ -170,30 +171,15 @@ __Please have a look at the installation tutorials below, which will assist you 
 2. Install the downloaded file
 3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
    A small docker symbol in the taskbar will tell you that docker is ready.
-4. Download the CRISPRAnalyzeR docker files
+4. Open a Terminal (macOS and Linux) or Commandline (Windows) 
+5. Download the CRISPRAnalyzeR docker files
 
   __Download the docker container__
-  * [CRISPRAnalyzeR - latest](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-latest.tar)
-  * [CRISPRAnalyzeR 0.99 RC](http://www.dkfz.de/signaling/crispranalyzer/crispranalyzer-0.99.tar)
-    
-    
-  __Alternatively, you can also download and install it using docker after starting a terminal or command line__
   ```
   docker pull boutroslab/crispranalyzer:latest
   ```
-
    
-5. Open a Terminal (macOS and Linux) or Commandline (Windows)
-6. Tell Docker that you have downloaded CRISPRAnalyzeR by typing (only if downloaded via web browser!)  
-   ```
-   # This is only required if you have downloaded the files via the web browser!
-   
-   docker load -i __PATHTOFILE__/crispranalyzer-latest.tar
-   ```
-   
-   Docker will start to _install_ CRISPRAnalyzeR for later use!
-   
-7. Once Docker has finished with the installation, you can RUN the CRISPRAnalyzeR and provide several parameters to it.
+6. Once Docker has finished with the installation, you can RUN the CRISPRAnalyzeR and provide several parameters to it.
    
    __To run CRISPRAnalyzeR with the default settings (see below)__, just type the following into your Terminal / Command Line  
    ```
