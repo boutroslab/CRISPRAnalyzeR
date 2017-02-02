@@ -11,7 +11,7 @@ CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and docum
 
 ---
 
-#<i class="fa fa-info" aria-hidden="true"></i> CRISPRAnalyzeR will be available for download soon - stay tuned!
+#<i class="fa fa-info" aria-hidden="true"></i> CRISPRAnalyzeR is now available for download - see below or check out the wiki.
 
 ---
 
