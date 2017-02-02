@@ -70,7 +70,7 @@ Furthermore, we implmented TWO analysis workflows based on bayesion models that 
 
 __Use various external ressources to enrich information about your favourite candidate - all within the app and included in your report!__
 
-<img src="./images/CRISPRAnalyzeR_gene_annotation.png" width="50%">
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_gene_annotation.png" width="50%">
 
 ## Interactive Report
 
@@ -139,7 +139,7 @@ Python Scipy | latest | https://www.scipy.org/
 
 # How to Install CRISPRAnalyzeR using the provided Docker Container
 
-<img src="./images/large_h-trans.png" width="30%">
+<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/large_h-trans.png" width="30%">
 
 CRISPRAnalyzeR is available for a **platform-independent installation** as a so called Docker container.
 
