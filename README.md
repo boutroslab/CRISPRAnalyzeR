@@ -113,7 +113,8 @@ While CRISPRAnalyzeR does not require an additional license for commercial use i
 **Please note that Highcharts, the COSMIC database and the Enrichr API access require additional licensing for commercial use**.
 
 __Highcharts Licensing Options__
-https://shop.highsoft.com/
+https://shop.highsoft.com/  
+Please also have a look here: https://github.com/jbkunst/highcharter/issues/254#issuecomment-277253126
 
 __COSMIC Licensing Options__
 https://cancer.sanger.ac.uk/cosmic/license
