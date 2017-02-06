@@ -164,19 +164,20 @@ __Please have a look at the installation tutorials below, which will assist you 
 4. Open a terminal or command line (macOS: Terminal; Windows: cmd.exe)
 4. Download and run the CRISPRAnalyzeR directly from the online repository (without additional settings)
    ```
-   docker run --rm -p 3838:3838 boutroslab/crispranalyzer:latest
+   docker run --rm -p 80:3838 boutroslab/crispranalyzer:latest
    ```
-   It is important to keep the __3838:3838__ as this tells the software how to access it via the browser.
+   It is important to keep the __80:3838__ as this tells the software how to access it via the browser.  
+   By default, CRISPRAnalyzeR can be accesed by the web-browser using __http://localhost/CRISPRAnalyzeR__.
    
    If you want to run a specific version, just replace the `latest` with the specific version number
    
    ```
-   docker run --rm -p 3838:3838 boutroslab/crispranalyzer:0.99
+   docker run --rm -p 80:3838 boutroslab/crispranalyzer:0.99
    ```
 
 5. __Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.__
 
-6. Access CRISPRAnalyzeR using your web-browser - __http://localhost:3838/CRISPRAnalyzeR__
+6. Access CRISPRAnalyzeR using your web-browser - __http://localhost/CRISPRAnalyzeR__
 
 ## Run and install with local downloading of container file
 
@@ -196,11 +197,11 @@ __Please have a look at the installation tutorials below, which will assist you 
    
    __To run CRISPRAnalyzeR with the default settings (see below)__, just type the following into your Terminal / Command Line  
    ```
-   docker run --rm -p 3838:3838 boutroslab/crispranalyzer:latest
+   docker run --rm -p 80:3838 boutroslab/crispranalyzer:latest
    ```
    **However, you can adjust multiple parameters when starting the CRISPRAnalyzeR!**
    
-8. __Access the CRISPRAnalyzeR via your webbrowser: http://localhost:3838/CRISPRAnalyzeR__
+8. __Access the CRISPRAnalyzeR via your webbrowser: http://localhost/CRISPRAnalyzeR__
    
 
 ---
