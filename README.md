@@ -155,7 +155,7 @@ You can install the CRISPRAnalyzeR by two ways:
 
 __Please have a look at the installation tutorials below, which will assist you with the installation__
 
-## Run and install directly from online resource (recommended)
+## Run and install directly from online resource
 
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
 2. Install the downloaded file
@@ -194,55 +194,28 @@ to download the latest version and then run it as described above:
    docker run --rm -p 80:3838 boutroslab/crispranalyzer:latest
  ```
 
-
-
-## Run and install with local downloading of container file
-
-1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
-2. Install the downloaded file
-3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
-   A small docker symbol in the taskbar will tell you that docker is ready.
-4. Open a Terminal (macOS and Linux) or Commandline (Windows) 
-5. Download the CRISPRAnalyzeR docker files
-
-  __Download the docker container__
-  ```
-  docker pull boutroslab/crispranalyzer:latest
-  ```
-   
-6. Once Docker has finished with the installation, you can RUN the CRISPRAnalyzeR and provide several parameters to it.
-   
-   __To run CRISPRAnalyzeR with the default settings (see below)__, just type the following into your Terminal / Command Line  
-   ```
-   docker run --rm -p 80:3838 boutroslab/crispranalyzer:latest
-   ```
-   **However, you can adjust multiple parameters when starting the CRISPRAnalyzeR!**
-   
-8. __Access the CRISPRAnalyzeR via your webbrowser: http://localhost/CRISPRAnalyzeR__
-   
-
 ---
 
 ## Available Paramaters to start CRISPRAnalyzeR
 
 CRISPRAnalyzeR has been designed to be installed once on a machine and then accessed via a webbrowser. Therefore, you can adjust all parameters during the start of the CRISPRAnalyzeR.
 
-Paramater | Meaning | Default Value | Accepted Values 
+Parameter | Meaning | Default Value | Accepted Values 
 ----------|---------|---------------|-----------------
-websockets_behind_proxy | use Websocket protocol | TRUE | TRUE or FALSE
-verbose_logfiles | output of log files | TRUE | TRUE or FALSE
-database_path | Directory where database files are located | ./database | any path
-COSMIC_database | Directory in which the COSMIC database is located | NULL | any path
-disable_EnrichR | Whether to Disable the Enrichr API access | FALSE | TRUE or FALSE
-EnrichR_URL | URL to the Enrichr API | http://amp.pharm.mssm.edu/Enrichr/ | Any URL
-ecrispr_databasepath | Path to E-CRISP reference genomes | ./database | any path
-bowtie_threads | Number of bowtie2 threads for mapping | 2 | any number, must be equal or smaller the number of CPU cores
-proxy_url | URL to your Proxy server | NULL | URL or NULL to inactivate
-proxy_port | Proxy server Port | NULL |Port number of NULL to inactivate
+__websockets_behind_proxy__ | use Websocket protocol | TRUE | TRUE or FALSE
+__verbose_logfiles__ | output of log files | TRUE | TRUE or FALSE
+__database_path__ | Directory where database files are located | ./database | any path
+__COSMIC_database__ | Directory in which the COSMIC database is located | NULL | any path
+__disable_EnrichR__ | Whether to Disable the Enrichr API access | FALSE | TRUE or FALSE
+__EnrichR_URL__ | URL to the Enrichr API | http://amp.pharm.mssm.edu/Enrichr/ | Any URL
+__ecrispr_databasepath__ | Path to E-CRISP reference genomes | ./database | any path
+__bowtie_threads__ | Number of bowtie2 threads for mapping | 2 | any number, must be equal or smaller the number of CPU cores
+__proxy_url__ | URL to your Proxy server | NULL | URL or NULL to inactivate
+__proxy_port__ | Proxy server Port | NULL |Port number of NULL to inactivate
 
 ### How to use the parameters
 
-All parameter can be attach by the following:
+All parameters can be set during the start by the following:
 
 ```bash
 docker run -rm -p -e PARAMETER1 -e PARAMETER2 -e PAREMETER3 3838:3838 boutroslab/crispranalyzer:latest
