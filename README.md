@@ -167,17 +167,34 @@ __Please have a look at the installation tutorials below, which will assist you 
    docker run --rm -p 80:3838 boutroslab/crispranalyzer:latest
    ```
    It is important to keep the __80:3838__ as this tells the software how to access it via the browser.  
-   By default, CRISPRAnalyzeR can be accesed by the web-browser using __http://localhost/CRISPRAnalyzeR__.
+   By default, CRISPRAnalyzeR can be accessed by the web-browser using __http://localhost/CRISPRAnalyzeR__.
    
    If you want to run a specific version, just replace the `latest` with the specific version number
    
    ```
    docker run --rm -p 80:3838 boutroslab/crispranalyzer:0.99
    ```
-
+   
 5. __Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.__
 
 6. Access CRISPRAnalyzeR using your web-browser - __http://localhost/CRISPRAnalyzeR__
+
+
+## Update CRISPRAnalyzeR to the latest version
+
+In case you would like to update CRISPRAnalyzer to the latest version, just type
+
+```
+  docker pull boutroslab/crispranalyzer:latest
+```
+
+to download the latest version and then run it as described above:
+
+ ```
+   docker run --rm -p 80:3838 boutroslab/crispranalyzer:latest
+ ```
+
+
 
 ## Run and install with local downloading of container file
 
