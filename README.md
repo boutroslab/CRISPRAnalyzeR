@@ -218,7 +218,7 @@ COSMIC_database | Directory in which the COSMIC database is located | NULL | any
 disable_EnrichR | Whether to Disable the Enrichr API access | FALSE | TRUE or FALSE
 EnrichR_URL | URL to the Enrichr API | http://amp.pharm.mssm.edu/Enrichr/ | Any URL
 ecrispr_databasepath | Path to E-CRISP reference genomes | ./database | any path
-bowtie_threads | Number of bowtie2 threads for mapping | 4 | any number
+bowtie_threads | Number of bowtie2 threads for mapping | 2 | any number, must be equal or smaller the number of CPU cores
 proxy_url | URL to your Proxy server | NULL | URL or NULL to inactivate
 proxy_port | Proxy server Port | NULL |Port number of NULL to inactivate
 
