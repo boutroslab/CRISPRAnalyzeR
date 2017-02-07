@@ -194,6 +194,10 @@ to download the latest version and then run it as described above:
    docker run --rm -p 80:3838 boutroslab/crispranalyzer:latest
  ```
 
+## How to Start and Restart the CRISPRAnalyzeR
+
+You can start and stop the CRISPRanalyzeR using docker.
+
 ---
 
 ## Available Paramaters to start CRISPRAnalyzeR
@@ -218,17 +222,20 @@ __proxy_port__ | Proxy server Port | NULL |Port number of NULL to inactivate
 All parameters can be set during the start by the following:
 
 ```bash
-docker run -rm -p -e PARAMETER1 -e PARAMETER2 -e PAREMETER3 3838:3838 boutroslab/crispranalyzer:latest
+docker run --rm -e PARAMETER1 -e PARAMETER2 -e PARAMETER3 -p 80:3838 boutroslab/crispranalyzer:latest
 ```
 
 this means you always need to add `-e` in front of the parameters, e.g.:
 
 ```bash
--e websockets_behind_proxy=TRUE
--e verbose_logfiles=TRUE
--e bowtie_threads=4
+-e websockets_behind_proxy=TRUE -e verbose_logfiles=TRUE -e bowtie_threads=4
 ```
 
+e.g.
+
+```bash
+docker run --rm -e bowtie_threads=4 -e proxy_url="http://thisismyproxy.com" -e proxy_port=80 -p 80:3838 boutroslab/crispranalyzer:latest
+```
 
 
 ## Installation Tutorial macOS
@@ -241,7 +248,6 @@ this means you always need to add `-e` in front of the parameters, e.g.:
 
 ## Installation Tutorial Ubuntu
 
-## How to Start and Restart the CRISPRAnalyzeR
 
 
 
@@ -266,16 +272,8 @@ __Step 3: start CRISPRAnalyzeR and tell it where you files are__
 Using the command line, start CRISPRAnalyzeR and provide the database path
 
 ```bash
-
+NOT DONE YET
 ```
-
-
----
-
-# How to Install CRISPRAnalyzeR using the provided Source Code
-
----
-
 
 ---
 
