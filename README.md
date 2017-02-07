@@ -232,8 +232,8 @@ this means you always need to add `-e` in front of the parameters, e.g.:
 
 
 ## Installation Tutorial macOS
+<a href="https://youtu.be/IFPojCjW0ns" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_macos.png" width="30%" alt="CRISPRAnalyzeR Report Preview"></a>
 
-[![CRISPRAnalyzeR Report Preview](./images/CRISPRAnalyzeR_YT_macos.png)](https://youtu.be/IFPojCjW0ns)
 
 
 
@@ -446,11 +446,11 @@ The first column describes which sgRNA identifier (must be the same as in the sg
 
 
 
-# Contact
+# Contact and Citation
 
 **Jan Winter - jan.winter@dkfz-heidelberg.de**
 
-@winterj86
+__Twitter:__ @winterj86
 
 *Manuscript submitted*
 
