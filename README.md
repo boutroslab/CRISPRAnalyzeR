@@ -288,26 +288,21 @@ In case you want to use the COSMIC database, please proceed as follows.
 - If you aim for a commercial use, please see the [COSMIC Licensing Information Page](https://cancer.sanger.ac.uk/cosmic/license)
 - Head to the [COSMIC download section](https://cancer.sanger.ac.uk/cosmic/download)
 - Download the __COSMIC Mutation Data__ database file
-- Extract the CosmicMutantExport.tsv.gz file to the __database__ folder within the CRISPR AnalyzeR
-- Open the __config.R__ in the main folder of the CRISPRAnalyzeR Shiny directory and edit it 
-```r
-# COSMIC database file, needs to be located in database_path
-# DEFAULT is NULL, as CRISPRAnalyzeR is not provided with COSMIC Database
-config[["COSMIC_database"]] <- "CosmicMutantExport.tsv" # NULL if not available
-```
-- Restart the CRISPRAnalyzeR
+- Extract the CosmicMutantExport.tsv.gz file to the __a database__ folder that you can define on your own
+- Tell CRISPRAnalyzeR during the start that you would like to have the COSMIC database included via the parameter __-e COSMIC_database="/PATHtoFILE/CosmicMutantExport.tsv"__
+
+  ```bash
+  docker run --rm -e COSMIC_database="PATHtoFILE/CosmicMutantExport.tsv" -p 80:3838 boutroslab/crispranalyzer:latest
+  ```
 
 *Please note that the COSMIC database is loaded during the analysis procedure and requires 1 GB of RAM.*
 
 ### Enrichr API
 [Enrichr](http://amp.pharm.mssm.edu/Enrichr/) offers API access for a gene set analysis.
-By default, CRISPRAnalyzeR has the Enrichr API access disabled.
-You can activate the Enrichr API access during the installation by setting `EnrichR` to `TRUE`.
-As an alternative you can edit the `config.R` in the main folder of CRISPRAnalyzeR:
-```r
-# EnrichR
-# Enrichr is TRuE by default, but for commercial use a license HAS to be OBTAINED!
-config[["EnrichR"]] <- TRUE # False if inactive
+By default, CRISPRAnalyzeR has the Enrichr API access ENABLED.
+You can DISBALE the Enrichr API access during the start by setting the paratemer __-e disable_EnrichR=TRUE__
+```bash
+ docker run --rm -e disable_EnrichR=TRUE -p 80:3838 boutroslab/crispranalyzer:latest
 ```
 
 Please not that you require a license for commercial use.
