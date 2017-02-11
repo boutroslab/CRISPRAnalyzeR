@@ -66,8 +66,8 @@ seqFiles <- eventReactive(input$submit_seqFiles, {
   for( i in 1:length(names) ){
     gen_names <- c(gen_names, input[[paste0("seqFile_gen_name_", i)]])
   }
-    
-  test <- Check_seqFiles(names, paths, gen_names, regex, messages = config$message)
+    #as.numeric(config[["car.bt2.threads"]])
+  test <- Check_seqFiles(names, paths, gen_names, regex, messages = config$message, threads = 1, userdir = userDir, ID = userID)
   
   if( test$error == TRUE ){
     error$seqFiles <- test$message
@@ -193,7 +193,7 @@ output$libFile_upload_example <- renderUI({
     txt <- character()
     for( i in 1:n ){
       m <- GetCaptures(x[i], pat)
-      m <- apply(rbind(m[1, ], apply(m, 2, function(s) substr(x, s[2], s[3]))), 2, function(ss){
+      m <- apply(rbind(m[1, ], apply(m, 2, function(s) substr(x[i], s[2], s[3]))), 2, function(ss){
         if(as.integer(ss[1]) != 0) paste0('<font color="', cols[as.integer(ss[1])], '">', ss[2], "</font>") else ss[2]})
       txt <- c(txt, paste(m, collapse = ""))
     }

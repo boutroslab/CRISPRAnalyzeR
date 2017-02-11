@@ -19,6 +19,7 @@
 observeEvent(input$startAnalysis, {
   write(paste(userID, ": clicked on startAnalysis at", Sys.time()), logFile, append = TRUE)
   
+  
   test <- Check_final( status$seqFiles, status$libFile, status$extract, status$groups, status$anno,
     status$compare, status$analysis, status$extractedFiles, messages = config$messages )
   if( test$error == TRUE ){
@@ -221,9 +222,11 @@ results <- eventReactive(progress_analysis(),{
         # open modal to show error
         shinyBS::toggleModal(session, "analysis_error", toggle = "open")
         return()
+      } else {
+        write(paste(userID, ": results tested: good"), logFile, append = TRUE)
       }
       
-      write(paste(userID, ": results tested: good"), logFile, append = TRUE)
+      
       time$finishAnalysis <- Sys.time()
       
       # Load cosmic DB?
@@ -234,9 +237,28 @@ results <- eventReactive(progress_analysis(),{
         ########################
         # Load COSMIC ONLY ONCE
        
+        # check first if COSMIC DB is accessible
+        write(paste(userID, ": Access COSMIC Database at ", file.path(config$COSMIC_database)), logFile, append = TRUE)
+        cosmicreadable <- file.access(names = file.path(config$COSMIC_database), mode = 4)
+        
+        if(cosmicreadable == 0)
+        {
           withProgress(value=0.3, message="Loading COSMIC Database, please be patient.", {
-            COSMICDB <- readr::read_tsv(file = file.path(config$database_path, config$COSMIC_database), col_names = TRUE)
+            COSMICDB <- try(readr::read_tsv(file = file.path(config$COSMIC_database), col_names = TRUE))
+            if(class(COSMICDB) == "try-error")
+            {
+              write(paste(userID, ": COSMIC Database could not be loaded"), logFile, append = TRUE)
+              write(paste(userID, ": ",COSMICDB[1]), logFile, append = TRUE)
+              COSMICDB <- NULL
+            }
           })
+        } else
+        {
+          write(paste(userID, ": COSMIC Database could not be loaded at ", file.path(config$COSMIC_database)), logFile, append = TRUE)
+          
+          COSMICDB <- NULL
+        }
+          
 
       }
       else {
@@ -280,7 +302,8 @@ results <- eventReactive(progress_analysis(),{
         "ctrls" = readRDS(file.path(userDir, "ctrls.rds")),
         
         "uniqueGenes" = readRDS(file.path(userDir, "uniqueGenes.rds")),
-        "sampleList" = readRDS(file.path(userDir, "sampleList.rds"))
+        "sampleList" = readRDS(file.path(userDir, "sampleList.rds")),
+        "error" = test$error
         )
 
       
@@ -289,10 +312,12 @@ results <- eventReactive(progress_analysis(),{
       #arguments <- file.path(userDir, "*seqFile") 
       #system2(command, arguments)
       
-     
-      
       ### Open MODAL when Analysis Extraction is done
-      shinyBS::toggleModal(session, "analysis_finished", toggle = "open")
+      if( test$error != TRUE )
+      {
+        shinyBS::toggleModal(session, "analysis_finished", toggle = "open")
+      }
+      
       
       status$results <- TRUE
       out
@@ -337,7 +362,7 @@ output$analysis_progressBar <- renderUI({
       title = "Performing Hit Calculations - edgeR"
     } else if(progress_analysis()$progress >= 0.73 && progress_analysis()$progress < 0.75)
     {
-      title = "Performing Hit Calculations - BAGEL"
+      title = "Performing Hit Calculations - BAGEL - Please be patient"
     }  else if(progress_analysis()$progress >= 0.75 && progress_analysis()$progress < 0.78)
     {
       title = "Performing Hit Calculations - ScreenBEAM - Please be patient"
@@ -369,6 +394,17 @@ output$results_errormodal <- renderUI(
 
 ## reset sets final back
 observeEvent(input$resetAnalysis, {
+  
+  # close modals so we can open them later on
+  if(results()$error == FALSE){
+    shinyBS::toggleModal(session, "analysis_finished", toggle = "close") 
+  } else {
+    shinyBS::toggleModal(session, "analysis_error", toggle = "close")
+  }
+  
+  
+  
+  
   status$final <- FALSE
   status$results <- FALSE
   error$results <- ""

@@ -56,12 +56,14 @@ if( !file.exists(logFile) ){
 }
 
 # Load packages
-write(paste(userID, ": Loading libraries Rqc and ShortRead"), logFile, append = TRUE)
+write(paste(userID, ": Loading libraries"), logFile, append = TRUE)
 
 #library(Rqc)
 #write(paste(userID, ": Rqc done"), logFile, append = TRUE)
 library(ShortRead)
-write(paste(userID, ": ShortRead done"), logFile, append = TRUE)
+#write(paste(userID, ": ShortRead done"), logFile, append = TRUE)
+library(BiocParallel)
+library(ggplot2)
 
 write(paste(userID, ": Copy files"), logFile, append = TRUE)
 #### copy lib file to userDir
@@ -199,9 +201,9 @@ write(paste(userID, ": Check for Extraction Requirements"), logFile, append = TR
 if( info$extract ){
   bt2index <- file.path(userDir, "bt2Index")
 
-  write(paste(userID, ": run:", "bowtie2-build", info$libPath, bt2index), logFile, append = TRUE)
+  write(paste(userID, ": run:", "bowtie2-build", info$libPath, bt2index, paste0("PATH=", Sys.getenv("PATH"))), logFile, append = TRUE)
   
-  tryFun(system2("bowtie2-build", args = c(info$libPath, bt2index)), "index", "")
+  tryFun(system2("bowtie2-build", args = c(info$libPath, bt2index) ,stderr = file.path(userDir, "bt2build_error.log"), stdout = file.path(userDir, "bt2build.log")), "index", "")
   
   
 }
@@ -251,6 +253,7 @@ write(outInfo, file.path(userDir, "fastq_extraction.info"))
 # Always: check file content
 
 # make filename rdy for RQC later
+
 rqcqa <- list()
 rqcqa$QCperCycle <- "empty"
 
@@ -266,6 +269,8 @@ if( nfiles > 1 ){
     file.copy(info$paths[i], file.path(userDir, paste0(i, ".seqFile")), overwrite = TRUE)
     info$paths[i] <- file.path(userDir, paste0(i, ".seqFile"))
     info$oldpaths[i] <- info$paths[i]
+    
+    write(paste(userID, ": process file", i, "of", nfiles), logFile, append = TRUE)
     
     #### fastQ file 
     if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
@@ -388,6 +393,8 @@ info$paths[i] <- file.path(userDir, paste0(i, ".seqFile"))
 # old file
 info$oldpaths[i] <- info$paths[i]
 
+write(paste(userID, ": process file", nfiles, "of", nfiles), logFile, append = TRUE)
+
 #### Fastq file 
 if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
 
@@ -484,10 +491,18 @@ if(exists("file.rqc"))#length(file.rqc) >=1 ) #&& file.rqc[[1]] != ""
   #write(paste(userID, ": ", unlist(file.rqc), collapse = " - "), logFile, append = TRUE)
   options(bphost="localhost")
   
+  param <- BiocParallel::SnowParam(workers = as.numeric(info$bt2Threads), type = "SOCK")
+  
+  #library(ggplot2)
   outInfo <- c(paste("progress", 0.91, sep = ";"), paste("info", "", sep = ";"))
   write(outInfo, file.path(userDir, "fastq_extraction.info"))
   
-  fastq.qa <- Rqc::rqcQA(unlist(file.rqc), workers=as.numeric(info$bt2Threads))
+  fastq.qa <- try(Rqc::rqcQA(unlist(file.rqc),workers = as.numeric(info$bt2Threads), BPPARAM = param))
+  if(class(fastq.qa) == "try-error")
+  {
+    write(paste(userID, ": ","rqcqa failed ##", fastq.qa[1]), logFile, append = TRUE)
+    stop (paste("rqcqa failed", fastq.qa[1]))
+  }
   
   write(paste(userID, ": Creating FASTQ QC Analysis Report"), logFile, append = TRUE)
   
@@ -499,15 +514,12 @@ if(exists("file.rqc"))#length(file.rqc) >=1 ) #&& file.rqc[[1]] != ""
   
   write(paste(userID, ": Creating FASTQ QC Analysis Plots"), logFile, append = TRUE)
   # Create plots
-  
   outInfo <- c(paste("progress", 0.93, sep = ";"), paste("info", "", sep = ";"))
   write(outInfo, file.path(userDir, "fastq_extraction.info"))
   
   
   # Plots
-  
   #### Per cycle plots
-  
   # quality per cycle
   #rqcqa$QCperCycle <- Rqc::rqcCycleAverageQualityCalc(fastq.qa)
   rqcqa$QCperCycle <- Rqc::rqcCycleAverageQualityPlot(fastq.qa)
@@ -575,6 +587,8 @@ if(exists("file.rqc"))#length(file.rqc) >=1 ) #&& file.rqc[[1]] != ""
 
 outInfo2 <- c(paste("progress", 0.97, sep = ";"), paste("info", "", sep = ";"))
 write(outInfo2, file.path(userDir, "fastq_extraction.info"))
+
+write(paste(userID, ": Save data to fastq_extraction.info"), logFile, append = TRUE)
 
 ################
 #### Finish ####

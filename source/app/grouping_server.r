@@ -198,9 +198,9 @@ observeEvent(input$reset_data2, {
   status$final <- FALSE
   status$results <- FALSE
   shinyjs::enable("groups_n") 
-  shinyjs::disable("biomart_dataset")
-  shinyjs::disable("biomart_ID")
-  shinyjs::disable("biomart_IDnew")
+  shinyjs::enable("biomart_dataset")
+  shinyjs::enable("biomart_ID")
+  shinyjs::enable("biomart_IDnew")
   shinyjs::enable("submit_groups")
   shinyjs::enable("startAnalysis")
   write(paste(userID, ": clicked on reset_data2 at", Sys.time()), logFile, append = TRUE)

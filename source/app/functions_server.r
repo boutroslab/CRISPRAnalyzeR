@@ -76,7 +76,9 @@ GetCaptures <- function(s, pat){
 #         error   boolean, were there issues?
 #         message error message in case there were issues
 #
-Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$messages) {
+
+
+Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$messages,  threads = as.numeric(config$car.bt2.threads), userdir = userDir, ID = userID) {
   out <- list(error = FALSE, message = "")
 
   withProgress(value = 0.1, message = messages$checkseqfilesprogress1$String, {
@@ -183,17 +185,24 @@ Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$mes
          out$extractRatio <- list()
          setProgress(value = 0.4,detail = messages$checkseqfilesprogress4$String)
          
+         
       # BiocParallel FIX
          options(bphost="localhost")
-         out$extractRatio <- BiocParallel::bptry(BiocParallel::bplapply(checkpath, function(x) {
+         #BiocParallel::MulticoreParam(workers = as.numeric(threads),log = TRUE, logdir = userdir, jobname = as.character(ID))
+         param <- BiocParallel::SnowParam(workers = as.numeric(threads), type = "SOCK",log = FALSE)
+         #param <- BiocParallel::MulticoreParam(workers = 2, type = "FORK",log = TRUE, logdir = userdir, jobname = as.character(ID))
+         
+         
+         #BiocParallel::bptry(BiocParallel::bplapply(checkpath, function(x) {
+         out$extractRatio <- BiocParallel::bplapply(checkpath, function(x) {
            
            if(!is.na(x))
            {
-             
              con <- file(x)
-             #print(con)
+             
              f <- ""
              f <- ShortRead::FastqSampler(con = con, n = 10000, ordered = TRUE)
+             
              
              f <- ShortRead::yield(f) # Get the data
              
@@ -214,11 +223,14 @@ Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$mes
              
              # Check ratio of working Regular Expression, should be LOWER than 30% of reads
              extractRatio <- round(as.numeric(( 1- (countFalse / 10000 ))*100 ), digits=4)
+             #close(con)
              
            } else { extractRatio <- NA}
            
+
+           
            return(extractRatio)
-         }))
+         }, BPPARAM = param)
          
          
          
@@ -1805,14 +1817,23 @@ Plot_Replicates_SPLOM <- function( readCountVS, dsNames,
 #                           writing annotations ("x", "y", "text")
 #             xTrans        chr "linear", "logarithmic", "datetime", or "category"
 #             yTrans        chr "linear", "logarithmic", "datetime", or "category"
+#             sym           bool whether to scale axis symmetrically
 # value       highcharter plot object
 #
 Plot_scatter <- function( dataList, seriesNames,
                   tooltip = NULL, title = "", subtitle = "", xLab = "", yLab = "", zoom = "xy",
-                  crosshair = c(FALSE, FALSE), legend = TRUE, export = TRUE, turboT = 0,
-                  anno = NULL, col = NULL, xTrans = "linear", yTrans = "linear" , filename = NULL){
+                  crosshair = c(FALSE, FALSE), legend = TRUE, export = TRUE, turboT = 0, anno = NULL, 
+                  col = NULL, xTrans = "linear", yTrans = "linear" , filename = NULL, sym = FALSE){
   export <- TRUE # subsequent correction
-  
+
+  xLim <- range(do.call(rbind, dataList)$x)
+  yLim <- range(do.call(rbind, dataList)$y)
+  if(sym){
+    xLim[1] <- min(xLim[1], yLim[1])
+    yLim[1] <- min(xLim[1], yLim[1])
+    xLim[2] <- max(xLim[2], yLim[2])
+    yLim[2] <- max(xLim[2], yLim[2])
+  }
   
   hc <- highcharter::highchart() %>% 
     highcharter::hc_chart(zoomType = zoom) %>%
@@ -1820,8 +1841,8 @@ Plot_scatter <- function( dataList, seriesNames,
     highcharter::hc_subtitle(text = subtitle) %>%
     highcharter::hc_plotOptions(series = list(turboThreshold = turboT, 
         marker = list(symbol = "circle", radius = 2))) %>%
-    highcharter::hc_xAxis(title = list(text = xLab), type = xTrans) %>%
-    highcharter::hc_yAxis(title = list(text = yLab), type = yTrans) %>%
+    highcharter::hc_xAxis(title = list(text = xLab), type = xTrans, min = xLim[1], max = xLim[2]) %>%
+    highcharter::hc_yAxis(title = list(text = yLab), type = yTrans, min = yLim[1], max = yLim[2]) %>%
     highcharter::hc_legend(enabled = legend) %>%
     highcharter::hc_exporting(enabled = export,
                  printMaxWidth = 2000,
@@ -1829,8 +1850,6 @@ Plot_scatter <- function( dataList, seriesNames,
                  scale=8,
                  formAttributes = list(target = "_blank")
                  )
-  
- 
   
   for( i in 1:length(seriesNames) ){
     d <- list_parse(dataList[[i]])
@@ -1973,24 +1992,28 @@ Plot_replicates_pair <- function( xx, yy, data, cCtrl = "neg",
   }
   
   rand <- df[, ]
-  rand <- data.frame("x" = rand[[xx]], "y" = rand[[yy]], ID = rand$gene, stringsAsFactors = FALSE)
+  rand <- data.frame("x" = rand[[xx]], "y" = rand[[yy]], "ID" = rand$gene, stringsAsFactors = FALSE)
   
   pos <- df[which(df$labelgene == "pos" ), ]
-  pos <- data.frame("x" = pos[[xx]], "y" = pos[[yy]], ID = pos$gene, stringsAsFactors = FALSE)
+  pos <- data.frame("x" = pos[[xx]], "y" = pos[[yy]], "ID" = pos$gene, stringsAsFactors = FALSE)
 
   neg <- df[which(df$labelgene == "neg" ), ]
-  neg <- data.frame("x" = neg[[xx]], "y" = neg[[yy]], ID = neg$gene, stringsAsFactors = FALSE)
+  neg <- data.frame("x" = neg[[xx]], "y" = neg[[yy]], "ID" = neg$gene, stringsAsFactors = FALSE)
   
   rand[["plotRatio"]] <- rand$y / rand$x
   randLow <- rand[which(rand$plotRatio <= 2), ] 
   randLow <- randLow[which(randLow$plotRatio >= 0.5), ]
   randHigh <- rbind(rand[which(rand$plotRatio >= 2), ], rand[which(rand$plotRatio <= 0.5), ])
   
+  # remove plotRatio
+  randLow$plotRatio <- NULL
+  randHigh$plotRatio <- NULL
+  
   # add labeled gene
   if(!is.null(labelgene))
   {
     genelabel  <- df[which(df$gene %in% labelgene), ]
-    genelabel <- data.frame("x" = genelabel[[xx]], "y" = genelabel[[yy]], ID = genelabel$gene, stringsAsFactors = FALSE)
+    genelabel <- data.frame("x" = genelabel[[xx]], "y" = genelabel[[yy]], "ID" = genelabel$gene, stringsAsFactors = FALSE)
     
     data <- list(randLow, randHigh, pos, neg, genelabel)
     series <- c("ratio <= 2", "ratio > 2", ctrlName, paste(labelgene, collapse = " ; "))
@@ -2034,7 +2057,8 @@ Plot_replicates_pair <- function( xx, yy, data, cCtrl = "neg",
   
   
   p <- Plot_scatter( data, series, col = colours, tooltip = tt, turboT = 200000,
-    xTrans = type, yTrans = type, xLab = xx, yLab = yy, title = tit, subtitle = sub, export = ex , filename = file)
+    xTrans = type, yTrans = type, xLab = xx, yLab = yy, title = tit, subtitle = sub, 
+    export = ex , filename = file, sym = TRUE)
 
   return(p)
 }

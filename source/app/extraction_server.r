@@ -213,7 +213,9 @@ extractedFiles <- eventReactive(progress_fastq(), {
         out[[xlist[[i]][1]]] <- xlist[[i]][-1]
       }
       
+      write(paste(userID, ": check extracted files"), logFile, append = TRUE)
       test <- Check_extractedFiles(out$names, out$paths, out$gen_names, info, userID, messages = config$messages)
+      
       if( test$error == TRUE ){
         error$extractedFiles <- test$message
         write(paste(userID, ": extractedFiles tested: error"), logFile, append = TRUE)
@@ -226,21 +228,21 @@ extractedFiles <- eventReactive(progress_fastq(), {
           attach <- file.path(config$logDir, "fastq_extraction.log") # Attach logfile AND analysis.info for more details
           sendmail_car(message = message, title = title, from=NULL, to=NULL, attach=attach, type = "error")
         }
-        
         return()
       }
-      
+      write(paste(userID, ": check if QC information for NGS files is present"), logFile, append = TRUE)
         if(out[["rqc"]] != "empty")
         {
+          write(paste(userID, ": RQC information present"), logFile, append = TRUE)
           rqc.qa <- readRDS(file = out$rqc)
           
           out$rqc <- rqc.qa
         } else
         {
+          write(paste(userID, ": RQC information NOT present"), logFile, append = TRUE)
           out$rqc <- ""
         }
       
-    
       
       write(paste(userID, ": extractedFiles tested: good"), logFile, append = TRUE)
       time$finishFasq <- Sys.time()
@@ -395,9 +397,12 @@ output$fastq_progressBar2 <- renderUI({
 
 ### Open MODAL when FASTQ Extraction is done
 observeEvent(progress_fastq()$progress, {
-  if(progress_fastq()$progress == 1 && (error$extractedFiles == "" || is.null(error$extractedFiles) ) && (error$extract == "" || is.null(error$extract) ) )
+  if(progress_fastq()$progress == 1 )
   {
-    shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "open")
+    if(error$extractedFiles == "")
+    {
+      shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "open")
+    }
   }
   
  
@@ -408,6 +413,7 @@ observeEvent(error$extractedFiles, {
   if(error$extractedFiles !="" && !is.null(error$extractedFiles))
   {
     shinyBS::toggleModal(session, "extractfileerror", toggle = "open")
+    shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "close")
   }
 })
 
@@ -425,6 +431,11 @@ observe(extractedFiles())
 #### reset button
 # tabset file upload
 observeEvent(input$reset_data, {
+  
+  # close modals after clicking on submit, so we can open them later on
+  shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "close")
+  shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "close")
+  
   status$seqFiles <- FALSE
   status$libFile <- FALSE
   status$groups <- FALSE

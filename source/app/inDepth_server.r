@@ -18,7 +18,7 @@ source(file.path(config[["Fundir"]], "gene.overview.R"))
 # Dataset/Organism: annos()$dataset
 # filter (new gene identifier): annos()$IDnew
 # Proxy: config[["car.proxy"]]
-#httr::with_config(httr::use_proxy(url = "www-int2.inet.dkfz-heidelberg.de", port=80, auth="basic"),  makeTxDbFromBiomart(biomart=config$car.bm.database, dataset="hsapiens_gene_ensembl"))
+
 
 
 output$indepthOverviewGene <- renderUI({
@@ -317,9 +317,6 @@ output$kegg_structure <- renderUI({
   ## make URL to 
   # http://www.rcsb.org/pdb/explore/explore.do?structureId=TERM
   ## TERM is KEGG.structure
-  ## NEEDS ITERATION
-  # KEGG$structure <- unlist(strsplit(KEGG$structure ,split = " "))
-  # KEGG$structure <- KEGG$structure[!KEGG$structure %in% c("", "PDB:", NA) ]
   # 
   output <- ""
   
@@ -646,19 +643,6 @@ output$indepth_hc_gene_zratio <- renderHighchart({
 
 
 # Part3: Data Table with sgRNA Information and Foldchanges for this particular gene
-# sgrna.dt <- reactiveValues(data = NULL)
-# observeEvent(input$indepthOverviewGene, {
-#   
-#   sgrna.d <- as.data.frame(results()$deseq$data$sgRNA[results()$deseq$data$sgRNA$genes == input$indepthOverviewGene,c("log2FoldChange","padj","sgRNA")])
-#   sgrna.d$log2FoldChange <- round(as.numeric(sgrna.d$log2FoldChange), digits = 4)
-#   
-#   
-#   sgrna.d <- merge.data.frame(x=sgrna.d, y=results()$libFILE, by.x = "sgRNA", by.y = "design", all.x=TRUE)
-#   sgrna.d$sequence <- toupper(sgrna.d$sequence)
-#   
-#   sgrna.dt$data <- as.data.frame(sgrna.d)
-# 
-# })
 
 
 output$indepth_DT_sgrna2 <- renderDataTable({
@@ -688,33 +672,6 @@ output$indepth_hc_sgrna_log2fc <- renderHighchart({
 
 ###### Part5 : Gene Ontology
 
-#indepth_GO <- reactiveValues(data = NULL)
-
-# observeEvent(input$indepthOverviewGene,{
-#   shiny::validate(
-#     shiny::need(input$indepthOverviewGene, message=FALSE)
-#   )
-#   
-#   print("in indepth_GO")
-#   
-#   shiny::withProgress(message = 'Generating Gene Ontology Information', value = 0,{
-#    
-#     if(config$car.proxy != ""){
-#       res <- httr::with_config(httr::use_proxy(url = config$car.proxy.url, port = as.numeric(config$car.proxy.port)), goterms(genes = input$indepthOverviewGene, database=config$car.bm.database, dataset=annos()$dataset, filter = annos()$IDnew, host="www.ensembl.org", userdir = userDir))  
-#     } else
-#     {
-#       res <- try(goterms(genes = input$indepthOverviewGene, database=config$car.bm.database, dataset=annos()$dataset, filter = annos()$IDnew, host="www.ensembl.org", userdir = userDir))
-#     }
-#     
-#     if(class(res) == "try-error")
-#     {
-#       return(NULL)
-#     } else {
-#       
-#       indepth_GO$data <- res
-#     }
-#   })
-# })
 
 output$indepth_GO_table1 <- renderDataTable({
   shiny::validate(
@@ -860,13 +817,6 @@ output$indepth_Type_cosmic <- renderHighchart({
   )
   return(try(plot_cosmic(indepth_geneOverview()$cosmic$hcmutation, plottype = "Mutation Description", title = "Type of Mutation", subtitle = paste("in ", input$indepthOverviewGene ,sep=""), ylab ="Occurence in COSMIC database", xlab =" Type of Mutation", filename = paste("GeneOverview_", input$indepthOverviewGene ,"_COSMIC_TypeMutations", sep=""))))
 })
-
-# output$indepth_Type_cosmic2 <- renderHighchart({
-#   shiny::validate(
-#     shiny::need(input$indepthOverviewGene, 'Not Available')
-#   )
-#   return(try(plot_cosmic(indepth_geneOverview()$cosmic$hcmutation$`Mutation Description`, title = "Type of Mutation", subtitle = paste("in ", input$indepthOverviewGene ,sep=""), ylab ="Occurence in COSMIC database", xlab =" Type of Mutation", filename = paste("GeneOverview_", input$indepthOverviewGene ,"_COSMIC_TypeMutations", sep="")), type = "pie"))
-# })
 
 output$indepth_Tumor_cosmic <- renderHighchart({
   shiny::validate(

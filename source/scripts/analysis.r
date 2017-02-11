@@ -149,7 +149,9 @@ tryFunction <- function( expr, place, log = logFile, ID = userID, dir = userDir 
       mageck = "MAGeCK Hit calculation could not be performed.<br/>",
       rsea = "sgRSEA Hit calculation could not be performed.<br/>",
       wilcox = "Wilcoxon Hit calculation could not be performed.<br/>",
-      aggregate = "sgRNA readcount data could not be aggregated for gene.<br/>Please make sure you selected the correct Regular Expression (on the Setup Page) that describes your sgRNA identifier.<br/>You can also send us a ticket/post to the forum and we will help you.<br/>"
+      aggregate = "sgRNA readcount data could not be aggregated for gene.<br/>Please make sure you selected the correct Regular Expression (on the Setup Page) that describes your sgRNA identifier.<br/>You can also send us a ticket/post to the forum and we will help you.<br/>",
+      thresholdcheck = "<strong>The median or mean of your read count data is 0 or no sgRNAs are left.</strong></br>In case you selected to remove sgRNAs with low or high read counts from your data,</br>you can try to unset this option in the 'Set Analysis Parameters' section and start the analysis again.<br/>",
+      PCA = "Principal Component Analysis failed.</br></br>In case you selected to remove low or high read counts from your data,</br>you can try to unset this option in the 'Set Analysis Parameters' section and start the analysis again.<br/>"
     )
     
     outInfo <- c(paste("progress", 1, sep = ";"), paste("info", info, sep = ";"))
@@ -160,6 +162,22 @@ tryFunction <- function( expr, place, log = logFile, ID = userID, dir = userDir 
   } else return(res)
 }
 
+# check for missing data after applying the thresholds
+# if now median/mean is 0, we have some issues!
+check_thresholds <- function(threshold_to_check){
+  # check number of rows
+  if(nrow(cp$readcount) <= 10){
+    stop("Less than 10 sgRNAs left after applying the cutoff.")
+  }
+  
+  # check read count
+  check_median <- dplyr::summarise_each(cp$readcount[,cp$miaccs$file.names], dplyr::funs(median))
+  check_mean <- dplyr::summarise_each(cp$readcount[,cp$miaccs$file.names], dplyr::funs(mean))
+  if(check_median[1,] <= threshold_to_check || check_mean[1,] <= threshold_to_check)
+  {
+    stop("Mean or Median read count of you data is 0.")
+  } else { return(NULL) }
+}
 
 progress <- 0.02
 outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
@@ -365,6 +383,9 @@ if(info$removeLow)
     {
       cp$readcount <- cp$readcount[apply(cp$readcount[cp$miaccs$file.names],1,function(z) !any( z <= as.numeric(info$removeThresholdLow) )),] 
       
+      # check
+      tryFunction(check_thresholds(threshold_to_check = 0), "thresholdcheck")
+      
       cp$readcount$design <- as.character(cp$readcount$design)
       
       # set back row names
@@ -376,6 +397,9 @@ if(info$removeLow)
       
       
       cp$readcount <- cp$readcount[apply(cp$readcount[groupstouse],1,function(z) !any( z <= as.numeric(info$removeThresholdLow) )),] 
+      
+      # check
+      tryFunction(check_thresholds(threshold_to_check = 0), "thresholdcheck")
       
       cp$readcount$design <- as.character(cp$readcount$design)
       
@@ -402,6 +426,8 @@ if(info$removeHigh)
     if(info$removeGroups == "all")
     {
       cp$readcount <- cp$readcount[apply(cp$readcount[cp$miaccs$file.names],1,function(z) !any( z >= as.numeric(info$removeThresholdHigh) )),] 
+      # check
+      tryFunction(check_thresholds(threshold_to_check = 0), "thresholdcheck")
       
       cp$readcount$design <- as.character(cp$readcount$design)
       
@@ -413,6 +439,8 @@ if(info$removeHigh)
       groupstouse <- cp$treatmentgroup[[info$removeGroups]] + 1 # add additional row for design, so we start at 2
       
       cp$readcount <- cp$readcount[apply(cp$readcount[groupstouse],1,function(z) !any( z >= as.numeric(info$removeThresholdHigh) )),] 
+      # check
+      tryFunction(check_thresholds(threshold_to_check = 0), "thresholdcheck")
       
       cp$readcount$design <- as.character(cp$readcount$design)
       
@@ -547,7 +575,7 @@ datasetspca <- names(cp$dataset.names)[datasetcols]
 # for Genes
 data <- cp$normalized.aggregated.readcount[,datasetspca]
 rownames(data) <- cp$normalized.aggregated.readcount$gene
-pca$genes <- princomp(data, scores=TRUE)
+pca$genes <- tryFunction(princomp(data, scores=TRUE),"PCA")
 
 
 #highcharter::hchart(pca$genes)
@@ -1058,9 +1086,10 @@ write(outInfo, file.path(userDir, "analysis.info"))
 
 #### BAGEL
 write(paste(userID, ": creating object bagel"), logFile, append = TRUE)
+write(paste(userID, ": bagel cutoffs -", info$analysisBagelLower, "-" , info$analysisBagelHigher), logFile, append = TRUE)
 bagel <- list()
 
-bageldf <- try(stat.bagel(scriptpath = cp$miaccs$scriptpath, outputfolder=userDir, groups = cp$groups.compare,  lowercutoff = info$bagel_lower, highercutoff = info$bagel_higher))
+bageldf <- try(stat.bagel(scriptpath = cp$miaccs$scriptpath, outputfolder=userDir, groups = cp$groups.compare,  lowercutoff = info$analysisBagelLower, highercutoff = info$analysisBagelHigher))
 
 if(class(bageldf) == "try-error")
 {

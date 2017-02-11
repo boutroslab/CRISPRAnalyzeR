@@ -223,10 +223,10 @@ observeEvent(input$createReport, {
       
       wd <- getwd()
       bookDir <- paste("CRISPR-AnalyzeR", format(startTime, format = "%y-%m-%d"), "report", sep = "_")
-      unlink(file.path(userDir, "report.zip"))
-      unlink(file.path(userDir, "_book"), recursive = TRUE)
-      unlink(file.path(userDir, "_bookdown_files"), recursive = TRUE)
-      unlink(file.path(userDir, bookDir), recursive = TRUE)
+      if(file.exists(file.path(userDir, "report.zip"))) unlink(file.path(userDir, "report.zip"))
+      if(dir.exists(file.path(userDir, "_book"))) unlink(file.path(userDir, "_book"), recursive = TRUE)
+      if(dir.exists(file.path(userDir, "_bookdown_files"))) unlink(file.path(userDir, "_bookdown_files"), recursive = TRUE)
+      if(dir.exists(file.path(userDir, bookDir))) unlink(file.path(userDir, bookDir), recursive = TRUE)
       
       group <- c()
       for( i in 1: length(groups()) ){
@@ -292,6 +292,8 @@ observeEvent(input$createReport, {
                 paste("report_seqprimer", input$report_seqprimer, sep = ";"),
                 paste("report_seqkit", input$report_seqkit, sep = ";"),
                 
+                paste("cosmicDB", if(is.null(config$COSMIC_database)) "no" else "yes", sep = ";"),
+                
                 paste("inclSQ", input$report_sqCheck, sep = ";"),
                 paste("inclHC", input$report_hcCheck, sep = ";"),
                 paste("inclOV", input$report_ovCheck, sep = ";"),
@@ -300,7 +302,6 @@ observeEvent(input$createReport, {
                 paste("inclAN", input$report_anCheck, sep = ";"),
                 paste("inclGS", input$report_enCheck, sep = ";"))
       write(info, infoFiles$report)
-      write(info, paste0(infoFiles$report, ".bak"))
       
       file.copy(file.path(config$scriptpath, "report.Rmd"), file.path(userDir, "report.Rmd"), overwrite = TRUE)
       file.copy(file.path(config$scriptpath, "green_report.css"), file.path(userDir, "green_report.css"), overwrite = TRUE)
@@ -330,17 +331,19 @@ observeEvent(input$createReport, {
       wd <- getwd()
       setwd(userDir)
       
-      res <- try( bookdown::render_book( file.path(userDir, "report.Rmd"), 
-                             bookdown::gitbook(split_by = "section", self_contained = FALSE, number_sections = TRUE,
-                                               config = list(sharing = NULL, toc = list(collapse = "section"))),
-                             params = list(info = infoFiles$report) ) )
+      res <- try( withProgress(
+        bookdown::render_book( file.path(userDir, "report.Rmd"), 
+          bookdown::gitbook(split_by = "section", self_contained = FALSE, number_sections = TRUE,
+            config = list(sharing = NULL, toc = list(collapse = "section"))),
+          params = list(info = infoFiles$report)),
+          message = "Compiling Report") )
       if( inherits(res, "try-error") ){
         reportFile$status <- FALSE
         reportFile$error <- TRUE
         reportFile$msg <- "<div style='color:red;'>Error occurred during report rendering.</div>"
       } else {
         dir.create(bookDir)
-        file.copy(c("_book", "_bookdown_files"), bookDir, recursive = TRUE)
+        file.copy("_book", bookDir, recursive = TRUE)
         system2("zip", args = c("-r", file.path(userDir, "report.zip"), bookDir)) 
         reportFile$status <- TRUE
         shinyBS::toggleModal(session, "reportCreated_modal", toggle = "open")

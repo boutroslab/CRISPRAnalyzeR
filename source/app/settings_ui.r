@@ -103,7 +103,7 @@ tabItem(tabName = "settings", align = "center",
                  numericInput("bagel_lower", "Lowest BAGEL cutoff", value = -50, min = -100, max = 80, step = 1, width = "150px"),
                  numericInput("bagel_higher", "Highest BAGEL cutoff", value = 100, min = 0, max = 200, step = 1, width = "150px")
           ), column(width = 6, h4("ScreenBEAM"),
-                    shiny::tags$p("Do you want to run ScreenBEAM data analysis? This will increase the analysis calculation time by at least 10 minutes."),
+                    shiny::tags$p("Do you want to run ScreenBEAM data analysis? This will increase the analysis calculation time by at least three times."),
                     checkboxInput("screenbeam_run", value=FALSE, label = HTML("<strong>YES</strong>, activate ScreenBEAM analysis.")),
                     numericInput("screenbeam_pval", "P-Value Threshold", 
                                  value = 0.05, min = 0, max = 1, step = 0.005, width = "150px"),
