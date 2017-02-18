@@ -208,7 +208,7 @@ Parameter | Meaning | Default Value | Accepted Values
 ----------|---------|---------------|-----------------
 __websockets_behind_proxy__ | use Websocket protocol | TRUE | TRUE or FALSE
 __verbose_logfiles__ | output of log files | TRUE | TRUE or FALSE
-__COSMIC_database__ | filename of the CosmicMutantExport.tsv | NULL | CosmicMutantExport.tsv
+__COSMIC_database__ | Filename of the COSMIC Mutant database (CosmicMutantExport.tsv) | NULL | CosmicMutantExport.tsv
 __disable_EnrichR__ | Whether to Disable the Enrichr API access | FALSE | TRUE or FALSE
 __EnrichR_URL__ | URL to the Enrichr API | http://amp.pharm.mssm.edu/Enrichr/ | Any URL
 __bowtie_threads__ | Number of bowtie2 threads for mapping | 2 | any number, must be equal or smaller the number of CPU cores
@@ -249,41 +249,6 @@ docker run --rm -e bowtie_threads=4 -e proxy_url="http://thisismyproxy.com" -e p
 
 
 
-
-### How to setup CRISPRAnalyzeR for local re-evaluation of sgRNAs
-
-
-You can download the human reference genome and tell CRISPRAnalyzeR to perform the re-evaulation locally on your computer. For this, you require at least 60GB of disk space and a fast computer.
-
-__Step 1: Download the reference genome__  
-Download the reference genome you need
-* [Homo Sapiens](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/homo_sapiens.tar.gz)
-* [Mus Musculus](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/mus_musculus.tar.gz)
-* [Danio Rerio](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/danio_rerio.tar.gz)
-
-__Step 2: Extract the files to a folder (*DATABASEFOLDER*) of your desire__
-Extract the downloaded file using gunzip (macOS/Linux) or Zip (Windows) to a *DATABASEFOLDER* of your desire.
-Please note that you need to know the exact path to the *DATABASEFOLDER*!
-e.g. /home/user1/databases
-
-__Step 3: start CRISPRAnalyzeR and tell it where you files are__
-Using the command line, start CRISPRAnalyzeR and provide the database path using the docker -v option
-
-```bash
--v /*DATABASEFOLDER*/:/srv/shiny-server/CRISPRAnalyzeR/database/ 
-```
-
-so as example a complete command would look like this:  
-(exchange the *DATABASEFOLDER* with your path!)  
-
-```bash
-docker run --rm -v /*DATABASEFOLDER*/:/srv/shiny-server/CRISPRAnalyzeR/database/ -p 80:3838 boutroslab/crispranalyzer:latest
-```
-
-With the -v option you ask CRISPRAnalyzeR to have access to your local computer folder where you have put the database files in.
-
-
-
 ---
 
 ## How to use the COSMIC Database and Enrichr API
@@ -297,11 +262,13 @@ In case you want to use the COSMIC database, please proceed as follows.
 - If you aim for a commercial use, please see the [COSMIC Licensing Information Page](https://cancer.sanger.ac.uk/cosmic/license)
 - Head to the [COSMIC download section](https://cancer.sanger.ac.uk/cosmic/download)
 - Download the __COSMIC Mutation Data__ database file
-- Extract the CosmicMutantExport.tsv.gz file to the __a database__ folder that you can define on your own
-- Tell CRISPRAnalyzeR during the start that you would like to have the COSMIC database included via the parameter __-e COSMIC_database="/PATHtoFILE/CosmicMutantExport.tsv"__
+- Extract the CosmicMutantExport.tsv.gz file to the __a database__ folder *DATABASEFOLDER* that you can define on your own
+- Tell CRISPRAnalyzeR during the start that you have an external folder with your database files using the -v parameter __-v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database__ and that you would like to have the COSMIC database included via the parameter __-e COSMIC_database="CosmicMutantExport.tsv"__
+
+Please replace *DATABASEFOLDER* byt the full path to the directory where you have placed the CosmicMutantExport.tsv!
 
   ```bash
-  docker run --rm -e COSMIC_database="PATHtoFILE/CosmicMutantExport.tsv" -p 80:3838 boutroslab/crispranalyzer:latest
+  docker run --rm -v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database -e COSMIC_database="CosmicMutantExport.tsv" -p 80:3838 boutroslab/crispranalyzer:latest
   ```
 
 *Please note that the COSMIC database is loaded during the analysis procedure and requires 1 GB of RAM.*
@@ -318,6 +285,44 @@ Please not that you require a license for commercial use.
 A license can be obtained by contacting [the Mount Sinai Technology Development](http://www.ip.mountsinai.org/).
 
 More information can be found at the [Enrichr Help Page](http://amp.pharm.mssm.edu/Enrichr/help#terms).
+
+---
+
+## How to perform local sgRNA Re-evaluation
+
+CRISPRAnalyzeR re-evaluated your sgRNAs during the analysis process. By default, this is done by sending the sgRNAs to www.e-crisp.org and downloading the files again.
+However, you can also perform a local re-evaluation of your sgRNAs!
+
+You can download the human reference genome (or mus musculus) and tell CRISPRAnalyzeR to perform the re-evaulation locally on your computer. For this, you require at least 60GB of disk space and a pretty fast computer.
+
+__Step 1: Download the reference genome__  
+Download the reference genome you need
+* [Homo Sapiens](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/homo_sapiens.tar.gz)
+* [Mus Musculus](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/mus_musculus.tar.gz)
+* [Danio Rerio](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/danio_rerio.tar.gz)
+
+__Step 2: Extract the files to a folder (*DATABASEFOLDER*) of your desire__
+Extract the downloaded file using gunzip (macOS/Linux) or Zip (Windows) to a *DATABASEFOLDER* of your desire.
+Please note that you need to know the exact path to the *DATABASEFOLDER*!
+e.g. /home/user1/databases  
+__If you have already setup the COSMIC Database, please make sure you extract the file into that same folder.__
+
+Please note: The folder structure MUST be kept, when you extract the file into
+e.g. /home/user1/databases  
+it will create a folde rstructure like that:  
+e.g. /home/user1/databases/__data/scripts/crispr_databases/homo_sapiens__
+
+
+__Step 3: start CRISPRAnalyzeR and tell it where you files are__
+Using the command line, start CRISPRAnalyzeR and provide the database path!  
+
+__Please note: if you have setup the COSMIC database already, just extract the files in the same folder and you do not need to do anything in addition__
+
+
+```bash
+docker run --rm -v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database -p 80:3838 boutroslab/crispranalyzer:latest
+```
+
 
 
 ## How to perform an Analysis using CRISPRAnalyzeR
