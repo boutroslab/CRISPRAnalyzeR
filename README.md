@@ -208,11 +208,9 @@ Parameter | Meaning | Default Value | Accepted Values
 ----------|---------|---------------|-----------------
 __websockets_behind_proxy__ | use Websocket protocol | TRUE | TRUE or FALSE
 __verbose_logfiles__ | output of log files | TRUE | TRUE or FALSE
-__database_path__ | Directory where database files are located | ./database | any path
-__COSMIC_database__ | Directory in which the COSMIC database is located | NULL | any path
+__COSMIC_database__ | filename of the CosmicMutantExport.tsv | NULL | CosmicMutantExport.tsv
 __disable_EnrichR__ | Whether to Disable the Enrichr API access | FALSE | TRUE or FALSE
 __EnrichR_URL__ | URL to the Enrichr API | http://amp.pharm.mssm.edu/Enrichr/ | Any URL
-__ecrispr_databasepath__ | Path to E-CRISP reference genomes | ./database | any path
 __bowtie_threads__ | Number of bowtie2 threads for mapping | 2 | any number, must be equal or smaller the number of CPU cores
 __proxy_url__ | URL to your Proxy server | NULL | URL or NULL to inactivate
 __proxy_port__ | Proxy server Port | NULL |Port number of NULL to inactivate
@@ -269,11 +267,22 @@ Please note that you need to know the exact path to the *DATABASEFOLDER*!
 e.g. /home/user1/databases
 
 __Step 3: start CRISPRAnalyzeR and tell it where you files are__
-Using the command line, start CRISPRAnalyzeR and provide the database path
+Using the command line, start CRISPRAnalyzeR and provide the database path using the docker -v option
 
 ```bash
-NOT DONE YET
+-v /*DATABASEFOLDER*/:/srv/shiny-server/CRISPRAnalyzeR/database/ 
 ```
+
+so as example a complete command would look like this:  
+(exchange the *DATABASEFOLDER* with your path!)  
+
+```bash
+docker run --rm -v /*DATABASEFOLDER*/:/srv/shiny-server/CRISPRAnalyzeR/database/ -p 80:3838 boutroslab/crispranalyzer:latest
+```
+
+With the -v option you ask CRISPRAnalyzeR to have access to your local computer folder where you have put the database files in.
+
+
 
 ---
 
