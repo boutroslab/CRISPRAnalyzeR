@@ -31,9 +31,7 @@ CRISPAnalyzeR consists of **four sections**:
 - Screen and Sequencing Quality Estimation
 - Hit Calling using multiple published hit calling algorithms
 - Hit Confirmation which includes information from up to 26 external data ressources
-- Download of the interactive report that provides a comprehensive documentation of your screen and analysis
-
-<img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns.png" alt="alt text" width="30%" style="align:center;" >
+- Download of the interactive report that provides a comprehensive documentation of your screen and analysis  
 
 ### The principle CRISPRAnalyzeR Guided-Analysis Workflow
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_workflow4.png" alt="alt text" width="100%" style="align:center;" >
