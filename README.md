@@ -18,20 +18,20 @@ CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and docum
 **You can use the provided CRISPRAnalyzeR web-service or download the suite for installation within your lab/company.**
 
 CRISPRAnalyzeR has been specifically developed to provide a fully-interactive, hollistic and exploratory analysis of pooled CRISPR Screens especially for those people that perform the screens themselves.
-You can easily analyse your screen using 6 different hit calling and 1 essential gene calling methods as well as perform gene annotation enrichment, gene set analysis and get detailed information about your sgRNAs - all in a convenient web-browser interface.
+You can analyse your screen using 8 different analysis methods as well as perform gene annotation, gene set analysis and get detailed information about your sgRNAs - all in a convenient web-browser interface.
 
-**All you need is your sequencing data and the pooled CRISPR screen library file (we provide you with the most common ones) - and CRISPRAnalyzeR will help you to go from rawdata to potential followup candidates!**
+**All you need is your sequencing data and the a file describing your pooled CRISPR screen library (we provide you with the most common ones) - and CRISPRAnalyzeR will help you to go from rawdata to potential followup candidates**
 
+---
 
-## What makes CRISPRAnalyzeR the perfect suite to analyze pooled CRISPR Screens?
+CRISPRAnalyzeR uses a **guided-analysis** approach. This means you will be **guided through the whole analysis**.
 
-CRISPRAnalyzeR uses a **guided-analysis** approach. This means you will be **guided through the whole analysis, so that you can focus on the most important thing - your data**.
+In brief, CRISPAnalyzeR consists of **four sections**:
 
-In brief, CRISPAnalyzeR consists of **four sections**, all paired with a great user-friendly UI:
-- Screen Quality Estimation
-- Hit Calling using multiple published hit calling methods
-- Hit Confirmation with extensive Gene information, sgRNA information, Gene Set Analysis and much more
-- Download of the interactive report that provides a comprehensive documentation of your screen
+- Screen and Sequencing Quality Estimation
+- Hit Calling using multiple published hit calling algorithms
+- Hit Confirmation which includes information from up to 26 external data ressources
+- Download of the interactive report that provides a comprehensive documentation of your screen and analysis
 
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns.png" alt="alt text" width="30%" style="align:center;" >
 
@@ -43,32 +43,32 @@ In brief, CRISPAnalyzeR consists of **four sections**, all paired with a great u
 
 # What CRISPRAnalyzeR offers you
 
-CRISPRAnalyzeR is easy-to-use and assists you with the analysis of your screening data.
-It contains **4 different steps**, each filled with nice visualizations, interactive tables and all the information you need.
+CRISPRAnalyzeR assists you with the analysis of your screening data.
+It contains **4 different steps**, each offering interactive visualizations and tables.
 
 
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns_single.png" alt="alt text" width="80%" style="align:center;" >
 
-## EIGHT Hit Calling Methods
+## Up to eight Hit Calling Algorithms
 
-CRISPRAnalyzeR combines the power of several CRISPR Analysis Workflows and **incorporates them into a streamlined, straight-forward and convenient workflow.**
+CRISPRAnalyzeR combines the power of several CRISPR Analysis Workflows and **incorporates them into a streamlined and convenient workflow.**
 
 **You run one analysis and get the information of 8 different analysis workflows**
 
-We implemented SIX analysis workflows based on differentially expressed read counts:
-- Wilcoxon Test
+We implemented multiple available analysis workflows
+
 - DESeq2 (based on gene-level read counts)
 - MAGeCK
 - sgRSEA
 - edgeR
-
-Furthermore, we implmented TWO analysis workflows based on bayesion models that specifically identify gene essentiality/dropouts:
 - BAGEL
 - ScreenBEAM
+- Mann-Whitney Test
+
 
 ## Hit Confirmation
 
-__Use various external ressources to enrich information about your favourite candidate - all within the app and included in your report!__
+__Use up to 26 external data ressources to enrich information about your favourite candidate - all information is available within the application and can be saved to your report for documentation__
 
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_gene_annotation.png" width="50%">
 
@@ -79,23 +79,25 @@ __Use various external ressources to enrich information about your favourite can
 
 # How to download the CRISPRAnalyzeR
 
-#### Please check our [live demo](http://crispr-analyzer.dkfz.de), which you can also use to analyse your screening data.
+#### You can also check our [live demo](http://crispr-analyzer.dkfz.de), which you can also use to analyse your screening data.
 
-You can get the CRISPRAnalyzeR suite as source code or as a ready-to-use Docker Container.
+CRISPRAnalyzeR can be downloaded as a pre-configured app (using Docker) or as source code.
+
+__We encourage users to obtain the pre-configured application.__
 
 ---
 
 __Scroll down for the download options.__ 
 
-__Please also check the minimum system requirements and licensing information.__
+__See the minimum system requirements and licensing information.__
 
 ---
 
 **The idea of installing CRISPRAnalyzeR is to provide a single installation within a Lab/Institute, so that everyone can access it via the web browser.  
-However, you can also also install CRISPRAnalyzeR on your local machine only.**
+However, you can also also install CRISPRAnalyzeR on your local machine.**
 
 ### Minimum System Requirements
-CRISPRAnalyzeR is based on R Shiny-Server and uses many different R packages and tools.
+CRISPRAnalyzeR is based on R Shiny and uses many different R packages and tools which are listed separately.
 For a source code installation, we recommend the use of Ubuntu.
 
  | Source Code Installation | Docker Container Installation
@@ -110,7 +112,8 @@ Additional Software Packages | **See list below!** | All included in container
 ### Licenses
 CRISPRAnalyzeR is published under the GPL-2 license and is **free for non-commercial use only**.
 While CRISPRAnalyzeR does not require an additional license for commercial use itself, some included tools strictly require additional licensing.  
-**Please note that Highcharts, the COSMIC database and the Enrichr API access require additional licensing for commercial use**.
+**Please note that Highcharts, the COSMIC database and the Enrichr API access require additional licensing for commercial use**.  
+**The authors of this application are not responsible for licensing or license issues - please contact the corresponding companies directly.**.
 
 __Highcharts Licensing Options__
 https://shop.highsoft.com/  
@@ -125,18 +128,7 @@ http://www.ip.mountsinai.org/
 
 __It is your responsibility to obtain all required licenses in case of commercial usage!__
 
-
-## Source Code
-
-### Additional Required Software
-
-Software | Version | Link 
----------|---------|------
-Bowtie2 | 2.29 | http://bowtie-bio.sourceforge.net/bowtie2/index.shtml
-CRISPR ReEvaluation Tool | Latest | https://github.com/boutroslab/Supplemental-Material
-PERL | 5 | https://www.perl.org/
-Python | 2.7.11 | https://www.python.org/ 
-Python Scipy | latest | https://www.scipy.org/
+---
 
 # How to Install CRISPRAnalyzeR using the provided Docker Container
 
@@ -247,7 +239,21 @@ docker run --rm -e bowtie_threads=4 -e proxy_url="http://thisismyproxy.com" -e p
 ## Installation Tutorial Ubuntu
 
 
+---
 
+# Source Code
+
+More information will be here soon.
+
+### Additional Required Software
+
+Software | Version | Link 
+---------|---------|------
+Bowtie2 | 2.29 | http://bowtie-bio.sourceforge.net/bowtie2/index.shtml
+CRISPR ReEvaluation Tool | Latest | https://github.com/boutroslab/Supplemental-Material
+PERL | 5 | https://www.perl.org/
+Python | 2.7.11 | https://www.python.org/ 
+Python Scipy | latest | https://www.scipy.org/
 
 ---
 
