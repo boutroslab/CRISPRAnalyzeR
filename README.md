@@ -2,10 +2,10 @@
 # CRISPRAnalyzeR - Fully-interactive Analysis and Documentation Suite for Pooled CRISPR Screens
 Welcome to the CRISPRAnalyzeR Github page!
 
-CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and documentation of pooled CRISPR Screens.
+CRISPRAnalyeR is a web-based, interactive suite for the analysis and documentation of pooled CRISPR Screens.
 
 
-**See [CRISPRAnalyzeR](http://crispr-analyzer.dkfz.de) in action! You can even go and analyse your own data right away!**
+**See [CRISPRAnalyzeR](http://crispr-analyzer.dkfz.de) in action!**
 
 **Check out the [Wiki Page](https://github.com/boutroslab/crispr-analyzer/wiki) or scroll down for more information and help**
 
@@ -15,18 +15,18 @@ CRISPRAnalyeR is a web-based, fully interactive suite for the analysis and docum
 
 ---
 
-**You can use the provided CRISPRAnalyzeR web-service or download the suite for installation within your lab/company.**
+**You can use the provided CRISPRAnalyzeR web-service or download the suite for installation within your lab.**
 
-CRISPRAnalyzeR has been specifically developed to provide a fully-interactive, hollistic and exploratory analysis of pooled CRISPR Screens especially for those people that perform the screens themselves.
+CRISPRAnalyzeR has been developed to provide a fully-interactive and exploratory analysis of pooled CRISPR Screens with user experience in mind.
 You can analyse your screen using 8 different analysis methods as well as perform gene annotation, gene set analysis and get detailed information about your sgRNAs - all in a convenient web-browser interface.
 
-**All you need is your sequencing data and the a file describing your pooled CRISPR screen library (we provide you with the most common ones) - and CRISPRAnalyzeR will help you to go from rawdata to potential followup candidates**
+**All you need is your sequencing data and the a file describing your pooled CRISPR screen library (we provide you with the most common ones) - and you can go from rawdata to potential followup candidates**
 
 ---
 
-CRISPRAnalyzeR uses a **guided-analysis** approach. This means you will be **guided through the whole analysis**.
+CRISPRAnalyzeR uses a **guided-analysis** approach. This means you will be **guided through the analysis**.
 
-In brief, CRISPAnalyzeR consists of **four sections**:
+CRISPAnalyzeR consists of **four sections**:
 
 - Screen and Sequencing Quality Estimation
 - Hit Calling using multiple published hit calling algorithms
@@ -39,12 +39,10 @@ In brief, CRISPAnalyzeR consists of **four sections**:
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_workflow4.png" alt="alt text" width="100%" style="align:center;" >
 
 
-**Analysing CRISPR Screens has never been easier - and has never been so much fun!**
-
 # What CRISPRAnalyzeR offers you
 
 CRISPRAnalyzeR assists you with the analysis of your screening data.
-It contains **4 different steps**, each offering interactive visualizations and tables.
+It contains **4 different sections**, each offering interactive visualizations and tables.
 
 
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_5columns_single.png" alt="alt text" width="80%" style="align:center;" >
@@ -53,7 +51,7 @@ It contains **4 different steps**, each offering interactive visualizations and 
 
 CRISPRAnalyzeR combines the power of several CRISPR Analysis Workflows and **incorporates them into a streamlined and convenient workflow.**
 
-**You run one analysis and get the information of 8 different analysis workflows**
+**You run one analysis and get the information of up to 8 different analysis workflows**
 
 We implemented multiple available analysis workflows
 
@@ -74,6 +72,8 @@ __Use up to 26 external data ressources to enrich information about your favouri
 
 ## Interactive Report
 
+Finally you can document the screening data and analysis using the interactive report.  
+
 [![CRISPRAnalyzeR Report Preview](./images/CRISPRAnalyzeR_YT_report1.png)](https://www.youtube.com/embed/eusAj4LrSik)
 
 
@@ -83,7 +83,7 @@ __Use up to 26 external data ressources to enrich information about your favouri
 
 CRISPRAnalyzeR can be downloaded as a pre-configured app (using Docker) or as source code.
 
-__We encourage users to obtain the pre-configured application.__
+__We encourage users to obtain the pre-configured application which is described below.__
 
 ---
 
@@ -110,8 +110,9 @@ Additional Software Packages | **See list below!** | All included in container
 
 
 ### Licenses
-CRISPRAnalyzeR is published under the GPL-2 license and is **free for non-commercial use only**.
-While CRISPRAnalyzeR does not require an additional license for commercial use itself, some included tools strictly require additional licensing.  
+CRISPRAnalyzeR is published under the GPL-2 license and is **free for non-commercial use only**.  
+
+While CRISPRAnalyzeR does not require an additional license for commercial use itself, _some included tools strictly require additional licensing_.  
 **Please note that Highcharts, the COSMIC database and the Enrichr API access require additional licensing for commercial use**.  
 **The authors of this application are not responsible for licensing or license issues - please contact the corresponding companies directly.**.
 
@@ -136,10 +137,6 @@ __It is your responsibility to obtain all required licenses in case of commercia
 
 CRISPRAnalyzeR is available for a **platform-independent installation** as a so called Docker container.
 
-CRISPRAnalyzeR re-evaluates every sgRNA during the analysis process. Thus, it needs to map each sgRNA against the reference genome.  
-This can be performed locally (does not require a fast internet connection) or via e-crisp.org (requires fast internet >10 mbit).
-
-By default, CRISPRAnalyzeR uses e-crisp.org to re-evaluate your sgrRNAs
 
 You can install the CRISPRAnalyzeR by two ways:
 1. Directly run the latest version from the online resource
@@ -164,12 +161,21 @@ __Please have a look at the installation tutorials below, which will assist you 
    If you want to run a specific version, just replace the `latest` with the specific version number
    
    ```
-   docker run --rm -p 80:3838 boutroslab/crispranalyzer:0.99
+   docker run --rm -p 80:3838 boutroslab/crispranalyzer:1.08
    ```
+   
+   All pre-configured versions are listed at the [Docker Hub](https://hub.docker.com/r/boutroslab/crispranalyzer/tags/).  
+   
    
 5. __Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.__
 
 6. Access CRISPRAnalyzeR using your web-browser - __http://localhost/CRISPRAnalyzeR__
+
+
+CRISPRAnalyzeR re-evaluates every sgRNA during the analysis process. Thus, it needs to map each sgRNA against the reference genome.  
+This can be performed locally (does not require a fast internet connection) or via e-crisp.org (requires fast internet connection >10 mbit).
+
+By default, CRISPRAnalyzeR uses e-crisp.org to re-evaluate your sgRNAs. If you want to perform local sgRNA re-evaluation, please see below.
 
 
 ## Update CRISPRAnalyzeR to the latest version
@@ -268,10 +274,10 @@ In case you want to use the COSMIC database, please proceed as follows.
 - If you aim for a commercial use, please see the [COSMIC Licensing Information Page](https://cancer.sanger.ac.uk/cosmic/license)
 - Head to the [COSMIC download section](https://cancer.sanger.ac.uk/cosmic/download)
 - Download the __COSMIC Mutation Data__ database file
-- Extract the CosmicMutantExport.tsv.gz file to the __a database__ folder *DATABASEFOLDER* that you can define on your own
+- Extract the CosmicMutantExport.tsv.gz file to the __a database__ folder _*DATABASEFOLDER*_ that you can define on your own
 - Tell CRISPRAnalyzeR during the start that you have an external folder with your database files using the -v parameter __-v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database__ and that you would like to have the COSMIC database included via the parameter __-e COSMIC_database="CosmicMutantExport.tsv"__
 
-Please replace *DATABASEFOLDER* byt the full path to the directory where you have placed the CosmicMutantExport.tsv!
+Please replace  _*DATABASEFOLDER*_ byt the full path to the directory where you have placed the CosmicMutantExport.tsv!
 
   ```bash
   docker run --rm -v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database -e COSMIC_database="CosmicMutantExport.tsv" -p 80:3838 boutroslab/crispranalyzer:latest
@@ -308,22 +314,26 @@ Download the reference genome you need
 * [Danio Rerio](http://www.dkfz.de/signaling/crispr-downloads/DATABASES/danio_rerio.tar.gz)
 
 __Step 2: Extract the files to a folder (*DATABASEFOLDER*) of your desire__
-Extract the downloaded file using gunzip (macOS/Linux) or Zip (Windows) to a *DATABASEFOLDER* of your desire.
-Please note that you need to know the exact path to the *DATABASEFOLDER*!
+Extract the downloaded file using gunzip (macOS/Linux) or Zip (Windows) to a _*DATABASEFOLDER*_ of your desire.
+Please note that you need to know the exact path to the _*DATABASEFOLDER*_!
 e.g. /home/user1/databases  
 __If you have already setup the COSMIC Database, please make sure you extract the file into that same folder.__
 
 Please note: The folder structure MUST be kept, when you extract the file into
-e.g. /home/user1/databases  
-it will create a folde rstructure like that:  
-e.g. /home/user1/databases/__data/scripts/crispr_databases/homo_sapiens__
+e.g. __/home/user1/databases__  
+this is your _*DATABASEFOLDER*_  
+
+it will create a folder structure like that:  
+e.g. **/home/user1/databases/**_data/scripts/crispr_databases/homo_sapiens_
 
 
 __Step 3: start CRISPRAnalyzeR and tell it where you files are__
-Using the command line, start CRISPRAnalyzeR and provide the database path!  
+Using the command line, start CRISPRAnalyzeR and provide the database path _*DATABASEPATH*_ - so that CRISPRAnalyzeR know where to look for your data. 
 
 __Please note: if you have setup the COSMIC database already, just extract the files in the same folder and you do not need to do anything in addition__
 
+
+Again, replace _*DATABASEFOLDER*_ with your absolute path.  
 
 ```bash
 docker run --rm -v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database -p 80:3838 boutroslab/crispranalyzer:latest
