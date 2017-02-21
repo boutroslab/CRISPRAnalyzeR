@@ -142,6 +142,29 @@ You can install the CRISPRAnalyzeR by two ways:
 
 __Please have a look at the installation tutorials below, which will assist you with the installation__
 
+
+#### Latest Version and Changelog  
+
+```
+Version 1.09 (latest)
+- fixed glitches in data handling for Gene Overview section
+
+Version 1.08
+- fixed rare internet connectivity issues
+- updated filename handling -> automatically removes unwanted characters
+- updated libraries
+
+Version 1.07
+- fixed report crashing
+
+Version 1.03
+
+Version 1.01
+
+Version 0.99
+
+```
+
 ## Run and install directly from online resource
 
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
