@@ -148,6 +148,10 @@ __Please have a look at the installation tutorials below, which will assist you 
 ```
 Version 1.09 (latest)
 - fixed glitches in data handling for Gene Overview section
+- fixed proxy/no proxy issues
+- added another progress bar to highlight sgRNA re-evaluation status
+- added short help GIF animation to show how to adjust FASTQ regular expressions
+- streamlined code
 
 Version 1.08
 - fixed rare internet connectivity issues
