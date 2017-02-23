@@ -146,7 +146,13 @@ __Please have a look at the installation tutorials below, which will assist you 
 #### Latest Version and Changelog  
 
 ```
-Version 1.09 (latest)
+Version 1.10 (latest)
+- added possibility to have log files exported in real time for debugging using -v parameter (see bottom of the page for debugging section)
+- added status information on the Download CRISPRAnalyzeR page to show what features are active/inactive
+- added additional error message for data mapping using bowtie2, so users now see what is the exact issue
+- FASTQ options only display in case FASTQ.gz files have been uploaded
+
+Version 1.09
 - fixed glitches in data handling for Gene Overview section
 - fixed proxy/no proxy issues
 - added another progress bar to highlight sgRNA re-evaluation status
@@ -500,7 +506,7 @@ The first column describes which sgRNA identifier (must be the same as in the sg
 
 __Twitter:__ @winterj86
 
-*Manuscript submitted*
+__Cite: http://biorxiv.org/content/early/2017/02/20/109967__
 
 
 
@@ -513,3 +519,18 @@ __Twitter:__ @winterj86
 
 ## Assessing Screen Quality
 [![CRISPRAnalyzeR Tutorial on Screen Quality](./images/CRISPRAnalyzeR_YT_tutorial_SQ.png)](https://www.youtube.com/watch?v=zIC8OZBX_5U)
+
+
+--- 
+
+# Debugging for Advanced Users and System Administrators
+
+CRISPRAnalyzeR can provide you the log files generated, which can help you to identify potential issues and me to fix bugs or add new features.  
+In order to see the logs conveniently without struggeling into the running docker application itself, you can ask CRISPRAnalyzeR to export the logs in real-time to any folder using the start parameter `-v` in a similar way as it is done to include the COSMIC database or local sgRNA re-evaluation.  
+
+_*LOGFOLDER*_ is a local folder you create to which CRISPRAnalyzeR will save and update the logs in real time.  
+
+Start CRISPRAnalyzeR using the `-v` command, e.g.  
+```bash
+docker run --rm -v *LOGFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/log -p 80:3838 boutroslab/crispranalyzer:latest
+```
