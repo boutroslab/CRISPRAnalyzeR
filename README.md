@@ -164,14 +164,14 @@ Version 1.08
 - updated filename handling -> automatically removes unwanted characters
 - updated libraries
 
-Version 1.07
+Version 1.07		(outdated)
 - fixed report crashing
 
-Version 1.03
+Version 1.04		(outdated)
 
-Version 1.01
+Version 1.01	 (outdated)
 
-Version 0.99
+Version 0.99	(outdated)
 
 ```
 
