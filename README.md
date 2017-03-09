@@ -146,6 +146,25 @@ __Please have a look at the installation tutorials below, which will assist you 
 #### Latest Version and Changelog  
 
 ```
+Version 1.11BETA
+- added more detailed error handling
+- changed behaviour of automatic file renaming
+- fixed rare BAGEL/ScreenBEAM issues
+- added download of Hit Calling Data (Data Review Section) as Tab-separated .TSV or Excel .XLSX
+- added download of sgRNA re-evaluation file (Data Review Section) as Tab-separated .TSV
+- added CDF (cumulative frequency) plots for Gene and sgRNA level (takes long time to be visualized for Genome-wide screens and many samples!)
+- reworked Data Review Section to be more user-friendly
+- updated highcharts plots to latest version
+- improved data handling for less hard disk space
+- improved plot handling by adding crosshair/removing tooltips where applicable
+- added Data Review Section to report
+- improved speed of report generation
+- improved UI for easier and more streamlined appearance
+- fixed small glitches with libraries
+- improved file consistency check even more - now even rare cases should be reported
+- improved data handling to automatically correct certain flaws in file consistency to not interrupt the user experience
+
+
 Version 1.10 (latest)
 - added possibility to have log files exported in real time for debugging using -v parameter (see bottom of the page for debugging section)
 - added status information on the Download CRISPRAnalyzeR page to show what features are active/inactive
@@ -414,7 +433,7 @@ You can use them along with your read count (please see the format) or raw NGS s
 |Library Name |	Lab |	Pubmed ID |	Addgene |	Download |
 |-------------|-----|-----------|---------|----------|
 |CLD Benchmarking |	Boutros |	27013184 |	NA |	[FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_CLD_library.fasta) |
-|Gecko V2	| Zhang |	25075903 |	[here](https://www.addgene.org/crispr/libraries/geckov2/)	| [A+B FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_GeckoV2_all.fasta) |
+|Gecko V2	| Zhang |	25075903 |	[here](https://www.addgene.org/crispr/libraries/geckov2/)	| [A+B FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_GeckoV2_all.fasta) [A FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_GeckoV2_HGLib_A.fasta) [B FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_GeckoV2_HGLib_B.fasta) |
 |Torronto KnockOut Library (TKOv1) |	Moffat |	26627737 | [here](https://www.addgene.org/pooled-library/moffat-crispr-knockout/) |	[90K FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_TKO_90K_library.fasta) & [85K FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/fasta/FASTA_TKO_85Ksupp_library.fasta) |
 |Brunello	| Doench |	26780180	| [here](https://www.addgene.org/pooled-library/broadgpp-crispr-knockout/) |	[FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_brunello_library.fasta) |
 |CRISPRa / CRISPRi	| Weissmann	| 25307932 | [here](https://www.addgene.org/crispr/libraries/)	|	not available yet |
