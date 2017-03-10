@@ -146,7 +146,7 @@ __Please have a look at the installation tutorials below, which will assist you 
 #### Latest Version and Changelog  
 
 ```
-Version 1.11BETA
+Version 1.11 (latest)
 - added more detailed error handling
 - changed behaviour of automatic file renaming
 - fixed rare BAGEL/ScreenBEAM issues
@@ -163,9 +163,11 @@ Version 1.11BETA
 - fixed small glitches with libraries
 - improved file consistency check even more - now even rare cases should be reported
 - improved data handling to automatically correct certain flaws in file consistency to not interrupt the user experience
+- improved error handling for sgRNA re-evaluation
+- increased speed of plots
 
 
-Version 1.10 (latest)
+Version 1.10
 - added possibility to have log files exported in real time for debugging using -v parameter (see bottom of the page for debugging section)
 - added status information on the Download CRISPRAnalyzeR page to show what features are active/inactive
 - added additional error message for data mapping using bowtie2, so users now see what is the exact issue
@@ -183,14 +185,7 @@ Version 1.08
 - updated filename handling -> automatically removes unwanted characters
 - updated libraries
 
-Version 1.07		(outdated)
-- fixed report crashing
-
-Version 1.04		(outdated)
-
-Version 1.01	 (outdated)
-
-Version 0.99	(outdated)
+OLDER VERSIONS are not available anymore.
 
 ```
 
