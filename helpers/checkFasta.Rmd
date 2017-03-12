@@ -1,0 +1,74 @@
+
+This file is used to check FASTA files for usage with CRISPRAnalyzeR.
+It removed duplicate entries (both sgRNA identifiers and sgRNA sequences) as well as whitespaces/punctuations.
+
+Set FILEPATH with the path to your file and FILENAME to the filename of your file including the ending.
+
+The File MUST BE a valid fasta file!
+
+
+```{r}
+
+path = ""
+filename = ""
+makeshort = FALSE # only used if sgRNA sequences in the FASTA file are embedded into some additional bases e.g. due to oligo ordering
+makeshortpattern = ".*CACC(.{20,21})GTTT.*$" # only used if makeshort is TRUE
+
+extract_geneID = "^(.+?)_(.+)$" # extract gene ID in first capture group and sgRNA identifier in second capture group
+
+
+library(ShortRead)
+library(seqinr)
+
+# Load lib
+lib <- seqinr::read.fasta(file=file.path(path,filename), seqtype = "DNA", as.string = TRUE, forceDNAtolower = FALSE,set.attributes = TRUE, legacy.mode = TRUE, seqonly = FALSE, strip.desc = FALSE, bfa = FALSE, apply.mask = TRUE)
+
+# Make df
+libdf <- data.frame(
+  design = seqinr::getName(object = lib),
+  sgrna = toupper(unlist(seqinr::getSequence(object = lib, as.string = TRUE))),
+  stringsAsFactors = FALSE
+)
+
+
+# make sgRNA short?
+if(makeshort)
+{
+  libdf$sgrna <- sub(pattern = expression(makeshortpattern), replacement = "\\1", x=libdf$sgrna)
+}
+
+
+
+# extract identifiers and remove unwanted characters
+pattern1 <- expression(extract_geneID)
+libdf$Genes <- sub(pattern = "[[:punct:][:space:][:blank:]]", replacement = "", x = sub(pattern = pattern1, replacement = "\\1", x=libdf$design))
+libdf$sgRNAidentifier <- sub(pattern = "[[:punct:][:space:][:blank:]]", replacement = "", x = sub(pattern = pattern1, replacement = "\\2", x=libdf$design))
+
+# check for uniqueness
+nrow(libdf)
+
+length(unique(libdf$sgrna))
+length(unique(libdf$sgRNAidentifier))
+
+if(any(duplicated(libdf$sgrna)))
+{
+  duplicated <- libdf[duplicated(libdf$sgrna),]
+  # Remove duplicated
+  libdf <- libdf[!duplicated(libdf$sgrna),]
+}
+
+# rewrite sgRNA identifier to use sgrna sequence
+libdf$design <- apply(libdf,1, function(x){
+    
+    return(paste(as.character(x["Genes"]), "_", as.character(x["sgrna"]), sep=""))
+  })
+
+libdf$sgrna <- tolower(libdf$sgrna)
+
+
+# Write back to FASTA
+oligos <- as.list(libdf$sgrna)
+names(oligos) <- libdf$design
+seqinr::write.fasta(sequences = oligos,names = names(oligos) ,file.out = file.path(path,filename))
+
+```
