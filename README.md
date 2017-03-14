@@ -146,7 +146,10 @@ __Please have a look at the installation tutorials below, which will assist you 
 #### Latest Version and Changelog  
 
 ```
-Version 1.11 (latest)
+Version 1.12 (latest)
+- fixed glitch that caused crash after analysis
+
+Version 1.11
 - added more detailed error handling
 - changed behaviour of automatic file renaming
 - fixed rare BAGEL/ScreenBEAM issues
