@@ -9,6 +9,8 @@ CRISPRAnalyeR is a web-based, interactive suite for the analysis and documentati
 
 **Check out the [Wiki Page](https://github.com/boutroslab/crispr-analyzer/wiki) or scroll down for more information and help**
 
+__See our [Manuscript](http://biorxiv.org/content/early/2017/02/20/109967) on biorxiv.org__ http://biorxiv.org/content/early/2017/02/20/109967
+
 ---
 
 #<i class="fa fa-info" aria-hidden="true"></i> CRISPRAnalyzeR is now available for download - see below or check out the wiki.
