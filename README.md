@@ -554,12 +554,12 @@ Start CRISPRAnalyzeR using the `-v` command, e.g.
 ```bash
 docker run --rm -v *LOGFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/log -p 80:3838 boutroslab/crispranalyzer:latest
 ```
-# Increasing the calculation limit for larger reports
+# Increasing the core ulimit
 
 For some genome-wide screens, CRISPRAnalyzeR can abort the report generation due to limited amount of storage allocated for this operation. You can force docker to give more space to CRISPRAnalyzeR by increasing the `ulimit` setting (in kilobytes)
 
-For 8 GB of the so called `c stack space`, you need to set the value of 8GB in Kb - 8.589.934.592 with `--ulimit=8.589.934.592`.  
+For 8 GB of the so called `c stack space`, you need to set the value of 8GB in Kb - 8.589.934.592 with `--ulimit core=8589934592`.  
 
 ```bash
-docker run --rm --ulimit=8.589.934.592 -v *LOGFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/log -p 80:3838 boutroslab/crispranalyzer:latest
+docker run --rm --ulimit core=8589934592 -v *LOGFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/log -p 80:3838 boutroslab/crispranalyzer:latest
 ```
