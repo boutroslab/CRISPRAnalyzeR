@@ -257,11 +257,13 @@ Parameter | Meaning | Default Value | Accepted Values
 __websockets_behind_proxy__ | use Websocket protocol | TRUE | TRUE or FALSE
 __verbose_logfiles__ | output of log files | TRUE | TRUE or FALSE
 __COSMIC_database__ | Filename of the COSMIC Mutant database (CosmicMutantExport.tsv) | NULL | CosmicMutantExport.tsv
-__disable_EnrichR__ | Whether to Disable the Enrichr API access | FALSE | TRUE or FALSE
+__EnrichR__ | Whether to enable or disable the Enrichr API access | TRUE | TRUE or FALSE
 __EnrichR_URL__ | URL to the Enrichr API | http://amp.pharm.mssm.edu/Enrichr/ | Any URL
+__max_upload__ | Maximum size of uploaded files in Megabytes | 4096 | any number  
 __bowtie_threads__ | Number of bowtie2 threads for mapping | 2 | any number, must be equal or smaller the number of CPU cores
 __proxy_url__ | URL to your Proxy server | NULL | URL or NULL to inactivate
 __proxy_port__ | Proxy server Port | NULL |Port number of NULL to inactivate
+
 
 ### How to use the parameters
 
