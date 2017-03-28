@@ -199,8 +199,8 @@ This installation will use a tool called Kitematic to offer a user interface to 
 4. Search for CRISPRAnalyzeR  
 	![Search for CRISPRAnalyzeR](./images/CA_kitematic_search.png)
 5. Select CREATE to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR  
+6. Go to SETTINGS to adjust the parameters as shown below  
 	![CA_overview](./images/CA_kitematic_overview.png)
-6. Go to SETTINGS to adjust the parameters as shown below
 7. Hit the START button to start CRISPRAnalyzeR
 8. Copy the URL to the web browser to access CRISPRAnalyzeR  
 	![CA_url](./images/CA_kitematic_URL.png)
@@ -215,8 +215,8 @@ Hit the start, stop or restart button.
 
 ### How to adjust the CRISPRAnalyzeR settings
 
-As mentioned below, CRISPRAnalyzeR can be adjusted with several parameter.  
-With the user-interface provided by Kitematic, you can easily adjust all paarameters from the Settings section.  
+As mentioned below, CRISPRAnalyzeR can be adjusted with several parameters.  
+With the user-interface provided by Kitematic, you can easily adjust all parameters from the Settings section.  
 
 Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING button on the top right.
 
@@ -227,7 +227,7 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
 
 1. Search for CRISPRAnalyzeR in the Kitematic UI repository
 2. Click on the three dots for more options  
-	![More options](./CA_kitematic_moreoptions.png)
+	![More options](./images/CA_kitematic_moreoptions.png)
 3. Click on "Selected version"
 4. Select the version you want  
 	![Version](./images/CA_kitematic_version.png)
