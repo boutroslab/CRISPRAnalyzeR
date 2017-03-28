@@ -194,17 +194,23 @@ OLDER VERSIONS are not available anymore.
 YOUTUBE TUTORIAL
 
 This installation will use a tool called Kitematic to offer a user interface to start, stop or change settings of the CRISPRAnalyzeR.  
+In principal, you first install and start docker, then install and start kitematic and finally download CRISPRAnalyzeR.  
 
-1. Download the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) from the docker [website](https://www.docker.com/products/docker-toolbox)
-2. Install the Docker Toolbox
-3. Start Kitematic, which comes with the docker toolbox
-4. Search for CRISPRAnalyzeR  
+1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/community-edition#/download)
+2. Install the downloaded file
+3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
+   A small docker symbol in the taskbar will tell you that docker is ready.
+4. Then download the docker toolbox and proceed as described above.
+5. Download the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) from the docker [website](https://www.docker.com/products/docker-toolbox)
+6. Install the Docker Toolbox
+7. Start Kitematic, which comes with the docker toolbox
+8. Search for CRISPRAnalyzeR  
 	![Search for CRISPRAnalyzeR](./images/CA_kitematic_search.png)
-5. Select CREATE to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR  
-6. Go to SETTINGS to adjust the parameters as shown below  
+9. Select CREATE to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR  
+10. Go to SETTINGS to adjust the parameters as shown below  
 	![CA_overview](./images/CA_kitematic_overview.png)
-7. Hit the START button to start CRISPRAnalyzeR
-8. Copy the URL to the web browser to access CRISPRAnalyzeR  
+11. Hit the START button to start CRISPRAnalyzeR
+12. Copy the URL to the web browser to access CRISPRAnalyzeR  
 	![CA_url](./images/CA_kitematic_URL.png)
 
 
@@ -236,15 +242,6 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
 5. Click on the X at the bottom right
 6. Click CREATE
 
-
-### Hint for advanced users  
-
-You can also install docker separately for a native installation:  
-1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/community-edition#/download)
-2. Install the downloaded file
-3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
-   A small docker symbol in the taskbar will tell you that docker is ready.
-4. Then download the docker toolbox and proceed as described above.
 
 ---
 
