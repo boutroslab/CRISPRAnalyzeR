@@ -191,10 +191,14 @@ OLDER VERSIONS are not available anymore.
 
 ## User-Interface based installation (recommended) on macOS and Windows
 
-<a href="https://www.youtube.com/watch?v=jlhpsN65" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_kitematic.png" width="30%" alt="CRISPRAnalyzeR: How to install it using Kitematic"></a>
+__Installation Tutorial__
+
+<a href="https://www.youtube.com/watch?v=jlhpsN65" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_kitematic.png" width="40%" alt="CRISPRAnalyzeR: How to install it using Kitematic"></a>
 
 This installation will use a tool called Kitematic to offer a user interface to start, stop or change settings of the CRISPRAnalyzeR.  
 In principal, you first install and start docker, then install and start kitematic and finally download CRISPRAnalyzeR.  
+
+__Individual Steps__
 
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/community-edition#/download)
 2. Install the downloaded file
@@ -248,7 +252,7 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
 ## Command Line Installation (advanced users)
 
 #### Installation Tutorial macOS
-<a href="https://youtu.be/IFPojCjW0ns" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_macos.png" width="30%" alt="CRISPRAnalyzeR: How to install command line version"></a>
+<a href="https://youtu.be/IFPojCjW0ns" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_macos.png" width="40%" alt="CRISPRAnalyzeR: How to install command line version"></a>
 
 
 
