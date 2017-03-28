@@ -13,7 +13,7 @@ __See our [Manuscript](http://biorxiv.org/content/early/2017/02/20/109967) on bi
 
 ---
 
-#<i class="fa fa-info" aria-hidden="true"></i> CRISPRAnalyzeR is now available for download - see below or check out the wiki.
+# <i class="fa fa-info" aria-hidden="true"></i> CRISPRAnalyzeR is now available for download - see below or check out the wiki.
 
 ---
 
@@ -199,6 +199,7 @@ OLDER VERSIONS are not available anymore.
 
 ```
 
+---
 
 
 ## User-Interface based installation (recommended) on macOS and Windows
@@ -210,34 +211,40 @@ This installation will use a tool called Kitematic to offer a user interface to 
 1. Download the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) from the docker [website](https://www.docker.com/products/docker-toolbox
 2. Install the Docker Toolbox
 3. Start Kitematic, which comes with the docker toolbox
-4. Search for CRISPRAnalyzeR
+4. Search for CRISPRAnalyzeR  
 	![Search for CRISPRAnalyzeR](./images/CA_kitematic_search.png)
-5. Select CREATE to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR
+5. Select CREATE to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR  
 	![CA_overview](./images/CA_kitematic_overview.png)
-6. Go to SETTINGS to adjust the parameters
-	![CA_Options](./images/CA_kitematic_settings.png)
+6. Go to SETTINGS to adjust the parameters as shown below
 7. Hit the START button to start CRISPRAnalyzeR
-8. Copy the URL to the web browser to access CRISPRAnalyzeR
+8. Copy the URL to the web browser to access CRISPRAnalyzeR  
 	![CA_url](CA_kitematic_URL.png)
 
 
 
 ### How to Start, Stop or Restart CRISPRAnalyzeR
 
+Hit the start, stop or restart button.  
+
+![CA_overview](./images/CA_kitematic_overview.png)
 
 ### How to adjust the CRISPRAnalyzeR settings
 
 As mentioned below, CRISPRAnalyzeR can be adjusted with several parameter.  
 With the user-interface provided by Kitematic, you can easily adjust all paarameters from the Settings section.  
 
+Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING button on the top right.
+
+![CA_Options](./images/CA_kitematic_settings.png)
+
 
 ### Install specific version
 
 1. Search for CRISPRAnalyzeR in the Kitematic UI repository
-2. Click on the three dots for more options
+2. Click on the three dots for more options  
 	![More options](./CA_kitematic_moreoptions.png)
 3. Click on "Selected version"
-4. Select the version you want
+4. Select the version you want  
 	![Version](./images/CA_kitematic_version.png)
 5. Click on the X at the bottom right
 6. Click CREATE
@@ -251,6 +258,8 @@ You can also install docker separately for a native installation:
 3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
    A small docker symbol in the taskbar will tell you that docker is ready.
 4. Then download the docker toolbox and proceed as described above.
+
+---
 
 ## Command Line Installation (advanced users)
 
@@ -306,7 +315,7 @@ You can start and stop the CRISPRanalyzeR using docker.
 
 ---
 
-## Available Paramaters to start CRISPRAnalyzeR
+# Available Paramaters to start CRISPRAnalyzeR
 
 CRISPRAnalyzeR has been designed to be installed once on a machine and then accessed via a webbrowser. Therefore, you can adjust all parameters during the start of the CRISPRAnalyzeR.
 
@@ -594,6 +603,8 @@ __Cite: http://biorxiv.org/content/early/2017/02/20/109967__
 ---
 
 # Tutorials
+
+All available tutorials can be found on [Youtube](https://www.youtube.com/channel/UCiR7LwZ-8l_-qdZRWsuOmNA) and are also available from within CRISPRAnalyzeR.  
 
 ## Upload Read Count Data and Setup Screen
 [![CRISPRAnalyzeR Data Upload](./images/CRISPRAnalyzeR_YT_upload_readcount.png)](https://www.youtube.com/watch?v=J2WJFAo2OTY)
