@@ -203,7 +203,7 @@ This installation will use a tool called Kitematic to offer a user interface to 
 6. Go to SETTINGS to adjust the parameters as shown below
 7. Hit the START button to start CRISPRAnalyzeR
 8. Copy the URL to the web browser to access CRISPRAnalyzeR  
-	![CA_url](CA_kitematic_URL.png)
+	![CA_url](./images/CA_kitematic_URL.png)
 
 
 
