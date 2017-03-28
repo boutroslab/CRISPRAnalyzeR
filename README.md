@@ -247,6 +247,11 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
 
 ## Command Line Installation (advanced users)
 
+#### Installation Tutorial macOS
+<a href="https://youtu.be/IFPojCjW0ns" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_macos.png" width="30%" alt="CRISPRAnalyzeR Report Preview"></a>
+
+
+
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
 2. Install the downloaded file
 3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
@@ -338,11 +343,6 @@ docker run --rm -e bowtie_threads=4 -e proxy_url="http://thisismyproxy.com" -e p
 
 
 
-## Installation Tutorial macOS
-<a href="https://youtu.be/IFPojCjW0ns" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_macos.png" width="30%" alt="CRISPRAnalyzeR Report Preview"></a>
-
-
-
 
 ## Installation Tutorial Windows
 
@@ -368,7 +368,10 @@ Python Scipy | latest | https://www.scipy.org/
 ---
 
 ## How to use the COSMIC Database and Enrichr API
+
 ### COSMIC (Catalogue Of Somatic Mutations In Cancer)
+
+__Please note: COSMIC Database access only works in the commmand line installation.__
 
 The COSMIC database can be found [here](https://cancer.sanger.ac.uk/cosmic).
 By default, we do not provide the COSMIC database due to licensing compatibility.
@@ -405,6 +408,8 @@ More information can be found at the [Enrichr Help Page](http://amp.pharm.mssm.e
 ---
 
 ## How to perform local sgRNA Re-evaluation
+
+__Please note: local sgRNA re-evaluation is only supported in the command line installation, not in the Kitematic installation__
 
 CRISPRAnalyzeR re-evaluated your sgRNAs during the analysis process. By default, this is done by sending the sgRNAs to www.e-crisp.org and downloading the files again.
 However, you can also perform a local re-evaluation of your sgRNAs!
