@@ -147,8 +147,13 @@ __Please have a look at the installation tutorials below, which will assist you 
 
 #### Latest Version and Changelog  
 
+
 ```
-Version 1.12 (latest)
+Version 1.13 (latest)
+- fixed some typos
+- fixed report generation issue with larger datasets
+
+Version 1.12
 - fixed glitch that caused crash after analysis
 
 Version 1.11
@@ -194,7 +199,60 @@ OLDER VERSIONS are not available anymore.
 
 ```
 
-## Run and install directly from online resource
+
+
+## User-Interface based installation (recommended) on macOS and Windows
+
+YOUTUBE TUTORIAL
+
+This installation will use a tool called Kitematic to offer a user interface to start, stop or change settings of the CRISPRAnalyzeR.  
+
+1. Download the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) from the docker [website](https://www.docker.com/products/docker-toolbox
+2. Install the Docker Toolbox
+3. Start Kitematic, which comes with the docker toolbox
+4. Search for CRISPRAnalyzeR
+	![Search for CRISPRAnalyzeR](./images/CA_kitematic_search.png)
+5. Select CREATE to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR
+	![CA_overview](./images/CA_kitematic_overview.png)
+6. Go to SETTINGS to adjust the parameters
+	![CA_Options](./images/CA_kitematic_settings.png)
+7. Hit the START button to start CRISPRAnalyzeR
+8. Copy the URL to the web browser to access CRISPRAnalyzeR
+	![CA_url](CA_kitematic_URL.png)
+
+
+
+### How to Start, Stop or Restart CRISPRAnalyzeR
+
+
+### How to adjust the CRISPRAnalyzeR settings
+
+As mentioned below, CRISPRAnalyzeR can be adjusted with several parameter.  
+With the user-interface provided by Kitematic, you can easily adjust all paarameters from the Settings section.  
+
+
+### Install specific version
+
+1. Search for CRISPRAnalyzeR in the Kitematic UI repository
+2. Click on the three dots for more options
+	![More options](./CA_kitematic_moreoptions.png)
+3. Click on "Selected version"
+4. Select the version you want
+	![Version](./images/CA_kitematic_version.png)
+5. Click on the X at the bottom right
+6. Click CREATE
+
+
+### Hint for advanced users  
+
+You can also install docker separately for a native installation:  
+1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/community-edition#/download)
+2. Install the downloaded file
+3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
+   A small docker symbol in the taskbar will tell you that docker is ready.
+4. Then download the docker toolbox and proceed as described above.
+
+## Command Line Installation (advanced users)
 
 1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/products/overview)
 2. Install the downloaded file
@@ -284,6 +342,7 @@ e.g.
 ```bash
 docker run --rm -e bowtie_threads=4 -e proxy_url="http://thisismyproxy.com" -e proxy_port=80 -p 80:3838 boutroslab/crispranalyzer:latest
 ```
+
 
 
 ## Installation Tutorial macOS
