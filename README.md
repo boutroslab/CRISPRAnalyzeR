@@ -81,17 +81,14 @@ Finally you can document the screening data and analysis using the interactive r
 
 #### You can also check our [live demo](http://crispr-analyzer.dkfz.de), which you can also use to analyse your screening data.
 
-CRISPRAnalyzeR can be downloaded as a pre-configured app (using Docker) or as source code.
+CRISPRAnalyzeR can be downloaded as as source code and is also available for a **platform-independent installation** as pre-configured docker image.
+
+
+__Please have a look at the installation tutorials below, which will assist you with the installation__
+
 
 __We encourage users to obtain the pre-configured application which is described below.__
 
----
-
-__Scroll down for the download options.__ 
-
-__See the minimum system requirements and licensing information.__
-
----
 
 **The idea of installing CRISPRAnalyzeR is to provide a single installation within a Lab/Institute, so that everyone can access it via the web browser.  
 However, you can also also install CRISPRAnalyzeR on your local machine.**
@@ -129,20 +126,9 @@ http://www.ip.mountsinai.org/
 
 __It is your responsibility to obtain all required licenses in case of commercial usage!__
 
----
-
-# How to Install CRISPRAnalyzeR using the provided Docker Container
 
 <img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/large_h-trans.png" width="30%">
 
-CRISPRAnalyzeR is available for a **platform-independent installation** as a so called Docker container.
-
-
-You can install the CRISPRAnalyzeR by two ways:
-1. Directly run the latest version from the online resource
-2. Download and install CRISPRAnalyzeR on your machine before running it
-
-__Please have a look at the installation tutorials below, which will assist you with the installation__
 
 
 #### Latest Version and Changelog  
@@ -199,7 +185,6 @@ OLDER VERSIONS are not available anymore.
 
 ```
 
----
 
 
 ## User-Interface based installation (recommended) on macOS and Windows
