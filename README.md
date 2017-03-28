@@ -97,13 +97,15 @@ However, you can also also install CRISPRAnalyzeR on your local machine.**
 CRISPRAnalyzeR is based on R Shiny and uses many different R packages and tools which are listed separately.
 For a source code installation, we recommend the use of Ubuntu.
 
- | Source Code Installation | Docker Container Installation
+
+Type | Source Code Installation | Docker Container Installation
 ----|---|----
 Operating System|Ubuntu|Any supported OS by Docker
 CPU|Dual Core (Quad Core recommended)| Dual Core (Quad Core recommended)
 RAM|8 GB| 8GB
 HDD|512 GB (SSD recommended)| 512 GB (SSD recommended)
 Additional Software Packages | **See list below!** | All included in container
+
 
 
 ### Licenses
@@ -193,7 +195,7 @@ YOUTUBE TUTORIAL
 
 This installation will use a tool called Kitematic to offer a user interface to start, stop or change settings of the CRISPRAnalyzeR.  
 
-1. Download the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) from the docker [website](https://www.docker.com/products/docker-toolbox
+1. Download the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) from the docker [website](https://www.docker.com/products/docker-toolbox)
 2. Install the Docker Toolbox
 3. Start Kitematic, which comes with the docker toolbox
 4. Search for CRISPRAnalyzeR  
