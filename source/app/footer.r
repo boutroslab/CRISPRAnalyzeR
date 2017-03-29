@@ -14,14 +14,7 @@ shiny::fluidRow(style="margin-top:100px",
          shiny::tags$hr(),
          column(width=4,
                 shiny::tags$p(class="lead text-left", style="color:#4CAF50;", "CRISPRAnalyzeR"),
-                # GA opt out
-                # verbatimTextOutput("results"),actionButton("go","click me"))
-                shiny::tags$p(class="text-left" , style="font:weight:200'", HTML("<a href='javascript:gaOptout()' >Click once to turn off Google Analytics</a>") ),
-                # CRISPRAnalyzeR dependend shortcuts to help pages
-                
-                shiny::tags$p(class="text-left","How to use CRISPRAnalyzeR on your local machine"),
-                shiny::tags$p(class="text-left","What data does CRISPRAnalyzeR store?"),
-                shiny::tags$p(class="text-left","Help - I am lost!")
+                shiny::tags$p(class="text-left","Version: 1.14")
          ),
          column(width=4,
                 # Other Resources

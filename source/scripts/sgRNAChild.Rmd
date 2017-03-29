@@ -19,7 +19,7 @@ normData <- results$normalizedReadcount
 rawData <- results$readcount
 pol <- FALSE
 norm <- TRUE
-Plot_sgRNA_readcount( gene, datasets, normData, rawData, bPolar = pol, bNorm = norm, bApp = FALSE )
+tryFunction(Plot_sgRNA_readcount( gene, datasets, normData, rawData, bPolar = pol, bNorm = norm, bApp = FALSE )   , place = 'co')
 ```
 
 ### Log2 Foldchange
@@ -30,7 +30,7 @@ The log2 fold-change in normalized read-counts of sgRNAs for the gene of interes
 groups <- names(results$compare)
 df <- rawGenes$rawGenes
 sorted <- TRUE
-Plot_sgRNA_foldchanges( gene, groups, df, bSort = sorted, bApp = FALSE )
+tryFunction(Plot_sgRNA_foldchanges( gene, groups, df, bSort = sorted, bApp = FALSE )   , place = 'co')
 ```
 
 ### Genomic Binding Sites
@@ -42,7 +42,7 @@ The re-evaluation feature of [E-CRISP](http://www.e-crisp.org/E-CRISP/aboutpage.
 df <- rawGenes$rawGenes
 pol <- FALSE
 sorted <- TRUE
-Plot_sgRNA_offtarget( gene, "offtargets", df, bSort = sorted, bPolar = pol, bApp = FALSE )
+tryFunction(Plot_sgRNA_offtarget( gene, "offtargets", df, bSort = sorted, bPolar = pol, bApp = FALSE )   , place = 'co')
 ```
 
 ### Z-Score
@@ -53,7 +53,7 @@ These are [Z-scores](https://en.wikipedia.org/wiki/Standard_score)/ standard sco
 groups <- names(results$compare)
 df <- rawGenes$rawGenes
 sorted <- TRUE
-Plot_sgRNA_zScores( gene, groups, df, bSort = sorted, bApp = FALSE )
+tryFunction(Plot_sgRNA_zScores( gene, groups, df, bSort = sorted, bApp = FALSE )   , place = 'co')
 ```
 
 ### Efficiency Scores
@@ -67,7 +67,7 @@ The *Doench* score is an efficiency score introduced by [Xu **et al.**](https://
 scores <- c("seed_GC", "doench_score", "xu_score")
 df <- rawGenes$rawGenes
 pol <- FALSE
-Plot_sgRNA_scores( gene, scores, df, type = "effic", bPolar = pol, bApp = FALSE )
+tryFunction(Plot_sgRNA_scores( gene, scores, df, type = "effic", bPolar = pol, bApp = FALSE )   , place = 'co')
 ```
 
 ### E-CRISP Scores
@@ -78,7 +78,7 @@ Plot_sgRNA_scores( gene, scores, df, type = "effic", bPolar = pol, bApp = FALSE 
 scores <- c("Spec.Score", "Anno.Score", "Eff.Score", "CDS_score", "exon_score")
 df <- rawGenes$rawGenes
 pol <- FALSE
-Plot_sgRNA_scores( gene, scores, df, type = "ecrisp", bPolar = pol, bApp = FALSE )
+tryFunction(Plot_sgRNA_scores( gene, scores, df, type = "ecrisp", bPolar = pol, bApp = FALSE )   , place = 'co')
 ```
 
 ### sgRNA Sequences
@@ -92,7 +92,7 @@ df <- df[, c("designs", "log2foldchange","z.score.foldchange","offtargets", "seq
 df$log2foldchange <- round(as.numeric(df$log2foldchange), digits=2)
 df$z.score.foldchange <- round(as.numeric(df$z.score.foldchange), digits=2)
 df$offtargets <- round(as.numeric(df$offtargets), digits=0)
-Table_DT(df, colNames = c("sgRNAs", "Foldchange (log2)", "Z-Score (Foldchange)","Targets", "Target Sequence"), bRownames = FALSE, class = "stripe hover", ordering = list(1, 'asc'))
+tryFunction(Table_DT(df, colNames = c("sgRNAs", "Foldchange (log2)", "Z-Score (Foldchange)","Targets", "Target Sequence"), bRownames = FALSE, class = "stripe hover", ordering = list(1, 'asc'))   , place = 'co')
 ```
 
 ### sgRNA Binding Sites
@@ -106,7 +106,7 @@ df <- rawGenes$rawGenes
 df <- df[ df$genes == gene, ]
 df <- df[, c("designs","offtargets", "target")]
 df$offtargets <- round(as.numeric(df$offtargets), digits=0)
-Table_DT(df, colNames = c("sgRNAs", "Targets", "Predicted Binding Sites"), bRownames = FALSE, class = "stripe hover", ordering = list(1, 'asc'))
+tryFunction(Table_DT(df, colNames = c("sgRNAs", "Targets", "Predicted Binding Sites"), bRownames = FALSE, class = "stripe hover", ordering = list(1, 'asc'))   , place = 'co')
 ```
 
 

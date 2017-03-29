@@ -23,14 +23,20 @@
 #### create interface for renaming Files
 output$seqFiles_rename <- renderUI({
   if( is.null(input$seqFiles_upload$name) ){
-    "no files uploaded yet"
+    "No files uploaded yet"
   } else if( status$seqFiles == FALSE ){
   
     file_names <- input$seqFiles_upload$name
     n <- length(file_names)
     out <- tagList()
     for( i in 1:n ){
-      out[[i]] <- textInput(paste0("seqFile_gen_name_", i), file_names[i], value = file_names[i])
+      # also replace unwanted characters and file endings
+      if(grep(pattern = "\\..*$", x =  file_names[i]))
+      {
+        file_names[i] <- gsub("\\..*$", "" , file_names[i])
+      }
+      
+      out[[i]] <- textInput(paste0("seqFile_gen_name_", i), file_names[i], value = gsub("[[:space:][:blank:][:punct:]]", "_",file_names[i]))
     }
     out
   } else {
@@ -61,6 +67,17 @@ seqFiles <- eventReactive(input$submit_seqFiles, {
   names <- input$seqFiles_upload$name
   paths <- input$seqFiles_upload$datapath
   regex <- input$seqFiles_regexTarget
+  
+  needed <- extract_fastq$needed
+  
+  test <- Check_extract(regex, needed, messages = config$messages)
+  if( test$error == TRUE ){
+    error$extract <- test$message
+    return()
+  }
+  
+  status$seqFiles <- TRUE
+  error$seqFiles <- test$message
   
   gen_names <- character()
   for( i in 1:length(names) ){
@@ -210,8 +227,8 @@ output$extractiontime <- renderUI({
 
   filesize <- file.size(input$seqFiles_upload$datapath)
   totalfilesize <- round((sum(filesize)/1024)/1024, digits = 2) # in MB
-  # we guess extraction of 100 MB zipped is minimum 1 minute
-  timeduration <- round(totalfilesize / 100, digits=0)
+  # we guess extraction of 60 MB zipped is minimum 1 minute
+  timeduration <- round(totalfilesize / 60, digits=0)
   
   text <- paste("The <strong>minimum expected time</strong> to check and extract your data <strong>is", timeduration, "minutes</strong>.</br>
                 You will be notified once CRISPRAnalyzeR has performed these steps.", sep=" ")

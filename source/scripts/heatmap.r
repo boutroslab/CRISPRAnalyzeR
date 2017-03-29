@@ -273,8 +273,8 @@ heatmap <- function( object, label = FALSE, showInLegend = FALSE, tit = NULL, su
       hc_yAxis(categories = ynm, title = list(text = ""), reversed = TRUE)
   }
   
-  hc <- hc %>%
-    hc_chart(zoomType = "y") %>%
+  
+    hc <- hc_chart(hc, zoomType = "y") %>%
     hc_title(text = tit) %>%
     hc_subtitle(text = sub) %>%
     hc_xAxis(showempty = TRUE, title = list(text = xlab)) %>%

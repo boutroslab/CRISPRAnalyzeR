@@ -67,10 +67,27 @@ observeEvent(input$startAnalysis, {
   write(signature, file.path(userDir, "analysis.sign"))
   
   log <- c(paste(userID, ": status of seqFiles, libFile, extract, groups, anno, compare, analysis, extractedFiles: good"),
+           paste(userID, ": Proxy Information", config$car.proxy.url, config$car.proxy.port),
            paste(userID, ": starting analysis.r at", Sys.time()),
            paste(userID, ": signature is", signature),
            paste(userID, ": executing:", "Rscript", scriptpath, infoFiles$analysis))
   write(log, logFile, append = TRUE)
+  
+  
+  # set proxy 
+  if(is.null(config$car.proxy.url))
+  {
+    proxurl <- "NULL"
+  } else {
+    proxurl <- config$car.proxy.url
+  }
+  
+  if(is.null(config$car.proxy.port))
+  {
+    proxport <- "NULL"
+  } else {
+    proxport <- config$car.proxy.port
+  }
   
   group <- c()
   for( i in 1: length(groups()) ){
@@ -90,10 +107,10 @@ observeEvent(input$startAnalysis, {
           paste("bmDatabase", config$car.bm.database, sep = ";"),
           paste("ecrisp", config$ecrisp, sep = ";"),
           paste("databasepath", config$databasepath, sep = ";"),
+          paste("bt2Threads", paste(config$car.bt2.threads, collapse = ";"), sep = ";"),
           
-          
-          paste("proxyurl", config$car.proxy.url, sep = ";"),
-          paste("proxyport", config$car.proxy.port, sep = ";"),
+          paste("proxyurl", proxurl, sep = ";"),
+          paste("proxyport", proxport, sep = ";"),
           
           paste("libName", extractedFiles()$libName, sep = ";"),
           paste("libPath", extractedFiles()$libPath, sep = ";"),
@@ -152,7 +169,8 @@ observeEvent(input$startAnalysis, {
 
   system2("Rscript", args = c(scriptpath, infoFiles$analysis), wait = FALSE, stdout = NULL, stderr = NULL)
 
-  
+  #show progress bar
+  shinyjs::show(id="analysis-progress")
   
   
   
@@ -221,7 +239,8 @@ results <- eventReactive(progress_analysis(),{
         }
         # open modal to show error
         shinyBS::toggleModal(session, "analysis_error", toggle = "open")
-        return()
+        shinyjs::hide(id="analysis-progress")
+        return(NA)
       } else {
         write(paste(userID, ": results tested: good"), logFile, append = TRUE)
       }
@@ -238,13 +257,16 @@ results <- eventReactive(progress_analysis(),{
         # Load COSMIC ONLY ONCE
        
         # check first if COSMIC DB is accessible
-        write(paste(userID, ": Access COSMIC Database at ", file.path(config$COSMIC_database)), logFile, append = TRUE)
-        cosmicreadable <- file.access(names = file.path(config$COSMIC_database), mode = 4)
+        write(paste(userID, ": Access COSMIC Database at ", file.path(config$database_path, config$COSMIC_database)), logFile, append = TRUE)
+        cosmicreadable <- file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4)
         
         if(cosmicreadable == 0)
         {
+          write(paste(userID, ": Loading COSMIC Database at ", file.path(config$database_path, config$COSMIC_database)), logFile, append = TRUE)
+          
           withProgress(value=0.3, message="Loading COSMIC Database, please be patient.", {
-            COSMICDB <- try(readr::read_tsv(file = file.path(config$COSMIC_database), col_names = TRUE))
+            
+            COSMICDB <- try(readr::read_tsv(file = file.path(config$database_path, config$COSMIC_database), col_names = TRUE))
             if(class(COSMICDB) == "try-error")
             {
               write(paste(userID, ": COSMIC Database could not be loaded"), logFile, append = TRUE)
@@ -254,7 +276,7 @@ results <- eventReactive(progress_analysis(),{
           })
         } else
         {
-          write(paste(userID, ": COSMIC Database could not be loaded at ", file.path(config$COSMIC_database)), logFile, append = TRUE)
+          write(paste(userID, ": COSMIC Database could not be loaded at ", file.path(config$database_path,config$COSMIC_database)), logFile, append = TRUE)
           
           COSMICDB <- NULL
         }
@@ -271,8 +293,9 @@ results <- eventReactive(progress_analysis(),{
         "statsGeneral" = readRDS(file.path(userDir, "statsGeneral.rds")),
         "unmappedGenes" = readRDS(file.path(userDir, "unmappedGenes.rds")),
         "readDistribution" = readRDS(file.path(userDir, "readDistribution.rds")),
-        "readDistributionBox" = readRDS(file.path(userDir, "readDistributionBox.rds")),
+        #"readDistributionBox" = readRDS(file.path(userDir, "readDistributionBox.rds")),
         "readDistributionBoxNorm" = readRDS(file.path(userDir, "readDistributionBoxNorm.rds")),
+        "CDF_list" = readRDS(file.path(userDir, "CDF_list.rds")),
         "readDepth" = readRDS(file.path(userDir, "readDepth.rds")),
         "geneDesigns" = readRDS(file.path(userDir, "geneDesigns.rds")),
         "readCountVS" = readRDS(file.path(userDir, "readCountVS.rds")),
@@ -305,21 +328,18 @@ results <- eventReactive(progress_analysis(),{
         "sampleList" = readRDS(file.path(userDir, "sampleList.rds")),
         "error" = test$error
         )
-
-      
-      # extracted seqfiles
-      #command <- "rm"
-      #arguments <- file.path(userDir, "*seqFile") 
-      #system2(command, arguments)
       
       ### Open MODAL when Analysis Extraction is done
       if( test$error != TRUE )
       {
+        shinyBS::toggleModal(session, "reannotation_started", toggle = "open")
         shinyBS::toggleModal(session, "analysis_finished", toggle = "open")
+        shinyjs::show("downloadanalysisdata")
       }
       
       
       status$results <- TRUE
+      shinyjs::show(id="reevaluation-progress")
       out
   }
 })
@@ -372,9 +392,12 @@ output$analysis_progressBar <- renderUI({
     } else if(progress_analysis()$progress >= 0.8 && progress_analysis()$progress <= 0.94)
     {
       title = "Finish Analysis"
+    } else if(progress_analysis()$progress ==1)
+    {
+      title = "Analysis finished"
     } else {title=""}
     
-    HTML(paste0("<div style='width:70%'><br/>
+    HTML(paste0("<div id = 'analysis-progress' style='width:70%'><br/>
                 <div id='analysis_r_progress_title' class='text-center'><h4 class='text-center'>",title,"<h4></div>
                 <div id='analysis_r_progress' class='progress progress-striped shiny-file-input-progress' style='visibility: visible;'>
                 <div class='progress-bar' style='width:", perc, "%;'>Progress ", perc, "%</div></div></div>"
@@ -394,10 +417,11 @@ output$results_errormodal <- renderUI(
 
 ## reset sets final back
 observeEvent(input$resetAnalysis, {
-  
+  shinyjs::hide(id="reevaluation-progress")
+  shinyjs::hide(id="analysis-progress")
   # close modals so we can open them later on
-  if(results()$error == FALSE){
-    shinyBS::toggleModal(session, "analysis_finished", toggle = "close") 
+  if(!is.na(results)){
+    shinyBS::toggleModal(session, "analysis_reset", toggle = "open") 
   } else {
     shinyBS::toggleModal(session, "analysis_error", toggle = "close")
   }
@@ -428,6 +452,8 @@ observeEvent(input$resetAnalysis, {
   shinyjs::enable("screenbeam_burnin")
   shinyjs::enable("screenbeam_run")
   shinyjs::enable("screenbeam_pval")
+  
+  
   write(paste(userID, ": clicked on resetAnalysis at", Sys.time()), logFile, append = TRUE)
 })
 
@@ -440,10 +466,10 @@ output$analysisduration <- renderUI({
   
  
   # we guess extraction of 300 MB zipped is minimum 1 minute
-  timeduration <- round(extractedFiles()$toplength / 6000, digits=0)+1
+  timeduration <- round(extractedFiles()$toplength / 3000, digits=0)+1
   if(input$screenbeam_run)
   { # Add ScreenBEAM information
-    timeduration <- timeduration * 3
+    timeduration <- timeduration * 5
   }
   
   text <- paste("The <strong>minimum expected time</strong> to check and analyse your data <strong>is", timeduration, "minutes</strong>.</br>
@@ -452,4 +478,7 @@ output$analysisduration <- renderUI({
   return(HTML(text))
   
 })
+
+
+
 

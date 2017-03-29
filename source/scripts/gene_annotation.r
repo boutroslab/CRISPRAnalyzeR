@@ -96,6 +96,19 @@ source(file.path(info$funDir, "get.gene.info.R"))
 # writes on cp and creates annotation file
 write(paste(userID, ": contacting biomaRt"), logFile, append = TRUE) 
 
+if( is.null(info$proxyurl) || is.na(info$proxyurl) || length(info$proxyurl) == 0 )
+  {
+  info$proxy <- ""
+  httr::set_config(httr::use_proxy(url = NULL, port = NULL))
+} else {
+  info$proxy <- paste(info$proxyurl, info$proxyport, sep=":")
+  httr::set_config(httr::use_proxy(url = info$proxyurl, port = as.numeric(info$proxyport)))
+}
+
+options(RCurlOptions = list(proxy = info$proxy, http.version = 1))
+
+
+
 # check if annotation is more than 3 elements, if this is the case split it and put it in loop
 if(length(annotation) > 3)
 {

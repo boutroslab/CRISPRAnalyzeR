@@ -32,7 +32,14 @@ userID <- info$userID
 userDir <- info$userDir
 nfiles <- length(info$paths)
 
-
+# gene / sgRNA Divider
+# Catching first symbol in second bracket
+genedivider = ""
+genedivider <- try(sub(pattern = "^.*?\\(.+?\\)\\((.{1}).*\\).*$", replacement = "\\1", x = info$libRegex))
+if(class(genedivider) == "try-error" || genedivider == "")
+{
+  genedivider = "_" # set default to _ (underscore)
+}
 
 #### scan sgRNA library
 libScan <- scan(info$libPath, what="", sep="\n")
@@ -44,6 +51,7 @@ log <- c(paste(userID, ": fastq_extraction.r starting at", Sys.time()),
          paste(userID, ": lines 1:5 of sgRNA library are:"),
          paste(userID, ":", libScan[1:5]),
          paste(userID, ": sgRNA library regex is", info$libRegex),
+         paste(userID, ": Gene divider is", genedivider),
          paste(userID, ": read", nfiles, "sequencing files:"),
          paste(userID, ":", info$names),
          paste(userID, ": user named them:"),
@@ -163,19 +171,96 @@ Check_File_log <- function(path, name, userID, numberlines, rc = FALSE){
 # value:  if no error occured, result of expression
 #         if error occured stop with a error message
 # side effects: if error occured, writes on logging and info file
-tryFun <- function( expr, place, name, log = logFile, ID = userID, dir = userDir ){
+tryFun <- function( expr, place, name,  path = info$paths, log = logFile, ID = userID, dir = userDir){
   res <- try(expr)
   if( res != 0 ){
     
     write(paste(ID, ": non-0 exit status"), log, append = TRUE)
+    write(paste(ID, ": ", path), log, append = TRUE)
     write(paste(ID, ":", res[1]), log, append = TRUE)
     
+    std_err <- ""
+    std_out <- ""
+    
+    # Make additional log files visible
+    if(place == "index")
+    {
+      # attach bt2 log file to output
+      std_err <- try(readr::read_file(file = file.path(dir, "bt2build_error.log")))
+      
+      write(paste(userID, ": Bowtie2 Build Error", std_err, collapse = "\n"), log, append = TRUE)
+      #file.path(userDir, "bt2build_error.log")
+      #file.path(userDir, "bt2build.log")
+    }
+    if(place == "unzip")
+    {
+      # attach gzip log file to output
+      # attach bt2 log file to output
+      std_err <- try(readr::read_file(file = file.path(path,"_gzip_stderr.log")))
+      if(class(std_err) == "try-error"  || std_err == "")
+      {
+        std_err <- "No Log available."
+      }
+      std_out <- try(readr::read_file(file = file.path(path,"_gzip_stdout.log")))
+      if(class(std_out) == "try-error" || std_out == "")
+      {
+        std_out <- "No Log available."
+      }
+      write(paste(userID, ": Gzip Error", std_err, std_out, collapse = "\n"), log, append = TRUE)
+      
+      
+      
+      
+      
+      
+    }
+    if(place == "map")
+    {
+      # attach bt2 log file to output
+      std_err <- try(readr::read_file(file = file.path(path,"_bt2_error.log")))
+      if(class(std_err) == "try-error"  || std_err == "")
+      {
+        std_err <- "No Log available."
+      }
+      std_out <- try(readr::read_file(file = file.path(path,"_bt2.log")))
+      if(class(std_out) == "try-error" || std_out == "")
+      {
+        std_out <- "No Log available."
+      }
+      write(paste(userID, ": Bowtie2 Mapping Error", std_err, std_out, collapse = "\n"), log, append = TRUE)
+      #file.path(userDir, "bt2build_error.log")
+      #file.path(userDir, "bt2build.log")
+    }
+    if(place == "map2")
+    {
+      # attach bt2 log file to output
+      std_err <- try(readr::read_file(file = file.path(path,"_map_stderr.log")))
+      if(class(std_err) == "try-error"  || std_err == "")
+      {
+        std_err <- "No Log available."
+      }
+      std_out <- try(readr::read_file(file = file.path(path,"_map_stdout.log")))
+      if(class(std_out) == "try-error" || std_out == "")
+      {
+        std_out <- "No Log available."
+      }
+      write(paste(userID, ": Perl Mapping Error", std_err, std_out, collapse = "\n"), log, append = TRUE)
+      #file.path(userDir, "bt2build_error.log")
+      #file.path(userDir, "bt2build.log")
+    }
+    
+    # Make output ready for error message
     info <- switch(place,
-      index = "Sorry, the bowtie2 index could not be made.<br/>Please make sure your sgRNA library is a real fasta file.<br/>",
-      unzip = paste0("Unfortunately your fastq.gz file ", name, " could not be unzipped.<br/>Are you sure it is a valid .fastq.gz file?<br/>"),
-      extract = paste0("Sorry, but sgRNA target sequences could not be extracted from your file ", name, ".<br/>Please make sure your FASTQ.gz file content match the RegEx you selected.<br/> See the help for more information.<br/>"),
-      map = paste0("Sorry but I was not able to map your file ", name, " to the provided sgRNA library.<br/>Please make sure you uploaded corresponding files.<br/>")
+      index = paste0("Sorry, the bowtie2 index could not be made.<br/>Please make sure your sgRNA library is a real fasta file.<br/></br><strong>The bowtie2 error message is:</strong></br><pre>", std_err,"</pre>"),
+      unzip = gsub(pattern = "[\n;]", replacement = " ", x = paste0("Unfortunately your fastq.gz file ", name, " could not be unzipped.<br/>Are you sure it is a valid .fastq.gz file?<br/><strong>The gzip error log is:</strong></br><pre>", htmltools::htmlEscape(std_err) ,"</pre></br><strong>The gzip output log is:</strong></br><pre>", htmltools::htmlEscape(std_out),"</pre>")),
+      extract = gsub(pattern = "[\n;]", replacement = " ", x = paste0("Sorry, but sgRNA target sequences could not be extracted from your file ", name, ".<br/>Please make sure your FASTQ.gz file content match the RegEx you selected.<br/> See the help for more information.<br/><br/><strong>The error log is:</strong></br><pre>", htmltools::htmlEscape(std_err) ,"</pre></br><strong>The output log is:</strong></br><pre>", htmltools::htmlEscape(std_out),"</pre>")),
+      #extract = paste0("Sorry, but sgRNA target sequences could not be extracted from your file ", name, ".<br/>Please make sure your FASTQ.gz file content match the RegEx you selected.<br/> See the help for more information.<br/>"),
+      map = gsub(pattern = "[\n;]", replacement = " ", x = paste0("Sorry but CRISPRAnalyzeR could not map your file ", name, " to the provided sgRNA library.<br/>Please make sure you uploaded corresponding files and selected a mathcing regular expression.<br/><strong>The bowtie2 error log is:</strong></br><pre>", htmltools::htmlEscape(std_err) ,"</pre></br><strong>The bowtie2 output log is:</strong></br><pre>", htmltools::htmlEscape(std_out),"</pre>")),
+      map2 = gsub(pattern = "[\n;]", replacement = " ", x = paste0("Sorry but CRISPRAnalyzeR could not find mapping information for  ", name, " using the provided sgRNA library.<br/>Please make sure you uploaded corresponding files.<br/><strong>The error log is:</strong></br><pre>", htmltools::htmlEscape(std_err) ,"</pre></br><strong>The output log is:</strong></br><pre>", htmltools::htmlEscape(std_out),"</pre>")),
+      rqc = paste0("CRISPRAnalyzeR could not generate the FASTQ quality control report.</br>Please try again.")
     )
+    
+   
   
     outInfo <- c(paste("progress", 1, sep = ";"), paste("info", info, sep = ";"))
     write(outInfo, file.path(dir, "fastq_extraction.info"))
@@ -295,7 +380,7 @@ if( nfiles > 1 ){
       ## unzip
       arguments <- c("-d", paste0(info$paths[i], ".gz"))
       write(paste(userID, ": run: gzip", paste(arguments, collapse = " ")), logFile, append = TRUE)
-      tryFun(system2("gzip", args = arguments), "unzip", info$names[i])
+      tryFun(system2("gzip", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_gzip_stdout.log", sep="")), stderr = file.path( paste(info$oldpaths[i],"_gzip_stderr.log", sep=""))), "unzip", info$names[i], info$oldpaths[i]) # 
 
       ### add couple of lines to log
       testlines <- Check_File_log(info$paths[i], info$names[i], userID, 27)
@@ -303,12 +388,17 @@ if( nfiles > 1 ){
       
       ## extract
       extractstring <- file.path(info$scriptDir, "CRISPR-extract.pl")
-      arguments <- c(extractstring, shQuote(info$targetRegex), shQuote(info$paths[i]), info$reverse)
+      arguments <- c(extractstring, shQuote(info$targetRegex), shQuote(info$paths[i]), info$reverse, paste(info$oldpaths[i],"_stats.txt", sep="") )
       write(paste(userID, ": run:", "perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
-      tryFun(system2("perl", args = arguments), "extract", info$names[i])
+      tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_extract_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_extract_stderr.log", sep=""))), "extract", info$names[i], info$oldpaths[i])
       info$paths[i] <- c(paste0(info$paths[i], "_extracted.fastq"))
       
       info$oldextractedpaths[i] <- info$paths[i]
+      
+      # remove unzipped FASTQ
+      command <- "rm"
+      arguments <- file.path(userDir, "*seqFile.fastq") 
+      try(system2(command, arguments))
   
       ## progress update
       count <- count + step
@@ -317,23 +407,31 @@ if( nfiles > 1 ){
       write(outInfo, file.path(userDir, "fastq_extraction.info"))
     
       ## map
-      mappinglog <- paste("1>", " ", file.path(userDir, paste(info$names[i],"_bt2_error.log", sep="")), " ", "2>", " ", file.path(userDir, paste(info$names[i],"_bt2.log", sep="")), sep= "") # will catch the stderr to gather mapping information
+      #mappinglog <- paste("1>", " ", file.path(userDir, paste(info$names[i],"_bt2_error.log", sep="")), " ", "2>", " ", file.path(userDir, paste(info$names[i],"_bt2.log", sep="")), sep= "") # will catch the stderr to gather mapping information
       
       params <- c("-p", info$bt2Threads, paste0("--", info$bt2Sensitivity))
-      arguments <- c("-x", bt2index, "-U", info$paths[i], "-S", paste0(info$paths[i], ".sam"),  params, mappinglog)
+      arguments <- c("-x", bt2index, "-U", info$paths[i], "-S", paste0(info$paths[i], ".sam"),  params)
       write(paste(userID, ": run:", "bowtie2", paste(arguments, collapse = " ")), logFile, append = TRUE)
-      tryFun(system2("bowtie2", args = arguments), "map", info$names[i])
+      tryFun(system2("bowtie2", args = arguments, stderr = file.path(paste(info$oldpaths[i],"_bt2_error.log", sep="")), stdout = file.path(paste(info$oldpaths[i],"_bt2.log", sep=""))), "map", info$names[i], path = info$oldpaths[i])
     
       extractstring <- shQuote(file.path(info$scriptDir, "CRISPR-mapping.pl"))
-      arguments <- c(extractstring, info$libPath, paste0(info$paths[i], ".sam"), info$bt2Quality)
+      arguments <- c(extractstring, info$libPath, paste0(info$paths[i], ".sam"), info$bt2Quality, genedivider, paste(info$oldpaths[i],"_map_stats.txt", sep=""))
       write(paste(userID, ": run: perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
-      tryFun(system2("perl", args = arguments), "map", info$names[i])
+      tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_map_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_map_stderr.log", sep=""))), "map2", info$names[i], path = info$oldpaths[i])
       info$paths[i] <- paste0(info$paths[i], "-designs.txt")
 
 
       # Write couple of lines to log
       testlines <- Check_File_log(info$paths[i], info$names[i], userID, 10)
       write(testlines, logFile, append = TRUE)
+      
+      # remove extracted FASTQ and SAM
+      command <- "rm"
+      arguments <- file.path(userDir, "*.sam") 
+      try(system2(command, arguments))
+      
+      arguments <- file.path(userDir, "*_extracted.fastq") 
+      try(system2(command, arguments))
       
       ## check
       test <- Check_File(info$paths[i], info$names[i], userID)
@@ -410,7 +508,7 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   ## unzip
   arguments <- c("-d", paste0(info$paths[i], ".gz"))
   write(paste(userID, ": run: gzip", paste(arguments, collapse = " ")), logFile, append = TRUE)
-  tryFun(system2("gzip", args = arguments), "unzip", info$names[i])
+  tryFun(system2("gzip", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_gzip_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_gzip_stderr.log", sep=""))), "unzip", info$names[i], path = info$oldpaths[i])
   
   
   ### add couple of lines to log
@@ -419,11 +517,16 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   
   ## extract
   extractstring <- file.path(info$scriptDir, "CRISPR-extract.pl")
-  arguments <- c(extractstring, shQuote(info$targetRegex), info$paths[i], info$reverse)
+  arguments <- c(extractstring, shQuote(info$targetRegex), info$paths[i], info$reverse, paste(info$oldpaths[i],"_stats.txt", sep=""))
   write(paste(userID, ": run: perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
-  tryFun(system2("perl", args = arguments), "extract", info$names[i])
+  tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_extract_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_extract_stderr.log", sep=""))), "extract", info$names[i], path = info$oldpaths[i])
   info$paths[i] <- c(paste0(info$paths[i], "_extracted.fastq"))
   info$oldextractedpaths[i] <- info$paths[i]
+  
+  # remove unzipped FASTQ
+  command <- "rm"
+  arguments <- file.path(userDir, "*seqFile.fastq") 
+  try(system2(command, arguments))
   
   ## progress update
   count <- count + step
@@ -432,19 +535,26 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   write(outInfo, paste(userDir, "fastq_extraction.info", sep = "/"))
     
   ## map
-  mappinglog <- paste("2>",file.path(userDir, paste(info$names[i],"_bt2.log", sep="")), sep= " ") # will catch the stderr to gather mapping information
+  #mappinglog <- paste("2>",file.path(userDir, paste(info$names[i],"_bt2.log", sep="")), sep= " ") # will catch the stderr to gather mapping information
   params <- c("-p", info$bt2Threads, paste0("--", info$bt2Sensitivity))
-  arguments <- c("-x", bt2index, "-U", info$paths[i], "-S", paste0(info$paths[i], ".sam"),  params, mappinglog)
+  arguments <- c("-x", bt2index, "-U", info$paths[i], "-S", paste0(info$paths[i], ".sam"),  params)
   write(paste(userID, ": run: bowtie2", paste(arguments, collapse = " ")), logFile, append = TRUE)
-  tryFun(system2("bowtie2", args = arguments), "map", info$names[i])
+  tryFun(system2("bowtie2", args = arguments, stderr = file.path( paste(info$oldpaths[i],"_bt2_error.log", sep="")), stdout = file.path( paste(info$oldpaths[i],"_bt2.log", sep=""))), "map", info$names[i], path = info$oldpaths[i])
 
   extractstring <- file.path(info$scriptDir, "CRISPR-mapping.pl")
-  arguments <- c(extractstring, info$libPath, paste0(info$paths[i], ".sam"), info$bt2Quality)
+  arguments <- c(extractstring, info$libPath, paste0(info$paths[i], ".sam"), info$bt2Quality, genedivider, paste(info$oldpaths[i],"_map_stats.txt", sep=""))
   write(paste(userID, ": run: perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
-  tryFun(system2("perl", args = arguments), "map", info$names[i])
+  tryFun(system2("perl", args = arguments, stdout = file.path( paste(info$oldpaths[i],"_map_stdout.log", sep="")), stderr = file.path( paste(info$oldpaths[i],"_map_stderr.log", sep=""))), "map2", info$names[i], path = info$oldpaths[i])
   info$paths[i] <- paste0(info$paths[i], "-designs.txt")
 
 
+  # remove extracted FASTQ and SAM
+  command <- "rm"
+  arguments <- file.path(userDir, "*.sam") 
+  try(system2(command, arguments))
+  
+  arguments <- file.path(userDir, "*_extracted.fastq") 
+  try(system2(command, arguments))
 
   ## check
   test <- Check_File(info$paths[i], info$names[i], userID)
@@ -489,20 +599,11 @@ if(exists("file.rqc"))#length(file.rqc) >=1 ) #&& file.rqc[[1]] != ""
   write(paste(userID, ": FASTQ QC Analysis on ", file.rqc, collapse = ""), logFile, append = TRUE)
   
   #write(paste(userID, ": ", unlist(file.rqc), collapse = " - "), logFile, append = TRUE)
-  options(bphost="localhost")
   
-  param <- BiocParallel::SnowParam(workers = as.numeric(info$bt2Threads), type = "SOCK")
-  
-  #library(ggplot2)
   outInfo <- c(paste("progress", 0.91, sep = ";"), paste("info", "", sep = ";"))
   write(outInfo, file.path(userDir, "fastq_extraction.info"))
-  
-  fastq.qa <- try(Rqc::rqcQA(unlist(file.rqc),workers = as.numeric(info$bt2Threads), BPPARAM = param))
-  if(class(fastq.qa) == "try-error")
-  {
-    write(paste(userID, ": ","rqcqa failed ##", fastq.qa[1]), logFile, append = TRUE)
-    stop (paste("rqcqa failed", fastq.qa[1]))
-  }
+  options(bphost="localhost")
+  fastq.qa <- Rqc::rqcQA(x = unlist(file.rqc), n = 50000, workers = info$bt2Threads)
   
   write(paste(userID, ": Creating FASTQ QC Analysis Report"), logFile, append = TRUE)
   

@@ -97,6 +97,27 @@ tabItem(tabName = "sq_stats", align = "center",
         
       ),
       
+      ## Cumulative Frequency Distribution
+      tabPanel("Cumulative Frequency",
+               shiny::tags$p(class="lead","Below you find the log2-transformed, normalized cumulative frequency for each sample.", shiny::tags$br(),
+                             "", shiny::tags$br()
+               ),
+               shiny::tags$br(),
+               
+               fluidRow(
+                 box(width=6, solidHeader = TRUE, status = "primary", collapsible = TRUE, collapsed = FALSE, title = "Cumulative Frequency for Gene Read Counts",
+                        #shiny::tags$h3("Cumulative Frequency for Gene Read Counts"),
+                        shiny::tags$div(width="80%", highchartOutput("sqCoverage_CDF_gene")),
+                        helpText("Click on legend to exclude/include data. Drag rectangle to zoom.")
+                 ),
+                 box(width=6, solidHeader = TRUE, status = "primary", collapsible = TRUE, collapsed = TRUE, title = "Cumulative Frequency for sgRNA Read Counts",
+                        #shiny::tags$h3("Cumulative Frequency for sgRNA Read Counts"),
+                        shiny::tags$div(width="80%",highchartOutput("sqCoverage_CDF_sgrna")),
+                        helpText("Click on legend to exclude/include data. Drag a rectangle to zoom.")
+                 )
+               )
+      ),
+      
 
       # controls
       tabPanel(

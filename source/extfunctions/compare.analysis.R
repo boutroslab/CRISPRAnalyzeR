@@ -1,4 +1,4 @@
-compare.analysis = function(methods=NULL, type="enriched", cutoff.deseq = cp$miaccs$sig.pval.deseq, cutoff.wilcox = cp$miaccs$sig.pval.wilcox, cutoff.mageck = cp$miaccs$sig.pval.mageck, cutoff.edger = cp$miaccs$sig.pval.edger, cutoff.rsea = cp$miaccs$sig.pval.rsea, cutoff.override=cp$miaccs$cutoff.override, cutoff.hits=cp$miaccs$compare.cutoff, output="list",plot.method=c("wilcox","mageck", "deseq"), plot.feature=c("pval","fdr","pval"), pch=16)
+compare.analysis = function(methods=NULL, type="enriched", cutoff.deseq = cp$miaccs$sig.pval.deseq, cutoff.wilcox = cp$miaccs$sig.pval.wilcox, cutoff.mageck = cp$miaccs$sig.pval.mageck, cutoff.edger = cp$miaccs$sig.pval.edger, cutoff.rsea = cp$miaccs$sig.pval.rsea, cutoff.override=cp$miaccs$cutoff.override, cutoff.hits=cp$miaccs$compare.cutoff, output="list",plot.method=c("wilcox","mageck", "deseq2"), plot.feature=c("pval","fdr","pval"), pch=16)
 {
   #type = enriched | depleted
   #output = list | rank | venn
@@ -21,7 +21,7 @@ compare.analysis = function(methods=NULL, type="enriched", cutoff.deseq = cp$mia
     }
     if(exists("deseq", envir=cp))
     {
-      load.analysis = c(load.analysis,"deseq")
+      load.analysis = c(load.analysis,"deseq2")
     }
     if(exists("mageck", envir=cp))
     {
@@ -90,7 +90,7 @@ if(type=="enriched")
       ),]
     }
     
-    if("deseq" %in% load.analysis)
+    if("deseq2" %in% load.analysis)
     {
       
       #DESeq2
@@ -167,7 +167,7 @@ if(type=="enriched")
       ),]
     }
     # print(df.wilcox)
-    if("deseq" %in% load.analysis)
+    if("deseq2" %in% load.analysis)
     {
       
       #DESeq2
@@ -277,7 +277,7 @@ if(output=="list")
       }
 
       # DESEQ2
-      if("deseq" %in% load.analysis) {
+      if("deseq2" %in% load.analysis) {
         
         df.output$deseq.log2fc=apply(df.output,1,function(i) return(df.deseq[i["genes"],"log2FoldChange"]))
         df.output$deseq.pval=apply(df.output,1,function(i) return(df.deseq[i["genes"],"padj"]))
@@ -339,7 +339,7 @@ if(output=="list")
   }
   
   # DESEQ2
-  if("deseq" %in% load.analysis) {
+  if("deseq2" %in% load.analysis) {
     df.output$deseq=apply(df.output,1,function(i) return(df.deseq[i["genes"],"rank"]))
     #df.output$deseq.pval=apply(df.output,1,function(i) return(df.deseq[i["genes"],"padj"]))
   }
@@ -414,7 +414,7 @@ if(output=="list")
   }
   
   # DESEQ2
-  if("deseq" %in% load.analysis) {
+  if("deseq2" %in% load.analysis) {
     
     venn.deseq=df.deseq[order(df.deseq[,"padj"], na.last=TRUE, decreasing=FALSE),]
     #df.output$deseq.pval=apply(df.output,1,function(i) return(df.deseq[i["genes"],"padj"]))
@@ -431,7 +431,7 @@ if(output=="list")
       }
     }
     # return list
-    list.return=c(list.return,list("DEseq2" = venn.deseq))
+    list.return=c(list.return,list("DESeq2" = venn.deseq))
   }
   
   

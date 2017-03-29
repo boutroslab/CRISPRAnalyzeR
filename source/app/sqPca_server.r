@@ -1,6 +1,6 @@
 #saved as sqPca_server.r
 
-output$pcaplotgene <- renderHighchart2({
+output$pcaplotgene <- renderHighchart({
   if( status$results == FALSE ){
     Plot_blank("hc",msg = config$messages$noanalysisrunyet$String)
   } else {

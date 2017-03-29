@@ -108,8 +108,7 @@ library(BiocParallel)
 
 write(paste(userID, ": finished loading packages"), logFile, append = TRUE) 
 
-
-
+write(paste(userID, ": databasepath ", info$databasepath), logFile, append = TRUE) 
 
 
 
@@ -135,7 +134,7 @@ tryFunction <- function( expr, place, log = logFile, ID = userID, dir = userDir 
     
     info <- switch(place,
       readcount = "We have problems reading the read count files. Please make sure they meet the formatting criteria.<br/>Please see the help for more information.<br/>",
-      biomart = "Gene Identifier handling via the biomaRt service failed.<br/><br/>There might be several reasons for this, e.g. the biomaRt service might be down (in this case, please try again later) or the gene identifier wrong.<br/>
+      biomart = "Gene Identifier handling via the biomaRt service failed.<br/><br/>There might be several reasons for this, e.g. the biomaRt service might be down (in this case, please try again later).<br/>Additional, please check whether you have selected the correct <b>gene identifier ans organism in the 'Set Groups and Identifier' tab</b>.</br>
       Please make sure you select the correct identifiers.<br/><br/>If you do not want gene identifiers to be converted, please select your gene identifier also as the identifier to convert it to.<br/>",
       cpnorm = "It looks like you have duplicate sgRNA identifier in your sgRNA library file.<br/>Please make sure only unique sgRNA identifier are present in your sgRNA fasta library file.",
       pre = "Something went wrong when pre-processing the data.<br/>",
@@ -330,7 +329,8 @@ local({
     
     # Debug
     write(paste(userID, ": reading sequencing files - Set rownames"), logFile, append = TRUE)
-    cp$readcount <- merge(cp$readcount, fileread, by="design", suffixes = sample(1:2000,2), all.x = TRUE) # keep all sgRNAs from library file
+    cp$readcount <- dplyr::left_join(x = cp$readcount, y = fileread, by="design")
+    #cp$readcount <- merge(cp$readcount, fileread, by="design", suffixes = sample(1:2000,2), all.x = TRUE) # keep all sgRNAs from library file
     
     # if NA, set to 0
     cp$readcount[is.na(cp$readcount)] <- 0
@@ -469,8 +469,8 @@ write(outInfo, file.path(userDir, "analysis.info"))
 ## get gene symbols
 write(paste(userID, ": Convert Gene Identifier using biomaRt"), logFile, append = TRUE)
 write(paste(userID, ": Gene Extraction Pattern:",  cp$miaccs$g.extractpattern), logFile, append = TRUE)
-write(paste(userID, ": Old Identifier:",  info$annoID), logFile, append = TRUE)
-write(paste(userID, ": New Identifier:",  info$annoIDnew), logFile, append = TRUE)
+write(paste(userID, ": Old Identifier:",  cp$miaccs$g.identifier), logFile, append = TRUE)
+write(paste(userID, ": New Identifier:",  cp$miaccs$g.identifier.new), logFile, append = TRUE)
 write(paste(userID, ": Database:",  cp$miaccs$a.database), logFile, append = TRUE)
 write(paste(userID, ": Dataset:",  info$annoDataset), logFile, append = TRUE)
 
@@ -483,8 +483,8 @@ tryFunction(
              dataset = info$annoDataset,
              annotate = FALSE,
              convert.identifier = TRUE,
-             new.identifier = info$annoIDnew,
-             filter = info$annoID,
+             new.identifier = cp$miaccs$g.identifier.new,
+             filter = cp$miaccs$g.identifier,
              attribute = c(info$annoID)),
              "biomart")
 if( ctrlNon ){
@@ -523,6 +523,7 @@ aggregateok <- tryFunction(aggregatetogenes(agg.function = sum,
 uniquegenes <- unique(cp$readcount$gene)
 
 sampleaggregated <- cp$readcount[sampledraw,"gene"]
+sampledraw <- NULL
 
 #write(paste(userID, ": 5 random lines of cp$aggregated.readcount:",  cp$aggregated.readcount[cp$aggregated.readcount$gene %in% sampleaggregated,]), logFile, append = TRUE)
 
@@ -578,6 +579,74 @@ rownames(data) <- cp$normalized.aggregated.readcount$gene
 pca$genes <- tryFunction(princomp(data, scores=TRUE),"PCA")
 
 
+# make CDF plots
+### progress
+progress <- 0.12
+outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
+write(outInfo, file.path(userDir, "analysis.info"))
+
+# gene reads
+cdf_list_gene <- list(NA)
+for(i in 1:length(cp$miaccs$file.names))
+{
+    #get number of gene
+    n = length(cp$normalized.aggregated.readcount[,cp$miaccs$file.names[i]])
+    
+    # get a summary
+    sample_summary <- summary(cp$normalized.aggregated.readcount[,cp$miaccs$file.names[i]])
+    
+    # Order data
+    sample_sorted <- log2(sort(cp$normalized.aggregated.readcount[,cp$miaccs$file.names[i]]))
+    # remove -inf by setting them to 0
+    sample_sorted[!is.finite(sample_sorted)] <- 0
+    
+    # data is plotted like this:
+    ##  x   sample_sorted
+    ##  y   (1:n)/n
+    
+    # make tibble for highcharts
+    cdf_list_gene[[i]] <- list(tibble::tibble(
+      "x" = sample_sorted,
+      "y" = (1:n)/n
+    )
+    )
+    sample_sorted <- NULL
+}
+
+# sgrna 
+cdf_list_sgrna <- list(NA)
+for(i in 1:length(cp$miaccs$file.names))
+{
+    #get number of gene
+    n = length(cp$normalized.readcount[,cp$miaccs$file.names[i]])
+    
+    # get a summary
+    sample_summary <- summary(cp$normalized.readcount[,cp$miaccs$file.names[i]]+1)
+    
+    # Order data
+    sample_sorted <- log2(sort(cp$normalized.readcount[,cp$miaccs$file.names[i]]+1))
+    # remove -inf by setting them to 0
+    sample_sorted[!is.finite(sample_sorted)] <- 0
+    
+    # data is plotted like this:
+    ##  x   sample_sorted
+    ##  y   (1:n)/n
+    
+    # make tibble for highcharts
+    cdf_list_sgrna[[i]] <- list(tibble::tibble(
+      "x" = sample_sorted,
+      "y" = (1:n)/n
+    )
+    )
+
+    sample_sorted <- NULL
+}
+
+CDF_list <- list(
+  "gene" = cdf_list_gene,
+  "sgRNA" = cdf_list_sgrna
+)
+
 #highcharter::hchart(pca$genes)
 
 # for sgRNAs
@@ -585,10 +654,7 @@ pca$genes <- tryFunction(princomp(data, scores=TRUE),"PCA")
 #rownames(data) <- cp$normalized.readcount$design
 #pca$sgrna <- princomp(data)
 
-### progress
-progress <- 0.16
-outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
-write(outInfo, file.path(userDir, "analysis.info"))
+
 
 # Statistics
 write(paste(userID, ": creating object statsGeneral"), logFile, append = TRUE)
@@ -657,15 +723,15 @@ outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, se
 write(outInfo, file.path(userDir, "analysis.info"))
 ###
 
-write(paste(userID, ": creating object readDistributionBox"), logFile, append = TRUE)
-# make log2
-readcountbox1 <- log2((dplyr::select(cp$readcount, -design,-gene)+1) )
-readcountbox2 <- data.frame(
-  "design" = cp$readcount$design,
-                      stringsAsFactors=FALSE)
-readcountbox2 <- dplyr::bind_cols(readcountbox2, readcountbox1)
-readcountbox2$gene <- cp$readcount$gene
-readDistributionBox <- tryFunction(reshape2::melt(readcountbox2), "qc")
+# write(paste(userID, ": creating object readDistributionBox"), logFile, append = TRUE)
+# # make log2
+# readcountbox1 <- log2((dplyr::select(cp$readcount, -design,-gene)+1) )
+# readcountbox2 <- data.frame(
+#   "design" = cp$readcount$design,
+#                       stringsAsFactors=FALSE)
+# readcountbox2 <- dplyr::bind_cols(readcountbox2, readcountbox1)
+# readcountbox2$gene <- cp$readcount$gene
+# readDistributionBox <- tryFunction(reshape2::melt(readcountbox2), "qc")
 
 ### progress
 progress <- 0.22
@@ -681,8 +747,6 @@ readcountbox2 <- data.frame(
   stringsAsFactors=FALSE)
 readcountbox2 <- dplyr::bind_cols(readcountbox2, readcountbox1)
 readcountbox2$gene <- cp$normalized.readcount$gene
-readDistributionBox <- tryFunction(reshape2::melt(readcountbox2), "qc")
-
 readDistributionBoxNorm <- tryFunction(reshape2::melt(readcountbox2), "qc")
 
 ### progress
@@ -1246,8 +1310,10 @@ saveRDS(pca, file = file.path(userDir, "PCA.rds"))
 saveRDS(statsGeneral, file = file.path(userDir, "statsGeneral.rds"))
 saveRDS(unmappedGenes, file = file.path(userDir, "unmappedGenes.rds"))
 saveRDS(readDistribution, file = file.path(userDir, "readDistribution.rds"))
-saveRDS(readDistributionBox, file = file.path(userDir, "readDistributionBox.rds"))
+#saveRDS(readDistributionBox, file = file.path(userDir, "readDistributionBox.rds"))
 saveRDS(readDistributionBoxNorm, file = file.path(userDir, "readDistributionBoxNorm.rds"))
+
+saveRDS(CDF_list, file = file.path(userDir, "CDF_list.rds"))
 
 ### progress 90%
 progress <- 0.90
@@ -1331,6 +1397,18 @@ write(outInfo, file.path(userDir, "analysis.info"))
 scriptpath <- file.path(info$scriptDir, "get_info.r")
 filepath <- file.path(userDir, "get_info.info")
 
+
+write(paste(userID, ": databasepath ", info$databasepath), logFile, append = TRUE) 
+
+if(info$proxyurl == "" || is.null(info$proxyurl))
+{
+  info$proxyurl = "NULL"
+}
+if(info$proxyport == ""|| is.null(info$proxyport))
+{
+  info$proxyport = "NULL"
+}
+
 info <- c(paste("progress", 0, sep = ";"),
           paste("info", "", sep = ";"),
           paste("logDir", logDir, sep = ";"),
@@ -1342,6 +1420,9 @@ info <- c(paste("progress", 0, sep = ";"),
           paste("databasepath", info$databasepath, sep = ";"),
           paste("annoDataset", info$annoDataset, sep = ";"),
           paste("organism", info$annoDataset, sep = ";"),
+          paste("bt2Threads", info$bt2Threads, sep = ";"),
+          paste("proxyurl", info$proxyurl, sep = ";"),
+          paste("proxyport", info$proxyport, sep = ";"),
           paste("ecrisp", info$ecrisp, sep = ";")
 )
 write(info, filepath)

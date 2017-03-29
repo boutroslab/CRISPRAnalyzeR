@@ -2,7 +2,7 @@
 # used to call CLD RE-Evaluation as shown here:
 # https://github.com/boutroslab/Supplemental-Material/tree/master/crispr-reannotation
 
-car.genome <- function(outputdir=NULL, sequencefiles=NULL, databasepath=NULL, organism = NULL, nonseedlength = 1, mismatchesallowed = 1, reannotatescriptpath = NULL){
+car.genome <- function(outputdir=NULL, sequencefiles=NULL, databasepath=NULL, organism = NULL, nonseedlength = 1, mismatchesallowed = 1, reannotatescriptpath = NULL, logfile = NULL, btthreads = 1){
   
   # organism can be homo_sapiens, mus_musculus or dario_rerio
   if(is.null(organism))
@@ -23,17 +23,26 @@ car.genome <- function(outputdir=NULL, sequencefiles=NULL, databasepath=NULL, or
   #pasted_seq = sgrna.fasta,
   #PAM = cas,
   # make arguments
-  args <- c(paste("--outputdir=", file.path(outputdir), sep=""),
+  args <- c(file.path(reannotatescriptpath, "reannotate_crispr.pl"),
+            paste("--output-dir=", file.path(outputdir), sep=""),
             paste("--sequence-files=", file.path(outputdir, sequencefiles), sep=""),
             paste("--databasepath=", file.path(databasepath), sep=""),
             paste("--organism=", organism, sep=""),
             paste("--non-seed-length=", nonseedlength, sep=""),
             paste("--mismatches-allowed=", mismatchesallowed, sep=""),
+            paste("--threads=", btthreads, sep=""),
             paste("2>",file.path(outputdir, "ecrisp.log"), sep= " ") ) # will catch the stderr to gather mapping information
-  command <- paste("perl ", file.path(reannotatescriptpath, "reannotate_crispr.pl") , sep="")
+  command <- "perl"
   
   # make system call
-  reannotate <- system2(command, args)
+  Write(paste("System Call: ", command, file.path(reannotatescriptpath, "reannotate_crispr.pl"), paste("--output-dir=", file.path(outputdir), sep=""), paste("--sequence-files=", file.path(outputdir, sequencefiles), sep=""), paste("--databasepath=", file.path(databasepath), sep=""), paste("--organism=", organism, sep=""), paste("--non-seed-length=", nonseedlength, sep=""), paste("--mismatches-allowed=", mismatchesallowed, sep=""), paste("--threads=", btthreads, sep=""), paste("2>",file.path(outputdir, "ecrisp.log"), sep= " "), sep = " "), logFile, bAppend = TRUE)
+  reannotate <- try(system2(command, args))
+  
+  if(class(reannotate) == "try-error")
+  {
+    Write(paste(reannotate[1], sep = " ", collapse = " "), logFile, bAppend = TRUE)
+    stop()
+  }
   #print(command)
   #print(args)
   #print(test)
@@ -45,15 +54,15 @@ car.genome <- function(outputdir=NULL, sequencefiles=NULL, databasepath=NULL, or
   top <- readLines(con = file.path(outputdir, "ecrisp.log"))
   
   ## apply regex
-  resultsfile <- sub(pattern = ".*\\/(.*?)\\/primary_out.bwt.*$", replacement = "\\1", x= top, perl=TRUE, fixed=FALSE)
+  #resultsfile <- sub(pattern = ".*\\/(.*?)\\/primary_out.bwt.*$", replacement = "\\1", x = top, perl=TRUE, fixed=FALSE)
   
   ## open resultsfile and convert it to ecrisp table as before with cargenome
-  if(file.exists(file.path(outputdir,resultsfile,"results.tab")))
+  if(file.exists(file.path(outputdir,"results.tab")))
   {
-    cp$ecrisp <- read.table(file.path(outputdir,resultsfile, "results.tab"), header=TRUE, sep="\t", comment.char = "", stringsAsFactors = FALSE, colClasses = c("character","character","numeric","numeric","character","numeric","numeric","numeric","character","character","character","numeric","numeric","numeric","numeric","numeric","character"))
+    cp$ecrisp <- read.table(file.path(outputdir, "results.tab"), header=TRUE, sep="\t", comment.char = "", stringsAsFactors = FALSE, colClasses = c("character","character","numeric","numeric","character","numeric","numeric","numeric","character","character","character","numeric","numeric","numeric","numeric","numeric","character"))
     
     
-  } else { stop(paste("CRISPR Re-Annotation failed. The Resultsfile", file.path(outputdir,resultsfile, "results.tab") ,"could not be found."))}
+  } else { stop(paste("CRISPR Re-Annotation failed. The Resultsfile", file.path(outputdir, "results.tab") ,"could not be found."))}
   
   ## Convert and Modify outputtable
   colnames(cp$ecrisp) <- c("design", "chr","Start", "End", "Gene.targets", "Spec.Score",

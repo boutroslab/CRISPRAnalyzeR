@@ -404,14 +404,26 @@ Check_libFile <- function(name, path, regex, messages = config$messages) {
     }
     # Check for regular expression
     check.fasta.names.regex.gene <- sub(pattern = regex,x = check.fasta.names, replacement = "\\1")
+    # make available for all
+    libfile_gene <<- check.fasta.names.regex.gene
+    
     check.fasta.names.regex.sgrna <- sub(pattern = regex,x = check.fasta.names, replacement = "\\2")
     
     setProgress(value = 0.6)
     
+    # check for unique identifier
+    if(length(check.fasta.names.regex.sgrna) != length(unique(check.fasta.names.regex.sgrna)))
+    {
+      out$error <- TRUE
+      out$message <- paste0(out$message, messages$checklibfile15$String) 
+      #out$message <- paste0(out$message, "The regular expression revealed a problem with your sgRNA identifier.<br/>Either the selected regular expression is not correct or you have missing/incorrect entries in your sgRNA library file.<br/>Please make sure every sgRNA identifier consists of a gene identifier and a unique sgRNA identifier part.<br/>")
+      
+    }
+
     if(length(check.fasta.names.regex.sgrna) != length(check.fasta.names.regex.gene))
     {
       out$error <- TRUE
-      out$message <- paste0(out$message, messages$checklibfile11$String$String) 
+      out$message <- paste0(out$message, messages$checklibfile11$String) 
       #out$message <- paste0(out$message, "The regular expression revealed a problem with your sgRNA identifier.<br/>Either the selected regular expression is not correct or you have missing/incorrect entries in your sgRNA library file.<br/>Please make sure every sgRNA identifier consists of a gene identifier and a unique sgRNA identifier part.<br/>")
       
     }
@@ -676,7 +688,8 @@ Check_compare <- function(group1, group2, pos, neg, top, messages = config$messa
   # check whether pos Ctrl is found in sgRNA library
   if( !any(is.null(pos)) && !any(is.na(pos)) && !any(length(pos) == 0) && !any(pos == "") && !is.null(top) ){
     for( i in 1:length(pos) ){
-      if( !any(grepl(pos[i], top, fixed = TRUE)) ){
+      pattern <- paste("^",pos[i],"$" , sep="")
+      if( !any(grepl(pattern, top, fixed = FALSE, perl = TRUE)) ){
         out$error <- TRUE
         out$message <- paste0(out$message, paste(messages$checkcompare1$String, pos[i],messages$checkcompare2$String,"<br/>"))
         #out$message <- paste0(out$message, paste("Positive control", pos[i], "was not found in sgRNA library.","<br/>"))
@@ -687,7 +700,8 @@ Check_compare <- function(group1, group2, pos, neg, top, messages = config$messa
   # check whether non-targeting Ctrl is found in sgRNA library
   if( !any(is.null(neg)) && !any(is.na(neg)) && !any(length(neg) == 0) && !any(neg == "") && !is.null(top) ){
     for( i in 1:length(neg) ){
-      if( !any(grepl(neg[i], top, fixed = TRUE)) ){
+      pattern <- paste("^",neg[i],"$" , sep="")
+      if( !any(grepl(pattern, top, fixed = FALSE, perl=TRUE)) ){
         out$error <- TRUE
         out$message <- paste0(out$message, paste(messages$checkcompare3$String, neg[i],messages$checkcompare2$String,"<br/>"))
         #out$message <- paste0(out$message, paste("Non-targeting control", neg[i], "was not found in sgRNA library.<br/>"))
@@ -866,7 +880,7 @@ Check_results <- function ( info, ID , messages = config$messages){
      out$message <- paste0(out$message, info,
         messages$checkresults$String
     )
-  }
+  } 
   
   return(out)
 }
@@ -1122,7 +1136,7 @@ registerInputHandler("shinyjsexamples.chooser", function(data, ...) {
 ####################
 # function for plotting a placeholder for plot renders in app
 # necessary arguments are device
-# arguments   device  chr "hc" or "base" defining render device renderHighchart() or renderPlot()
+# arguments   device  chr "hc" or "base" defining render device renderHighchart2() or renderPlot()
 #             pos     num arr length 2 for x and y pos in a range of [0;1]
 #             msg     chr for message to be shown
 #             col     chr or num for colour
@@ -1178,18 +1192,26 @@ Plot_blank <- function( device, pos = c(1, 1), msg = config$messages$noanalysisr
 # value       highcharter plot object
 #
 Plot_column <- function( seriesNames, catName, data, 
-                  tooltip = NULL, title = "", subtitle = "", xLab = "", yLab = "", zoom = "x",
-                  crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = NULL , turboT = 0){
+                  tooltip = FALSE, title = "", subtitle = "", xLab = "", yLab = "", zoom = "x",
+                  crosshair = c(FALSE, TRUE), legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = NULL , turboT = 0){
   export <- TRUE # subsequent correction
   
-  hc <- highcharter::highchart() %>%
-    highcharter::hc_chart(type = "column", zoomType = zoom) %>%
+  #check if boost.js is useful
+  # if(nrow(data) > 12000)
+  # {
+  #   hc <- highcharter::highchart()
+  # }else {
+  #   hc <- highcharter::highchart()
+  # }
+  # 
+   hc <- highcharter::highchart() %>%
+    highcharter::hc_chart( type = "column", zoomType = zoom) %>%
     highcharter::hc_plotOptions(series = list(turboThreshold = turboT)) %>% 
     highcharter::hc_title(text = title) %>%
     highcharter::hc_subtitle(text = subtitle) %>%
-    highcharter::hc_xAxis(title = list(text = xLab), labels  = list(rotation = "-45")) %>%
+    highcharter::hc_xAxis(title = list(text = xLab), labels  = list(rotation = "-45"), crosshair = crosshair[1]) %>%
     highcharter::hc_yAxis(title = list(text = yLab), align = "left", showFirstLabel = FALSE, 
-      showLastLabel = FALSE, labels = list(useHTML = TRUE), opposite = FALSE) %>%
+      showLastLabel = FALSE, labels = list(useHTML = TRUE), opposite = FALSE, crosshair = crosshair[2]) %>%
     highcharter::hc_legend(enabled = legend) %>%
     highcharter::hc_exporting(enabled = export,
                  printMaxWidth = 2000,
@@ -1201,19 +1223,26 @@ Plot_column <- function( seriesNames, catName, data,
     hc <- highcharter::hc_xAxis(hc, title = list(text = xLab), categories = data[[catName]], labels  = list(rotation = "-45"))
   }
   
-  if( is.null(tooltip) ){
-    hc <- highcharter::hc_tooltip(hc, crosshairs = crosshair, shared = TRUE, borderWidth = 0, delayForDisplay = 1500)
-  } else {
-    hc <- highcharter::hc_tooltip(hc, crosshairs = crosshair, shared = TRUE, borderWidth = 0, delayForDisplay = 1500,
-      useHTML = TRUE, headerFormat = "<table>", pointFormat = tooltip, footerFormat = "</table>")
+  if(tooltip !=FALSE)
+  {
+    if( is.null(tooltip) ){
+      hc <- highcharter::hc_tooltip(hc, shared = TRUE, borderWidth = 0, delayForDisplay = 1500)
+    } else {
+      hc <- highcharter::hc_tooltip(hc, shared = TRUE, borderWidth = 0, delayForDisplay = 1500,
+                                    useHTML = TRUE, headerFormat = "<table>", pointFormat = tooltip, footerFormat = "</table>")
+    }
+  } else
+  {
+    hc <- highcharter::hc_tooltip(hc, enabled=FALSE)
   }
+  
   
   if( is.null(cols) ) bCols <- FALSE else bCols <- TRUE
     
   for( i in 1:length(seriesNames) ){
     d <- data[, c(catName, seriesNames[i])]
     colnames(d) <- c("name", "y")
-    hc <- highcharter::hc_add_series(hc, type = "column", name = seriesNames[i], data = list_parse(d),
+    hc <- highcharter::hc_add_series(hc, type = "column", name = seriesNames[i], data = highcharter::list_parse(d),
                         colorByPoint = bCols, colors = cols, color = col[i])
   }
   
@@ -1488,14 +1517,14 @@ Plot_coverage_readDistro <- function( data, bApp = TRUE , filename = NULL){
     highcharter::hc_plotOptions(area = list(dashStyle = "Dash", 
           marker = list(enabled = FALSE, symbol = "circle", radius = 2, 
           states = list(hover = list(enabled = TRUE))))) %>%
-    highcharter::hc_xAxis(title = list(text = "log2 Readcount"), align = "middle") %>%
-    highcharter::hc_yAxis(title = list(text = "number of sgRNAs"), align = "left") %>%
+    highcharter::hc_xAxis(title = list(text = "log2 Readcount"), align = "middle", crosshair = TRUE) %>%
+    highcharter::hc_yAxis(title = list(text = "number of sgRNAs"), align = "left", crosshair = TRUE) %>%
     highcharter::hc_exporting(enabled = ex,
                    printMaxWidth = 3000,
                    scale=8,
                    filename = filename,
                    formAttributes = list(target = "_blank")) %>%
-    highcharter::hc_tooltip(crosshairs = TRUE, shared = TRUE, borderWidth = 0) %>%
+    highcharter::hc_tooltip(enabled=FALSE) %>%
     highcharter::hc_size(height="600px")
   
   #if( length(Ds) <= 4 ){
@@ -1540,7 +1569,7 @@ Plot_coverage_readDistroBox <- function( data, bApp = TRUE, type = "sgRNA", file
                scale=8,
                filename = filename,
                formAttributes = list(target = "_blank")) 
-  hc <- highcharter::hc_tooltip(hc, crosshairs = TRUE, shared = TRUE, borderWidth = 0, delayForDisplay = 1500)
+  hc <- highcharter::hc_tooltip(hc, enabled=FALSE)
   hc <- highcharter::hc_size(hc, height="1000px")
   hc <- hc_add_theme(hc, hc_theme_google2())
   
@@ -1835,14 +1864,15 @@ Plot_scatter <- function( dataList, seriesNames,
     yLim[2] <- max(xLim[2], yLim[2])
   }
   
-  hc <- highcharter::highchart() %>% 
+  
+  hc <- highcharter::highchart() %>%
     highcharter::hc_chart(zoomType = zoom) %>%
     highcharter::hc_title(text = title) %>%
     highcharter::hc_subtitle(text = subtitle) %>%
     highcharter::hc_plotOptions(series = list(turboThreshold = turboT, 
         marker = list(symbol = "circle", radius = 2))) %>%
-    highcharter::hc_xAxis(title = list(text = xLab), type = xTrans, min = xLim[1], max = xLim[2]) %>%
-    highcharter::hc_yAxis(title = list(text = yLab), type = yTrans, min = yLim[1], max = yLim[2]) %>%
+    highcharter::hc_xAxis(title = list(text = xLab), type = xTrans, min = xLim[1], max = xLim[2], crosshair = crosshair[1]) %>%
+    highcharter::hc_yAxis(title = list(text = yLab), type = yTrans, min = yLim[1], max = yLim[2], crosshair = crosshair[2]) %>%
     highcharter::hc_legend(enabled = legend) %>%
     highcharter::hc_exporting(enabled = export,
                  printMaxWidth = 2000,
@@ -1865,13 +1895,18 @@ Plot_scatter <- function( dataList, seriesNames,
               style = list(fontSize = "10px", color =  'rgba(0,0,0,0.70)'))
     )
   }
-
+if(tooltip != FALSE)
+{
   if( is.null(tooltip) ){
-    hc <- highcharter::hc_tooltip(hc, crosshairs = crosshair, borderWidth = 0, delayForDisplay = 1500)
+    hc <- highcharter::hc_tooltip(hc, enabled = TRUE, borderWidth = 0, delayForDisplay = 1500)
   } else {
-    hc <- highcharter::hc_tooltip(hc, crosshairs = crosshair, shared = TRUE, borderWidth = 0, delayForDisplay = 1500,
+    hc <- highcharter::hc_tooltip(hc, ensabled = TRUE, shared = TRUE, borderWidth = 0, delayForDisplay = 1500,
                                   useHTML = TRUE, headerFormat = "<table>", pointFormat = tooltip, footerFormat = "</table>")
   }
+} else {
+  hc <- highcharter::hc_tooltip(hc, enabled = FALSE)
+}
+  
 
   
     hc <- highcharter::hc_add_theme(hc, hc_theme_google2())
@@ -1992,15 +2027,15 @@ Plot_replicates_pair <- function( xx, yy, data, cCtrl = "neg",
   }
   
   rand <- df[, ]
-  rand <- data.frame("x" = rand[[xx]], "y" = rand[[yy]], "ID" = rand$gene, stringsAsFactors = FALSE)
+  rand <- data.frame("x" = round(rand[[xx]], digits=2), "y" = round(rand[[yy]], digits=2), "ID" = rand$gene, stringsAsFactors = FALSE)
   
   pos <- df[which(df$labelgene == "pos" ), ]
-  pos <- data.frame("x" = pos[[xx]], "y" = pos[[yy]], "ID" = pos$gene, stringsAsFactors = FALSE)
+  pos <- data.frame("x" = round(pos[[xx]], digits=2), "y" = round(pos[[yy]], digits=2), "ID" = pos$gene, stringsAsFactors = FALSE)
 
   neg <- df[which(df$labelgene == "neg" ), ]
-  neg <- data.frame("x" = neg[[xx]], "y" = neg[[yy]], "ID" = neg$gene, stringsAsFactors = FALSE)
+  neg <- data.frame("x" = round(neg[[xx]], digits=2), "y" = round(neg[[yy]], digits=2), "ID" = neg$gene, stringsAsFactors = FALSE)
   
-  rand[["plotRatio"]] <- rand$y / rand$x
+  rand[["plotRatio"]] <- round(rand$y / rand$x, digits=2)
   randLow <- rand[which(rand$plotRatio <= 2), ] 
   randLow <- randLow[which(randLow$plotRatio >= 0.5), ]
   randHigh <- rbind(rand[which(rand$plotRatio >= 2), ], rand[which(rand$plotRatio <= 0.5), ])
@@ -2056,7 +2091,7 @@ Plot_replicates_pair <- function( xx, yy, data, cCtrl = "neg",
   file <- filename
   
   
-  p <- Plot_scatter( data, series, col = colours, tooltip = tt, turboT = 200000,
+  p <- Plot_scatter( data, series, col = colours, tooltip = tt, turboT = 0,
     xTrans = type, yTrans = type, xLab = xx, yLab = yy, title = tit, subtitle = sub, 
     export = ex , filename = file, sym = TRUE)
 
@@ -2244,6 +2279,9 @@ Plot_performance <- function(data = NULL, thresh = NULL, bApp = TRUE,  method = 
       
     }
     
+    # remove tooltips for testing
+    #tt <- FALSE
+    
     if( bApp == TRUE ){
       tit <- ""
       sub <- ""
@@ -2256,8 +2294,8 @@ Plot_performance <- function(data = NULL, thresh = NULL, bApp = TRUE,  method = 
     file <- filename
     
     p <- Plot_scatter( list(rand, hlight), c("not significant", "significant"), zoom = "x", 
-                       col = c("rgba( 0 , 0 , 0 , 0.3)", "#D50F25"), tooltip = tt, turboT = 0,
-                       xLab = xl, yLab = yl, title = tit, subtitle = sub, export = ex , filename = file)
+                       col = c("rgba( 0 , 0 , 0 , 0.3)", "#D50F25"), tooltip = tt, turboT = 12000,
+                       xLab = xl, yLab = yl, title = tit, subtitle = sub, export = ex , filename = file, crosshair = c(TRUE,TRUE))
     
   }
   
@@ -2272,6 +2310,7 @@ Plot_performance <- function(data = NULL, thresh = NULL, bApp = TRUE,  method = 
         highcharter::hc_subtitle(text = method) %>%
         highcharter::hc_yAxis(title = list(text = "Number of Genes") ) %>%
         highcharter::hc_xAxis(title = list(text = "Z-Ratio") ) %>%
+        highcharter::hc_tooltip(enabled=FALSE) %>%
         highcharter::hc_exporting(enabled = TRUE,
                      printMaxWidth = 2000,
                      scale=8,
@@ -2283,6 +2322,7 @@ Plot_performance <- function(data = NULL, thresh = NULL, bApp = TRUE,  method = 
         highcharter::hc_subtitle(text = method) %>%
         highcharter::hc_yAxis(title = list(text = "Number of Genes") ) %>%
         highcharter::hc_xAxis(title = list(text = "log2 Bayes Factor") ) %>%
+        highcharter::hc_tooltip(enabled=FALSE) %>%
         highcharter::hc_exporting(enabled = TRUE,
                      printMaxWidth = 2000,
                      scale=8,
@@ -2294,6 +2334,7 @@ Plot_performance <- function(data = NULL, thresh = NULL, bApp = TRUE,  method = 
         highcharter::hc_subtitle(text = method) %>%
         highcharter::hc_yAxis(title = list(text = "Number of Genes") ) %>%
         highcharter::hc_xAxis(title = list(text = "P-Value") ) %>%
+        highcharter::hc_tooltip(enabled=FALSE) %>%
         highcharter::hc_exporting(enabled = TRUE,
                      printMaxWidth = 2000,
                      scale=8,
@@ -3454,7 +3495,7 @@ Plot_pca <- function(pca = NULL, title = NULL, subtitle = NULL, export = TRUE, l
   
   
   #hc <- highcharter::highchart() %>%
-   hc <- highcharter::hchart(pca) %>%
+    hc <- highcharter::hchart(pca) %>%
     highcharter::hc_chart(zoomType="xy") %>%
     highcharter::hc_title(text = title) %>%
     highcharter::hc_subtitle(text = subtitle) %>%
@@ -3467,6 +3508,7 @@ Plot_pca <- function(pca = NULL, title = NULL, subtitle = NULL, export = TRUE, l
                               scale=scale,
                               filename = filename,
                               formAttributes = list(target = "_blank")) %>%
+    highcharter::hc_size(width = NULL, height = 800) %>%
     highcharter::hc_add_theme(hc_theme_google2())
   shiny::incProgress(amount = 0.4, message = "Preparing Plot")
   return(hc)
@@ -3559,7 +3601,7 @@ gene.plotdistribution <- function(data = NULL, gene = NULL , type = "log2fc", sg
 ## Highcharts plot COSMIC data##
 ################################
 
-cosmicdb <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", host="www.ensembl.org", new.identifier = annos()$IDnew, COSMICdb = COSMIC){
+cosmicdb <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", host="www.ensembl.org", new.identifier = annos()$IDnew, COSMICdb = COSMIC, proxyurl = NULL, proxyport = NULL){
   
   # new.identifier to check whether genes contains HGNC_SYMBOL information, if this is not the case we need to convert it!
   if(new.identifier != "hgnc_symbol")
@@ -3573,14 +3615,34 @@ cosmicdb <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="hom
     shiny::incProgress(amount = 0.1, detail = "Query biomaRt")
     #print("Start genomecrispr handling")
     # Get data from Biomart
-    handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL, mirror = NULL, verbose = FALSE)
+    
+    handling <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = as.numeric(proxyport)),  
+                                        biomaRt::useEnsembl(database, dataset, host, version = NULL, mirror = NULL, verbose = FALSE)
+      ))
+    
+    #handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL, mirror = NULL, verbose = FALSE)
+    if(class(handling) == "try-error")
+    {
+      stop("biomaRt access failed")
+    }
+    
     # Call biomaRt
     shiny::incProgress(amount = 0.1, detail = "Get Gene Information")
-    gene.info <- biomaRt::getBM(
-      filters = new.identifier,
-      attributes = "hgnc_symbol",
-      values = unique(genes),
-      mart = handling)
+    # gene.info <- biomaRt::getBM(
+    #   filters = new.identifier,
+    #   attributes = "hgnc_symbol",
+    #   values = unique(genes),
+    #   mart = handling)
+    
+   
+    gene.info <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = as.numeric(proxyport)),  
+                                         biomaRt::getBM(
+                                           filters = new.identifier,
+                                           attributes = "hgnc_symbol",
+                                           values = unique(genes),
+                                           mart = handling)
+    ))
+    
     
     genes <- gene.info[1,1] # might be empty if no HGNC-symbol exists
   }
@@ -3725,7 +3787,7 @@ getenrichr <- function(gene.list = NULL, dataset=NULL, database = config$car.bm.
                                                                                                                          "OMIM_Disease",
                                                                                                                          "Cancer_Cell_Line_Encyclopedia",
                                                                                                                          "NCI-60_Cancer_Cell_Lines"
-), fdr.cutoff = 0.05, proxurl = config$car.proxy.url, proxport = config$car.proxy.port)
+), fdr.cutoff = 0.05, proxurl = NULL, proxport = NULL)
 {
   # check gene list
   # Make sure it has HGNC symbols to use
@@ -3921,9 +3983,100 @@ protein_interactions <- function(genes = NULL, graphplot = NULL, mapped = NULL, 
 
 
 
+### Make CDF Plots
+Plot_CDF <- function(data = NULL, filenames = extractedFiles()$gen_names, readtype = "gene", xlab = "", ylab = "", title = "", subtitle="", filename="")
+{
+  
+  # prepare plot output
+  if(readtype == "sgrna")
+  {
+    xlab = "Log2 Normalized sgRNA Read Counts"
+    ylab = "Cumulative Frequency"
+  } else {
+    xlab = "Log2 Normalized Gene Read Counts"
+    ylab = "Cumulative Frequency"
+  }
+  
+  #print(str(data))
+  
+  # in highcharts
+  library(highcharter)
+  
+  # Initialize plots
+  hc <- highcharter::highchart() %>%  
+    highcharter::hc_chart(type = "spine" ,zoomType="xy") %>%
+    highcharter::hc_legend(enabled = TRUE)
+  
+  # add data
+  for(i in 1:length(data))
+  {
+    if(readtype == "sgrna" && i != 1)
+    {
+      hc <- highcharter::hc_add_series(hc, name = filenames[i], data = data[[i]][[1]], type = "spline", visible = FALSE)
+      
+    } else {
+      hc <- highcharter::hc_add_series(hc, name = filenames[i], data = data[[i]][[1]], type = "spline", visible = TRUE)
+    }
+    
+  }
+  
+  
+  # set highchart options
+  hc <- highcharter::hc_title(hc, text = title) %>%
+    highcharter::hc_subtitle(text = subtitle) %>%
+    highcharter::hc_xAxis(title = list(text = xlab), crosshair = TRUE) %>%
+    highcharter::hc_yAxis(title = list(text = ylab), crosshair = TRUE, align = "left", showFirstLabel = FALSE, 
+                          showLastLabel = FALSE, labels = list(useHTML = TRUE), opposite = FALSE) %>%
+    highcharter::hc_tooltip(enabled = FALSE, crosshairs = TRUE,
+                            shared = TRUE, borderWidth = 0) %>%
+    highcharter::hc_exporting(enabled = TRUE,
+                              printMaxWidth = 2000,
+                              scale=8,
+                              filename = filename,
+                              formAttributes = list(target = "_blank")) %>%
+  highcharter::hc_add_theme( hc_theme_google2())
+  
+  return(hc)
+  
+  
+}
+
+
 
 #### About page and Status
 #
+
+# check version
+
+check_version <- function(url = "https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/version.txt", proxyurl = NULL, proxyport = NULL, version = NULL)
+{
+  ## latest version available and version installed
+  
+    # get version info from GitHub
+  if(!is.null(proxyurl) && !is.null(proxyport))
+  {
+     #getURL(url, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
+    #versionfile <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = as.numeric(proxyport)), readr::read_tsv(file = url, col_names = FALSE)) )
+    versionfile <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = as.numeric(proxyport)), httr::GET(url)) )
+  } else {
+    versionfile <- try(httr::GET(url))
+  }
+    
+    if(class(versionfile) != "try-error")
+    {
+      # Compare Version Info
+      versionfile <- as.numeric(httr::content(versionfile))
+      out <- paste("<span class='text'>Installed Version: <strong>", version , "</strong></span></br><span class='text-success'>The latest version is <strong>", versionfile ,"</strong></span>", sep="")
+      # Output Version with notice if new version is available
+    } else {
+      
+      # output installed version
+      out <- paste("<span class='text'>Installed Version: <strong>", version , "</strong></span>", sep="")
+    }
+    
+    return(out)
+  
+}
 
 ## Help Popover
 helpPopup <- function(title, content,
@@ -3945,3 +4098,5 @@ helpPopup <- function(title, content,
     )
   )
 }
+
+

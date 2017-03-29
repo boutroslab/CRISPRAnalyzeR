@@ -81,4 +81,34 @@ if(length(geneList$sgRNA) != 0){
 
 ```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
 ```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
+
+```{r, eval=sgRNABool[counter], child='sgRNAChild.Rmd'}
+```
   

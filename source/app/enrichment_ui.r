@@ -312,22 +312,22 @@ tabItem(tabName = "enrichment", align = "center",
                           )
                           
                           
-                 ),
-                 tabPanel("Protein Interactions",
-                             column(width=6, offset=3,
-                                    helpText("Depending on the selected Threshold, the interaction network can be very large, so please start with the default threshold of 999."),
-                                    sliderInput("stringDBthreshold", "Please set the StringDB interaction threshold:",
-                                                min = 500, max = 999, value = 999
-                                    ),
-                                    shiny::tags$br(),
-                                    helpText("Please note that the plot requires several minutes of computation time."),
-                                    actionButton(inputId = "startstringdb",label = "Calculate protein interactions")
-                             ),
-                             column(width=12,
-                                    shiny::tags$h3("Protein Interactions"),
-                                    highchartOutput("stringDBnetwork")
-                             )
-                 )
+                 )#,
+                 # tabPanel("Protein Interactions",
+                 #             column(width=6, offset=3,
+                 #                    helpText("Depending on the selected Threshold, the interaction network can be very large, so please start with the default threshold of 999."),
+                 #                    sliderInput("stringDBthreshold", "Please set the StringDB interaction threshold:",
+                 #                                min = 500, max = 999, value = 999
+                 #                    ),
+                 #                    shiny::tags$br(),
+                 #                    helpText("Please note that the plot requires several minutes of computation time."),
+                 #                    actionButton(inputId = "startstringdb",label = "Calculate protein interactions")
+                 #             ),
+                 #             column(width=12,
+                 #                    shiny::tags$h3("Protein Interactions"),
+                 #                    highchartOutput("stringDBnetwork")
+                 #             )
+                 # )
                  
               )
         )

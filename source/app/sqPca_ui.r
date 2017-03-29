@@ -45,11 +45,11 @@ tabItem(tabName = "sq_pca", align = "center",
                      )
               ),
           column(width=10, offset=1,
+                 box(width=12, title = "Principal Component Analysis", solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE, status = "primary",
               shiny::tags$br(),
-              shiny::tags$h3("Principal Component Analysis of all samples"),
-              highchartOutput2("pcaplotgene", height = "1000px")
+              highcharter::highchartOutput("pcaplotgene", height = "700px", width = "700px")
                  
-          ),
+          )),
           shiny::tags$br(),
           shiny::tags$br()
         ),

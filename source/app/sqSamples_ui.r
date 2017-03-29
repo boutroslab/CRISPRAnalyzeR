@@ -149,7 +149,7 @@ tabItem(tabName = "sq_samples", align = "center",
       
       fluidRow(column(12, 
         shiny::tags$h3("Overall Pairwise Correlations"),
-        plotOutput("sqReplicates_overview_plot", height = "800px", width = "800px")
+        plotOutput("sqReplicates_overview_plot", height = "800px", width = "800px")  
       ))
       
     ),
@@ -200,7 +200,7 @@ tabItem(tabName = "sq_samples", align = "center",
       
       fluidRow(column(12, 
         h3("Comparison"),
-        highchartOutput2("sqReplicates_dataset_plot", height = "800px", width = "800px")
+        highchartOutput("sqReplicates_dataset_plot", height = "800px", width = "800px")
       ))
     
     )

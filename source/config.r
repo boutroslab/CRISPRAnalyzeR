@@ -1,11 +1,16 @@
 # sourced from 'server.r'
 # save as 'config.r'
 # configuration file
-## Version 0.99
+
 # store variables in config
 config <- list()
 
+# Version
+config[["version"]] <- 1.14
+config[["versionfile"]] <- "https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/version.txt"
 
+# maximum upload size in MB
+config[["max_upload"]] <- 4096
 
 ###########################
 #### working directory ####
@@ -15,7 +20,7 @@ config <- list()
 # other paths are constructed from this directory
 # write path in quotes ("") or getwd() for current directory
 # DEFAULT getwd()
-config[["wd"]] <- getwd()
+config[["wd"]] <- "/srv/shiny-server/CRISPRAnalyzeR"
 
 
 ########################
@@ -39,12 +44,12 @@ config[["userDir_loc"]] <- "WD"
 # external databases such as COSMIC can be included in CRISPRAnalyzeR
 # COSMIC database files need to be downloaded first from https://cancer.sanger.ac.uk/cosmic/download AND IS NOT PROVIDED with CRISPRAnalyzeR
 #  
-# Config path, default ./database
-config[["database_path"]] <- "./database"
+# Config path, default ./database for storing downloaded files
+config[["database_path"]] <- "/srv/shiny-server/CRISPRAnalyzeR/database"
 
 # COSMIC database file, needs to be located in database_path
 # DEFAULT is NULL, as CRISPRAnalyzeR is not provided with COSMIC Database
-config[["COSMIC_database"]] <- NULL   # NULL if not available
+config[["COSMIC_database"]] <- "CosmicMutantExport.tsv"
 
 # EnrichR
 # Enrichr is TRuE by default, but for commercial use a license HAS to be OBTAINED!
@@ -96,7 +101,8 @@ config[["biomart.geneid"]] <- list(
   "hgnc_id",
   "hgnc_symbol",
   "unigene",
-  "uniprot_genename"
+  "uniprot_genename",
+  "mgi_symbol"
 )
 names(config[["biomart.geneid"]]) <- biomart.attributes[biomart.attributes$name %in% config[["biomart.geneid"]],"description"]
 
@@ -189,7 +195,7 @@ config[["scriptpath"]] <- "scripts"
 # from working directory
 # write path in quotes ("")
 # DEFAULT ""
-config[["databasepath"]] <- "/data/DATABASEFILES/"
+config[["databasepath"]] <- "/srv/shiny-server/CRISPRAnalyzeR/database/data/scripts/crispr_databases"
 
 
 ##############################
@@ -210,7 +216,7 @@ config[["Fundir"]] <- "extfunctions"
 # threads bowtie2 should use if fastQ files were supplied
 # enter plain natural number
 # DEFAULT 4
-config[["car.bt2.threads"]] <- 4
+config[["car.bt2.threads"]] <- 2
 
 
 
@@ -224,10 +230,15 @@ config[["car.bt2.threads"]] <- 4
 # DEFAULT ""
 # Please uncomment if proxy is used
 #config[["car.proxy"]] <- ""
-config[["car.proxy.url"]] <- NULL
-config[["car.proxy.port"]] <-  NULL
+config[["car.proxy.url"]] <-  NULL
+config[["car.proxy.port"]] <- NULL
+
+
+
 if(!is.null(config[["car.proxy.url"]]) && !is.null(config[["car.proxy.port"]]))
 {
+  config[["car.proxy.port"]] <- as.numeric(config[["car.proxy.port"]])
+  
   config[["car.proxy"]] <- paste(config[["car.proxy.url"]], config[["car.proxy.port"]], sep=":") # NULL
 } else
 {
@@ -251,14 +262,14 @@ config[["ecrisp"]] <- "http://www.e-crisp.org/E-CRISP/reannotate_crispr_carpools
 # Database files MUST be obtained from https://github.com/boutroslab/Supplemental-Material/tree/master/crispr-reannotation
 # or http://www.dkfz.de/signaling/crispr-downloads/
 
-##########################
+##########################?
 #### BiomaRt Database ####
 ##########################
 
 # biomaRt database
 # for now there is no other database supported
 # value kept for now for compatibility reasons
-config[["car.bm.database"]] <- "ENSEMBL_MART_ENSEMBL"
+config[["car.bm.database"]] <- "ensembl"# "ENSEMBL_MART_ENSEMBL"
 
 ###############
 #### paths ####
@@ -288,13 +299,13 @@ config[["activate.mail"]] <- FALSE
 
 # json secret file for gmail authentification
 # please see https://github.com/jimhester/gmailr for how to obtain the json file and auth key
-config[["gmailjson"]] <- NULL
+config[["gmailjson"]] <- ""
 
 # Email adress used
-config[["email.from"]] <- NULL
+config[["email.from"]] <- ""
 
 # Standard to send email to
-config[["email.to"]] <- NULL
+config[["email.to"]] <- ""
 
 # Standard subject
 config[["emailsubject"]] <- "[CRISPRAnalyzeR]"

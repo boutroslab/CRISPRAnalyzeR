@@ -18,21 +18,6 @@ tabItem(tabName = "data", align = "center",
   ## Welcome message
   fluidRow(style="width:80%",
   
-  #   h2("Data Upload"),
-  #   div(
-  #     
-  #     "In this tab you can upload your sequencing files and your sgRNA library - both are required for the data analysis.",
-  #     "Sequencing files can either be <strong>readcount files (.txt) or zipped fastQ files</strong>.", br(),
-  #     tags$h4("FASTQ Files"),
-  #     "In case you upload fastQ files, we run the program bowtie2 to map the fastQ reads onto
-  #     the provided sgRNA library. More advanced users can adjust bowtie2 parameters in the box on the right.", br(),
-  #     "Since fastQ files can be quite large, we would ask you only upload compressed files",
-  #     "This will make the whole process a little bit faster.", br(),
-  #     "Your sequencer probably already did this. In this case, the files should end with .gz",
-  #     "Otherwise, please compress them using gzip first"
-  #   )
-  # 
-  # ), 
     
     HTML("<div class='section'>
       <div class='container'>
@@ -46,7 +31,7 @@ tabItem(tabName = "data", align = "center",
          <p class='lead'>As a first step, you need to upload your sequencing files and your sgRNA library file
          - both are required for the data analysis.
          <br>Sequencing files can either be
-         <strong>readcount files (
+         <strong>read count files (
          <i>.txt</i> - please check the format) or zipped FASTQ files (
          <i>.fastq.gz</i>)</strong>.&nbsp;</p>
          </div>
@@ -64,19 +49,6 @@ tabItem(tabName = "data", align = "center",
   shiny::tags$hr(width="85%"),
   
   fluidRow(
-    column(width=8, offset=2,
-           column(width=12, class="alert alert-warning", style="margin-top:40px;",
-                  shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),
-                  shiny::tags$span(
-                    shiny::tags$h4("Looking for sample data?"),
-                    shiny::tags$br(),
-                    shiny::tags$p("Just click on the the help above this box and you will find different sample data sets.")
-                  )
-           )
-  )
-  ),
-
-  fluidRow(
            column(10,offset=1,
                   # Now we add the box
                   ## sgRNA library upload Box  
@@ -84,6 +56,30 @@ tabItem(tabName = "data", align = "center",
                        width = 12,
                        solidHeader = TRUE,
                        status = "primary",
+                      
+                      # Sample Data
+                      column(width=8, offset=2, style="margin-top:20px;margin-bottom:20px;",
+                             column(width=12,
+                                    shiny::tags$h3(class="text-success", "New to CRISPRAnalyzeR? Try our sample data:"),
+                                    shiny::tags$br()
+                                    ),
+                             
+                             column(width=6,
+                                    HTML('<a class="btn btn-block btn-danger btn-md" href="https://cdn.rawgit.com/boutroslab/CRISPRAnalyzeR/f77fdab0/sampledata/caR_Readcount_sample-data.zip"
+                                                                                   target="_blank"><i class="fa fa-download fa-fw"></i>Read Count Package&nbsp;&nbsp;<span class="badge">0.5 MB</span></a>')
+                                    ),
+                             column(width=6,
+                                    HTML('<a class="btn btn-block btn-danger btn-md center" href="http://www.dkfz.de/signaling/crispranalyzer/CRISPRAnalyzeR_NGSFASTQ_sample-data.zip"
+                                                                                   target="_blank"><i class="fa fa-download fa-fw"></i>Raw data Package&nbsp;&nbsp;<span class="badge">1.38 GB</span></a>')
+                                    ),
+                             column(width=12,
+                                    shiny::tags$br(),
+                                    shiny::tags$h4("The sample data can be used with the default settings.")
+                                    )
+                             
+                      ),
+                      
+                      
                       column(width=6,
                              column(width=8, offset=2, class="alert alert-info", style="margin-top:40px;",
                                     shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),
@@ -107,7 +103,7 @@ tabItem(tabName = "data", align = "center",
                                    
                                    helpText("The regular expression depends on how you designed the sgRNA identifiers within your sgRNA library file.",
                                             shiny::tags$br(),
-                                            "For more information please see the help where you can also download pre-made FASTA library files."), br(),
+                                            HTML("<strong>For more information please see the help where you can also download pre-made FASTA library files.</strong>")), shiny::tags$br(),
                                    shiny::tags$p("Some Examples:"),
                                    shiny::tags$table(
                                      shiny::tags$dl(class="dl-horizontal",
@@ -124,7 +120,7 @@ tabItem(tabName = "data", align = "center",
                               shiny::tags$h3("An example from your sgRNA library"),
                               shiny::tags$p(class = "lead" ,"This is how CRISPRAnalyzeR detects the gene from your sgRNA identifier."),
                               helpText("Please select the regular expression from the left dropdown menu or type in your own."),
-                              helpText("You selected the correct regular expression in the case your gene is highlighted in red colour."),
+                              helpText("You selected the correct regular expression in the case your gene is highlighted in blue colour."),
                               uiOutput("libFile_upload_example"),
                               shiny::tags$br(),
                               shiny::tags$hr()
@@ -161,9 +157,6 @@ tabItem(tabName = "data", align = "center",
                     
                     ),
              column(width=12,
-                      #helpText("You can upload already mapped readcount files 
-                      #         (as .txt for example, please check the format) or compressed NGS FASTQ files as they come out of the sequencing machine.
-                      #         CRISPRAnalyzeR will then extract the files and map it to your sgRNA library file."),
                       shiny::tags$br(),
                       
                       fileInput("seqFiles_upload", NULL, multiple = TRUE),
@@ -178,7 +171,7 @@ tabItem(tabName = "data", align = "center",
       # other half
       column(width=6,
              column(width=12,
-                    # Example of Readcount data
+                    # Example of read count data
                     shiny::tags$h4("Example of a read count file (.txt)"),
                     shiny::tags$p("The sgRNA identifier needs to be TAB-separated from the counts."),
                     shiny::tags$pre(class="text-left",
@@ -215,7 +208,7 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
     column(width=10, offset=1,
     
     ## FASTQ extraction Box
-    box( title = "Step 3: Set FASTQ Options (if FASTQ files uploaded)", collapsible = TRUE, collapsed = FALSE,
+    box(id="fastqsettings", title = "Step 3: Set FASTQ Options (if FASTQ files uploaded)", collapsible = TRUE, collapsed = FALSE,
       solidHeader = TRUE,
       width = 12,
       status = "primary",
@@ -240,9 +233,15 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
       checkboxInput("seqFiles_rev", "Is data in FASTQ in reverse complement?", value = FALSE),
       selectInput("seqFiles_bt2Sens", "Bowtie2 sensitivity", choices = list("very-sensitive-local", "local", "very-sensitive")),
       selectInput("seqFiles_bt2quali", "Bowtie2 quality", choices = list("perfect", "high", "seed")),
-      helpText("If you have a really low overall readcount, you can try to go down with these parameters
+      helpText("If you have a really low overall read count, you can try to go down with these parameters
                and accept mapping mismatches.")
-    )
+    ),
+    column(width=6,
+           shiny::tags$br(),
+           shiny::tags$h4("You can modify / add your own regular expression"),
+           shiny::tags$br(),
+           shiny::tags$img(src="./images/CA_UserRegex.gif", class="img-responsive", width="80%")
+           )
     )
     # other half
     )

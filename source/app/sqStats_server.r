@@ -151,13 +151,13 @@ output$sqCoverage_distro_plot <- renderHighchart(
   }
 )
 
-output$sqCoverage_distroBox_plot <- renderHighchart(
-  if( status$results == FALSE ){
-    Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
-  } else {
-    Plot_coverage_readDistroBox( results()$readDistributionBox, bApp = TRUE, filename = "QualityControl_ReadCount_DistributionBox" )
-  }
-)
+# output$sqCoverage_distroBox_plot <- renderHighchart(
+#   if( status$results == FALSE ){
+#     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
+#   } else {
+#     Plot_coverage_readDistroBox( results()$readDistributionBox, bApp = TRUE, filename = "QualityControl_ReadCount_DistributionBox" )
+#   }
+# )
 
 output$sqCoverage_distroBoxNorm_plot <- renderHighchart(
   if( status$results == FALSE ){
@@ -168,10 +168,22 @@ output$sqCoverage_distroBoxNorm_plot <- renderHighchart(
 )
 
 
+# CDF plots
+output$sqCoverage_CDF_gene <- renderHighchart(
+  if( status$results == FALSE ){
+    Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
+  } else {
+    Plot_CDF(data = results()$CDF_list[["gene"]], readtype = "gene", filenames = extractedFiles()$gen_names, title = "Cumulative Frequency", subtitle = "based on Gene Read Counts", filename="QualityControl_ReadCount_CDF_Gene")
+  }
+)
 
-
-
-
+output$sqCoverage_CDF_sgrna <- renderHighchart(
+  if( status$results == FALSE ){
+    Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
+  } else {
+    Plot_CDF(data = results()$CDF_list[["sgRNA"]], readtype = "sgrna", filenames= extractedFiles()$gen_names, title = "Cumulative Frequency", subtitle = "based on sgRNA Read Counts", filename="QualityControl_ReadCount_CDF_sgRNA")
+  }
+)
 
 ####################
 #### Read Depth ####

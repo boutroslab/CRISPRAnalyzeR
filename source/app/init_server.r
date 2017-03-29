@@ -1,3 +1,4 @@
+
 # sourced by 'server.r'
 # save as 'init_server.r'
 # define objects needed throughout this session
@@ -22,6 +23,10 @@ if( config$userDir_loc == "TMP" ){
   userDir <- file.path(config$wd, userID)
 }
 dir.create(userDir)
+
+# chmod to provide a workaround for issues with python
+command = "chmod"
+args = c("-R", "777", userDir)
 
 session$onSessionEnded(function() {
   unlink(userDir, recursive = TRUE)
@@ -60,7 +65,61 @@ local({
   }
 })
 
+# add other logs
 
+logging_files <- list("analysis" = "analysis.log",
+                  "fastq_extraction" = "fastq_extraction.log",
+                  "gene_annotation" = "gene_annotation.log",
+                  "get_info" = "get_info.log",
+                  "heatmap" = "heatmap.log",
+                  "hit_candidate" = "hit_candidate.log",
+                  "report" = "report.log"
+                  )
+
+
+for(i in 1:length(logging_files))
+{
+  file_to_write <- file.path(config$logDir, logging_files[[i]])
+  local({
+    log <- c(paste(userID, ": ####################### NEW USER at", Sys.time()),
+             paste(userID, ": ####################### with userDir", userDir))
+    if( !file.exists(file_to_write) ){
+      write(log, file_to_write)
+    } else {
+      write(log, file_to_write, append = TRUE)
+    }
+  })
+  
+}
+
+
+
+
+
+
+## check external config settings from docker image
+
+# make enrichr boolean if required
+if(config$EnrichR == "FALSE")
+{
+  config$EnrichR = FALSE
+} else if(config$EnrichR == "TRUE")
+{
+  config$EnrichR = TRUE
+} else 
+{
+  config$EnrichR = TRUE
+}
+
+# max upload
+config$max_upload <- as.numeric(config$max_upload)
+# bt2 threads
+config$bowtie_threads <- as.numeric(config$bowtie_threads)
+# proxyport
+if(!is.null(config$proxy_port) && config$proxyport != "")
+{
+  config$proxyport <- as.numeric(config$proxy_port)
+}
 
 
 
@@ -302,6 +361,40 @@ Info_read_anno <- function() {
               "info" = xlist[[2]][-1]))
 }
 
+### Set proxy settings for libCurl and RCurl
+## httr is done on the fly
+
+if(!is.null(config$car.proxy.url) && !is.null(config$car.proxy.port))
+{
+  options(RCurlOptions = list(
+    proxy=paste(config$car.proxy.url, config$car.proxy.port, sep=":"),
+    http.version = 1)
+  )
+   opts <- list(
+     "CURLOPT_PROXY"         = config$car.proxy.url, 
+     "CURLOPT_PROXYPORT"     = config$car.proxy.port
+   )
+  # RCurl::curlSetOpt(opts)
+  #httr::set_config(httr::use_proxy(url = config$car.proxy.url, port = as.numeric(config$car.proxy.port)))
+  Sys.setenv(http_proxy=paste(config$car.proxy.url, config$car.proxy.port, sep=":"))
+  httr::set_config(httr::config(ssl_verifypeer = 0L))
+  
+} else {
+  
+  options(RCurlOptions = list(
+          proxy="",
+          http.version = 1)
+          )
+  
+   opts <- list(
+         "CURLOPT_PROXY"         = NULL, 
+         "CURLOPT_PROXYPORT"     = NULL
+      )
+  # RCurl::curlSetOpt(opts)
+  #httr::set_config(httr::use_proxy(url = NULL, port = NULL))
+  Sys.unsetenv("http_proxy")
+  httr::set_config(httr::config(ssl_verifypeer = 0L))
+}
 
 
 
@@ -320,4 +413,162 @@ geneList <- reactiveValues(
   anno = list()
 )
 
+###############################
+### Status and Status Updates #
+###############################
+
+## BiomaRt online?
+#output$biomart_online <- shiny::renderUI({
+#  handling <- biomaRt::useEnsembl(biomart = config$car.bm.database, host = "www.ensembl.org")
+#})
+
+## sgRNA Re-Evaluation online?
+# check for ecrisp/databases
+
+output$reevaluation_active <- shinydashboard::renderValueBox({
+  if(dir.exists(config$databasepath))
+  {
+    out <- HTML("<span class='text'><strong>Local sgRNA re-evaluation database found</strong></span>")
+    col <- "green"
+  } else {
+    out <- HTML("<span class='text'><strong>Local sgRNA re-evaluation database was not found</strong></span>")
+    col <- "red"
+  }
+  
+  shinydashboard::infoBox(width = 12,
+           title = "Local sgRNA Re-Evaluation",
+           value = out,
+           icon = icon("open-file", lib = "glyphicon"),
+           color = col,
+           fill=TRUE
+  )
+
+})
+
+## COSMIC Database online?
+output$cosmic_active <- shinydashboard::renderValueBox({
+  
+  if(is.null(config$COSMIC_database))
+  {
+    out <- HTML("<span class='text'><strong>Inactive</strong></span>")
+    col<- "red"
+  } else {
+    if(file.access(file.path(config$database_path,config$COSMIC_database), mode = 4) == 0)
+    {
+      out <- HTML("<span class='text'><strong>Active</strong></span>")
+      col = "green"
+    } else {
+      out <- HTML("<span class='text'><strong>Inactive</strong></span>")
+      col = "red"
+    }
+  }
+  
+  
+  shinydashboard::infoBox(width = 12,
+                          title = "COSMIC Mutation Database",
+                          value = out,
+                          icon = icon("hdd", lib = "glyphicon"),
+                          color = col,
+                          fill=TRUE
+  )
+
+})
+
+## Enrichr activated?
+
+output$enrichr_active <- shinydashboard::renderValueBox({
+  
+  
+  if(config$EnrichR == TRUE)
+  {
+    if(!httr::with_config(httr::use_proxy(url = config$car.proxy.url, port = config$car.proxy.port),httr::http_error(config$EnrichR_URL)))
+    {
+      out <- HTML("<span class='text'><strong>Active</strong></span>")
+      col = "green"
+    } else {
+      out <- HTML("<span class='text'><strong>Website could not be accessed.</strong></span>")
+      col = "yellow"
+    }
+    
+  } else {
+    out <- HTML("<span class='text'><strong>Inactive</strong></span>")
+    col = "red"
+  }
+
+  shinydashboard::infoBox(width = 12,
+                          title = "Enrichr Web Service",
+                          value = out,
+                          icon = icon("education", lib = "glyphicon"),
+                          color = col,
+                          fill=TRUE
+  )
+                          
+})
+
+## Version
+output$version <- shinydashboard::renderValueBox({
+
+  out <- try(check_version(url = config$versionfile, proxyurl = config$car.proxy.url, proxyport = config$car.proxy.port, version = config$version))
+  col = "green"
+  if(class(out) == "try-error")
+   {
+     out <- paste("<span class='text'>CRISPRAnalyzeR Version ", config$version , "</span>", sep="")
+  } 
+  
+  shinydashboard::infoBox(width = 12,
+                          title = "Installed Version of CRISPRAnalyzeR",
+                          value = HTML(out),
+                          icon = icon("info-sign", lib = "glyphicon"),
+                          color = col,
+                          fill=TRUE
+  )
+})
+
+## Internet Access
+output$internet_access <- shinydashboard::renderValueBox({
+  
+  out <- try(check_version(url = config$versionfile, proxyurl = config$car.proxy.url, proxyport = config$car.proxy.port, version = config$version))
+  if(class(out) == "try-error")
+  {
+    out <- HTML("<span class=' text'><strong>No Internet Access - Please check the proxy settings</strong></span>")
+    col = "red"
+  } else {
+    out <- HTML("<span class=' text'><strong>OK</strong></span>")
+    col = "green"
+  }
+  
+  shinydashboard::infoBox(width = 12,
+                          title = "Internet Access",
+                          value = out,
+                          icon = icon("sort", lib = "glyphicon"),
+                          color = col,
+                          fill=TRUE
+  )
+  
+  
+})
+
+## Proxy active?
+output$proxy <- shinydashboard::renderValueBox({
+  
+  
+  if(is.null(config$car.proxy) || is.null(config$car.proxy.url))
+  {
+    out <- HTML("<span class=' text'><strong>No Proxy Server is used</strong></span>")
+    col = "green"
+  } else {
+    out <- HTML("<span class=' text'><strong>Proxy Server is used</strong></span>")
+    col = "green"
+  }
+  
+  shinydashboard::infoBox(width = 12,
+                          title = "Proxy Server",
+                          value = out,
+                          icon = icon("sort", lib = "glyphicon"),
+                          color = col,
+                          fill=TRUE
+  )
+  
+  
+})
 

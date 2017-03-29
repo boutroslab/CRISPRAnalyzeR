@@ -28,7 +28,7 @@ tabItem(tabName = "impressum", align = "center",
 fluidRow(style="margin-top:50px;",
   column(width=10,offset=1,
          column(width=6,
-                shiny::tags$p(class="lead", "This website is a non-commercial project, which is funded and hosted by the German Cancer Research Center (dkfz).", HTML("</br>"), 
+                shiny::tags$p(class="lead", "This application is a non-commercial project, which is funded and hosted by the German Cancer Research Center (dkfz).", HTML("</br>"), 
                 "It is developed by Jan Winter and Marc Schwering.")
                  ),
          column(width=6,
@@ -87,7 +87,7 @@ fluidRow(style="margin-top:50px;",
 column(width=10, offset=1,
        shiny::tags$hr(),
   shiny::tags$p(class="lead", "
-                  This website does not store personal information.
+                  CRISPRAnalyzeR does not store personal information.
                   All uploaded data is deleted immediately once the browser is closed or the connection is lost for any reason.")
 ),
 column(width=10,offset=1,
@@ -119,7 +119,7 @@ column(width=10,offset=1,
        shiny::tags$hr(),
        shiny::tags$h2(class="text-success text-left", "What data is stored?"),
        shiny::tags$p(class="lead text-left",
-                     "This website does not store personal information.
+                     "CRISPRAnalyzeR does not store personal information.
                      All uploaded data is deleted immediately once the browser is closed or the connection is lost for any reason."),
        shiny::tags$p(class="text-left",
                      "CRISPRAnalyzeR only stores uploaded data for the time you visit the website.", shiny::tags$br(),
@@ -140,7 +140,7 @@ column(width=10,offset=1,
        shiny::tags$h2(class="text-success text-left",
                       "CRISPRAnalyzeR uses the following technologies"),
        shiny::tags$h3(class="text-left", "Tools"),
-       shiny::tags$table(class="table-striped table text-left", style="width:60%",
+       shiny::tags$table(class="table", style="width:60%",
                          shiny::tags$thead(
                            shiny::tags$tr(
                              shiny::tags$th(""),

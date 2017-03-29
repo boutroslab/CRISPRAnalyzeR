@@ -44,12 +44,18 @@ enrichGeneList <- function(gene.list, databases=db.list, fdr.cutoff=NULL, proxyu
   ######Step 1: Post gene list to EnrichR
   shiny::incProgress(amount = 0.1, detail = "Query EnrichR")
   req.body <- list(list=paste(gene.list, collapse="\n"))
+  
   if(!is.null(proxyurl) && !is.null(proxyport))
   {
-    post.req <- httr::POST("http://amp.pharm.mssm.edu/Enrichr/enrich", encode="multipart", body=I(req.body), config = httr::use_proxy(url = proxyurl, port = as.numeric(proxyport)), httr::add_headers("Expect"=""))
-  } else
+    post.req <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport), httr::POST("http://amp.pharm.mssm.edu/Enrichr/enrich", encode="multipart", body=I(req.body), httr::add_headers("Expect"=""))))
+  } else {
+    post.req <- try(httr::POST("http://amp.pharm.mssm.edu/Enrichr/enrich", encode="multipart", body=I(req.body), httr::add_headers("Expect"="")))
+  }
+  
+  
+  if(class(post.req) == "try-error")
   {
-    post.req <- httr::POST("http://amp.pharm.mssm.edu/Enrichr/enrich", encode="multipart", body=I(req.body))
+    stop("Retrieving results from EnrichR failed")
   }
   
   shiny::incProgress(amount = 0.2)
@@ -64,12 +70,17 @@ enrichGeneList <- function(gene.list, databases=db.list, fdr.cutoff=NULL, proxyu
     
     if(!is.null(proxyurl) && !is.null(proxyport))
     {
-      get.req <- httr::GET(paste("http://amp.pharm.mssm.edu/Enrichr/enrich?backgroundType=", database, sep=""), config = httr::use_proxy(url = proxyurl, port = as.numeric(proxyport)), httr::add_headers("Expect"=""))
+      get.req <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport), httr::GET(paste("http://amp.pharm.mssm.edu/Enrichr/enrich?backgroundType=", database, sep=""), httr::add_headers("Expect"=""))))
     } else {
-      get.req <- httr::GET(paste("http://amp.pharm.mssm.edu/Enrichr/enrich?backgroundType=", database, sep=""))
+      get.req <- try(httr::with_config(verbose(),httr::GET(paste("http://amp.pharm.mssm.edu/Enrichr/enrich?backgroundType=", database, sep=""), httr::add_headers("Expect"=""))))
     }
     
     
+    
+    if(class(get.req) == "try-error")
+    {
+      stop("Retrieving results from EnrichR failed")
+    }
     if (!grepl("success", httr::http_status(get.req)$category, ignore.case=T)) stop("Retrieving results from EnrichR failed")
     
     response.content <- mungeResponseContent(httr::content(get.req)[[database]])

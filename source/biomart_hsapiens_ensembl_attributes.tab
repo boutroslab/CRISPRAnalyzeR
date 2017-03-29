@@ -198,3 +198,4 @@ upstream_flank	upstream_flank
 downstream_flank	downstream_flank
 cdna_coding_start	CDS start (within cDNA)
 cdna_coding_end	CDS end (within cDNA)
+mgi_symbol	MGI symbol Mouse

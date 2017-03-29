@@ -42,10 +42,11 @@ tabItem(tabName = "hc_candidates", align = "center",
       # Wilcox
       tabPanel(
         "Wilcox",
-        shiny::tags$p(class="lead", "Wilcox analysis is based on the Wilcoxon Rank-Sum test."),
+        shiny::tags$p(style="width:60%", "Wilcox analysis is based on the Wilcoxon Rank-Sum test."),
        # shiny::tags$p(style="width:60%","First all sgRNA read counts are normalized with DESeq2 across the samples.", br(),
       #                "Then, fold changes of each population of sgRNAs for one gene is compared to either non-targeting controsl (if specified) or a number of randomly pciked sgRNAs using a two-sided Mann-Whitney test with FDR correction according to Benjamini Hochberg."),
-        shiny::tags$br(),
+      shiny::tags$hr(width="50%"),  
+      shiny::tags$br(),
         
         fluidRow(
           column(width=10,offset=1, 
@@ -62,17 +63,17 @@ tabItem(tabName = "hc_candidates", align = "center",
                  tabBox(width=12,
                         tabPanel(title = "Ranked by P-Value",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_wilcox_plot")
+                                                 highchartOutput("hcPerformance_wilcox_plot")
                                  )
                                  
                         ),
                         tabPanel(title = "P-Value Distribution",
                                  shiny::tags$div(width="60%",
-                                                 highchartOutput2("hcPerformance_wilcox_plot2") )
+                                                 highchartOutput("hcPerformance_wilcox_plot2") )
                         ),
                         tabPanel(title = "Foldchange vs. adjusted P-Value",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcCandidates_wilcox_plot", height = "500px") )
+                                                 highchartOutput("hcCandidates_wilcox_plot", height = "500px") )
                         )
                         
                  )
@@ -83,14 +84,15 @@ tabItem(tabName = "hc_candidates", align = "center",
       ),
       
       
-      # DESeQ2
+      # DESeq2
       tabPanel(
         "DESeq2",
-        shiny::tags$p(class="lead","DESEq2 analysis is performed using the DESeq2 Differentially Expressed Genes workflow on gene-level read counts."),
+        shiny::tags$p(style="width:60%","DESeq2 analysis is performed using the DESeq2 Differentially Expressed Genes workflow on gene-level read counts."),
        # shiny::tags$p(style="width:60%","Read counts for all sgRNAs are summed up to obtain read counts per gene.", 
       #                "Then, DESeq2 analysis is performed, which includes normalization, estimation of size-factors and variance stabilization using a parametric fit.", br(),
       #                "A Wald test for difference in log2-foldchanges between both conditions is done."),
-        shiny::tags$br(),
+      shiny::tags$hr(width="50%"),  
+      shiny::tags$br(),
         
         fluidRow(
           column(width=10,offset=1, 
@@ -107,19 +109,19 @@ tabItem(tabName = "hc_candidates", align = "center",
                  tabBox(width=12,
                         tabPanel(title = "Ranked by P-Value",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_deseq_plot")
+                                                 highchartOutput("hcPerformance_deseq_plot")
                                  )
                                  
                         ),
                         tabPanel(title = "P-Value Distribution",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_deseq_plot2")
+                                                 highchartOutput("hcPerformance_deseq_plot2")
                                                  
                                  )
                         ),
                         tabPanel(title = "Foldchange vs. adjusted P-Value",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcCandidates_deseq_plot", height = "500px") )
+                                                 highchartOutput("hcCandidates_deseq_plot", height = "500px") )
                         )
                         
                  )
@@ -132,8 +134,13 @@ tabItem(tabName = "hc_candidates", align = "center",
       # MAGeCK
       tabPanel(
         "MAGeCK",
-        shiny::tags$p(class="lead","MAGeCK analysis is performed using the MAGeCK algorithm."),
-        #shiny::tags$p(style="width:60%","This method uses a rank-based model to test for a change in abundance of sgRNAs after DESeq2 data normalization."),
+        shiny::tags$p(style="width:60%",
+                      "MAGeCK analysis is performed using the MAGeCK algorithm as described in "),
+        shiny::tags$p(style="width:60%",
+                      shiny::tags$b("Li,W. et al. (2014) MAGeCK enables robust identification of essential genes from genome-scale CRISPR/Cas9 knockout screens."), 
+                      shiny::tags$i("Genome Biology, 15, 554.")
+                      ),
+        shiny::tags$hr(width="50%"),
         shiny::tags$br(),
         
         fluidRow(
@@ -151,29 +158,29 @@ tabItem(tabName = "hc_candidates", align = "center",
                         tabPanel(title = "Ranked by P-Value",
                                  shiny::tags$div(width="100%",
                                                  shiny::tags$h3("Enriched"),
-                                                 highchartOutput2("hcPerformance_mageck_plotEnr"),
+                                                 highchartOutput("hcPerformance_mageck_plotEnr"),
                                                  shiny::tags$hr(),
                                                  shiny::tags$h3("Depleted"),
-                                                 highchartOutput2("hcPerformance_mageck_plotDep")
+                                                 highchartOutput("hcPerformance_mageck_plotDep")
                                  )
                                  
                         ),
                         tabPanel(title = "P-Value Distribution",
                                  shiny::tags$div(width="100%",
                                                  shiny::tags$h3("Enriched"),
-                                                 highchartOutput2("hcPerformance_mageck_plotEnr2"),
+                                                 highchartOutput("hcPerformance_mageck_plotEnr2"),
                                                  shiny::tags$hr(),
                                                  shiny::tags$h3("Depleted"),
-                                                 highchartOutput2("hcPerformance_mageck_plotDep22")
+                                                 highchartOutput("hcPerformance_mageck_plotDep22")
                                  )
                         ),
                         tabPanel(title = "Foldchange vs. adjusted P-Value",
                                  shiny::tags$div(width="100%",
                                                  shiny::tags$h3("Enriched"),
-                                                 highchartOutput2("hcCandidates_mageck_plotEnr", height = "500px"),
+                                                 highchartOutput("hcCandidates_mageck_plotEnr", height = "500px"),
                                                  shiny::tags$hr(),
                                                  shiny::tags$h3("Depleted"),
-                                                 highchartOutput2("hcCandidates_mageck_plotDep", height = "500px")
+                                                 highchartOutput("hcCandidates_mageck_plotDep", height = "500px")
                                                  )
                         )
                         
@@ -187,11 +194,12 @@ tabItem(tabName = "hc_candidates", align = "center",
       # sgRSEA
       tabPanel(
         "sgRSEA",
-        shiny::tags$p(class="lead","This method uses the sgRSEA R package to call enriched or depleted genes in your treatment group."),
-        #shiny::tags$p(style="width:60%","sgRSEA is based on a single-guide RNA Set Enrichment Analysis. First, sgRNAs are ranked by a signal-to-noise ratio.",
-        #              "Then, the distribution of sgRNA ranks of a sgRNA set is compared with the overall distribution using the enrichment score.", br(),
-        #              "This score is based on a one-sided Kolmogorov Smirnov statistic and reflects the degree to which a sgRNA set is overrepresented at the top/the bottom of the ranked list.", br(),
-        #              "sgRSEA has its strength in detecting depleted genes, e.g. in a dropout or essential genes CRISPR assay."),
+        shiny::tags$p(style="width:60%",
+                      "This method uses the sgRSEA R package as described in the workflow at"),
+        shiny::tags$p(style="width:60%",
+                      shiny::tags$b("https://cran.r-project.org/web/packages/sgRSEA/index.html")
+        ),
+        shiny::tags$hr(width="50%"),
         shiny::tags$br(),
         
         fluidRow(
@@ -212,29 +220,29 @@ tabItem(tabName = "hc_candidates", align = "center",
                         tabPanel(title = "Ranked by P-Value",
                                  shiny::tags$div(width="100%",
                                                  shiny::tags$h3("Ranked for Enrichment"),
-                                                 highchartOutput2("hcPerformance_sgrsea_plotEnr"),
+                                                 highchartOutput("hcPerformance_sgrsea_plotEnr"),
                                                  shiny::tags$hr(),
                                                  shiny::tags$h3("Ranked for Depletion"),
-                                                 highchartOutput2("hcPerformance_sgrsea_plotDep")
+                                                 highchartOutput("hcPerformance_sgrsea_plotDep")
                                  )
                                  
                         ),
                         tabPanel(title = "P-Value Distribution",
                                  shiny::tags$div(width="60%",
                                                  shiny::tags$h3("Enrichment"),
-                                                 highchartOutput2("hcPerformance_sgrsea_plotEnr2"),
+                                                 highchartOutput("hcPerformance_sgrsea_plotEnr2"),
                                                  shiny::tags$hr(),
                                                  shiny::tags$h3("Depletion"),
-                                                 highchartOutput2("hcPerformance_sgrsea_plotDep2")
+                                                 highchartOutput("hcPerformance_sgrsea_plotDep2")
                                                  )
                         ),
                         tabPanel(title = "Foldchange vs. adjusted P-Value",
                                  shiny::tags$div(width="100%",
                                                  shiny::tags$h3("Enriched"),
-                                                 highchartOutput2("hcCandidates_sgrsea_plotEnr", height = "500px"),
+                                                 highchartOutput("hcCandidates_sgrsea_plotEnr", height = "500px"),
                                                  shiny::tags$hr(),
                                                  shiny::tags$h3("Depleted"),
-                                                 highchartOutput2("hcCandidates_sgrsea_plotDep", height = "500px")
+                                                 highchartOutput("hcCandidates_sgrsea_plotDep", height = "500px")
                                                  )
                         )
                         
@@ -252,10 +260,13 @@ tabItem(tabName = "hc_candidates", align = "center",
       # EdgeR
       tabPanel(
         "edgeR",
-        shiny::tags$p(class="lead","The edgeR implementation uses the edgeR Bioconductor package using a previously published workflow."),
-       #shiny::tags$p(style="width:60%","Readcount data is modelled using an overdispersed Poisson model.",
-        #              "Gene dispersions are estimated by conditional maximum likelihood and dispersions are shrunk using an empirical Bayes procedure.", br(),
-         #             "Then, differential expression is assessed using an adapted Fisher's exact test."),
+        shiny::tags$p(style="width:60%",
+                      "The edgeR implementation uses the edgeR Bioconductor package using a previously published workflow in "),
+        shiny::tags$p(style="width:60%",
+                      shiny::tags$b("Dai,Z. et al. (2014) edgeR: a versatile tool for the analysis of shRNA-seq and CRISPR-Cas9 genetic screens."), 
+                      shiny::tags$i("F1000Research, 3, 95.")
+        ),
+        shiny::tags$hr(width="50%"),
         shiny::tags$br(),
         
         fluidRow(
@@ -272,19 +283,19 @@ tabItem(tabName = "hc_candidates", align = "center",
                  tabBox(width=12,
                         tabPanel(title = "Ranked by P-Value",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_edger_plot")
+                                                 highchartOutput("hcPerformance_edger_plot")
                                  )
                                  
                         ),
                         tabPanel(title = "P-Value Distribution",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_edger_plot2")
+                                                 highchartOutput("hcPerformance_edger_plot2")
                                                  
                                  )
                         ),
                         tabPanel(title = "Foldchange vs. adjusted P-Value",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcCandidates_edger_plot", height = "500px")
+                                                 highchartOutput("hcCandidates_edger_plot", height = "500px")
                                                  )
                         )
                         
@@ -308,7 +319,7 @@ tabItem(tabName = "hc_candidates", align = "center",
                       ),
         shiny::tags$hr(width="50%"),
         #shiny::tags$p(class="lead","The Z-Ratio is a variance normalized way to show a foldchange."),
-        shiny::tags$p(class="lead","According to the publication, a Z-Ratio higher than 1.96 and lower than -1.96 indicates a possible candidate."),
+        shiny::tags$p(class="text","According to the publication, a Z-Ratio higher than 1.96 and lower than -1.96 indicates a possible candidate."),
         
         shiny::tags$br(),
         
@@ -324,19 +335,19 @@ tabItem(tabName = "hc_candidates", align = "center",
                  tabBox(width=12,
                         tabPanel(title = "Ranked by Z-Ratio",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_zratio_plot")
+                                                 highchartOutput("hcPerformance_zratio_plot")
                                  )
                                  
                         ),
                         tabPanel(title = "Z-Ratio Distribution",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_zratio_plot2")
+                                                 highchartOutput("hcPerformance_zratio_plot2")
                                                  
                                  )
                         ),
-                        tabPanel(title = "Foldchange vs. Z-Ratio",
+                        tabPanel(title = "Treated Z-Score vs. Z-Ratio",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcCandidates_zratio_plot", height = "500px")
+                                                 highchartOutput("hcCandidates_zratio_plot", height = "500px")
                                  )
                         )
                         
@@ -373,13 +384,13 @@ tabItem(tabName = "hc_candidates", align = "center",
                  tabBox(width=12,
                         tabPanel(title = "Ranked by log2 Bayes Factor",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_bagel_plot")
+                                                 highchartOutput("hcPerformance_bagel_plot")
                                  )
                                  
                         ),
                         tabPanel(title = "Log2 Bayes Factor Distribution",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_bagel_plot2")
+                                                 highchartOutput("hcPerformance_bagel_plot2")
                                                  
                                  )
                         )
@@ -417,13 +428,13 @@ tabItem(tabName = "hc_candidates", align = "center",
                  tabBox(width=12,
                         tabPanel(title = "Ranked by FDR",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_screenbeam_plot")
+                                                 highchartOutput("hcPerformance_screenbeam_plot")
                                  )
 
                         ),
                         tabPanel(title = "P-Value Distribution",
                                  shiny::tags$div(width="100%",
-                                                 highchartOutput2("hcPerformance_screenbeam_plot2")
+                                                 highchartOutput("hcPerformance_screenbeam_plot2")
 
                                  )
                         )

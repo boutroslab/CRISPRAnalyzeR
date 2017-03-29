@@ -44,7 +44,7 @@ output$hcOverview_data <- DT::renderDataTable({
            rsea = results()$rsea$info$pval, edger = results()$edger$info$pval)
     radio <- input$hcOverview_radio
     df <- results()$hitOverview
-    Table_hcOverview( df, radio, checks, th )
+    Table_hcOverview( df, radio, checks, th, filename = "Hit_Calling_Overview" )
   }
 })
 
@@ -59,16 +59,19 @@ output$hcOverview_venn <- renderPlot(
   } else {
     type <- input$hcOverview_radio 
     df <- switch(type, en = results()$vennEnriched, de = results()$vennDepleted)
-    ids <- c("Wilcox", "DEseq2", "MAGeCK", "sgRSEA", "EdgeR")
+    ids <- c("Wilcox", "DESeq2", "MAGeCK", "sgRSEA", "EdgeR")
     ids <- ids[c(input$hcOverview_wilcox, input$hcOverview_deseq, input$hcOverview_mageck, input$hcOverview_rsea, input$hcOverview_edger)]
-    if(all(ids) %in% "FALSE")
+    # if(all(ids) %in% "FALSE")
+    # {
+    #   return(Plot_blank("base",msg = "Please select at least two algorithms to compare", pos = c(0.5, 0.5)) )
+    # }
+    if(length(ids %in% "TRUE") <= 1 )
     {
-      return(Plot_blank("base",msg = "Please select at least two algorithms to compare", pos = c(0.5, 0.5)) )
+      Plot_blank("base", msg = "Please select at least two algorithms to compare", pos = c(0.5, 0.5))
     }
-    #if(length(ids %in% "TRUE") == 1 )
-    #{
-    #  Plot_blank("base",msg = "Please select at least two algorithms to compare", pos = c(0.5, 0.5))
-    #}
+    print(str(df))
+    print(ids)
+    
     Plot_venn( df, ids, "en" )
   }
 )

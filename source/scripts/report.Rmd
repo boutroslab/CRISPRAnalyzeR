@@ -3,6 +3,10 @@ title: "CRISPR-AnalyzeR Report"
 params: 
   info: 
     value: unknown
+pandoc_args: [
+      "+RTS", "-K64m",
+      "-RTS"
+    ]
 ---
 
 # Screen Information
@@ -11,10 +15,10 @@ params:
 
 **Date of Report Generation:** "`r format(Sys.time(), '%d %B, %Y')`"
 
-This report has been generated with CRISPRAnalyzeR, a software suite to analyze and document pooled CRISPR/Cas9 screens in an interactive and exploratory way.  
+This report has been generated with CRISPRAnalyzeR, a software suite to analyze, annotate and document pooled CRISPR/Cas9 screens.  
 
 **Please note:**  
-All tables and figures are still interactive and do not require internet access.  
+All tables and the majority of figures are still interactive and do not require internet access.  
 
 
 <!--load files, data, libraries--> 
@@ -27,49 +31,117 @@ All tables and figures are still interactive and do not require internet access.
 
 
 <!--Part quality controls--> 
+```{r, eval=inclSQ, warning=FALSE, include=FALSE, message=FALSE}
+write(paste(userID, ": writing Quality Control"), logFile, append = TRUE)  
+incProgress(message = "Quality Control")
+```
+
+
 ```{r, results='asis', eval=inclSQ}
 cat("# (PART) Screen Quality {-}")
 ```
+
+
 ```{r, child='screenQuality.Rmd', eval=inclSQ}
+
 ```
 
 
 <!--Part Hit Calling-->
+```{r, eval=inclHC, warning=FALSE, include=FALSE, message=FALSE}
+write(paste(userID, ": writing Hit Calling"), logFile, append = TRUE)  
+incProgress(message = "Hit Calling")
+```
+
 ```{r, results='asis', eval=inclHC}
 cat("# (PART) Hit Calling {-}")
 ```
+
 ```{r, child='hitCalling.Rmd', eval=inclHC}
+
 ```
 
 
 <!--Part Hit Confirmation-->
 ```{r}
-idBool <- if( any(c(inclSG, inclOV, inclCO, inclAN, inclGS)) ) TRUE else FALSE # if none was checked (downloads tab)
-if( length(geneList$sgRNA) + length(geneList$overview) + 
-    length(geneList$anno) + length(geneList$compare) + length(geneList$GSE) < 1 ) idBool <- FALSE # if there are no genes saved
+write(paste(userID, ": writing Hit Confirmation Setup "), logFile, append = TRUE)  
+
+idBool <- if( any(c(inclSG, inclOV, inclCO, inclAN, inclGS)) ) {TRUE} else{FALSE} # if none was checked (downloads tab)
+write(paste(userID, ": idBool", idBool), logFile, append = TRUE)
+write(paste(userID, ": length(geneList$sgRNA", length(geneList$sgRNA)), logFile, append = TRUE)
+write(paste(userID, ": length(geneList$overview", length(geneList$overview)), logFile, append = TRUE)
+write(paste(userID, ": length(geneList$anno", length(geneList$anno)), logFile, append = TRUE)
+write(paste(userID, ": length(geneList$compare", length(geneList$compare)), logFile, append = TRUE)
+write(paste(userID, ": length(geneList$GSE", length(geneList$GSE)), logFile, append = TRUE)
+      
+if( length(geneList$sgRNA) + length(geneList$overview) + length(geneList$anno) + length(geneList$compare) + length(geneList$GSE) < 1 )
+{
+  idBool <- FALSE # if there are no genes saved
+}
+write(paste(userID, ": idBool", idBool), logFile, append = TRUE)
 ```
+
+```{r, eval=idBool, warning=FALSE, include=FALSE, message=FALSE}
+write(paste(userID, ": writing Hit Confirmation"), logFile, append = TRUE)  
+incProgress(message = "Hit Confirmation Part")
+```
+
 ```{r, results='asis', eval=idBool}
 cat("# (PART) Hit Confirmation {-}")
 ```
 
 <!--overview--> 
+```{r, eval=idBool, warning=FALSE, include=FALSE, message=FALSE}
+write(paste(userID, ": writing overview"), logFile, append = TRUE)
+incProgress(message = "Gene Overview")
+```
+
 ```{r, child='overview.Rmd', eval=inclOV}
+
 ```
 
 <!--sgRNAs--> 
+```{r, eval=idBool, warning=FALSE, include=FALSE, message=FALSE}
+write(paste(userID, ": writing sgRNAs"), logFile, append = TRUE)
+incProgress(message = "Gene Overview: sgRNA Information")
+```
+
 ```{r, child='sgRNA.Rmd', eval=inclSG}
+
 ```
 
 <!--gene set enrichment--> 
+```{r, eval=idBool, warning=FALSE, include=FALSE, message=FALSE}
+incProgress(message = "Gene Set Analysis")
+write(paste(userID, ": writing GSE"), logFile, append = TRUE)
+```
+
 ```{r, child='gse.Rmd', eval=inclGS}
+
 ```
 
 <!--compare--> 
+```{r, eval=idBool, warning=FALSE, include=FALSE, message=FALSE}
+incProgress(message = "Gene Comparison")
+write(paste(userID, ": writing comparison"), logFile, append = TRUE)  
+```
+
 ```{r, child='compare.Rmd', eval=inclCO}
+
 ```
 
 <!--annotate--> 
+```{r, eval=idBool, warning=FALSE, include=FALSE, message=FALSE}
+write(paste(userID, ": writing annotation"), logFile, append = TRUE)  
+incProgress(message = "Annotation")
+```
+
 ```{r, child='anno.Rmd', eval=inclAN}
+
+```
+
+```{r}
+incProgress(message = "Converting Report to HTML")
 ```
 
 <!--credits-->
@@ -77,12 +149,13 @@ cat("# (PART) Hit Confirmation {-}")
 # Credits
 
 CRISPRAnalyzeR has been developed by **Jan Winter** and **Marc Schwering** at the **German Cancer Research Center**.  
-For further information please visit our Website at  
+For further information please visit us at [GitHub](https://github.com/boutroslab/CRISPRAnalyzeR) or the [Website](http://crispr-analyzer.dkfz.de)  
 
-[GitHub](https://github.com/boutroslab/CRISPRAnalyzeR)
-[Website](http://crispr-analyzer.dkfz.de)  
+__Please also cite CRISPRAnalyzeR__  
 
+__Winter,J. et al. (2017)__ _CRISPRAnalyzeR: Interactive analysis, annotation and documentation of pooled CRISPR screens._ bioRxiv.  
 
-Please also don't forget to cite our paper  
+and get the [PrePrint](http://biorxiv.org/content/early/2017/02/20/109967)
+
 
 

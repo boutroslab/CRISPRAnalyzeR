@@ -4,6 +4,7 @@ child of 'overview.Rmd'
 --> 
 
 ```{r, results='asis', eval=ovBool[counter]}
+write(paste(userID, ": writing overviewChild"), logFile, append = TRUE) 
 gene <- geneList$overview[[counter]]$gene
 cat("##", gene, sprintf("(%s)", counter))
 ```
@@ -23,6 +24,7 @@ indepth_GVIZ_sgrna_data <- geneList$overview[[counter]]$indepth_GVIZ_sgrna_data
 #### Gene Information
 
 ```{r}
+write(paste(userID, ": writing overviewChild - Gene Information"), logFile, append = TRUE) 
                 HTML('<div class="col-md-6">')
                   HTML('
                           <table class="table">
@@ -71,6 +73,7 @@ HTML(as.character(paste(paste("<i class='fa fa-external-link fa-fw'></i>&nbsp;<s
 #### Performance in Screen
 
 ```{r}
+write(paste(userID, ": writing overviewChild - Performance in Screen"), logFile, append = TRUE) 
 HTML('<div class="col-md-6">')
                     HTML('<table class="table">
                       <tbody>
@@ -129,6 +132,7 @@ HTML(round(as.numeric(results$edger$data$genes[rownames(results$edger$data$genes
 #### KEGG
 
 ```{r}
+write(paste(userID, ": writing overviewChild - KEGG"), logFile, append = TRUE) 
 data <- indepth_geneOverview$kegg$name
                    shiny::tags$p(class="text-left",HTML("<strong>Other Gene Names</strong>"),HTML("</br>") , 
 HTML(if(length(data) > 0 && data != "") data else "No data available"))
@@ -161,6 +165,7 @@ HTML(if(data == "") "No data available" else data) )
 #### Further Information
 
 ```{r}
+write(paste(userID, ": writing overviewChild - Further Information"), logFile, append = TRUE) 
 data <- (dplyr::filter(indepth_geneOverview$enrichr, database == "ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X", database == "ChEA 2015") %>% dplyr::select(category))$category
 chipseqbinding <- if(length(data) > 0) paste(data, collapse = "<br>") else "No data available"
 
@@ -190,13 +195,26 @@ Transcripts and interesting genomic regions near the gene of interest are shown.
 It uses data from [Ensembl](http://www.ensembl.org/index.html).
 
 ```{r}
-res <- indepth_GVIZ_gene_data
+write(paste(userID, ": writing overviewChild - Gene Model"), logFile, append = TRUE) 
+
+if(!is.na(indepth_GVIZ_gene_data))
+{
+  res <- indepth_GVIZ_gene_data
 if( !is.null(res) && length(res) > 0 && class(res) != "character" ){
-  Gviz::plotTracks(c(res[["itrack"]], res[["refTrack"]], res[["generegionTrack"]], res[["biomTrack"]], res[["dTrack"]]),  
-                       groupAnnotation = "id", red="darkred", green="grey")
+  res2 <- try(Gviz::plotTracks(c(res[["itrack"]], res[["refTrack"]], res[["generegionTrack"]], res[["biomTrack"]], res[["dTrack"]]),  
+                       groupAnnotation = "id", red="darkred", green="grey"))
+  
+  if(class(res2) == "try-error")
+  {
+    HTML("<div style='color:red'>The plot could not be drawn.</div><br/>")  
+  }
+  
+}
 } else {
+  
   HTML("<div style='color:red'>Not available. There was something wrong with the plot.</div><br/>")  
 }
+
 ```
 
 
@@ -212,18 +230,28 @@ The effects and locations of individual sgRNAs in the gene model are shown.
 It uses data from [Ensembl](http://www.ensembl.org/index.html).
 
 ```{r}
-res <- indepth_GVIZ_sgrna_data
+write(paste(userID, ": writing overviewChild - sgRNA Model"), logFile, append = TRUE) 
+
+if(!is.na(indepth_GVIZ_sgrna_data))
+{
+  res <- indepth_GVIZ_sgrna_data
 if( !is.null(res) && length(res) > 0 && class(res) != "character" ){
   if( is.null(res[["sgrnaTrack"]]) || is.null(res[["dTrack"]]) || is.null(res[["featureTrack"]]) || is.null(res[["motifTrack"]]) ) {
-    Gviz::plotTracks(c(res[["itrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]]), from = res[["from"]] , to = res[["to"]] )
+    re2 <- try(Gviz::plotTracks(c(res[["itrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]]), from = res[["from"]] , to = res[["to"]] ))
   } else {
-    Gviz::plotTracks(c(res[["itrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]], 
+    re2 <- try(Gviz::plotTracks(c(res[["itrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]], 
                      res[["sgrnaTrack"]], res[["dTrack"]], res[["featureTrack"]], res[["motifTrack"]]), 
-                   from = res[["from"]] , to = res[["to"]], chromosome = res[["chromosome"]] )
+                   from = res[["from"]] , to = res[["to"]], chromosome = res[["chromosome"]] ))
   }
+  if(class(res2) == "try-error")
+  {
+    HTML("<div style='color:red'>Not available.</div>")
+  }
+}
 } else {
   HTML("<div style='color:red'>Not available. There was something wrong with the plot.</div>")  
 }
+
 ```
 
 
@@ -242,6 +270,7 @@ If the gene of interest was targeted, or one of the sgRNAs was used in a publish
 The gene of interest has already been assayed in the following published CRISPR screens.
 
 ```{r}
+write(paste(userID, ": writing overviewChild - Published Screens"), logFile, append = TRUE) 
 gcrispr_gene_header <- '<table class="table">
 <thead>
   <tr>
@@ -275,8 +304,15 @@ HTML(paste0(gcrispr_gene_header, gcrispr_gene_body, gcrispr_gene_footer))
 In previous screens, authors reported the following phenotypes for the gene of interest.
 
 ```{r}
-data <- indepth_geneOverview$genomecrispr$sgrnas
-if(!is.null(data)) Table_DT(data, colNames = c("Pubmed ID", "Cell Line", "Screening Condition", "Hit?", "sgRNA Sequence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", indepthOverviewGene ,"_PublishedCRISPRScreens", sep="")) else HTML("No Data available")
+write(paste(userID, ": writing overviewChild - Reported Phenotype"), logFile, append = TRUE) 
+if(!is.na(indepth_geneOverview$genomecrispr$sgrnas))
+{
+  data <- indepth_geneOverview$genomecrispr$sgrnas
+  Table_DT(data, colNames = c("Pubmed ID", "Cell Line", "Screening Condition", "Hit?", "sgRNA Sequence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", indepthOverviewGene ,"_PublishedCRISPRScreens", sep=""))
+} else {
+  HTML("No Data available")
+}
+
 ```
 
 #### Reported sgRNA
@@ -284,8 +320,14 @@ if(!is.null(data)) Table_DT(data, colNames = c("Pubmed ID", "Cell Line", "Screen
 The same sgRNAs have been used in the following previously published screens.
 
 ```{r}
-data <- indepth_geneOverview$genomecrispr$sgrnas2
-if(!is.null(data)) Table_DT(data, colNames = c("Pubmed ID", "Cell Line", "Screening Condition", "Hit?", "sgRNA Sequence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", indepthOverviewGene , "_sgRNAs",sep="")) else HTML("No Data available")
+write(paste(userID, ": writing overviewChild - Reported sgRNA"), logFile, append = TRUE) 
+if(!is.na(indepth_geneOverview$genomecrispr$sgrnas2))
+{
+Table_DT(data, colNames = c("Pubmed ID", "Cell Line", "Screening Condition", "Hit?", "sgRNA Sequence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", indepthOverviewGene , "_sgRNAs",sep="")) 
+} else {
+   HTML("No Data available")
+}
+
 ```
 
 
@@ -302,18 +344,21 @@ This is a brief overview of how the gene of interest performed compared to all o
 #### Log2-Fold-Change
 
 ```{r, warning=FALSE, message=FALSE}
+write(paste(userID, ": writing overviewChild - Log2-Fold-Change"), logFile, append = TRUE) 
 gene.plotdistribution(data = results$deseq$data$genes, gene = indepthOverviewGene , type = "log2fc", sgrna=FALSE, tooltip = paste("Log2 FoldChange:", "{point.log2FoldChange}", sep=" "), title = "Log2 Foldchanges", subtitle = "for all genes", xLab = "Genes", yLab = "Log2 FoldChange", zoom = "x", crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL, filename = paste("GeneOverview_", indepthOverviewGene , "LOG2FC", sep="") )
 ```
 
 #### Z-Ratio
 
 ```{r, warning=FALSE, message=FALSE}
+write(paste(userID, ": writing overviewChild - Z-Ratio"), logFile, append = TRUE) 
 gene.plotdistribution(data = results$zratio, gene = indepthOverviewGene , type = "zratio", sgrna=FALSE, tooltip = paste("Z-Ratio:", "{point.zratio}", sep=" "), title = "Z-Ratios", subtitle = "for all genes", xLab = "Genes", yLab = "Z-Ratio between Treated and Untreated", zoom = "x", crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL , filename = paste("GeneOverview_", indepthOverviewGene , "Z-Ratio", sep=""))
 ```
 
 #### Individual sgRNAs
 
 ```{r}
+write(paste(userID, ": writing overviewChild - individual sgRNAs"), logFile, append = TRUE) 
 data <- indepth_geneOverview$sgrna.dt
 if(!is.null(data)) Table_DT(data, colNames = c("sgRNA", "Log2 FoldChange", "DESeq2 Adjusted P-Value", "Sequence", "Gene"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_",indepthOverviewGene , "Log2FC_sgRNAs", sep="")) else HTML("No data available")
 ```
@@ -326,7 +371,12 @@ gene.plotdistribution(data = indepth_geneOverview$sgrna.dt, gene = indepthOvervi
 
 <!-- COSMIC -->
 ```{r}
-COSMICBool <- if(is.null(indepth_geneOverview$cosmic)) FALSE else TRUE
+ if( info$cosmicDB == "no" ){
+  COSMICBool <- FALSE
+  write(paste(userID, ": writing overviewChild - COSMIC"), logFile, append = TRUE)
+ } else {
+   COSMICBool <- TRUE
+ }
 ```
 ```{r, eval=COSMICBool, child='cosmicChild.Rmd'}
 ```
@@ -342,6 +392,7 @@ The gene of interest is annotated with the following Gene Ontology terms.
 #### Cellular Component
 
 ```{r}
+write(paste(userID, ": writing overviewChild - Gene Component"), logFile, append = TRUE) 
 data <- indepth_geneOverview$GO$table$cellular_component
 if(!is.null(data)) Table_DT(data, colNames = c("Type", "GO IDs", "Evidence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_",indepthOverviewGene , "GeneOntology_CellularComponents", sep="")) else HTML("No data available")
 ```
@@ -355,6 +406,7 @@ knitr::include_graphics(plotGO$plot$cellular_component)
 #### Biological Process
 
 ```{r}
+write(paste(userID, ": writing overviewChild - Biological Process"), logFile, append = TRUE) 
 data <- indepth_geneOverview$GO$table$biological_process
 if(!is.null(data)) Table_DT(data, colNames = c("Type", "GO IDs", "Evidence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_",indepthOverviewGene , "GeneOntology_BiologicalProcess", sep="")) else HTML("No data available")
 ```
@@ -368,6 +420,7 @@ knitr::include_graphics(plotGO$plot$biological_process)
 #### Molecular Function
 
 ```{r}
+write(paste(userID, ": writing overviewChild - Molecular Function"), logFile, append = TRUE) 
 data <- indepth_geneOverview$GO$table$molecular_function
 if(!is.null(data)) Table_DT(data, colNames = c("Type", "GO IDs", "Evidence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_",indepthOverviewGene , "GeneOntology_MolecularFunction", sep="")) else HTML("No data available")
 ```

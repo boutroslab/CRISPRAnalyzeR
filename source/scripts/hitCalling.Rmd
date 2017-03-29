@@ -1,7 +1,6 @@
 
-
-
 ```{r, include=FALSE, message=FALSE}
+write(paste(userID, ": writing tooltip"), logFile, append = TRUE) 
 tooltip_hcCandidates <- tagList(
   tags$h3("{point.genes}"),
   tags$table(style = "width:100%", 
@@ -45,6 +44,7 @@ The rest of the histogram should still be more or less flat.
 If the histogram shows other shapes the analysis method might not have worked well.
 
 ```{r, message=FALSE, warning=FALSE}
+write(paste(userID, ": writing Wilcox"), logFile, append = TRUE) 
 t <- results$wilcox$info$pval
 df <- results$wilcox$data$p.value.unadjusted
 Plot_performance( data = df, thresh = t, bApp =  FALSE, type="distribution", method = "Wilcoxon" , filename = "HitCalling_Wilcox_PValueDistribution")
@@ -105,10 +105,6 @@ Table_hcPerf( df, sign, th, radio, "wilcox" )
 
 
 
-
-
-
-
 ## DESeq2
 
 The DESeq2 implementation is based on the DESeq2 R package. It uses the summed read counts of all sgRNAs for a given gene and tests for differential effects based on a negative binomial distribution model. In brief, eead counts for all sgRNAs are summed up to obtain the total read count per gene. DESeq2 analysis is performed on these read counts, which includes normalization, estimation of size-factors and variance stabilization using a parametric fit. A Wald test for difference in log2-foldchanges between both conditions is done to determine enrichment/depletion effects. For more information about DESeq2, please see the DESeq2 manual available at [Bioconductor](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) or the publication. [^fn4]
@@ -124,6 +120,7 @@ The rest of the histogram should still be more or less flat.
 If the histogram shows other shapes the analysis method might not have worked well.
 
 ```{r, message=FALSE, warning=FALSE}
+write(paste(userID, ": writing DESeq2"), logFile, append = TRUE) 
 t <- results$deseq$info$pval
 df <- results$deseq$data$genes$pvalue
 Plot_performance( data = df, thresh = t, bApp= FALSE, type="distribution", method = "DESEq2" , filename = "HitCalling_DESeq2_PValueDistribution")
@@ -204,6 +201,7 @@ If the histogram shows other shapes the analysis method might not have worked we
 #### Enriched
 
 ```{r, message=FALSE, warning=FALSE}
+write(paste(userID, ": writing MAGeCK"), logFile, append = TRUE) 
 t <- results$mageck$info$pval
 df <- results$mageck$data$genes$pos
 Plot_performance( data = df, thresh = t,bApp=FALSE, type="distribution", method = "MAGeCK Enriched" , filename = "HitCalling_MAGeCK_PValueDistribution_Enrichment")
@@ -315,6 +313,7 @@ If the histogram shows other shapes the analysis method might not have worked we
 #### Enriched
 
 ```{r, message=FALSE, warning=FALSE}
+write(paste(userID, ": writing sgRSEA"), logFile, append = TRUE) 
 t <- results$rsea$info$pval
 df <- as.data.frame(results$rsea$data$gene.pos)
 df <- df$p.value.pos
@@ -427,6 +426,7 @@ The rest of the histogram should still be more or less flat.
 If the histogram shows other shapes the analysis method might not have worked well.
 
 ```{r, message=FALSE, warning=FALSE}
+write(paste(userID, ": writing edgeR"), logFile, append = TRUE) 
 t <- results$edger$info$pval
 df <- results$edger$data$genes$PValue
 Plot_performance(data = df, thresh = t,bApp = FALSE, type="distribution", method = "EdgeR", filename = "HitCalling_EdgeR_PValueDistribution" )
@@ -500,6 +500,7 @@ The Z-Ratio has been implemented as previously published. [^fn6]
 ### Z Ratio Distribution
 
 ```{r}
+write(paste(userID, ": writing Z-Ratio"), logFile, append = TRUE) 
 t <- 1.96
 df <- results$zratio$zratio
 Plot_performance( data = df, thresh = t , bApp = FALSE, type="distribution", method = "Z-Ratio" , filename = "HitCalling_Z-Ratio_ZRatioDistribution")
@@ -546,6 +547,7 @@ Description missing.
 ### Log2 Bayes Factor Distribution
 
 ```{r}
+write(paste(userID, ": writing BAGEL"), logFile, append = TRUE) 
  if( is.null(results$bagel$info) ){
     Plot_blank("hc", msg = "No BAGEL data available")
 } else {
@@ -594,6 +596,9 @@ ScreenBEAM was implemented as described in the paper [^fn9]
 ### P-Value Distribution
 
 ```{r}
+
+write(paste(userID, ": writing ScreenBeam"), logFile, append = TRUE) 
+
 if( is.null(results$screenbeam$info) ){
     Plot_blank("hc", msg = "No ScreenBEAM Data available")
 } else {
@@ -654,6 +659,7 @@ They are interactive, and by sorting relevant columns one can see the top genes 
 Gene foldchanges and adjusted p values of methods *Wilcox*, *DESeq2*, *MAGeCK*, *sgRSEA*, and *EdgeR* for enrichment.
 
 ```{r, message=FALSE, warning=FALSE}
+write(paste(userID, ": writing Summary"), logFile, append = TRUE) 
 sign <- list(wilcox = F, deseq = F, mageck = F, rsea = F, edger = F)
 th <- list(wilcox = results$wilcox$info$pval, deseq = results$deseq$info$pval, 
        mageck = results$mageck$info$pval,
@@ -661,6 +667,8 @@ th <- list(wilcox = results$wilcox$info$pval, deseq = results$deseq$info$pval,
 radio <- "en"
 df <- results$hitOverview
 Table_hcOverview( df, radio, sign, th )
+
+write(paste(userID, ": writing Enriched Done"), logFile, append = TRUE) 
 ```
 
 
@@ -671,4 +679,6 @@ Gene foldchanges and adjusted p values of methods *Wilcox*, *DESeq2*, *MAGeCK*, 
 ```{r, message=FALSE, warning=FALSE}
 radio <- "de"
 Table_hcOverview( df, radio, sign, th )
+write(paste(userID, ": writing Depleted done"), logFile, append = TRUE) 
+
 ```

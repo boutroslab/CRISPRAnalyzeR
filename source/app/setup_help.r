@@ -59,19 +59,38 @@ fluidRow(style="width:85%",
                                                                               shiny::tags$strong("If you do not want to convert your gene identifier, please select the same identifer twice."),
                                                                               shiny::tags$br(),
                                                                               shiny::tags$h4(class="text-primary", "Supported Gene Identifiers"),
-                                                                              shiny::tags$dl(class="dl-horizontal",
-                                                                                             shiny::tags$dt("Ensembl Gene ID"),
-                                                                                             shiny::tags$dd("e.g. ENSG00000141510", class="text-left"),
-                                                                                             shiny::tags$dt("EntrezGene ID (also NCBI Gene ID)"),
-                                                                                             shiny::tags$dd("e.g. 7157", class="text-left"),
-                                                                                             shiny::tags$dt("HGNC ID"),
-                                                                                             shiny::tags$dd("e.g. 11998", class="text-left"),
-                                                                                             shiny::tags$dt("HGNC symbol"),
-                                                                                             shiny::tags$dd("e.g. TP53", class="text-left"),
-                                                                                             shiny::tags$dt("Unigene ID"),
-                                                                                             shiny::tags$dd("e.g. 7157", class="text-left"),
-                                                                                             shiny::tags$dt("Uniprot Gene Name"),
-                                                                                             shiny::tags$dd("e.g. TP53", class="text-left")
+                                                                              shiny::tags$table(class="table table-striped",
+                                                                                                
+                                                                                                shiny::tags$thead(
+                                                                                                  shiny::tags$th("Gene Identifier"),
+                                                                                                  shiny::tags$th("Example")
+                                                                                                ),
+                                                                                                shiny::tags$tbody(
+                                                                                                  shiny::tags$tr(
+                                                                                                  shiny::tags$td("Ensembl Gene ID"),
+                                                                                                  shiny::tags$td("e.g. ENSG00000141510")
+                                                                                                  ),
+                                                                                                  shiny::tags$tr(
+                                                                                                    shiny::tags$td("EntrezGene ID (also NCBI Gene ID)"),
+                                                                                                    shiny::tags$td("e.g. 7157")
+                                                                                                  ),
+                                                                                                  shiny::tags$tr(
+                                                                                                    shiny::tags$td("HGNC ID"),
+                                                                                                    shiny::tags$td("e.g. 11998")
+                                                                                                  ),
+                                                                                                  shiny::tags$tr(
+                                                                                                    shiny::tags$td("HGNC symbol"),
+                                                                                                    shiny::tags$td("e.g. TP53")
+                                                                                                  ),
+                                                                                                  shiny::tags$tr(
+                                                                                                    shiny::tags$td("Unigene ID"),
+                                                                                                    shiny::tags$td("e.g. 7157")
+                                                                                                  ),
+                                                                                                  shiny::tags$tr(
+                                                                                                    shiny::tags$td("Uniprot Gene Name"),
+                                                                                                    shiny::tags$td("e.g. TP53")
+                                                                                                  )
+                                                                                                )
                                                                                              )
                                                                                              
                                                                               )

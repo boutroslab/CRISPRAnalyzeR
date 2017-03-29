@@ -97,8 +97,10 @@ tabItem(tabName = "settings", align = "center",
         ),
         # BAGEL and ScreenBEAM
         fluidRow(
-          shiny::tags$h3(class="text-success", "Essential Genes Analysis"),
+          
           column(width = 6, h4("BAGEL"),
+                 shiny::tags$h4(class="text-success", "Essential Genes Analysis"),
+                 
                  helpText("You can define the range in which you expect the BAGEL cutoff."),
                  numericInput("bagel_lower", "Lowest BAGEL cutoff", value = -50, min = -100, max = 80, step = 1, width = "150px"),
                  numericInput("bagel_higher", "Highest BAGEL cutoff", value = 100, min = 0, max = 200, step = 1, width = "150px")
@@ -109,8 +111,8 @@ tabItem(tabName = "settings", align = "center",
                                  value = 0.05, min = 0, max = 1, step = 0.005, width = "150px"),
                     helpText("You can change the default calculation parameters of ScreenBEAM."),
                     helpText("Changing these parameters will lead to increased/decreased calculation times!"),
-                    numericInput("screenbeam_iterations", "Number of iterations", value = 15000, min = 200, max = 30000, step = 1, width = "150px"),
-                    numericInput("screenbeam_burnin", "Burnin", value = 5000, min = 500, max = 10000, step = 1, width = "150px")
+                    numericInput("screenbeam_iterations", "Number of iterations", value = 1500, min = 200, max = 15000, step = 1, width = "150px"),
+                    numericInput("screenbeam_burnin", "Burnin", value = 500, min = 50, max = 5000, step = 1, width = "150px")
                     
           ))
           
@@ -186,6 +188,8 @@ tabItem(tabName = "settings", align = "center",
     div(style="display:inline-block", actionButton("startAnalysis", "Start Analysis")),
     div(style="display:inline-block", actionButton("resetAnalysis", "Change Settings", icon = icon("refresh"))),
     uiOutput("analysis_progressBar"),
+    shiny::tags$br(),
+    uiOutput("info_progressBar"),
     
     column(width=8, offset=2, class="alert alert-info", style="margin-top:40px;",
                     shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),

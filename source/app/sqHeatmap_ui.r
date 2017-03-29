@@ -73,8 +73,14 @@ tabItem(tabName = "sq_heatmap", align = "center",
              uiOutput("heatmap_error"),
              div(style="display:inline-block", actionButton("sqHeatmap_go", "Create Heatmap")),
              div(style="display:inline-block", actionButton("addReport_heatmap", "Add to Report"))
-             )
+             ),
       
+      column(width=8, offset=2, class="alert alert-info", style="margin-top:10px;",
+             shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),
+             shiny::tags$span(
+               shiny::tags$strong("Depending on the library size, heatmap calculation can take some time.", shiny::tags$br(),"Please be patient while CRISPRAnalyzeR generates it for you.")
+             )
+      )
                   
     )
     )
@@ -82,16 +88,10 @@ tabItem(tabName = "sq_heatmap", align = "center",
   fluidRow(
     shiny::tags$hr(width="50%"),
     column(10,offset=1, 
-           column(width=8, offset=2, class="alert alert-info", style="margin-top:10px;",
-                  shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),
-                  shiny::tags$span(
-                    shiny::tags$strong("Depending on the library size, heatmap calculation can take some time.", shiny::tags$br(),"Please be patient while CRISPRAnalyzeR generates it for you.")
-                  )
-           ),
            
       box( title="Get your heatmap",  width = 12, solidHeader = TRUE, collapsible = TRUE , status = "primary", height = 1500,
         shiny::tags$h2(class="text-success","Heatmap"),
-        highchartOutput2("sqHeatmap_plot", height = "1400px")
+        highchartOutput("sqHeatmap_plot", height = "1400px")
       )
     )
     

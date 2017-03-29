@@ -56,6 +56,10 @@ info <- eventReactive( progress_info(), {
           sendmail_car(message = message, title = title, from=NULL, to=NULL, attach=attach, type = "error")
         }
         
+        # open modal to show error
+        shinyBS::toggleModal(session, "info_error", toggle = "open")
+        shinyjs::hide(id="reevaluation-progress")
+        
         return()
       }
       
@@ -81,12 +85,45 @@ info <- eventReactive( progress_info(), {
 observe(info())
 
 
+## draw progress bar
+output$info_progressBar <- renderUI({
+  if( progress_info()$progress == 0 ){
+    return() 
+  } else {
+    perc <- round(progress_info()$progress * 100)
+    
+    if(progress_info()$progress >= 0.1 && progress_info()$progress < 0.3)
+    { 
+      title = "Setting Up Parameters"
+    } else if(progress_info()$progress >= 0.3 && progress_info()$progress < 0.5 )
+    {
+      title = "Starting with sgRNA Re-Evaluation - Please be patient"
+    }else if(progress_info()$progress >= 0.5 && progress_info()$progress < 0.7 )
+    {
+      title = "sgRNA Re-Evaluation - Please be patient"
+    } else if(progress_info()$progress >= 0.8 && progress_info()$progress < 0.9 )
+    {
+      title = "Finish sgRNA Re-Evaluation and write files"
+    } else if(progress_info()$progress == 1)
+    {
+      title = "sgRNA Re-Evaluation finished"
+    } else {title=""}
+    
+    HTML(paste0("<div id = 'reevaluation-progress' style='width:70%'><br/>
+                <div id='info_r_progress_title' class='text-center'><h4 class='text-center'>",title,"<h4></div>
+                <div id='info_r_progress' class='progress progress-striped shiny-file-input-progress' style='visibility: visible;'>
+                <div class='progress-bar' style='width:", perc, "%;'>Progress ", perc, "%</div></div></div>"
+    ))
+  }
+  })
+
 #### error message
 # showing if get_info.r is done
 # or whether there was a problem
 # render one for sgRNAs and one for Genomic View
 output$info_error <- renderUI(HTML(
   if( status$results == TRUE ) {
+    
     paste0("<div style='color:red;'>", error$info, "</div>")
   } else {
     NULL
@@ -95,5 +132,7 @@ output$info_error <- renderUI(HTML(
 
 
 
-
+output$info_errormodal <- renderUI(
+  return(HTML(error$info))
+)
 

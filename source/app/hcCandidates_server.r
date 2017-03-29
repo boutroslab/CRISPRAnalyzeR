@@ -89,18 +89,18 @@ output$hcPerformance_wilcox_data <- DT::renderDataTable({
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual p value of a point (not -log10)
-output$hcPerformance_wilcox_plot <- renderHighchart2(
+output$hcPerformance_wilcox_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
     
     t <- results()$wilcox$info$pval
     df <- results()$wilcox$data
-    Plot_performance( data = df, thresh = t, method = "wilcox", bApp = FALSE , filename = "HitCalling_Wilcox_RankedPValue")
+    Plot_performance( data = df, thresh = t, method = "wilcox", bApp = FALSE , filename = "HitCalling_Wilcox_RankedPValue" )
   }
 )
 
-output$hcPerformance_wilcox_plot2 <- renderHighchart2(
+output$hcPerformance_wilcox_plot2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc",msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -117,7 +117,7 @@ output$hcPerformance_wilcox_plot2 <- renderHighchart2(
 # significant p values are shown in red
 # xy-zoomable
 # tooltip gives cross methods information
-output$hcCandidates_wilcox_plot <- renderHighchart2(
+output$hcCandidates_wilcox_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -169,7 +169,7 @@ output$hcPerformance_deseq_data <- DT::renderDataTable({
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual p value of a point (not -log10)
-output$hcPerformance_deseq_plot <- renderHighchart2(
+output$hcPerformance_deseq_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -180,7 +180,7 @@ output$hcPerformance_deseq_plot <- renderHighchart2(
   }
 )
 
-output$hcPerformance_deseq_plot2 <- renderHighchart2(
+output$hcPerformance_deseq_plot2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -216,7 +216,7 @@ output$hcPerformance_deseq_plot2 <- renderHighchart2(
 # significant p values are shown in red
 # xy-zoomable
 # tooltip gives cross methods information
-output$hcCandidates_deseq_plot <- renderHighchart2(
+output$hcCandidates_deseq_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -292,7 +292,7 @@ output$hcPerformance_mageck_data <- DT::renderDataTable({
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual p value of a point (not -log10)
-output$hcPerformance_mageck_plotEnr <- renderHighchart2(
+output$hcPerformance_mageck_plotEnr <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -304,7 +304,7 @@ output$hcPerformance_mageck_plotEnr <- renderHighchart2(
 )
 
 
-output$hcPerformance_mageck_plotEnr2 <- renderHighchart2(
+output$hcPerformance_mageck_plotEnr2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -321,7 +321,7 @@ output$hcPerformance_mageck_plotEnr2 <- renderHighchart2(
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual p value of a point (not -log10)
-output$hcPerformance_mageck_plotDep <- renderHighchart2(
+output$hcPerformance_mageck_plotDep <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -333,7 +333,7 @@ output$hcPerformance_mageck_plotDep <- renderHighchart2(
 )
 
 
-output$hcPerformance_mageck_plotDep2 <- renderHighchart2(
+output$hcPerformance_mageck_plotDep2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -349,7 +349,7 @@ output$hcPerformance_mageck_plotDep2 <- renderHighchart2(
 # significant p values are shown in red
 # xy-zoomable
 # tooltip gives cross methods information
-output$hcCandidates_mageck_plotEnr <- renderHighchart2(
+output$hcCandidates_mageck_plotEnr <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -367,7 +367,7 @@ output$hcCandidates_mageck_plotEnr <- renderHighchart2(
 # significant p values are shown in red
 # xy-zoomable
 # tooltip gives cross methods information
-output$hcCandidates_mageck_plotDep <- renderHighchart2(
+output$hcCandidates_mageck_plotDep <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -444,7 +444,7 @@ output$hcPerformance_sgrsea_data <- DT::renderDataTable({
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual p value of a point (not -log10)
-output$hcPerformance_sgrsea_plotEnr <- renderHighchart2(
+output$hcPerformance_sgrsea_plotEnr <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -455,7 +455,7 @@ output$hcPerformance_sgrsea_plotEnr <- renderHighchart2(
   }
 )
 
-output$hcPerformance_sgrsea_plotEnr2 <- renderHighchart2(
+output$hcPerformance_sgrsea_plotEnr2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -474,7 +474,7 @@ output$hcPerformance_sgrsea_plotEnr2 <- renderHighchart2(
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual p value of a point (not -log10)
-output$hcPerformance_sgrsea_plotDep <- renderHighchart2(
+output$hcPerformance_sgrsea_plotDep <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -485,7 +485,7 @@ output$hcPerformance_sgrsea_plotDep <- renderHighchart2(
   }
 )
 
-output$hcPerformance_sgrsea_plotDep2 <- renderHighchart2(
+output$hcPerformance_sgrsea_plotDep2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -503,7 +503,7 @@ output$hcPerformance_sgrsea_plotDep2 <- renderHighchart2(
 # significant p values are shown in red
 # xy-zoomable
 # tooltip gives cross methods information
-output$hcCandidates_sgrsea_plotEnr <- renderHighchart2(
+output$hcCandidates_sgrsea_plotEnr <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -521,7 +521,7 @@ output$hcCandidates_sgrsea_plotEnr <- renderHighchart2(
 # significant p values are shown in red
 # xy-zoomable
 # tooltip gives cross methods information
-output$hcCandidates_sgrsea_plotDep <- renderHighchart2(
+output$hcCandidates_sgrsea_plotDep <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -600,7 +600,7 @@ output$hcPerformance_edger_data <- DT::renderDataTable({
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual p value of a point (not -log10)
-output$hcPerformance_edger_plot <- renderHighchart2(
+output$hcPerformance_edger_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -611,7 +611,7 @@ output$hcPerformance_edger_plot <- renderHighchart2(
   }
 )
 
-output$hcPerformance_edger_plot2 <- renderHighchart2(
+output$hcPerformance_edger_plot2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -627,7 +627,7 @@ output$hcPerformance_edger_plot2 <- renderHighchart2(
 # significant p values are shown in red
 # xy-zoomable
 # tooltip gives cross methods information
-output$hcCandidates_edger_plot <- renderHighchart2(
+output$hcCandidates_edger_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -690,7 +690,7 @@ output$hcPerformance_zratio_data <- DT::renderDataTable({
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual Z-Ratio
-output$hcPerformance_zratio_plot <- renderHighchart2(
+output$hcPerformance_zratio_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -701,7 +701,7 @@ output$hcPerformance_zratio_plot <- renderHighchart2(
   }
 )
 
-output$hcPerformance_zratio_plot2 <- renderHighchart2(
+output$hcPerformance_zratio_plot2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -718,7 +718,7 @@ output$hcPerformance_zratio_plot2 <- renderHighchart2(
 #### volcano plot
 # xy-zoomable
 # tooltip gives cross methods information
-output$hcCandidates_zratio_plot <- renderHighchart2(
+output$hcCandidates_zratio_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
@@ -782,7 +782,7 @@ output$hcPerformance_bagel_cutoff <- renderText({
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual p value of a point (not -log10)
-output$hcPerformance_bagel_plot <- renderHighchart2(
+output$hcPerformance_bagel_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } 
@@ -797,7 +797,7 @@ output$hcPerformance_bagel_plot <- renderHighchart2(
   }
 )
 
-output$hcPerformance_bagel_plot2 <- renderHighchart2(
+output$hcPerformance_bagel_plot2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc",msg = config$messages$noanalysisrunyet$String)
   } else if(status$results == TRUE && is.null(results()$bagel$info))
@@ -863,7 +863,7 @@ output$hcPerformance_screenbeam_cutoff <- renderText({
 # p values below (virtually above) threshold are coloured red
 # this plot is x zoomable
 # the tooltip shows the actual p value of a point (not -log10)
-output$hcPerformance_screenbeam_plot <- renderHighchart2(
+output$hcPerformance_screenbeam_plot <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } 
@@ -878,7 +878,7 @@ output$hcPerformance_screenbeam_plot <- renderHighchart2(
   }
 )
 
-output$hcPerformance_screenbeam_plot2 <- renderHighchart2(
+output$hcPerformance_screenbeam_plot2 <- renderHighchart(
   if( status$results == FALSE ){
     Plot_blank("hc",msg = config$messages$noanalysisrunyet$String)
   } else if(status$results == TRUE && is.null(results()$screenbeam$info))

@@ -203,6 +203,8 @@ observeEvent(input$reset_data2, {
   shinyjs::enable("biomart_IDnew")
   shinyjs::enable("submit_groups")
   shinyjs::enable("startAnalysis")
+  shinyjs::hide(id="reevaluation-progress")
+  shinyjs::hide(id="analysis-progress")
   write(paste(userID, ": clicked on reset_data2 at", Sys.time()), logFile, append = TRUE)
 })
 

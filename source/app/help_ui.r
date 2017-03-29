@@ -25,8 +25,6 @@ tabItem(tabName = "help_ticket", align = "center",
          </h1>
          <hr>
          <p class='lead'>Our main goal was to keep CRISPRAnalyzeR easy-to-use and straight-forward.
-         <br>But - to be honest - with each new user things might come up that might
-         not be clear to the user or just don't work as intended.
          <br>We apologize for any inconvenience and aks you to please let us know what
          struggled you.
          <br>

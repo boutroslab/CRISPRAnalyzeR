@@ -25,10 +25,11 @@ libContent <- eventReactive(status$libFile,{
   if( status$libFile == TRUE ){
     shinyjs::enable("geneID_pos")
     shinyjs::enable("geneID_neg")
-    con <- file(libFile()$path)
-    top <- readLines(con)
-    close(con)
-    top <- as.character(top)
+    #con <- file(libFile()$path)
+    #top <- readLines(con)
+    #close(con)
+    #top <- as.character(top)
+    top <- libfile_gene
     #tolower(top)
   } else {
     shinyjs::disable("geneID_pos")

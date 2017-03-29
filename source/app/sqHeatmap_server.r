@@ -158,7 +158,7 @@ observe(heatmap())
 
 
 ## plot
-output$sqHeatmap_plot <- renderHighchart2({
+output$sqHeatmap_plot <- renderHighchart({
   if( status$heatmap == FALSE ){
     Plot_blank(device = "base", msg = config$messages$noanalysisrunyet$String)
   } else {

@@ -13,7 +13,7 @@ child of 'report.Rmd'
 ### Scope
 
 ```{r info_scope, results='asis'}
-cat(info$scope, "<br/>")
+cat("<strong>",info$scope, "</strong><br/>")
 ```
 
 ### Procedure
@@ -59,6 +59,7 @@ cat(info$comment, "<br/>")
 ### Files
 
 ```{r info_files}
+write(paste(userID, ": writing info part"), logFile, append = TRUE)  
 df <- rbind(data.frame(name = "sgRNA library", filename = info$libName),
             data.frame(name = info$seqGenNames, filename = info$seqNames))
 Table_DT(df, class = "stripe hover", dom = "t", buttons = NULL, pageLen = nrow(df))
@@ -67,6 +68,7 @@ Table_DT(df, class = "stripe hover", dom = "t", buttons = NULL, pageLen = nrow(d
 ### Experimental Design
 
 ```{r, results='asis'}
+write(paste(userID, ": Experimental Design"), logFile, append = TRUE) 
 cat("<dl>")
 cat("<dt>Groups</dt>")
 cat("<dd>", info$report_organism, "</dd>")
@@ -82,20 +84,22 @@ cat("</dl>")
 ### Analysis Parameters
 
 ```{r info_data, results='asis'}
-cat("Regular Expression for Gene ID extraction in sgRNA library was '", info$g.extractpattern, "'. ")
+write(paste(userID, ": Analysis Parameters"), logFile, append = TRUE) 
+cat("Regular Expression for Gene ID extraction in sgRNA library was <strong>'", info$g.extractpattern, "'</strong>. ")
 if(as.logical(info$extracted)){
-  cat("Regular Expression for sgRNA target extraction in fastQ files used was'", info$targetRegex, "'. ")
+  cat("Regular Expression for sgRNA target extraction in FASTQ files used was <strong>'", info$targetRegex, "'</strong>. ")
   if(as.logical(info$reverse)) cat("Reverse alignment was done. ")
-  cat("Bowtie sensitivity was set to", info$bt2Sensitivity, ", ")
-  cat("Bowtie quality to", info$bt2Quality, ".<br/>")
+  cat("Bowtie2 mapping sensitivity was set to", info$bt2Sensitivity, ", ")
+  cat("Bowtie2 mapping quality threshold to", info$bt2Quality, ".<br/>")
 } else {
-  cat("Readcount files were provided, no fastQ extraction was necessary. <br/>")
+  cat("Readcount files were provided, no FASTQ extraction and mapping was performed.<br/>")
 }
 ```
 
 ```{r info_hc, results='asis'}
+write(paste(userID, ": confidence intervals"), logFile, append = TRUE) 
 cat("<dl>")
-cat("<dt>Adjusted p value thresholds</dt>")
+cat("<dt>Adjusted p-value thresholds</dt>")
 cat("<dd>Wilcox:", info$analysisWilcoxPval, "</dd>")
 cat("<dd>DESeq2:", info$analysisDeseq2Pval, "</dd>")
 cat("<dd>MAGeCK:", info$analysisMageckPval, "</dd>")

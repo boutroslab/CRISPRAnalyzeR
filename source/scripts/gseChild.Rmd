@@ -37,7 +37,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "WikiPathways_2016")
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -46,7 +46,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "WikiPathways_2016")
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "WikiPathways_2016" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "WikiPathways_2016" )   , place = 'co')
   }
 ```
 
@@ -54,10 +54,10 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "WikiPathways_2016")
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "WikiPathways_2016")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_WikiPathways_2016" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_WikiPathways_2016" )   , place = 'co')
 ```
 
 
@@ -79,7 +79,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "WikiPathways_2016")
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -88,17 +88,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "WikiPathways_2016")
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "KEGG_2016" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "KEGG_2016" )   , place = 'co')
   }
 ```
 
 ```{r}
   filtered <-  dplyr::filter(enrichment$enrichr, database == "KEGG_2016")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_KEGG_2016" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_KEGG_2016" )   , place = 'co')
 ```
 
 
@@ -120,7 +120,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Biocarta_2016")
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -129,7 +129,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Biocarta_2016")
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Biocarta_2016" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Biocarta_2016" )   , place = 'co')
   }
 ```
 
@@ -137,10 +137,10 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Biocarta_2016")
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "Biocarta_2016")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Biocarta_2016" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Biocarta_2016" )   , place = 'co')
 ```
 
 
@@ -162,7 +162,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Reactome_2016")
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -171,17 +171,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Reactome_2016")
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Reactome_2016" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Reactome_2016" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "Reactome_2016")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Reactome_2016" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Reactome_2016" )   , place = 'co')
 ```
 
 
@@ -203,7 +203,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-Nature_2016")
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -212,17 +212,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-Nature_2016")
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "NCI-Nature_2016" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "NCI-Nature_2016" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-Nature_2016")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_NCI-Nature_2016" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_NCI-Nature_2016" )   , place = 'co')
 ```
 
 
@@ -244,7 +244,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Panther_2016")
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -253,15 +253,15 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Panther_2016")
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Panther_2016" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Panther_2016" )   , place = 'co')
   }
 ```
 
 ```{r}
-Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_NCI-Panther_2016" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_NCI-Panther_2016" )   , place = 'co')
 ```
 
 
@@ -308,7 +308,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "ChEA_2015")
      Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -317,17 +317,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "ChEA_2015")
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GeneSetEnrichment_ChEA_2015" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GeneSetEnrichment_ChEA_2015" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "ChEA_2015")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
           dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
           formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-          pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_ChEA_2015" )
+          pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_ChEA_2015" )   , place = 'co')
 ```
 
 
@@ -349,7 +349,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "TRANSFAC_and_JASPAR_
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -358,17 +358,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "TRANSFAC_and_JASPAR_
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GeneSetEnrichment_TRANSFAC_and_JASPAR_PWMs" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GeneSetEnrichment_TRANSFAC_and_JASPAR_PWMs" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "TRANSFAC_and_JASPAR_PWMs")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_TRANSFAC_and_JASPAR_PWMs" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_TRANSFAC_and_JASPAR_PWMs" )   , place = 'co')
 ```
 
 
@@ -391,7 +391,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "ENCODE_and_ChEA_Cons
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -400,17 +400,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "ENCODE_and_ChEA_Cons
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GeneSetEnrichment_ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GeneSetEnrichment_ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X" )   , place = 'co')
 ```
 
 
@@ -433,7 +433,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "TargetScan_microRNA"
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -442,17 +442,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "TargetScan_microRNA"
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "TargetScan_microRNA" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "TargetScan_microRNA" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "TargetScan_microRNA")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_TargetScan_microRNA" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_TargetScan_microRNA" )   , place = 'co')
 ```
 
 
@@ -475,7 +475,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Transcription_Factor
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -484,17 +484,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Transcription_Factor
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Transcription_Factor_PPIs" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Transcription_Factor_PPIs" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "Transcription_Factor_PPIs")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Transcription_Factor_PPIs" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Transcription_Factor_PPIs" )   , place = 'co')
 ```
 
 
@@ -545,7 +545,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Biological_Proces
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -554,17 +554,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Biological_Proces
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GO_Biological_Process_2015" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GO_Biological_Process_2015" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Biological_Process_2015")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_GO_Biological_Process_2015" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_GO_Biological_Process_2015" )   , place = 'co')
 ```
 
 
@@ -587,7 +587,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Molecular_Functio
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -596,17 +596,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Molecular_Functio
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GO_Molecular_Function_2015" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GO_Molecular_Function_2015" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Molecular_Function_2015")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_GO_Molecular_Function_2015" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_GO_Molecular_Function_2015" )   , place = 'co')
 ```
 
 
@@ -629,7 +629,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Cellular_Componen
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -638,17 +638,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Cellular_Componen
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GO_Cellular_Component_2015" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "GO_Cellular_Component_2015" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "GO_Cellular_Component_2015")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_GO_Cellular_Component_2015" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_GO_Cellular_Component_2015" )   , place = 'co')
 ```
 
 
@@ -695,7 +695,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "OMIM_Disease")
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -704,17 +704,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "OMIM_Disease")
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "OMIM_Disease" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "OMIM_Disease" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "OMIM_Disease")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_OMIM_Disease" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_OMIM_Disease" )   , place = 'co')
 ```
 
 
@@ -763,7 +763,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Cancer_Cell_Line_Enc
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -772,17 +772,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "Cancer_Cell_Line_Enc
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Cancer_Cell_Line_Encyclopedia" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "Cancer_Cell_Line_Encyclopedia" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "Cancer_Cell_Line_Encyclopedia")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Cancer_Cell_Line_Encyclopedia" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_Cancer_Cell_Line_Encyclopedia" )   , place = 'co')
 ```
 
 
@@ -805,7 +805,7 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-60_Cancer_Cell_L
     Plot_blank(device="hc", msg = "No data available")
   } else {
     # Create Highcharter plot
-    Plot_bar( seriesNames = c("score"),
+tryFunction(Plot_bar( seriesNames = c("score"),
               catName = "category",
               data = filtered, 
               tooltip = tt,
@@ -814,17 +814,17 @@ filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-60_Cancer_Cell_L
               xLab = "Score",
               yLab = "Annotation",
               zoom = "x",
-              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "NCI-60_Cancer_Cell_Lines" )
+              crosshair = TRUE, legend = TRUE, export = TRUE, cols = NULL, anno = NULL, col = NULL, filename = "NCI-60_Cancer_Cell_Lines" )   , place = 'co')
   }
 ```
 
 ```{r}
 filtered <-  dplyr::filter(enrichment$enrichr, database == "NCI-60_Cancer_Cell_Lines")
   
-  Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
+tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adjusted P-Value", "Z-Score", "EnrichR Score", "Involved Genes"), bRownames = FALSE, style = "default", class = "display", 
            dom = "flrtip", alignment = list(centre = NULL, justify = NULL, left = NULL), 
            formatCurr = NULL, formatPerc = NULL, formatRoun = list("cols" = c(3,4,5,6), "digits" = 4), buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_NCI-60_Cancer_Cell_Lines" )
+           pageLen = 5, bScroll = FALSE, filename = "GeneSetEnrichment_NCI-60_Cancer_Cell_Lines" )   , place = 'co')
 ```
 
 

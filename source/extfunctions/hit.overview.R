@@ -33,11 +33,7 @@ hit.overview = function( cutoff.deseq = cp$miaccs$sig.pval.deseq, cutoff.wilcox 
       load.analysis = c(load.analysis,"rsea")
       rsea <- cp$rsea
     }
-    if(exists("doench", envir=cp))
-    {
-      load.analysis = c(load.analysis,"doench")
-      # NOT IMPLEMENTED YET
-    }
+    
     
   } else {
     for (method in methods){

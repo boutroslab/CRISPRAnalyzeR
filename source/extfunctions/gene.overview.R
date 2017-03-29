@@ -13,14 +13,37 @@
 #library(RamiGO)
 
 
-gene.annotation <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", filter = NULL, attributes = NULL, host="www.ensembl.org", proxyuri = NULL, proxyport = NULL, genomecrispruri = NULL, GRCh = NULL, progresslog = NULL)
+gene.annotation <- function(genes = NULL, database="ensembl", dataset="homo_sapiens", filter = NULL, attributes = NULL, host="www.ensembl.org", proxyurl = NULL, proxyport = NULL, genomecrispruri = NULL, GRCh = NULL, progresslog = NULL, workdir = getwd())
 {
+  #set working dir as backup
+  # print(getwd())
+  # # set options
+  # 
+  # if(!is.null(proxyurl) && !is.null(proxyport))
+  # {
+  #   options(RCurlOptions = list(
+  #     proxy=paste(proxyurl, proxyport, sep=":"))
+  #   )
+  #   httr::config(proxy = proxyurl, proxyport = proxyport)
+  # } else {
+  #   options(RCurlOptions = list(
+  #     proxy="")
+  #   )
+  #   httr::config(proxy = NULL, proxyport = NULL)
+  # }
+  # 
+  # print(options())
+  
   shiny::incProgress(amount = 0.2,detail = "Prepare Data")
   # check dataset
   if(dataset == "homo_sapiens") { dataset <- "hsapiens_gene_ensembl"}
   if(dataset == "mus_musculus") { dataset <- "mmusculus_gene_ensembl"}
   if(dataset == "dario_rerio") { dataset <- "drerio_gene_ensembl"}
   
+  
+  
+  
+  #system2("echo", args = c(genes, filter, attributes), stdout = "/tmp/id_geneannotation1")
   # progresslog: must be the path to the progress file
   
   # mainly expects genes as a vector of identiiers as set in filter argument.
@@ -32,7 +55,8 @@ gene.annotation <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", datas
     #print("Gene Annotation Handling")
     # Get data from Biomart
     shiny::incProgress(amount = 0.2,detail = "Access biomaRt")
-
+  
+    #system2("echo", args = c("Acces Biomart - ", paste(attributes, collapse = "-")), stdout = "/tmp/id_geneannotation2")
     
     if(length(attributes) > 2)
     {
@@ -40,17 +64,20 @@ gene.annotation <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", datas
       annotation.list <- split(attributes, ceiling(seq_along(attributes)/2))
       reslist <- c(1:length(annotation.list))
       reslist <- as.list(reslist)
-
       
       filter_used <- FALSE
       
       # call biomart in loop
       for(i in 1:length(annotation.list)){
+        handling <- try(biomaRt::useEnsembl(biomart=database, dataset = dataset, host = host, version = NULL, GRCh, mirror = NULL, verbose = FALSE))
+        #handling <- try(biomaRt::useEnsembl(biomart = database, dataset, host, version = NULL, GRCh, mirror = NULL, verbose = FALSE))
         
+        #system2("echo", args = c(getwd(), "-" , print(handling)), stdout = "/tmp/id_geneannotation3")
         
-        handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL, GRCh, mirror = NULL, verbose = FALSE)
-        if(!exists("handling"))
-        {stop("biomaRt connection is not working. This can be a connectivity issue (e.g. proxy settings, internet connection) or the biomaRt service is currently not avaible.")}
+        if(class(handling) == "try-error")
+        {
+          #system2("echo", args = c(class(handling)), stdout = "/tmp/id_geneannotation4")
+          stop("biomaRt connection is not working. This can be a connectivity issue (e.g. proxy settings, internet connection) or the biomaRt service is currently not avaible.")}
         
         # check if filter is in attributes, if not we will add it.
         # also make sure it is unique
@@ -63,14 +90,17 @@ gene.annotation <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", datas
           attributes <- unique(c(filter,annotation.list[[i]]))  
         }
         
+        #system2("echo", args = c(filter,attributes), stdout = "/tmp/id_geneannotation_handling2")
         
-        # Call biomaRt
-        gene.infos <- biomaRt::getBM(
-          filters = filter,
-          attributes = c(attributes),
-          values = unique(genes),
-          mart = handling)
-          
+        gene.infos <- try(
+          biomaRt::getBM(
+            filters = filter,
+            attributes = c(attributes),
+            values = unique(genes),
+            mart = handling)
+        )
+        
+        #system2("echo", args = c(gene.infos), stdout = "/tmp/id_geneannotation_handling_geneinfos")
         # put result in list
           reslist[i] <- list(gene.infos)
         
@@ -83,15 +113,16 @@ gene.annotation <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", datas
           gene.info <- dplyr::full_join(gene.info, reslist[[i]], by = filter)
         }
         
-        
+          #system2("echo", args = c(gene.info), stdout = "/tmp/id_geneannotation_handling_geneinfo")
       }
       
     }
     
     else {
-        
-      handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL, GRCh, mirror = NULL, verbose = FALSE)
-      if(!exists("handling"))
+      handling <- try(biomaRt::useEnsembl(biomart = database, dataset = dataset, host = host, version = NULL, GRCh, mirror = NULL, verbose = FALSE))
+      #system2("echo", args = c(handling, "NO SPLIT"), stdout = "/tmp/id_geneannotation_handling")
+      
+      if(class(handling) == "try-error")
       {stop("biomaRt connection is not working. This can be a connectivity issue (e.g. proxy settings, internet connection) or the biomaRt service is currently not avaible.")}
       
       # check if filter is in attributes, if not we will add it.
@@ -104,7 +135,7 @@ gene.annotation <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", datas
       {
         attributes <- unique(c(filter,attributes))
       }
-    
+      #system2("echo", args = c(filter,attributes), stdout = "/tmp/id_geneannotation_handling2")
     
       #print("Call Gene Annotation BiomaRt")
       shiny::incProgress(amount = 0.3, detail = "Retrieve data")
@@ -117,6 +148,7 @@ gene.annotation <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", datas
       
     }
     
+    #system2("echo", args = c(gene.info), stdout = "/tmp/id_geneannotation_handling_geneinfo")
     shiny::incProgress(amount = 0.2)
     ## Return
     return(unique(gene.info))
@@ -136,8 +168,9 @@ gene.annotation <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", datas
 ### GVIZ MODEL plotting
 # region defines the region arroung the gene to look at
 
-gene.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", filter = NULL, host="www.ensembl.org", proxyuri = NULL, proxyport = NULL, progresslog = NULL, region = 10000, data.only = FALSE, deseq=NULL)
+gene.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens", filter = NULL, host="www.ensembl.org", proxyurl = NULL, proxyport = NULL, progresslog = NULL, region = 10000, data.only = FALSE, deseq=NULL)
 {
+  
   shiny::incProgress(amount = 0.1,detail = "Prepare Data")
   # check dataset
   if(dataset == "homo_sapiens") { dataset <- "hsapiens_gene_ensembl"
@@ -147,7 +180,6 @@ gene.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="ho
   
   # Get biomart gene region track and load data from cp$ecrisp if available
   
-  
   # prepare and check
   if(is.null(genes) || is.null(filter))
   {
@@ -155,22 +187,19 @@ gene.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="ho
   }
   shiny::incProgress(amount = 0.1,detail = "Query biomaRt")
   #print("Gene.Gviz Start")
-  # Get data from Biomart
-  handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL,  mirror = NULL, verbose = FALSE)
-  if(!exists("handling"))
+  handling <- biomaRt::useEnsembl(biomart = database, dataset = dataset, host = host, version = NULL,  mirror = NULL, verbose = FALSE)
+  if(class(handling) == "try-error")
   {stop("biomaRt connection is not working. This can be a connectivity issue (e.g. proxy settings, internet connection) or the biomaRt service is currently not avaible.")}
-  
   
   attributes <- c("chromosome_name", "start_position", "end_position","strand")
   shiny::incProgress(amount = 0.1,detail = "Get Gene Information")
   # Call biomaRt
-  gene.info <- biomaRt::getBM(
-    filters = filter,
-    attributes = c(filter,attributes),
-    values = unique(genes),
-    mart = handling)
-  # print(str(gene.info))
-  
+    gene.info <- biomaRt::getBM(
+        filters = filter,
+        attributes = c(filter,attributes),
+        values = unique(genes),
+        mart = handling)
+    
   shiny::incProgress(amount = 0.1,detail = "Get Gene Region Information")
   # Get region infomration
   region.info <- biomaRt::getBM(
@@ -178,6 +207,7 @@ gene.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="ho
     attributes = c(filter,attributes),
     values = paste(unique(gene.info$chromosome_name),":",min(gene.info$start_position-region, na.rm=TRUE),":",max(gene.info$end_position+region, na.rm=TRUE), sep=""),
     mart = handling)
+  
   # replace empty with "unknown
   region.info[region.info[,1] == "",1] <- "no identifier"
   
@@ -197,6 +227,7 @@ gene.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="ho
   #print(str(itrack))
   #print("Reftrack")
   # make gene overview
+  
   ref.track <- Gviz::GenomeAxisTrack(GenomicRanges::GRanges(paste("chr", unique(gene.info$chromosome_name), sep=""), IRanges::IRanges(min((gene.info$start_position-region), na.rm=TRUE), max((gene.info$end_position+region), na.rm=TRUE))), lwd=4, fontsize=20)
   shiny::incProgress(amount = 0.2)
   gene.region <- GenomicRanges::makeGRangesFromDataFrame(region.info,
@@ -207,15 +238,7 @@ gene.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="ho
                                                          keep.extra.columns=TRUE,
                                                          ignore.strand=FALSE,
                                                          starts.in.df.are.0based=TRUE)
-  #print("Adding log2fc")
-  # Set the selected gene for highlighting later
-  #elementMetadata(gene.region)[,1] <- sapply(elementMetadata(gene.region)[,1], function(x) { 
-  #  if(x == genes)
-  #  {return("GOI")} else {
-  #    return(x)
-  #  } 
-  #  } )
-  # Get log2 FC from deseq$data$genes
+
   GenomicRanges::elementMetadata(gene.region)$log2fc <- sapply(GenomicRanges::elementMetadata(gene.region)[,1], function(x){
     toreturn = NULL
     toreturn <- deseq$data$genes[deseq$data$genes$genes == as.character(x),"log2FoldChange"]
@@ -240,30 +263,32 @@ gene.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="ho
   shiny::incProgress(amount = 0.2)
   # make BiomartGeneregion for transcripts
   #print("biomTrack")
-  biomTrack <- Gviz::BiomartGeneRegionTrack(chromosome = paste("chr",unique(gene.info$chromosome_name), sep="",collapse=""),
-                                            start = min(region.info$start_position, na.rm=TRUE), end = max(region.info$end_position, na.rm=TRUE),
-                                            biomart = biomaRt::useEnsembl(biomart="ensembl", dataset=dataset),
-                                            name = "Transcripts",
-                                            genome = genome,
-                                            transcriptAnnotation = "symbol",
-                                            showExonId = FALSE,
-                                            showId=TRUE,
-                                            collapseTranscripts=TRUE,
-                                            shape="box",
-                                            stacking = "squish")
-  # make datatrack for log2 FC and Z-Ratio of particular gene
+   
+  biomTrack <-  Gviz::BiomartGeneRegionTrack(chromosome = paste("chr",unique(gene.info$chromosome_name), sep="",collapse=""),
+                                                 start = min(region.info$start_position, na.rm=TRUE), end = max(region.info$end_position, na.rm=TRUE),
+                                                 biomart = biomaRt::useEnsembl(biomart="ensembl", dataset=dataset),
+                                                 name = "Transcripts",
+                                                 genome = genome,
+                                                 transcriptAnnotation = "symbol",
+                                                 showExonId = FALSE,
+                                                 showId=TRUE,
+                                                 collapseTranscripts=TRUE,
+                                                 shape="box",
+                                                 stacking = "squish")
   
+  # make datatrack for log2 FC and Z-Ratio of particular gene
   #print("dTrack")
+  
   dtrack <- Gviz::DataTrack(range = gene.region,
                             strand = "*",
                             data = gene.region$log2fc,
                             type = "histogram",
                             name ="Log2 Foldchange")
+  
   Gviz::feature(dtrack) <- region.info$color
   shiny::incProgress(amount = 0.1,detail = "Create Plot")
   # plot track and give back dataframe with all results
   return.list <- list("info" = gene.info, "region" = region.info, "iTrack" = itrack, "refTrack" = ref.track , "generegionTrack" = generegiontrack, "biomTrack" = biomTrack, "dTrack" = dtrack, "chromosome" = paste("chr", unique(gene.info$chromosome_name), sep="") )
-  
   
   
   ## Return
@@ -280,8 +305,9 @@ gene.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="ho
 }
 
 ### Gene detailed with sgRNA
-sgrna.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", filter = NULL, host="www.ensembl.org", region = 1000, data.only=FALSE, deseq=NULL, readcount = NULL, ecrisp = NULL, GRCh = NULL)
+sgrna.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens", filter = NULL, host="www.ensembl.org", region = 1000, data.only=FALSE, deseq=NULL, readcount = NULL, ecrisp = NULL, GRCh = NULL, proxyurl = NULL, proxyport = NULL)
 {
+  
   #sgrna.gviz(genes = "BAX", database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", filter = "hgnc_symbol", host="www.ensembl.org", region = 1000, data.only=FALSE, deseq=out$deseq, readcount = out$readcount, ecrisp = out$ecrisp)
   shiny::incProgress(amount = 0.1, detail = "Prepare Data")
   # check dataset
@@ -309,26 +335,20 @@ sgrna.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="h
   shiny::incProgress(amount = 0.1,detail = "Query biomaRt")
   #print("sgRNA.gviz start")
   # Get data from Biomart
-  handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL, GRCh, mirror = NULL, verbose = FALSE)
-  if(!exists("handling"))
+    handling <- biomaRt::useEnsembl(biomart = database, dataset = dataset, host = host, version = NULL, GRCh, mirror = NULL, verbose = FALSE)
+  
+  if(class(handling) == "try-error")
   {stop("biomaRt connection is not working. This can be a connectivity issue (e.g. proxy settings, internet connection) or the biomaRt service is currently not avaible.")}
   
   #print("Call biomaRt")
   attributes <- c("chromosome_name", "start_position", "end_position","strand")
   shiny::incProgress(amount = 0.1,detail = "Get Gene Information")
   # Call biomaRt
-  gene.info <- biomaRt::getBM(
-    filters = filter,
-    attributes = c(filter,attributes),
-    values = unique(genes),
-    mart = handling)
-  
-  ###
-  
-  
-  
-  
-  
+    gene.info <- biomaRt::getBM(
+        filters = filter,
+        attributes = c(filter,attributes),
+        values = unique(genes),
+        mart = handling)
   
   
   ###
@@ -386,17 +406,20 @@ sgrna.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="h
   
   # make BiomartGeneregion for transcripts
   shiny::incProgress(amount = 0.1)
-  biomTrack <- Gviz::BiomartGeneRegionTrack(chromosome = paste("chr",unique(gene.info$chromosome_name), sep="",collapse=""),
-                                            start = min(gene.info$start_position, na.rm=TRUE), end = max(gene.info$end_position, na.rm=TRUE),
-                                            biomart = biomaRt::useEnsembl(biomart="ensembl", dataset=dataset),
-                                            name = "Transcripts",
-                                            genome = genome,
-                                            transcriptAnnotation = "symbol",
-                                            showExonId = FALSE,
-                                            showId=TRUE,
-                                            collapseTranscripts=FALSE,
-                                            shape="box",
-                                            stacking = "squish")
+
+    biomTrack <- Gviz::BiomartGeneRegionTrack(chromosome = paste("chr",unique(gene.info$chromosome_name), sep="",collapse=""),
+                                   start = min(gene.info$start_position, na.rm=TRUE), end = max(gene.info$end_position, na.rm=TRUE),
+                                   biomart = biomaRt::useEnsembl(biomart="ensembl", dataset=dataset),
+                                   name = "Transcripts",
+                                   genome = genome,
+                                   transcriptAnnotation = "symbol",
+                                   showExonId = FALSE,
+                                   showId=TRUE,
+                                   collapseTranscripts=FALSE,
+                                   shape="box",
+                                   stacking = "squish")
+      
+  #}
   
   # make sgRNAs 
   sgrnatrack <- NULL
@@ -472,18 +495,23 @@ sgrna.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="h
                                           group = annotate.features$feature_type_name,
                                           showId = TRUE)
     # Annotatetion
-    ensembl = biomaRt::useEnsembl(biomart="regulation", dataset=dataset.anno)
+    #ensembl = biomaRt::useEnsembl(biomart="regulation", dataset=dataset.anno)
     
     
     # Motifs
     #print("motif track")
-    ensembl = biomaRt::useEnsembl(biomart="regulation", dataset=dataset.motif)
+    
+    ensembl <- biomaRt::useEnsembl(biomart="regulation", dataset=dataset.motif)
+    
+    ensembl <- biomaRt::useEnsembl(biomart="regulation", dataset=dataset.motif)
+    
+    
     motif.features <- biomaRt::getBM(c("binding_matrix_id", "display_label", "score", "feature_type_name","chromosome_start","chromosome_end"),
-                                     filters = c("chromosome_name","start","end"),
-                                     #filters = c("chromosome_name"),
-                                     values = list(unique(gene.info$chromosome_name),min(gene.info$start_position, na.rm=TRUE), min(gene.info$end_position, na.rm=TRUE)),
-                                     #values = gene.load$chromosome_name,
-                                     mart = ensembl)
+                                      filters = c("chromosome_name","start","end"),
+                                      #filters = c("chromosome_name"),
+                                      values = list(unique(gene.info$chromosome_name),min(gene.info$start_position, na.rm=TRUE), min(gene.info$end_position, na.rm=TRUE)),
+                                      #values = gene.load$chromosome_name,
+                                      mart = ensembl)
     
     motifTrack <- Gviz::AnnotationTrack(feature = motif.features[, "feature_type_name"], chromosome = paste("chr", unique(gene.info$chromosome_name), sep=""), 
                                         start = motif.features[,"chromosome_start"], 
@@ -526,7 +554,7 @@ sgrna.gviz <- function(genes = NULL, database="ENSEMBL_MART_ENSEMBL", dataset="h
 
 
 
-genomecrispr <- function(genes = genes, database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", host="www.ensembl.org", new.identifier = cp$miaccs$g.identifier.new, readcount=NULL, ecrisp = NULL){
+genomecrispr <- function(genes = genes, database="ensembl", dataset="homo_sapiens", host="www.ensembl.org", new.identifier = cp$miaccs$g.identifier.new, readcount=NULL, ecrisp = NULL, proxyurl = NULL, proxyport = NULL){
   
   # new.identifier to check whether genes contains HGNC_SYMBOL information, if this is not the case we need to convert it!
   if(new.identifier != "hgnc_symbol")
@@ -540,45 +568,110 @@ genomecrispr <- function(genes = genes, database="ENSEMBL_MART_ENSEMBL", dataset
     shiny::incProgress(amount = 0.1, detail = "Query biomaRt")
     #print("Start genomecrispr handling")
     # Get data from Biomart
-    handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL, mirror = NULL, verbose = FALSE)
+    if(!is.null(proxyport) && !is.null(proxyport))
+    {
+      handling <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport),  
+                                        biomaRt::useEnsembl(biomart = database, dataset = dataset, host = host, version = NULL, mirror = NULL, verbose = FALSE)
+      ))
+    } else {
+      handling <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport),  
+                                        biomaRt::useEnsembl(biomart = database, dataset = dataset, host = host, version = NULL, mirror = NULL, verbose = FALSE)
+      ))
+    }
+      
+   
+    #handling <- biomaRt::useEnsembl(biomart = database, dataset = dataset, host = host, version = NULL, mirror = NULL, verbose = FALSE)
     # Call biomaRt
     shiny::incProgress(amount = 0.1, detail = "Get Gene Information")
-    gene.info <- biomaRt::getBM(
-      filters = new.identifier,
-      attributes = "hgnc_symbol",
-      values = unique(genes),
-      mart = handling)
+      gene.info <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport),  
+                                         biomaRt::getBM(
+                                           filters = new.identifier,
+                                           attributes = "hgnc_symbol",
+                                           values = unique(genes),
+                                           mart = handling)
+      ))
+    # gene.info <- biomaRt::getBM(
+    #   filters = new.identifier,
+    #   attributes = "hgnc_symbol",
+    #   values = unique(genes),
+    #   mart = handling)
     
     genes <- gene.info[1,1]
   }
   shiny::incProgress(amount = 0.1, detail = "Call GenomeCRISPR")
   # Call genomeCRISPR tp get all information for that particular gene
   #print("Call genomecrispr DB for gene information")
-  r <- httr::POST('http://genomecrispr.dkfz.de/api/sgrnas/symbol', 
-                  body=list(query=genes),  # genes
-                  encode='json' 
-  )
+  
+  if(!is.null(proxyport) && !is.null(proxyport))
+  {
+    r <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport),  
+                               httr::POST('http://genomecrispr.dkfz.de/api/sgrnas/symbol', 
+                                          body=list(query=genes),  # genes
+                                          encode='json' 
+                               )
+    ))
+  } else {
+    r <- try(
+              httr::POST('http://genomecrispr.dkfz.de/api/sgrnas/symbol', 
+                                          body=list(query=genes),  # genes
+                                          encode='json' 
+              )
+    )
+  }
+  
+    
+  
+  # r <- httr::POST('http://genomecrispr.dkfz.de/api/sgrnas/symbol', 
+  #                 body=list(query=genes),  # genes
+  #                 encode='json' 
+  # )
+  
+  output <- list()
+  
   if(length(httr::content(r)) == 0 || !grepl(pattern =".*pubmed.*", x = httr::content(r), perl=TRUE))
   {
-    output <- NULL
+    output <- list(
+      "sgrnas" = NA,
+      "genes" = NA,
+      "sgrnas2" = NA
+    )
   } else
   {
     shiny::incProgress(amount = 0.1)
     #print("convert gene information")
     ## dplyr method bind_rows is much faster than do.call('rbind') but does not work here for some weird reason.
-    #sgrnas <- dplyr::bind_rows(sgrnas, lapply(content(r), unlist)))
-    options(bphost="localhost")
+    
     sgrnas <- httr::content(r) %>% lapply(function(x) list(pubmed=x$pubmed, cellline=x$cellline, condition=x$condition, hit=x$hit, sequence=x$sequence)) %>% bind_rows
     # get Publications
-    output <- list()
+    
     output <- list("sgrnas" = sgrnas)
     output$genes <- list()
     for(i in 1:length(unique(sgrnas$pubmed)))
     {
-      author <- httr::POST('http://genomecrispr.dkfz.de/api/experiments/publication', 
-                           body=list(id=as.character(unique(sgrnas$pubmed))[i]), #
-                           encode='json' 
-      )
+      
+      if(!is.null(proxyport) && !is.null(proxyport))
+      {
+        author <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport),  
+                                        httr::POST('http://genomecrispr.dkfz.de/api/experiments/publication', 
+                                                   body=list(id=as.character(unique(sgrnas$pubmed))[i]), #
+                                                   encode='json' 
+                                        )
+        ))
+      } else {
+        author <- try(
+                    httr::POST('http://genomecrispr.dkfz.de/api/experiments/publication', 
+                                                   body=list(id=as.character(unique(sgrnas$pubmed))[i]), #
+                                                   encode='json' 
+                    )
+        )
+      }
+      
+       
+      
+      # author <- httr::POST('http://genomecrispr.dkfz.de/api/experiments/publication', 
+      #                      body=list(id=as.character(unique(sgrnas$pubmed))[i]), #
+      #                      encode='json' 
+      # )
       author.screens <- httr::content(author) %>% lapply(function(x) list(pubmed=x$pubmed, title=x$title, abstract=x$abstract)) %>% bind_rows
       output$genes[i] <- list(author.screens)
     }
@@ -595,18 +688,42 @@ genomecrispr <- function(genes = genes, database="ENSEMBL_MART_ENSEMBL", dataset
     #print("Call genomecrispr DB forsgrnas information")
     # get sgrna sequence
     sgrna.seq <- toupper(ecrisp[ecrisp$design %in% sgrna.id,"Sequence"])
-    r <- httr::POST('http://genomecrispr.dkfz.de/api/sgrnas/sequence', 
-                    body=list(sequence=as.character(unique(sgrna.seq))),#as.character(unique(sgrna.seq))), "CCAAATACTCCACACGCAAATTT"
-                    encode='json' 
-    )
-    #print("sgRnas2 output from DB")
+    
+    if(!is.null(proxyport) && !is.null(proxyport))
+    {
+      r <- try(httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport),  
+                                 httr::POST('http://genomecrispr.dkfz.de/api/sgrnas/sequence', 
+                                            body=list(sequence=as.character(unique(sgrna.seq))),
+                                            encode='json' 
+                                 )
+      ))
+    } else {
+      r <- try(
+                                 httr::POST('http://genomecrispr.dkfz.de/api/sgrnas/sequence', 
+                                            body=list(sequence=as.character(unique(sgrna.seq))),
+                                            encode='json' 
+                                 )
+      )
+    }
+    
+      
+    
+    # r <- httr::POST('http://genomecrispr.dkfz.de/api/sgrnas/sequence', 
+    #                 body=list(sequence=as.character(unique(sgrna.seq))),#as.character(unique(sgrna.seq))), "CCAAATACTCCACACGCAAATTT"
+    #                 encode='json' 
+    # )
+    
     shiny::incProgress(amount = 0.2)
     
-    if(length(httr::content(r)) < 1 || !grepl(pattern =".*pubmed.*", x = httr::content(r), perl=TRUE ))
+    # Check if meaningful data comes back
+    if(!grepl(pattern =".*pubmed.*", x = httr::content(r), perl=TRUE ))
     {
-      output$sgrnas2 <- NULL
+      output$sgrnas2 <- NA
     } else {
       output$sgrnas2 <- httr::content(r) %>% lapply(function(x) list(log2fc=x$log2fc, pubmed=x$pubmed, condition=x$condition, score=x$score, scoredist=x$scoredist, hit=x$hit)) %>% bind_rows
+      
+      #if()
+      
     }
     
   }
@@ -624,7 +741,7 @@ genomecrispr <- function(genes = genes, database="ENSEMBL_MART_ENSEMBL", dataset
 
 ###### GO Terms
 
-goterms <- function(genes = genes, database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", host="www.ensembl.org", filter = NULL, userdir = userDir){
+goterms <- function(genes = genes, database="ensembl", dataset="homo_sapiens", host="www.ensembl.org", filter = NULL, userdir = userDir, proxyurl = NULL, proxyport = NULL){
   
  
     shiny::incProgress(amount = 0.1, detail = "Prepare Data")
@@ -636,15 +753,10 @@ goterms <- function(genes = genes, database="ENSEMBL_MART_ENSEMBL", dataset="hom
     shiny::incProgress(amount = 0.1, detail = "Query biomaRt")
     #print("Start genomecrispr handling")
     # Get data from Biomart
-    handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL, mirror = NULL, verbose = FALSE)
+    handling <- biomaRt::useEnsembl(biomart = database, dataset = dataset, host = host, version = NULL, mirror = NULL, verbose = FALSE)
     # Call biomaRt
     shiny::incProgress(amount = 0.1, detail = "Get Gene Information")
     
-    #go_id	GO Term Accession
-    #name_1006	GO Term Name
-    #definition_1006	GO Term Definition
-    #go_linkage_type	GO Term Evidence Code
-    #namespace_1003	GO domain
     attributes <- c("go_id","name_1006","definition_1006","go_linkage_type","namespace_1003")
     
     gene.info <- try(biomaRt::getBM(
@@ -652,14 +764,12 @@ goterms <- function(genes = genes, database="ENSEMBL_MART_ENSEMBL", dataset="hom
       attributes = c(filter,attributes),
       values = unique(genes),
       mart = handling))
- 
-    # get unique name_1006
-    #go.name <- unique(gene.info$name_1006)
-    # get unique definition
-    #go.definition <- unique(gene.info$definition_1006)
-    # get unique go_linkage type
-    #go.type <- unique(gene.info$go_linkage_type)
-    # get unique namespace_1003
+   
+    if(class(gene.info) == "try-error")
+    {
+      stop("biomaRt query failed.")
+    }
+    
     go.namespace <- unique(gene.info$namespace_1003)
     go.namespace <- go.namespace[go.namespace !=""]
     
@@ -667,43 +777,50 @@ goterms <- function(genes = genes, database="ENSEMBL_MART_ENSEMBL", dataset="hom
     # create output in a way that it provides a list that seperates what we want to see:
     # first: seperated by NAMESPACE to see the functional class -> is always either molecular_function, biological_process or cellular_component
     # then by name (unique terms) with ALL experimental GO_linkage_types
-    go.list <- as.list(go.namespace) # make list
-    names(go.list) <- go.namespace
-    # next level, we add unique function of each
-    for(i in 1:length(go.list))
+    if(length(go.namespace) <=1)
     {
-      # get stuff from gene.info
-      df <- dplyr::filter(gene.info, namespace_1003 == go.list[[i]])
-      df_name <- unique(df$name_1006)
-      df_name <- as.data.frame(df_name[df_name != ""], stringsAsFactors=FALSE)
-      colnames(df_name) <- "name_1006"
+      return(list("table" = NA, "gene.info" = NA))
+    } else
+    {
+      go.list <- as.list(go.namespace) # make list
+      names(go.list) <- go.namespace
+      # next level, we add unique function of each
+      for(i in 1:length(go.list))
+      {
+        # get stuff from gene.info
+        df <- dplyr::filter(gene.info, namespace_1003 == go.list[[i]])
+        df_name <- unique(df$name_1006)
+        df_name <- as.data.frame(df_name[df_name != ""], stringsAsFactors=FALSE)
+        colnames(df_name) <- "name_1006"
+        
+        df_name$go_id <- sapply(df_name$name_1006, function(x) {
+          getgo <- gene.info[gene.info$name_1006 %in% as.character(x),"go_id"]
+          getgo <- paste(getgo, sep="", collapse = ";")
+          return(as.character(getgo))
+        })
+        
+        df_name$go_linkage_type <- sapply(df_name$name_1006, function(x) {
+          getgo <- gene.info[gene.info$name_1006 %in% as.character(x),"go_linkage_type"]
+          getgo <- paste(getgo, sep="", collapse = ";")
+          return(as.character(getgo))
+        })
+        
+        # add to go_list for return
+        go.list[i] <- list(df_name)
+      }
       
-      df_name$go_id <- sapply(df_name$name_1006, function(x) {
-        getgo <- gene.info[gene.info$name_1006 %in% as.character(x),"go_id"]
-        getgo <- paste(getgo, sep="", collapse = ";")
-        return(as.character(getgo))
-      })
-      
-      df_name$go_linkage_type <- sapply(df_name$name_1006, function(x) {
-        getgo <- gene.info[gene.info$name_1006 %in% as.character(x),"go_linkage_type"]
-        getgo <- paste(getgo, sep="", collapse = ";")
-        return(as.character(getgo))
-      })
-      
-      # add to go_list for return
-      go.list[i] <- list(df_name)
+      shiny::incProgress(amount = 0.2)
+      # return list with two things
+      return(list("table" = go.list, "gene.info" = gene.info))
     }
-    
-    shiny::incProgress(amount = 0.2)
-    # return list with two things
-    return(list("table" = go.list, "gene.info" = gene.info))
+   
 }
 
 goview <- function(golist = NULL, term = NULL, userdir = userDir){
   
-  if(is.null(golist) || is.null(term))
+  if(is.null(golist) || is.null(term) || is.na(golist$table) || is.na(golist$gene.info))
   {
-    stop("No go term list/gene info available. Please use goterm() before and pass its output to this function.")
+    return(NA)
   }
   
   
@@ -733,7 +850,7 @@ goview <- function(golist = NULL, term = NULL, userdir = userDir){
 #### KEGG
 
 
-getkegg <- function(entrezgene = NULL){
+getkegg <- function(entrezgene = NULL, proxyurl = NULL, proxyport = NULL){
   
   ## Now we ask KEGG via KEGGREST for additional information
   ## We need: gene as ENTREZGENE ID and the organism (maybe)
@@ -743,10 +860,18 @@ getkegg <- function(entrezgene = NULL){
   {
     return(NULL)
   }
+  if(!is.null(proxyurl) && !is.null(proxyport))
+  {
+    kegggene <- httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport), KEGGREST::keggConv("genes", paste("ncbi-geneid:", as.character(entrezgene) , sep="") ))
+    
+    keggquery <- httr::with_config(httr::use_proxy(url = proxyurl, port = proxyport), KEGGREST::keggGet(as.character(kegggene)))
+  } else {
+    
+    kegggene <- KEGGREST::keggConv("genes", paste("ncbi-geneid:", as.character(entrezgene) , sep="") )
+    
+    keggquery <- KEGGREST::keggGet(as.character(kegggene))
+  }
   
-  kegggene <- KEGGREST::keggConv("genes", paste("ncbi-geneid:", as.character(entrezgene) , sep="") )
-  
-  keggquery <- KEGGREST::keggGet(as.character(kegggene))
   
   
   

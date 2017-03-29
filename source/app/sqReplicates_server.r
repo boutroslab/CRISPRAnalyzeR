@@ -24,14 +24,16 @@ output$sqReplicates_overview_plot <- renderPlot({
   if( status$results == FALSE ){
     Plot_blank("base", pos = c(0.5, 0.5), msg = config$messages$noanalysisrunyet$String)
   } else {
+    withProgress(message = 'Making plot', value = 0, {
+      baggro <- input$sqReplicates_overview_aggro
+      blog <- input$sqReplicates_overview_log
+      cctrl <- "pos"  #input$sqReplicates_overview_ctrl removed UI element
+      dsNames <- c(results()$compare[[1]], results()$compare[[2]])
+      data <- results()$readCountVS
     
-    baggro <- input$sqReplicates_overview_aggro
-    blog <- input$sqReplicates_overview_log
-    cctrl <- "pos"  #input$sqReplicates_overview_ctrl removed UI element
-    dsNames <- c(results()$compare[[1]], results()$compare[[2]])
-    data <- results()$readCountVS
-
-    Plot_Replicates_SPLOM( data, dsNames, bLog = blog, bAggro = baggro, cCtrl = cctrl )
+      incProgress(0.5, detail = "rendering plot")
+      Plot_Replicates_SPLOM( data, dsNames, bLog = blog, bAggro = baggro, cCtrl = cctrl )
+    })
   }
 })
 
@@ -112,7 +114,7 @@ output$sqReplicates_labelgene_select <- renderUI({
 # bLog = boolean, log10 scale
 # aggro = boolean, aggregated
 # ctrl = chr "pos", "neg" positive/ nontargeting
-output$sqReplicates_dataset_plot <- renderHighchart2({
+output$sqReplicates_dataset_plot <- renderHighchart({
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else if( length(input$sqReplicates_dataset_set1) != 0 &&

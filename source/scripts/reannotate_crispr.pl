@@ -42,6 +42,7 @@ GetOptions(
 	    'organism=s'	=> \$something{"organism"},
 		'non-seed-length=s'=> \$something{"non-seed-length"},
 		'mismatches-allowed=s'=> \$something{"mismatches-allowed"},
+		'threads'		=> \$something{"threads"},
 	    'version'		=> \$something{"version"},
 	    'help'		=> \$something{"help"}
 	);
@@ -54,17 +55,21 @@ for (my $i=0; $i<scalar(@ARGV); $i++){
 			if ($ARGV[$i] eq '-organism'		){$something{"organism"}	= int($ARGV[++$i]); }	        
 			if ($ARGV[$i] eq '-non-seed-length'			){$something{"non-seed-length"}		= int($ARGV[++$i]); }
 			if ($ARGV[$i] eq '-mismatches-allowed'		){$something{"mismatches-allowed"}	= int($ARGV[++$i]); }
+			if ($ARGV[$i] eq '-threads'		){$something{"threads"}	= int($ARGV[++$i]); }
 			}
 		}
 
 if(!defined($something{"output-dir"}) or !(-d $something{"output-dir"})){ $something{"output-dir"}="." }
 if(!defined($something{"sequence-files"}) or !(-e $something{"sequence-files"})){ die "The sequence file ".$something{"sequence-files"}." could not be opened. Either the user has no rights the read it or the file does not exist." }
-if(!defined($something{"databasepath"}) or !(-d $something{"databasepath"})){ $something{"databasepath"}="." }
+if(!defined($something{"databasepath"})){ $something{"databasepath"}="." }
 if(!defined($something{"organism"})){ $something{"organism"}="drosophila_melanogaster" }
-if(!defined($something{"non-seed-length"})){ $something{"non-seed-length"}=1 }
+if(!defined($something{"non-seed-length"})){ $something{"non-seed-length"}=0 }
 if(!defined($something{"mismatches-allowed"})){ $something{"mismatches-allowed"}=0 }
+if(!defined($something{"threads"})){ $something{"threads"}=1 }
 
-my ($script_name,$script_version,$script_date,$script_years) = ('reannotate-crispr','0.0.1','2016-27-07','2013-2016');
+print "Settings are:\n Output Dir \t". $something{"output-dir"} ."\n Sequence file: \t". $something{"sequence-files"} ."\n Database Path: \t". $something{"databasepath"} . "\n Organism: \t". $something{"organism"} ."\n Non-Seed Length: \t". $something{"non-seed-length"} ."\n Mismatches Allowed: \t". $something{"mismatches-allowed"}. "\n Number of Threads: \t". $something{"threads"}."\n";
+
+my ($script_name,$script_version,$script_date,$script_years) = ('reannotate-crispr','0.0.2','2016-27-07','2013-2016');
 
 $something{"version_string"} = "$script_name, version $script_version, $script_date\nAuthor $script_years Florian Heigwer\n";
 $something{"help_string"} = qq{Usage: reannotate-crispr [--options=value] ...
@@ -73,7 +78,7 @@ Options:
 --sequence-files=<path/to/dir>      - A fasta formatted file of sgRNA spacer sequences (not-including PAM, mandatory).
 --databasepath=<path/to/dir>        - Select folder where genome data is deposit  (default: .)
 --organism=<string>                 - Please type the name of the reference organism as given in the database (default: drosophila_melanogaster)
---non-seed-length=<int>             - Specify the non-seed length in bp (the number of 5' basepairs to be ignore by the aligner, default: 1)
+--non-seed-length=<int>             - Specify the non-seed length in bp (the number of 5' basepairs to be ignored by the aligner, will be cut from the 5' end of the sequence , default: 0)
 --mismatches-allowed=<int>          - Specify the number of mismatches allowed in a "valid" alignment (default: 0)
 --version                           - Show version.
 --help                              - Show this message.
@@ -97,7 +102,7 @@ if ($something{"output-dir"}=~m/\/$/) {
   $temp_dir=$something{"output-dir"}."/";#.$temp_dir;
 }
 #mkdir($temp_dir) or die $!;
-#system('chmod -R o+rwx '.$temp_dir.';');
+system('chmod -R o+rwx '.$temp_dir.';');
 
 	
 my $databasepath;
@@ -145,11 +150,11 @@ $databasepath = $something{"databasepath"} . $something{"organism"} . "/" . $som
 		###################################################################################################################################################################################################
 		#system( '/usr/bin/bowtie ' . $databasepath.".genome" . ' ' . $temp_dir . "/" .'seq.fasta -f -v 3 -y -k 30 -S --sam-nohead --sam-nosq -p 4  > ' . $temp_dir .'/primary_out.bwt' );
 		if (-e $databasepath.".genome.1.ebwtl") {
-			system( 'bowtie ' . $databasepath.".genome" . ' ' . $temp_dir . "/" .'seq.fasta -f -v 3 -y -a -S --sam-nohead --sam-nosq --large-index -p 4  > ' . $temp_dir .'/primary_out.bwt' );
-            print 'large '.'bowtie ' . $databasepath.".genome" . ' ' . $temp_dir . "/" .'seq.fasta -f -v 3 --quiet -y -a -S --sam-nohead --large-index  --sam-nosq -p 4  > ' . $temp_dir .'/primary_out.bwt'."\n";
+			system( 'bowtie ' . $databasepath.".genome" . ' ' . $temp_dir . "/" .'seq.fasta -f -v 3 -y -a -S --sam-nohead --sam-nosq --large-index -p '. $something{"threads"} . '  > ' . $temp_dir .'/primary_out.bwt' );
+            print 'large '.'bowtie ' . $databasepath.".genome" . ' ' . $temp_dir . "/" .'seq.fasta -f -v 3 --quiet -y -a -S --sam-nohead --large-index  --sam-nosq -p '. $something{"threads"} . '  > ' . $temp_dir .'/primary_out.bwt'."\n";
           }else{
-			system( 'bowtie ' . $databasepath.".genome" . ' ' . $temp_dir . "/" .'seq.fasta -f -v 3 -y -a -S --sam-nohead --sam-nosq -p 4  > ' . $temp_dir .'/primary_out.bwt' );
-            print 'small '.'bowtie ' . $databasepath.".genome" . ' ' . $temp_dir . "/" .'seq.fasta -f -v 3 --quiet -y -a -S --sam-nohead --sam-nosq -p 4  > ' . $temp_dir .'/primary_out.bwt'."\n";
+			system( 'bowtie ' . $databasepath.".genome" . ' ' . $temp_dir . "/" .'seq.fasta -f -v 3 -y -a -S --sam-nohead --sam-nosq -p '. $something{"threads"} . '  > ' . $temp_dir .'/primary_out.bwt' );
+            print 'small '.'bowtie ' . $databasepath.".genome" . ' ' . $temp_dir . "/" .'seq.fasta -f -v 3 --quiet -y -a -S --sam-nohead --sam-nosq -p '. $something{"threads"} . '  > ' . $temp_dir .'/primary_out.bwt'."\n";
 		  }
 		open($bowtie,"$temp_dir/primary_out.bwt") or die $temp_dir,"cannot open primary bwt\n" ;
 			while (my $line = <$bowtie>) {

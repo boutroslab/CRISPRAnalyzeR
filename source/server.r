@@ -19,6 +19,7 @@ library(shinydashboard)
 library(VennDiagram)
 library(openxlsx)
 library(shiny)
+library(shinyjs)
 library(jsonlite)
 library(BiocGenerics)
 library(biomaRt)
@@ -45,6 +46,7 @@ library(gmailr)
 
 
 options(shiny.reactlog=FALSE) 
+options(shiny.sanitize.errors = FALSE)
 
 # load configuration
 source("config.r", local = TRUE)
@@ -69,7 +71,7 @@ shinyServer(function(input, output, session) {
   
 
   # 4096MB upload limit per file
-  options(shiny.maxRequestSize = 4096 * 1024^2)
+  options(shiny.maxRequestSize = as.numeric(config$max_upload) * 1024^2)
   
   # create objects needed throughout this session
   source(file.path(config$appDir, "init_server.r"), local = TRUE)
@@ -137,8 +139,6 @@ shinyServer(function(input, output, session) {
   # Venn diagrams and comparison across methods
   source(file.path(config$appDir, "hcOverview_server.r"), local = TRUE)
   
-  # Compare Samples with Drilldown
-  source(file.path(config$appDir, "hcCompareSamples_server.r"), local = TRUE)
   
   # Essential Genes
   
@@ -173,6 +173,7 @@ shinyServer(function(input, output, session) {
     source(file.path(config$appDir, "sendmail_server.r"), local = TRUE)
   }
  
+
   
   #shiny::showReactLog()
 })

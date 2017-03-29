@@ -32,18 +32,24 @@ observe({
     shinyjs::disable("seqFiles_rev")
     shinyjs::disable("seqFiles_bt2Sens")
     shinyjs::disable("seqFiles_bt2quali")
+    shinyjs::hide("fastqsettings")
+    
+    
   } else if( any(grepl(".*\\.fastq\\.gz$", tolower(input$seqFiles_upload$name), perl = TRUE)) ){
     extract_fastq$needed <- TRUE
     shinyjs::enable("seqFiles_regexTarget")
     shinyjs::enable("seqFiles_rev")
     shinyjs::enable("seqFiles_bt2Sens")
     shinyjs::enable("seqFiles_bt2quali")
+    shinyjs::show("fastqsettings")
+    
   } else {
     extract_fastq$needed <- FALSE
     shinyjs::disable("seqFiles_regexTarget")
     shinyjs::disable("seqFiles_rev")
     shinyjs::disable("seqFiles_bt2Sens")
     shinyjs::disable("seqFiles_bt2quali")
+    shinyjs::hide("fastqsettings")
   } 
 })
 
@@ -78,14 +84,14 @@ extract <- reactive({
   sens <- input$seqFiles_bt2Sens
   
   
-  test_seq <- Check_extract(target, needed, messages = config$messages)
-  if( test_seq$error == TRUE ){
-    error$extract <- test_seq$message
-    return()
-  }
+  # test_seq <- Check_extract(target, needed, messages = config$messages)
+  # if( test_seq$error == TRUE ){
+  #   error$extract <- test_seq$message
+  #   return()
+  # }
 
   status$extract <- TRUE
-  error$extract <- test_seq$message
+  #error$extract <- test_seq$message
   list("extract" = needed, "targetRegex" = target, "reverse" = rev,
        "bt2Quality" = paste("'", quali,"'", sep=""), "bt2Sensitivity" = sens)
 })
@@ -132,6 +138,8 @@ observeEvent(input$submit_seqFiles, {
     shinyjs::disable("seqFiles_bt2Sens")
     shinyjs::disable("seqFiles_bt2quali")
     shinyjs::disable("libFile_regex")
+    shinyjs::disable("download_readcounts")
+    shinyjs::disable("download_fastq_report")
     
     info2 <- c(paste("progress", paste(0, collapse = ";"), sep = ";"),
               paste("info", paste("", collapse = ";"), sep = ";"),
@@ -228,7 +236,9 @@ extractedFiles <- eventReactive(progress_fastq(), {
           attach <- file.path(config$logDir, "fastq_extraction.log") # Attach logfile AND analysis.info for more details
           sendmail_car(message = message, title = title, from=NULL, to=NULL, attach=attach, type = "error")
         }
-        return()
+        out$error <- TRUE
+        return(out)
+        
       }
       write(paste(userID, ": check if QC information for NGS files is present"), logFile, append = TRUE)
         if(out[["rqc"]] != "empty")
@@ -237,12 +247,14 @@ extractedFiles <- eventReactive(progress_fastq(), {
           rqc.qa <- readRDS(file = out$rqc)
           
           out$rqc <- rqc.qa
+          shinyjs::enable("download_fastq_report")
         } else
         {
           write(paste(userID, ": RQC information NOT present"), logFile, append = TRUE)
           out$rqc <- ""
         }
       
+      shinyjs::enable("download_readcounts")
       
       write(paste(userID, ": extractedFiles tested: good"), logFile, append = TRUE)
       time$finishFasq <- Sys.time()
@@ -266,18 +278,22 @@ extractedFiles <- eventReactive(progress_fastq(), {
       })
         
 
-      ## get bt2 mapping information
+      ## get bt2 mapping information, extractratio and mapping ratio
       # stored in log file seqFiles()$names_bt2.log
       out$bt2mapping <- list()
+      out$extractRatio <- list()
+      out$bt2matching <- list()
       
-      for(i in 1: length(out$names))
+      for(i in 1: length(out$oldpaths))
       {
+        
         out$bt2mapping[[i]] <- list(NA)
         # check if log file is there
-        if(file.access(file.path(userDir, paste(out$names[i],"_bt2.log", sep=""))) == 0)
+        if(file.access(file.path(paste(out$oldpaths[i],"_bt2_error.log", sep=""))) == 0)
         {
+          
           # read file
-          con <- file(file.path(userDir, paste(out$names[i],"_bt2.log", sep="")))
+          con <- file(file.path(paste(out$oldpaths[i],"_bt2_error.log", sep="")))
           top <- readLines(con)
           close(con)
           
@@ -298,6 +314,31 @@ extractedFiles <- eventReactive(progress_fastq(), {
           arguments <- file.path(userDir, "*.seqFile") 
           system2(command, arguments)
           
+        }
+        # check extractRatio
+        if(file.access(file.path(paste(out$oldpaths[i],"_stats.txt", sep="")), mode = 4) == 0)
+        {
+          extractratio <- try(readr::read_tsv(file = file.path( paste(out$oldpaths[i],"_stats.txt", sep="")), col_names = TRUE))
+          if(class(extractratio) == "try-error")
+          {
+            out$extractRatio[[i]] <- NA
+          }
+          out$extractRatio[[i]] <- round((as.numeric(extractratio$Extracted) / as.numeric(extractratio$Total))*100, digits = 2)
+        } else {
+          out$extractRatio[[i]] <- NA
+        }
+        
+        # check map match
+        if(file.access(file.path(paste(out$oldpaths[i],"_map_stats.txt", sep="")), mode = 4) == 0)
+        {
+          mapratio <- try(readr::read_tsv(file = file.path( paste(out$oldpaths[i],"_map_stats.txt", sep="")), col_names = TRUE))
+          if(class(mapratio) == "try-error")
+          {
+            out$bt2matching[[i]] <- NA
+          }
+          out$bt2matching[[i]] <- round((as.numeric(mapratio$Matched) / as.numeric(mapratio$Total))*100, digits = 2)
+        } else {
+          out$bt2matching[[i]] <- NA
         }
         
       }
@@ -328,6 +369,10 @@ extractedFiles <- eventReactive(progress_fastq(), {
         #   # extracted files
         #   
         # }
+      
+      # save to userdir
+      saveRDS(object = out, file = file.path(userDir, "extractedFiles.rds"))
+      
       # SAM FILES
       command <- "rm"
       arguments <- file.path(userDir, "*.sam") 
@@ -344,6 +389,9 @@ extractedFiles <- eventReactive(progress_fastq(), {
       
       
       status$extractedFiles <- TRUE
+      out$error <- FALSE
+      shinyjs::enable("reset_data") 
+      
       return(out)
   }
 })
@@ -397,9 +445,12 @@ output$fastq_progressBar2 <- renderUI({
 
 ### Open MODAL when FASTQ Extraction is done
 observeEvent(progress_fastq()$progress, {
+  shiny::validate(
+    shiny::need(extractedFiles(), message = FALSE)
+  )
   if(progress_fastq()$progress == 1 )
   {
-    if(error$extractedFiles == "")
+    if(extractedFiles()$error == FALSE)
     {
       shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "open")
     }
@@ -409,11 +460,14 @@ observeEvent(progress_fastq()$progress, {
 })
 
 # Modal
-observeEvent(error$extractedFiles, {
-  if(error$extractedFiles !="" && !is.null(error$extractedFiles))
+observeEvent(progress_fastq()$progress, {
+  shiny::validate(
+    shiny::need(extractedFiles(), message = FALSE)
+  )
+  if(extractedFiles()$error == TRUE)
   {
     shinyBS::toggleModal(session, "extractfileerror", toggle = "open")
-    shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "close")
+    #shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "close")
   }
 })
 
@@ -436,6 +490,9 @@ observeEvent(input$reset_data, {
   shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "close")
   shinyBS::toggleModal(session, "fastqextraction_finished", toggle = "close")
   
+  shinyjs::hide(id="reevaluation-progress")
+  shinyjs::hide(id="analysis-progress")
+  
   status$seqFiles <- FALSE
   status$libFile <- FALSE
   status$groups <- FALSE
@@ -447,6 +504,12 @@ observeEvent(input$reset_data, {
   shinyjs::enable("submit_seqFiles")
   shinyjs::enable("startAnalysis")
   shinyjs::enable("submit_groups")
+  
+  # Remove files if present
+  command <- "rm"
+  arguments <- file.path(userDir, "*seqFile*") 
+  try(system2(command, arguments))
+  
   write(paste(userID, ": clicked on reset_data at", Sys.time()), logFile, append = TRUE)
 })
 
@@ -629,6 +692,7 @@ output$download_fastq_report <- downloadHandler(
   #shiny::validate(
   #  shiny::need(extractedFiles()$rqc, message="Download FASTQ QC Report (if available")
   #), 
+  
   filename = function(file) {
     paste('FASTQ_QA_Report','.html', sep="")
   },
@@ -649,8 +713,6 @@ output$overview_files <- renderUI ({
       <div class='container'>
   <div class='row'>
   <div class='col-md-12'>
-  <h4 class='text-success text-left'>
-  <i class='fa fa-files-o fa-fw'></i>Uploaded / Generated Rawdata Files</h4>
   <table class='table'>
   <thead>
   <tr>
@@ -658,8 +720,10 @@ output$overview_files <- renderUI ({
   <th>Provided Name</th>
   <th>Type</th>
   <th>Size</th>
-  <th>Extraction Ratio</th>
-  <th>Mapping to Reference</th>
+  <th>sgRNA</br>Extraction Ratio</th>
+  <th>Mapped</br>to Reference</th>
+  <th>Passed</br>Quality Threshold</th>
+  <th>Used</br>in Total</th>
   </tr>
   </thead>
   <tbody>"
@@ -678,6 +742,7 @@ output$overview_files <- renderUI ({
                          "Size" = "",
                          "extractRatio" = "not available",
                          "bt2mapping" = "not available",
+                         "bt2matching" = "not available",
     stringsAsFactors = FALSE
   )
   # loop through files and give back rdy to use HTML
@@ -687,6 +752,7 @@ output$overview_files <- renderUI ({
     # Set initals
     fileinfo[i,"extractRatio"] <- "not available"
     fileinfo[i,"bt2mapping"] <- "not available"
+    fileinfo[i,"bt2matching"] <- "not available"
     
     # check if paths are different, if it is it is a readcount file as well as a FASTQ file available
     if(extractedFiles()$paths[i] == extractedFiles()$oldpaths[i])
@@ -697,7 +763,9 @@ output$overview_files <- renderUI ({
     {
       fileinfo[i,"Type"] <- "Fastq"
       # get extractRatio
-      fileinfo[i,"extractRatio"] <- paste((as.numeric(seqFiles()$extractRatio[i])), "%", sep="")
+      #fileinfo[i,"extractRatio"] <- paste((as.numeric(seqFiles()$extractRatio[i])), "%", sep="")
+      
+      fileinfo[i,"extractRatio"] <- paste((as.numeric(extractedFiles()$extractRatio[[i]])), "%", sep="")
       
       # get bt2mapping
       if(!is.na(extractedFiles()$bt2mapping[[i]][1]))
@@ -709,6 +777,22 @@ output$overview_files <- renderUI ({
         fileinfo[i,"bt2mapping"] <- mapping
       }
       
+      # get bt2matching
+      if(!is.na(extractedFiles()$bt2matching[[i]][1]))
+      {
+        #fileinfo[i,"extractRatio"] <- extractedFiles()bt2mapping[i]
+        matchinginfo <- extractedFiles()$bt2matching[[i]]
+        
+        fileinfo[i,"bt2matching"] <- paste(matchinginfo, "%", sep = "")
+      }
+      
+      # final output
+      if(is.na(extractedFiles()$extractRatio[[i]]) || is.na(extractedFiles()$bt2mapping[[i]]) || is.na(extractedFiles()$bt2matching[[i]]))
+      {
+        fileinfo[i,"finaloutput"] <- "not available"
+      } else {
+        fileinfo[i,"finaloutput"] <- paste(round( ( (as.numeric(extractedFiles()$extractRatio[[i]])/100) * (as.numeric(gsub(pattern = "%", replacement = "", x = extractedFiles()$bt2mapping[[i]][["singlealign"]]))/100) * (as.numeric(extractedFiles()$bt2matching[[i]]) /100 )  ) * 100, digits = 2),"%", sep="")
+      }
       
       
     }
@@ -738,6 +822,12 @@ output$overview_files <- renderUI ({
       <td>
       ", fileinfo[i,"bt2mapping"],"
       </td>
+      <td>
+      ", fileinfo[i,"bt2matching"],"
+       </td>
+      <td>
+      ", fileinfo[i,"finaloutput"],"
+      </td>
       </tr>", sep="")
     } else
     {
@@ -754,18 +844,25 @@ output$overview_files <- renderUI ({
                             <td>
                             ", fileinfo[i,"bt2mapping"],"
                             </td>
+                            <td>
+                            ", fileinfo[i,"bt2matching"],"
+                             </td>
+                            <td>
+                            ", fileinfo[i,"finaloutput"],"
+                             </td>
                            </tr>", sep="") )
     }
   }
   lengthfiles <- nrow(fileinfo)
   # Add Library
-  fileinfo[lengthfiles+1,"Type"] <- "Library File"
-  fileinfo[lengthfiles+1,"Size"] <-  paste(round((file.size(extractedFiles()$libPath)/1024)/1024, digits = 2),"MegaByte", sep=" ")
-  fileinfo[i,"NameOriginal"] <- extractedFiles()$libName
-  fileinfo[i,"NameNew"] <- extractedFiles()$libName
+  # fileinfo[lengthfiles+1,"Type"] <- "Library File"
+  # fileinfo[lengthfiles+1,"Size"] <-  paste(round((file.size(extractedFiles()$libPath)/1024)/1024, digits = 2),"MegaByte", sep=" ")
+  # fileinfo[i,"NameOriginal"] <- extractedFiles()$libName
+  # fileinfo[i,"NameNew"] <- extractedFiles()$libName
   
   outputhtml <- paste(fileinfohtml, sep ="", collapse= " ")
   outputhtml <- paste(top, outputhtml, bottom, sep="", collapse = " ")
+  
   HTML(outputhtml)
   
 })

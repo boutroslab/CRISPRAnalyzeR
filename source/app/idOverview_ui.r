@@ -179,7 +179,7 @@ tabItem(tabName = "id_overview", align = "center",
                      #shiny::tags$hr(width="50%", style="margin-top:40px;margin-bottom:40px;"),
                  # KEGG general information
                  fluidRow(class="text-left", style="width:80%",
-                   
+                   shiny::tags$br(),
                    shiny::tags$p(class="text-left",HTML("<strong>Other Gene Names</strong>"),HTML("</br>") , htmlOutput("kegg_name")),
                    shiny::tags$hr(width="50%"),
                    shiny::tags$p(class="text-left",HTML("<strong>Associated Pathways</strong>"),HTML("</br>") , htmlOutput("kegg_pathway")),
@@ -220,18 +220,21 @@ tabItem(tabName = "id_overview", align = "center",
         ## GVIZ Plots for Genomic View
                
                tabPanel("Gene Model",
+                        shiny::tags$div(align="center",
                         shiny::tags$p(class="lead","Check out the gene model based on the Ensembl database."),
                         
-                 # Gviz Plot 1
-                 plotOutput(width="85%", height="1000px", "indepth_GVIZ_gene"),
-                 br()
-                 
+                         # Gviz Plot 1
+                        plotOutput(width="85%", height="1000px", "indepth_GVIZ_gene"),
+                        shiny::tags$br()
+                        )
                  ),
         tabPanel("sgRNA Model",
+                 shiny::tags$div(align="center",
                  shiny::tags$p(class="lead","Find out the location and effect of individual sgRNAs for your gene of interest."),
                  # Gviz Plot 2
                  plotOutput(width="85%", height="1000px","indepth_GVIZ_sgrna"),
-                 br()
+                 shiny::tags$br()
+                 )
         ),
         
         
@@ -240,21 +243,30 @@ tabItem(tabName = "id_overview", align = "center",
         tabPanel("Published Screens", width="85%",
         
             ## DT Overview
+            shiny::tags$div(style="text-align: center;",
             shiny::tags$p(class="lead","In previous screens, authors reported the following phenotypes for your gene of interest"),
+            shiny::tags$br(),
             dataTableOutput("indepth_DT_overview"),
+            shiny::tags$br()
+            ),
             
             ## DT sgRNA
-            br(),
+            shiny::tags$br(),
+            shiny::tags$div(style="text-align: center;",
             shiny::tags$hr(width="50%"),
             shiny::tags$p(class="lead","Your sgRNAs have been used in the following previously published screens"),
-            dataTableOutput("indepth_DT_sgrna"),
+            shiny::tags$br(),
+            dataTableOutput("indepth_DT_sgrna")
+            ),
     
             # Powered by genomecrispr
+            shiny::tags$div(style="text-align: center;",
             shiny::tags$p(class="lead","Your gene of interest has already been assayed in the following published CRISPR screens"),
             htmlOutput("indepth_screens"),
-            br(),         
+            shiny::tags$br(),     
             shiny::tags$hr(width="50%"),
-            br()
+            shiny::tags$br()
+            )
         ),
           
          ##### Screen information
@@ -267,26 +279,35 @@ tabItem(tabName = "id_overview", align = "center",
                  # Make a tabbed box for HC Plots
                  tabBox(width=12,
                          tabPanel("Log2 FoldChange",
-                                  highchartOutput("indepth_hc_gene_log2fc", height = "500px")),
+                                  shiny::tags$div(align="center",
+                                  highchartOutput("indepth_hc_gene_log2fc", height = "500px"))
+                                  ),
                          tabPanel("Z-Ratio",
+                                  shiny::tags$div(align="center",
                                   highchartOutput("indepth_hc_gene_zratio", height = "500px"))
+                         )
                  ),
-        br(),
-        shiny::tags$hr(width="50%"),
-        br(),
-        shiny::tags$p(class="lead","Individual sgRNAS for your gene of interest showed the following log2-foldchange"),
-        #HTML('<h4 class="text-primary">
-                  #    <i class="fa fa-angle-down fa-fw"></i>How did the sgRNAs of the selected gene perform in your screen?</h4>'),
-                 
-                     # sgRNA information as DT
-                     dataTableOutput("indepth_DT_sgrna2"),
-                     # sgRNA Plot
-                     highchartOutput("indepth_hc_sgrna_log2fc")
-                 ),
+                shiny::tags$br(),
+                shiny::tags$hr(width="50%"),
+                shiny::tags$br(),
+                shiny::tags$div(align="center",
+                shiny::tags$p(class="lead","Individual sgRNAS for your gene of interest showed the following log2-foldchange"),
+                #HTML('<h4 class="text-primary">
+                          #    <i class="fa fa-angle-down fa-fw"></i>How did the sgRNAs of the selected gene perform in your screen?</h4>'),
+                         
+                             # sgRNA information as DT
+                            shiny::tags$br(),
+                            dataTableOutput("indepth_DT_sgrna2"),
+                            shiny::tags$br(),
+                             # sgRNA Plot
+                            highchartOutput("indepth_hc_sgrna_log2fc")
+                         )
+        ),
         
         # COSMIC
         
         tabPanel("COSMIC Mutation Database",
+                 
                  shiny::tags$p(class="lead","Your gene of interest is annotated with the following mutations in the COSMIC database"),
                  shiny::tags$br(),
                  
@@ -294,33 +315,49 @@ tabItem(tabName = "id_overview", align = "center",
                  
                  tabBox(width=12,
                         tabPanel("All Data",
+                                 shiny::tags$div(align="center",
                                  shiny::tags$p(class="lead","Mutation data for the selected gene in the COSMIC database"),
-                                 dataTableOutput("indepth_DT_cosmic")
+                                 shiny::tags$br(),
+                                 dataTableOutput("indepth_DT_cosmic"),
+                                 shiny::tags$br()
+                                 )
                                  
                                  
                         ),
                         tabPanel("Mutation Types",
+                                 shiny::tags$div(align="center",
                                  shiny::tags$p(class="lead","The following mutation types have been associated with the selected gene"),
                                  shiny::tags$br(),
-                                 shiny::tags$div(width="100%", highchartOutput("indepth_Type_cosmic", height = "500px"))
+                                 shiny::tags$div(align="center",width="100%", highchartOutput("indepth_Type_cosmic", height = "500px")),
+                                 shiny::tags$br()
+                                 )
                                  
                         ),
                         tabPanel("Tumor Types",
+                                 shiny::tags$div(align="center",
                                  shiny::tags$p(class="lead","Mutations for your gene have been found in the following tumor types"),
                                  shiny::tags$br(),
-                                 shiny::tags$div(width="100%", highchartOutput("indepth_Tumor_cosmic", height = "500px"))
+                                 shiny::tags$div(align="center",width="100%", highchartOutput("indepth_Tumor_cosmic", height = "500px")),
+                                 shiny::tags$br()
+                                 )
                                  
                         ),
                         tabPanel("Tumor Sites",
+                                 shiny::tags$div(align="center",
                                  shiny::tags$p(class="lead","Mutations where present in the following tumor sites"),
                                  shiny::tags$br(),
-                                 shiny::tags$div(width="100%", highchartOutput("indepth_Primary_cosmic", height = "500px"))
+                                 shiny::tags$div(align="center",width="100%", highchartOutput("indepth_Primary_cosmic", height = "500px")),
+                                 shiny::tags$br()
+                                 )
                                  
                         ),
                         tabPanel("Samples",
+                                 shiny::tags$div(align="center",
                                  shiny::tags$p(class="lead","The following sample have been associated with mutations in your gene"),
                                  shiny::tags$br(),
-                                 shiny::tags$div(width="100%", highchartOutput("indepth_Sample_cosmic", height = "500px"))
+                                 shiny::tags$div(align="center", width="100%", highchartOutput("indepth_Sample_cosmic", height = "500px")),
+                                 shiny::tags$br()
+                                 )
                                  
                         )
                         
@@ -342,32 +379,44 @@ tabItem(tabName = "id_overview", align = "center",
                  # Make a tabbed box for HC Plots
                  tabBox(width=12,
                         tabPanel("Cellular Component",
+                                 shiny::tags$div(align="center",
                                  shiny::tags$p(class="lead","Tabular View"),
+                                 shiny::tags$br(),
                                  dataTableOutput("indepth_GO_table1"),
+                                 shiny::tags$br(),
                                  shiny::tags$hr(),
                                  shiny::tags$p(class="lead","Image View"),
                                  #downloadButton('download_GO_plot1', 'Download Image'),
                                   shiny::tags$br(),
                                 imageOutput("indepth_GO_plot1", inline=TRUE)
+                                 )
                  
                                  ),
                         tabPanel("Biological Process",
+                                 shiny::tags$div(align="center",
                                  shiny::tags$p(class="lead","Tabular View"),
+                                 shiny::tags$br(),
                                  dataTableOutput("indepth_GO_table2"),
+                                 shiny::tags$br(),
                                  shiny::tags$hr(),
                                  shiny::tags$p(class="lead","Image View"),
                                  #downloadButton('download_GO_plot2', 'Download Image'),
                                  shiny::tags$br(),
                                  imageOutput("indepth_GO_plot2", inline=TRUE)
+                                 )
                                  ),
                         tabPanel("Molecular Function",
+                                 shiny::tags$div(align="center",
                                  shiny::tags$p(class="lead","Tabular View"),
+                                 shiny::tags$br(),
                                  dataTableOutput("indepth_GO_table3"),
+                                 shiny::tags$br(),
                                  shiny::tags$hr(),
                                  shiny::tags$p(class="lead","Image View"),
                                  #downloadButton('download_GO_plot3', 'Download Image'),
                                  shiny::tags$br(),
                                  imageOutput("indepth_GO_plot3", inline=TRUE)
+                                 )
                                  )
                  )
                  

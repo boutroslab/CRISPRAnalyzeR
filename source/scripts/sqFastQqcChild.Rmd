@@ -7,9 +7,9 @@ child of 'screenQuality.Rmd'
 
 <!--FastQ Quality Plots-->
 
-# FastQ Quality
+# FASTQ Quality
 
-For FastQ quality control the Bioconductor package [Rqc](https://www.bioconductor.org/packages/release/bioc/html/Rqc.html) was used.
+For FASTQ quality control the Bioconductor package [Rqc](https://www.bioconductor.org/packages/release/bioc/html/Rqc.html) was used.
 The following sections show several visualizations use to estimate sequencing quality.
 
 

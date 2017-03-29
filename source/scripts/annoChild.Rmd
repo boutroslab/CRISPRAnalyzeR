@@ -13,7 +13,7 @@ cat("##", paste(genes, collapse = ", "), sprintf("(%s)", counter))
 These annotations were requested by the user.
 
 ```{r}
-Table_DT(df, colNames = colnames(df), bRownames = FALSE, class = "stripe hover")
+tryFunction(Table_DT(df, colNames = colnames(df), bRownames = FALSE, class = "stripe hover"), "co")
 ```
 
 ```{r, include=FALSE, results='hide', warning=FALSE}

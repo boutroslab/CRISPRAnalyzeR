@@ -20,6 +20,7 @@ my %reads;
 my @matchstring=();
 my @matches=();
 my $matchalign;
+my $genepattern;
 
 
 
@@ -29,6 +30,9 @@ my $seqdesign;
 my $seqgene;
 my $match;
 my $lastinput;
+my $counttotal;
+my $countmatched;
+my $stats;
 
 
 my @libinputline=();
@@ -38,7 +42,8 @@ my @geneid;
 my %totalreads;
 my @blastline=();
 
-
+my $LOG;
+my $logfile;
 
 
 #######
@@ -56,6 +61,15 @@ my @blastline=();
 # Third:
 #	Combine the output as before using the design ID, gene symbol (mapped by genome) and mapped by the library refence
 
+# expected arguments
+# - fasta files
+# - .sam file
+# - align pattern (e.g. default)
+# - pattern to extract gene symbol from fasta file
+
+#open $LOG, ">", "LOG.txt";
+
+
 
 
 
@@ -67,16 +81,57 @@ open ($targetdesigns, "<", $filename) or die "cannot open library reference";
 
 print "Initialising Library Reference\n";
 
+# get gene divider
+if ($ARGV[3] ne "")
+{
+	$genepattern = $ARGV[3];
+}
+else
+{
+	$genepattern = "_";
+}
+
+# make logfile
+if (not defined $ARGV[4])
+{
+	$logfile = $filename . "_log.txt";
+}
+else
+{
+	if($ARGV[4] ne "")
+	{
+		$logfile = $ARGV[4];
+	}
+	else
+	{
+		$logfile = $filename . "_log.txt";
+	}
+}
+
+
+
+
 # go through both target list and blastoutput to parse it for matching sequences or slight /hard mismatches
 	while ($inputline = <$targetdesigns>){
+	#chomp($inputline);
 		if ($inputline=~/^>(.+)$/)	# get the design ID and initialize the hash
 		{
+			#print $LOG $1."\n";
 			$targetid = $1;
+			
+			# remove all special chars
+			chomp($targetid);
+			$targetid =~ s/\0//;
+			$targetid =~ s/\r//;
+			$targetid =~ s/\n//;
+			
+			#print $LOG $targetid."\n";
 			$libID{$targetid}{"match"} = 0;	# perfect match
 			$libID{$targetid}{"total"} = 0;	# total reads for a given design
 			$libID{$targetid}{"sequence"} = "";
 
-			@geneid = split("_", $targetid);
+			@geneid = split($genepattern, $targetid);
+			
 			$reads{$geneid[0]}{"genematch"} = 0;
 			$reads{$geneid[0]}{"genetotal"} = 0;
 
@@ -86,6 +141,8 @@ print "Initialising Library Reference\n";
 			$reads{$geneid[0]}{"targetmatched"} = 0;
 			$reads{$geneid[0]}{"targetnone"} = 0;
 			
+			#print $LOG $targetid."\n";
+			#print $LOG $libID{$targetid}{"match"}."\n";
 		}				
 	}
 
@@ -152,7 +209,10 @@ print "Reading Bowtie2 aligment to the reference library\n";
 			$matchpattern = qr/$ARGV[2]/ ;
 		}
 		
-print("Match Setting: ".$matchpattern."\n");
+print("Match Setting:\t".$matchpattern."\n");
+
+$counttotal = 0;
+$countmatched = 0;
 
 while ($inputline = <$samlibrary>){
 	@libinputline=split("\t",$inputline);		# Split line after each tab into array @libinputline to access SAM output
@@ -179,7 +239,7 @@ while ($inputline = <$samlibrary>){
 #	5.	Compare for each read whether the mapped gene symbol does match!
 #		Especially unmapped reads might show off-targets!
 #		Store the Genesymbol for each target in a hash and count the amount of reads for this off-target
-	
+
 	if($libinputline[0] =~m/^@.+$/)
 	{
 		# do nothing
@@ -190,12 +250,13 @@ while ($inputline = <$samlibrary>){
 	#	First parameter is a Illumina Sequencing ID
 	#	Second Parameter, the FLAG, indicates an alignment that is neither rev-complementary, nor unmapped, nor a mutliple alignment (FLAG = 0)
 	elsif($libinputline[0] ne $lastinput && $libinputline[0] =~m/^(.+)$/ && $libinputline[1] == 0)
-	
 	{
+		# add count for new line of mapping
+		$counttotal++;
 		$lastinput=$libinputline[0];			# set last line to the recent one for next iteration
 		 
 		# get single information from SAM output for this read
-		@geneid = split("_", $libinputline[2]);	# Extract the GeneSymbol
+		@geneid = split($genepattern, $libinputline[2]);	# Extract the GeneSymbol
 
 		# get aligment from SAM
 		#	Script by Florian, adapted from make_mismatch_string()
@@ -245,7 +306,12 @@ while ($inputline = <$samlibrary>){
 		
 		if( $aligned =~m/$matchpattern/g )	# If identity is as set by ARGV2
 		{	
-		
+			# add count for matching quality parameters
+			$countmatched++;
+			
+			chomp($libinputline[2]);
+			chomp($geneid[0]);
+			
 			$libID{$libinputline[2]}{"match"}++;	# increase amount of reads for the perfect match
 			$libID{$libinputline[2]}{"total"}++;
 			$reads{$geneid[0]}{"genematch"}++;
@@ -253,6 +319,8 @@ while ($inputline = <$samlibrary>){
 			$totalreads{"match"}++;
 			$totalreads{"total"}++;
 			$match++;
+			
+			#print $LOG $libinputline[2]." ".$libID{$libinputline[2]}{"match"}."\n";
 		}
 		
 		
@@ -292,7 +360,13 @@ print $seqgene "Gene\tCount\tdesigns-present\n";
 
 
 foreach $target (sort keys %libID) {
-	@geneid = split("_", $target);
+	@geneid = split($genepattern, $target);
+
+	# remove null-terminated ends
+		chomp($target);
+	$target =~ s/\0//;
+	$target =~ s/\r//;
+	$target =~ s/\n//;
 	#calculate the number of targets per gene present in the run
 	#and exclude any target of the gene that was already counted
 	if (!defined $exclude{$target})
@@ -308,8 +382,11 @@ foreach $target (sort keys %libID) {
 	
 		
 	}
+	#print $LOG $target."\n";
+	#print $LOG $libID{$target}{"match"}."\n";
 	
-	print $seqdesign "".$target."\t".$libID{$target}{"match"}."\n";
+	
+	print $seqdesign $target."\t".$libID{$target}{"match"}."\n";
 	
 	
 	# calculate mean reads per gene
@@ -317,15 +394,22 @@ foreach $target (sort keys %libID) {
 	# median reads per gene (matching)
 		
 	}
+	$target = "";
 
 foreach $target ( sort keys %reads) {
-	
-	print $seqgene "".$target."\t".$reads{$target}{"genematch"}."\t".$reads{$target}{"targetmatched"}."\n";
+	print $seqgene $target."\t".$reads{$target}{"genematch"}."\t".$reads{$target}{"targetmatched"}."\n";
 
 }	
 
+# print out counted stats
+open ($stats, ">", $logfile) or die $!; 
+print $stats "Total\tMatched\n";
+print $stats $counttotal . "\t" . $countmatched . "\n";
+close($stats);
+
 close($seqdesign);
 close($seqgene);
+#close($LOG)
 
 
 	

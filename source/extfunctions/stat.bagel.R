@@ -75,13 +75,26 @@ stat.bagel=function(numiter=1000, scriptpath = cp$miaccs$scriptpath, outputfolde
   
   res <- system2(command = "python2", args = bagel.args, stderr = file.path(dirstore, "stderr_bagel.log"), stdout = file.path(dirstore, "stdout_bagel.log"))
   
+  if(class(res) == "try-error")
+  {
+    stop("Bagel system2 call error")
+  }
   
   # read back BAGEL outputfile into df
-  bagel_df <- readr::read_tsv(df.bagel.outputfile)
+  bagel_df <- try(readr::read_tsv(df.bagel.outputfile))
+  
+  if(class(bagel_df) == "try-error")
+  {
+    stop(paste("Bagel_df reading error with file\n",df.bagel.outputfile, bagel_df[1] ) )
+  }
+  
+  bagel_df <- as.data.frame(bagel_df)
   
   # set cutoff value
   ref_essential <- read_tsv(file.path(scriptpath, 'training_essentials.txt'))
   ref_nonessential <- read_tsv(file.path(scriptpath,'training_nonessential.txt'))
+  
+  # set function for finding best cutoff
   distanceOptimalFDR <- function(cutoff, bagel_df){
     tp <- bagel_df %>% filter(BF > cutoff & GENE %in% ref_essential$Gene) %>% nrow
     fp <- bagel_df %>% filter(BF > cutoff & GENE %in% ref_nonessential$Gene) %>% nrow
@@ -90,10 +103,20 @@ stat.bagel=function(numiter=1000, scriptpath = cp$miaccs$scriptpath, outputfolde
     fdr <- 1 - tp/(tp+fp+0.00001)
     return(abs(fdr - 0.05))
   }
-  # get Bayes Factor cutoff dependent on training datasets
-  cutoff <- DEoptim::DEoptim(distanceOptimalFDR, lower=lowercutoff, upper=highercutoff, bagel_df=bagel_df)$optim$bestmem
   
-  out <- list("info" = list("cutoff" = cutoff),
+  
+  # get Bayes Factor cutoff dependent on training datasets
+  cutoff <- DEoptim::DEoptim(distanceOptimalFDR, lower=as.numeric(lowercutoff), upper=as.numeric(highercutoff), bagel_df=bagel_df)$optim$bestmem
+  
+  # add information about cutoff to table
+  bagel_df$Essential <- apply(bagel_df,1, function(x) {
+    if(x[["BF"]] > cutoff)
+    {
+      return("yes")
+    } else {return("no")}
+  })
+  
+  out <- list("info" = list("cutoff" = cutoff[[1]]),
               "data" = bagel_df)
   
   return(out)

@@ -9,7 +9,281 @@ child of 'report.Rmd'
 ```{r}
 fqQCbool <- if(extractedFiles$rqc == "") FALSE else TRUE
 ```
+
+# Data Review
+
+```{r data-overview, results='asis'}
+
+
+top <- "<div class='section'><div class='container'><div class='row'><div class='col-md-12'><table class='table'>
+<thead>
+<tr>
+<th>Filename Original</th>
+<th>Provided Name</th>
+<th>Type</th>
+<th>Size</th>
+<th>sgRNA</br>Extraction Ratio</th>
+<th>Mapped</br>to Reference</th>
+<th>Passed</br>Quality Threshold</th>
+<th>Used</br>in Total</th>
+</tr>
+</thead>
+<tbody>"
+  
+  bottom <- "</tbody></table></div></div></div></div>"
+  
+  fileinfo <- data.frame("NameOriginal" = "",
+                         "NameNew" = "",
+                         "Type" = "",
+                         "Size" = "",
+                         "extractRatio" = "not available",
+                         "bt2mapping" = "not available",
+                         "bt2matching" = "not available",
+    stringsAsFactors = FALSE
+  )
+  # loop through files and give back rdy to use HTML
+
+  for(i in 1:length(extractedFiles$paths))
+  {
+    # Set initals
+    fileinfo[i,"extractRatio"] <- "not available"
+    fileinfo[i,"bt2mapping"] <- "not available"
+    fileinfo[i,"bt2matching"] <- "not available"
+    
+    # check if paths are different, if it is it is a readcount file as well as a FASTQ file available
+    if(extractedFiles$paths[i] == extractedFiles$oldpaths[i])
+    {
+      fileinfo[i,"Type"] <- "Readcount"
+    }
+    else # it is a fastq files uploaded, so we need to change things a bit
+    {
+      fileinfo[i,"Type"] <- "Fastq"
+      # get extractRatio
+      #fileinfo[i,"extractRatio"] <- paste((as.numeric(seqFiles()$extractRatio[i])), "%", sep="")
+      
+      fileinfo[i,"extractRatio"] <- paste((as.numeric(extractedFiles$extractRatio[[i]])), "%", sep="")
+      
+      
+      
+      # get bt2mapping
+      if(!is.na(extractedFiles$bt2mapping[[i]][1]))
+      {
+        #fileinfo[i,"extractRatio"] <- extractedFilesbt2mapping[i]
+        mappinginfo <- c(paste("Not aligned:", extractedFiles$bt2mapping[[i]][["notalign"]], sep= " "), paste("Aligned once:", extractedFiles$bt2mapping[[i]][["singlealign"]], sep= " "), paste("Aligned multiple times:", extractedFiles$bt2mapping[[i]][["multiplealign"]], sep= " "))
+        mapping <- paste(mappinginfo, collapse = "<br/>")
+        
+        fileinfo[i,"bt2mapping"] <- mapping
+      }
+      
+      # get bt2matching
+      if(!is.na(extractedFiles$bt2matching[[i]][1]))
+      {
+        #fileinfo[i,"extractRatio"] <- extractedFilesbt2mapping[i]
+        matchinginfo <- extractedFiles$bt2matching[[i]]
+        
+        fileinfo[i,"bt2matching"] <- paste(matchinginfo, "%", sep = "")
+      }
+      
+      # final output
+      if(is.na(extractedFiles$extractRatio[[i]]) || is.na(extractedFiles$bt2mapping[[i]]) || is.na(extractedFiles$bt2matching[[i]]))
+      {
+        fileinfo[i,"finaloutput"] <- "not available"
+      } else {
+        fileinfo[i,"finaloutput"] <- paste(round( ( (as.numeric(extractedFiles$extractRatio[[i]])/100) * (as.numeric(gsub(pattern = "%", replacement = "", x = extractedFiles$bt2mapping[[i]][["singlealign"]]))/100) * (as.numeric(extractedFiles$bt2matching[[i]]) /100 )  ) * 100, digits = 2),"%", sep="")
+      }
+      
+      
+    }
+    # get Size of file
+    fileinfo[i,"Size"] <-  paste(extractedFiles$filesize[[i]],"MegaByte", sep=" ")
+    
+    # Uploaded name
+    fileinfo[i,"NameOriginal"] <- extractedFiles$names[i]
+    
+    # New name
+    fileinfo[i,"NameNew"] <- extractedFiles$gen_names[i]
+    
+    
+    # make HTML
+    if(i==1)
+    {
+      fileinfohtml <- paste("<tr><td>",fileinfo[i,"NameOriginal"],"</td><td>",fileinfo[i,"NameNew"],"</td><td>",fileinfo[i,"Type"],"</td><td>",fileinfo[i,"Size"],"</td><td>", fileinfo[i,"extractRatio"],"</td><td>", fileinfo[i,"bt2mapping"],"</td><td>", fileinfo[i,"bt2matching"],"</td><td>", fileinfo[i,"finaloutput"],"</td></tr>", sep="")
+    } else
+    {
+      fileinfohtml <- c(fileinfohtml, paste("<tr><td>",fileinfo[i,"NameOriginal"],"</td><td>",fileinfo[i,"NameNew"],"</td><td>",fileinfo[i,"Type"],"</td><td>",fileinfo[i,"Size"],"</td><td>", fileinfo[i,"extractRatio"],"</td><td>", fileinfo[i,"bt2mapping"],"</td><td>", fileinfo[i,"bt2matching"],"</td><td>", fileinfo[i,"finaloutput"],"</td></tr>", sep="") )
+    }
+  }
+
+  outputhtml <- paste(fileinfohtml, sep ="", collapse= " ")
+  outputhtml <- paste(top, outputhtml, bottom, sep="", collapse = " ")
+  
+  cat(outputhtml)
+  
+
+
+
+
+# 
+# 
+#   top <- "<div class='section'>
+#       <div class='container'>
+#   <div class='row'>
+#   <div class='col-md-12'>
+#   <h4 class='text-success text-left'>
+#   <i class='fa fa-files-o fa-fw'></i>Uploaded / Generated Rawdata Files</h4>
+#   <table class='table'>
+#   <thead>
+#   <tr>
+#   <th>Filename Original</th>
+#   <th>Provided Name</th>
+#   <th>Type</th>
+#   <th>sgRNA</br>Extraction Ratio</th>
+#   <th>Reads</br>Mapped to Reference</th>
+#   <th>Reads</br>Passed Quality Threshold</th>
+#   <th>Reads</br>Used in Total</th>
+#   </tr>
+#   </thead>
+#   <tbody>"
+#   
+#   bottom <- "</tbody>
+#                       </table>
+#   
+#   </div>
+#   </div>
+#   </div>
+#   </div>"
+#   
+#   fileinfo <- data.frame("NameOriginal" = "",
+#                          "NameNew" = "",
+#                          "Type" = "",
+#                          "Size" = "",
+#                          "extractRatio" = "not available",
+#                          "bt2mapping" = "not available",
+#                          "bt2matching" = "not available",
+#     stringsAsFactors = FALSE
+#   )
+#   # loop through files and give back rdy to use HTML
+#   
+#   for(i in 1:length(extractedFiles$paths))
+#   {
+#     # Set initals
+#     fileinfo[i,"extractRatio"] <- "not available"
+#     fileinfo[i,"bt2mapping"] <- "not available"
+#     fileinfo[i,"bt2matching"] <- "not available"
+#     
+#     # check if paths are different, if it is it is a readcount file as well as a FASTQ file available
+#     if(extractedFiles$paths[i] == extractedFiles$oldpaths[i])
+#     {
+#       fileinfo[i,"Type"] <- "Readcount"
+#     }
+#     else # it is a fastq files uploaded, so we need to change things a bit
+#     {
+#       fileinfo[i,"Type"] <- "Fastq"
+#       # get extractRatio
+#       #fileinfo[i,"extractRatio"] <- paste((as.numeric(seqFiles$extractRatio[i])), "%", sep="")
+#       
+#       fileinfo[i,"extractRatio"] <- paste((as.numeric(extractedFiles$extractRatio[[i]])), "%", sep="")
+#       
+#       # get bt2mapping
+#       if(!is.na(extractedFiles$bt2mapping[[i]][1]))
+#       {
+#         #fileinfo[i,"extractRatio"] <- extractedFilesbt2mapping[i]
+#         mappinginfo <- c(paste("Not aligned:", extractedFiles$bt2mapping[[i]][["notalign"]], sep= " "), paste("Aligned once:", extractedFiles$bt2mapping[[i]][["singlealign"]], sep= " "), paste("Aligned multiple times:", extractedFiles$bt2mapping[[i]][["multiplealign"]], sep= " "))
+#         mapping <- paste(mappinginfo, collapse = "<br/>")
+#         
+#         fileinfo[i,"bt2mapping"] <- mapping
+#       }
+#       
+#       # get bt2matching
+#       if(!is.na(extractedFiles$bt2matching[[i]][1]))
+#       {
+#         #fileinfo[i,"extractRatio"] <- extractedFilesbt2mapping[i]
+#         matchinginfo <- extractedFiles$bt2matching[[i]]
+#         
+#         fileinfo[i,"bt2matching"] <- paste(matchinginfo, "%", sep = "")
+#       }
+#       
+#       # final output
+#       if(is.na(extractedFiles$extractRatio[[i]]) || is.na(extractedFiles$bt2mapping[[i]]) || is.na(extractedFiles$bt2matching[[i]]))
+#       {
+#         fileinfo[i,"finaloutput"] <- "not available"
+#       } else {
+#         fileinfo[i,"finaloutput"] <- paste(round( ( (as.numeric(extractedFiles$extractRatio[[i]])/100) * (as.numeric(gsub(pattern = "%", replacement = "", x = extractedFiles$bt2mapping[[i]][["singlealign"]]))/100) * (as.numeric(extractedFiles$bt2matching[[i]]) /100 )  ) * 100, digits = 2),"%", sep="")
+#       }
+#       
+#       
+#     }
+#     # get Size of file
+#     fileinfo[i,"Size"] <-  paste(extractedFiles$filesize[[i]],"MegaByte", sep=" ")
+#     
+#     # Uploaded name
+#     fileinfo[i,"NameOriginal"] <- extractedFiles$names[i]
+#     
+#     # New name
+#     fileinfo[i,"NameNew"] <- extractedFiles$gen_names[i]
+#     
+#     
+#     # make HTML
+#     if(i==1)
+#     {
+#       fileinfohtml <- paste("<tr>
+#                       <td>",fileinfo[i,"NameOriginal"],"</td>
+#       <td>",fileinfo[i,"NameNew"],"</td>
+#       <td>",fileinfo[i,"Type"],"</td>
+#       <td>
+#       ",fileinfo[i,"Size"],"
+#       </td>
+#       <td>
+#       ", fileinfo[i,"extractRatio"],"
+#       </td>
+#       <td>
+#       ", fileinfo[i,"bt2mapping"],"
+#       </td>
+#       <td>
+#       ", fileinfo[i,"bt2matching"],"
+#        </td>
+#       <td>
+#       ", fileinfo[i,"finaloutput"],"
+#       </td>
+#       </tr>", sep="")
+#     } else
+#     {
+#       fileinfohtml <- c(fileinfohtml, paste("<tr>
+#                       <td>",fileinfo[i,"NameOriginal"],"</td>
+#                            <td>",fileinfo[i,"NameNew"],"</td>
+#                            <td>",fileinfo[i,"Type"],"</td>
+#                            
+#                             <td>
+#                             ", fileinfo[i,"extractRatio"],"
+#                             </td>
+#                             <td>
+#                             ", fileinfo[i,"bt2mapping"],"
+#                             </td>
+#                             <td>
+#                             ", fileinfo[i,"bt2matching"],"
+#                              </td>
+#                             <td>
+#                             ", fileinfo[i,"finaloutput"],"
+#                              </td>
+#                            </tr>", sep="") )
+#     }
+#   }
+#   lengthfiles <- nrow(fileinfo)
+#   # Add Library
+#   fileinfo[lengthfiles+1,"Type"] <- "Library File"
+#   fileinfo[lengthfiles+1,"Size"] <-  paste(round((file.size(extractedFiles$libPath)/1024)/1024, digits = 2),"MegaByte", sep=" ")
+#   fileinfo[i,"NameOriginal"] <- extractedFiles$libName
+#   fileinfo[i,"NameNew"] <- extractedFiles$libName
+#   
+#   outputhtml <- paste(fileinfohtml, sep ="", collapse= " ")
+#   outputhtml <- paste(top, outputhtml, bottom, sep="", collapse = " ")
+# 
+#   cat(outputhtml)
+  
+```
+
 ```{r, eval=fqQCbool, child='sqFastQqcChild.Rmd'}
+
 ```
 
 
@@ -39,14 +313,14 @@ Below are descriptive statistics about sgRNA and gene readcounts.
 
 ```{r}
 df <- results$statsGeneral$basic$sgRNA
-Table_small(df, filename = "sgRNA_basic_stats")
+tryFunction(Table_small(df, filename = "sgRNA_basic_stats")   , place = 'sq')
 ```
 
 ### Gene Readcount Statistics
 
 ```{r}
 df <- results$statsGeneral$basic$Gene
-Table_small(df, filename = "Gene_basic_stats")
+tryFunction(Table_small(df, filename = "Gene_basic_stats")   , place = 'sq')
 ```
 
 ## Readcount Distribution
@@ -61,8 +335,32 @@ These pseudodensity curves are based on normalized, log2-transformed readcount h
 (You can drag a rectangle to zoom in)
 
 ```{r sq_readcountsDistro}
-Plot_coverage_readDistro( results$readDistribution, bApp = FALSE )
+tryFunction(Plot_coverage_readDistro( results$readDistribution, bApp = FALSE )   , place = 'sq')
 ```
+
+### Cumulative Frequency for Gene Read Counts
+
+Below you find the log2-transformed, normalized cumulative frequency for each sample's gene read counts.
+
+```{r}
+tryFunction(
+  Plot_CDF(data = results$CDF_list[["gene"]], readtype = "gene", filenames = extractedFiles$gen_names, title = "Cumulative Frequency", subtitle = "based on Gene Read Counts", filename="QualityControl_ReadCount_CDF_Gene"),
+  place = "sq"
+)
+```
+
+### Cumulative Frequency for sgRNA Read Counts
+
+Below you find the log2-transformed, normalized cumulative frequency for each sample's sgRNA read counts.
+
+```{r}
+tryFunction(
+  Plot_CDF(data = results$CDF_list[["sgRNA"]], readtype = "sgrna", filenames = extractedFiles$gen_names, title = "Cumulative Frequency", subtitle = "based on sgRNA Read Counts", filename="QualityControl_ReadCount_CDF_sgRNA"),
+  place = "sq"
+)
+```
+
+
 
 ### Boxplots
 
@@ -70,8 +368,10 @@ These are the normalized, log2-transformed read count distributions.
 (Click on the Legend to exclude/include outliers)
 
 ```{r sq_readcountsDistroBoxGene}
-Plot_coverage_readDistroBox( results$readDistributionBoxNorm, bApp = FALSE , type = "Gene")
+tryFunction(Plot_coverage_readDistroBox( results$readDistributionBoxNorm, bApp = FALSE , type = "Gene")   , place = 'sq')
 ```
+
+
 
 
 ```{r, results='asis'}
@@ -87,7 +387,7 @@ cat("### Positive Controls\n\n")
 ```
 ```{r, eval=posBool}
 df <- results$statsGeneral$ctrl.p
-Table_small( df, type = "ctrl" , filename ="sqStats_ctrl_pos")
+tryFunction(Table_small( df, type = "ctrl" , filename ="sqStats_ctrl_pos")   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=negBool}
@@ -95,7 +395,7 @@ cat("### Non-targeting Controls\n\n")
 ```
 ```{r, eval=negBool}
 df <- results$statsGeneral$ctrl.n
-Table_small( df, type = "ctrl", filename ="sqStats_ctrl_pos")
+tryFunction(Table_small( df, type = "ctrl", filename ="sqStats_ctrl_pos")   , place = 'sq')
 ```
 
 
@@ -126,9 +426,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -136,9 +435,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -146,9 +444,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -156,9 +453,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -166,9 +462,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -176,9 +471,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -186,9 +480,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -196,9 +489,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -206,9 +498,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -216,9 +507,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -226,9 +516,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -236,9 +525,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -246,9 +534,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -256,9 +543,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -266,9 +552,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -276,9 +561,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -286,9 +570,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -296,9 +579,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -306,9 +588,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -316,7 +597,7 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )
+tryFunction(Plot_coverage_readDepth( results$readDepth, dataset, results$ctrls$non, results$ctrls$pos, bApp = FALSE )   , place = 'sq')
 ```
 
 
@@ -346,7 +627,7 @@ As an overview for each sample tables with descriptive statistics about each gen
 
 ```{r sq_readcountsGenes}
 df <- results$readcount
-Table_big(df)
+tryFunction(Table_big(df)   , place = 'sq')
 ```
 
 ```{r sq_readcountsTable_eval, include=FALSE, message=FALSE}
@@ -368,9 +649,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -378,9 +658,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -388,9 +667,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -398,9 +676,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -408,9 +685,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -418,9 +694,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -428,9 +703,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -438,9 +712,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -448,9 +721,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -458,9 +730,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -468,9 +739,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -478,9 +748,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -488,9 +757,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -498,9 +766,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -508,9 +775,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -518,9 +784,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -528,9 +793,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -538,9 +802,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -548,9 +811,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -558,7 +820,7 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Table_big(results$statsGeneral$dataset, dataset)
+tryFunction(Table_big(results$statsGeneral$dataset, dataset)   , place = 'sq')
 ```
 
 
@@ -590,7 +852,7 @@ Depending on the experiment certain sgRNAs or genes might be expected to be miss
 This number of genes did not result in any read count and are therefore considered missing in the respective sample.
 
 ```{r sq_coverageGenes}
-Plot_coverage_unmapped( results$unmappedGenes, "gene", bApp = FALSE )
+tryFunction(Plot_coverage_unmapped( results$unmappedGenes, "gene", bApp = FALSE )   , place = 'sq')
 ```
 
 ### Missing sgRNAs
@@ -598,7 +860,7 @@ Plot_coverage_unmapped( results$unmappedGenes, "gene", bApp = FALSE )
 This number of sgRNAs did not result in read counts and are therefore considered missing in the respective sample.
 
 ```{r sq_coverageSgRNAs}
-Plot_coverage_unmapped( results$unmappedGenes, "sgRNA", bApp = FALSE )
+tryFunction(Plot_coverage_unmapped( results$unmappedGenes, "sgRNA", bApp = FALSE )   , place = 'sq')
 ```
 
 ### \% Missing Non-targeting sgRNAs
@@ -609,7 +871,7 @@ This is the percentage of missing sgRNAs among the genes specified as non-target
 if( results$ctrls$non == FALSE ){
     Plot_blank("hc", msg = "No non-targeting controls were defined.")
 } else {
-    Plot_coverage_unmapped( results$unmappedGenes, "non", bApp = FALSE )
+tryFunction(Plot_coverage_unmapped( results$unmappedGenes, "non", bApp = FALSE )   , place = 'sq')
 }
 ```
 
@@ -621,7 +883,7 @@ This is the percentage of missing sgRNAs among the genes specified as positive c
 if( results$ctrls$pos == FALSE ){
   Plot_blank("hc", msg = "No positive controls were defined.")
 } else {
-  Plot_coverage_unmapped( results$unmappedGenes, "pos", bApp = FALSE )
+tryFunction(Plot_coverage_unmapped( results$unmappedGenes, "pos", bApp = FALSE )   , place = 'sq')
 }
 ```
 
@@ -650,9 +912,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -660,9 +921,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -670,9 +930,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -680,9 +939,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -690,9 +948,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -700,9 +957,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -710,9 +966,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -720,9 +975,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -730,9 +984,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -740,9 +993,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -750,9 +1002,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -760,9 +1011,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -770,9 +1020,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -780,9 +1029,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -790,9 +1038,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -800,9 +1047,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -810,9 +1056,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -820,9 +1065,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -830,9 +1074,8 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
-
 
 ```{r, results='asis', eval=datasetBool[counter]}
 cat("###", datasets[counter])
@@ -840,7 +1083,7 @@ cat("###", datasets[counter])
 ```{r, eval=datasetBool[counter]}
 dataset <- datasets[counter]
 counter <- counter + 1
-Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )
+tryFunction(Plot_coverage_geneDesigns(results$geneDesigns, dataset, nBreaks = 40, bApp = FALSE )   , place = 'sq')
 ```
 
 
@@ -884,22 +1127,22 @@ Normalized readcount foldchanges or Z-Ratios between all samples on both gene an
 ### Foldchange of Gene Effects
 
 ```{r, message=FALSE, warning=FALSE}
-highcharts.sampleComp(results$sampleList, sample = NULL, type = "genes", plot = "boxplot", 
-                      sorted = TRUE, info = "log2fc" , theme = TRUE, addline=FALSE)
+tryFunction(highcharts.sampleComp(results$sampleList, sample = NULL, type = "genes", plot = "boxplot", 
+                      sorted = TRUE, info = "log2fc" , theme = TRUE, addline=FALSE)   , place = 'sq')
 ```
 
 ### Z-Ratio of Gene Effects
 
 ```{r, message=FALSE, warning=FALSE}
-highcharts.sampleComp(results$sampleList, sample = NULL, type = "genes", plot = "boxplot", 
-                      sorted = TRUE, info = "zratio" , theme = TRUE, addline=FALSE)
+tryFunction(highcharts.sampleComp(results$sampleList, sample = NULL, type = "genes", plot = "boxplot", 
+                      sorted = TRUE, info = "zratio" , theme = TRUE, addline=FALSE)   , place = 'sq')
 ```
 
 ### Foldchange of sgRNA Effects
 
 ```{r, message=FALSE, warning=FALSE}
-highcharts.sampleComp(results$sampleList, sample = NULL, type = "sgrna", plot = "boxplot", 
-                      sorted = TRUE, info = "log2fc" , theme = TRUE, addline=FALSE)
+tryFunction(highcharts.sampleComp(results$sampleList, sample = NULL, type = "sgrna", plot = "boxplot", 
+                      sorted = TRUE, info = "log2fc" , theme = TRUE, addline=FALSE)   , place = 'sq')
 ```
 
 
@@ -956,13 +1199,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -972,13 +1211,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -988,13 +1223,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1004,13 +1235,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1020,13 +1247,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1036,13 +1259,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1052,13 +1271,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1068,13 +1283,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1084,13 +1295,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1100,13 +1307,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1116,13 +1319,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1132,13 +1331,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1148,13 +1343,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1164,13 +1355,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1180,13 +1367,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1196,13 +1379,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1212,13 +1391,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1228,13 +1403,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1244,13 +1415,9 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
 
-
-```{r, include=FALSE, message=FALSE, eval=plotsBool[counter]}
-inf <- geneList$SPLOM[[counter]]
-```
 ```{r, results='asis', eval=plotsBool[counter]}
 cat("\n\n### Scatter Plot Matrix", counter, "\n\n")
 cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts with positive and non-targeting controls highlighted in red and blue respectively.\n"))
@@ -1260,10 +1427,8 @@ cat("\n\n\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS
-Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )
+tryFunction(Plot_Replicates_SPLOM( data, inf$dsNames, bLog = inf$blog, bAggro = inf$baggro, cCtrl = inf$cctrl )   , place = 'sq')
 ```
-
-
 
 
 
@@ -1307,8 +1472,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1321,23 +1486,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
-```
-
-
-```{r, results='asis', eval=plotsBool[counter]}
-cat("### Scatterplot", counter, "\n\n")
-inf <- nPlots[[counter]]
-cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
-          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
-cat("Controls and user defined genes are highlighted.\n\n")
-```
-```{r, eval=plotsBool[counter]}
-counter <- counter + 1
-data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1350,8 +1500,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1364,8 +1514,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1378,8 +1528,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1392,8 +1542,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1406,8 +1556,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1420,8 +1570,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1434,8 +1584,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1448,8 +1598,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1462,8 +1612,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1476,8 +1626,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1490,8 +1640,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1504,8 +1654,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1518,8 +1668,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1532,8 +1682,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1546,8 +1696,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1560,8 +1710,8 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
 ```{r, results='asis', eval=plotsBool[counter]}
@@ -1574,10 +1724,23 @@ cat("Controls and user defined genes are highlighted.\n\n")
 ```{r, eval=plotsBool[counter]}
 counter <- counter + 1
 data <- results$readCountVS 
-Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
-                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
 ```
 
+```{r, results='asis', eval=plotsBool[counter]}
+cat("### Scatterplot", counter, "\n\n")
+inf <- nPlots[[counter]]
+cat(paste("Shown are", if(inf$baggro) "gene" else "sgRNA", "readcounts of", inf$YY, "over", inf$XX,
+          "on a", if(inf$blog) "log10" else "linear", "scale.\n"))
+cat("Controls and user defined genes are highlighted.\n\n")
+```
+```{r, eval=plotsBool[counter]}
+counter <- counter + 1
+data <- results$readCountVS 
+tryFunction(Plot_replicates_pair(inf$XX, inf$YY, data, inf$ctrl, bLog = inf$blog, aggro = inf$baggro, bApp = FALSE,
+                     filename = paste("QualityControl_Replicates_", inf$XX, "_VS_", inf$YY, sep=""), labelgene = inf$highlighted, results = results$compare)   , place = 'sq')
+```
 
 
 
@@ -1613,8 +1776,8 @@ Controls that are supposed to show an effect, should be separable from the data 
 Vectors of replicates should point in a similar direction.
 
 ```{r sq_pca}
-Plot_pca(pca = results$pca$genes, title = "Principal Component Analysis", 
-         subtitle = NULL, export = TRUE, legend = TRUE, scale=8) 
+tryFunction(Plot_pca(pca = results$pca$genes, title = "Principal Component Analysis", 
+         subtitle = NULL, export = TRUE, legend = TRUE, scale=8)   , place = 'sq')
 ```
 
 

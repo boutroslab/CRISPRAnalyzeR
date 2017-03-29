@@ -27,7 +27,7 @@ tabItem(tabName = "data_review", align = "center",
                       <small>&nbsp;Review your Data and Download Rawdata Files</small>
                       </h1>
                       <hr>
-                      <p class='lead'>Review your uploaded data and download generated read count files as well as a quality report of your FASTQ files.
+                      <p class='lead'>Review your uploaded data and download generated read count files or the quality report of your FASTQ files.
                       </p>
                       </div>
                       </div>
@@ -52,45 +52,70 @@ tabItem(tabName = "data_review", align = "center",
                  
                  valueBoxOutput("review_numbersgrnas"),
                  valueBoxOutput("review_filesize"),
-                 shiny::tags$br(),
-                 shiny::tags$hr()
+                 shiny::tags$br()
+
           
         ),
         
         fluidRow(style = "padding:4%;",
       
-               column(width=12,
-                      shiny::tags$h3(class="text-success text-left", HTML("<i class='fa fa-angle-double-right  fa-fw'></i>") , "Download Read Count files and FASTQ Quality Report"),
-                      shiny::tags$p(class="lead",
-                                   "For your convenience, just get the generated read count files and the optional FASTQ quality report (only available if fastq.gz files have been uploaded)." ),
-                      helpText("Read Count files can be used the next time - which is much faster than using FASTQ data."),
-                      shiny::tags$table(class="text-center",
-                      #shiny::tags$tbody(shiny::tags$tr(shiny::tags$td("Get your read count files"), shiny::tags$td("Uploaded FASTQ files? Get your quality report")) ),
-                      shiny::tags$tbody(
-                        shiny::tags$tr(
-                          shiny::tags$td(downloadButton('download_readcounts', 'Download Readcount files'), style = "margin:10px;display:block;"), 
-                          shiny::tags$td( downloadButton('download_fastq_report', 'Download Quality Report for FASTQ files'),style = "margin:10px;display:block;")))
-                      ))
+               column(width=10, offset=1,
+                      box(title = "Download Read Count Files",solidHeader = TRUE, collapsible = TRUE,width = 6,status = "primary",
+                          
+                          shiny::tags$p(class="text text-center",
+                                        "For your convenience, just get the generated read count files." ),
+                          helpText("Read count files can be used the next time - which is much faster than using FASTQ data."),
+                        shiny::tags$br(),
+                        downloadButton('download_readcounts', 'Download Readcount files')
+                      ),
+                      
+                      box(id="dlfastqqc", title = "Download FASTQ QC Report",solidHeader = TRUE, collapsible = TRUE, width = 6,status = "primary", 
+                          
+                          shiny::tags$p(class="text text-center",
+                                        "Download the optional FASTQ QC report."),
+                          helpText("This report is only available in case you uploaded NGS raw data."),
+                          shiny::tags$br(),
+                          downloadButton('download_fastq_report', 'Download Quality Report for FASTQ files')
+                      )
+                      
+                     )
         ),
-       
-        
-        shiny::tags$hr(width="50%"),
-        
-        fluidRow(style="width:85%",
-                 shiny::tags$h3(class="text-success text-left",HTML("<i class='fa fa-angle-double-right  fa-fw'></i>") ,"Overview of the Uploaded Data"),
-                  uiOutput("fastq_progressBar2"),
-                  uiOutput("removeLow_warning"),
-                 
-                 
-                  uiOutput("overview_files"),
-                  
-                  shiny::tags$hr(width="50%")
-      # shiny::tags$h4("FASTQ Read Quality"),
-      # shiny::tags$br(),
-      # plotOutput("rqcReadQualityBoxPlot"),
-      # shiny::tags$br()
-                  
-                 
+        # Overview of Data
+        fluidRow(
+                 column(width=10, offset=1,
+                        box(title = "Overview of Uploaded Data and Samples", width=12, solidHeader=TRUE, status="primary", collapsible = TRUE,
+                            uiOutput("fastq_progressBar2"),
+                            uiOutput("removeLow_warning"),
+                            uiOutput("overview_files")
+                        )
+                        )
+        ),
+        # after analysis, people can download .tsv data files
+        fluidRow(
+          column(width=10, offset=1,
+                 box(id = "downloadanalysisdata", title = "Download Analysis Data", width=12, solidHeader=TRUE, status="primary", collapsible = TRUE,
+                     
+                 # Download ALL as XLSX or TSV
+                
+                 column(width = 6,
+                        shiny::tags$h4("Download All Analysis Data"),
+                        shiny::helpText("You can download all raw data form the individual hit calling methods either as a tab-separated .TSV file or as a fully formatted .XLSX Excel file."),
+                        downloadButton('downloadHC_TSV', 'Download .TSV'),
+                        downloadButton('downloadHC_XLSX', 'Download as Excel .XLSX')
+                        
+                        ),
+                 column(width = 6,
+                        
+                        shiny::tags$h4("Download the sgRNA Re-Evaluation File"),
+                        shiny::helpText("You can download the sgRNA Re-Evaluation file that includes genomic locations and scores for each individual sgRNA or your library."),
+                        downloadButton('downloadSGRNA', 'Download .TSV')#,
+                        #shiny::tags$br(),
+                        #shiny::tags$h4("Download all data as RDS Objects for R"),
+                        #downloadButton('downloadALL', 'Download All Raw Data')
+                        )
+                     
+                 )
+          )
         ),
       # load footer  
       source(file.path(config$appDir, "footer.r"))[1]

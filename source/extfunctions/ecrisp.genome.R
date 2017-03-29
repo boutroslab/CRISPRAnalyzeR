@@ -17,6 +17,7 @@ ecrisp.genome <- function(organism = "homo_sapiens",
                             #ecrisp = "http://b110-ws01/E-CRISP/reannotate_crispr_carpools.pl"
                             ecrisp = "http://www.e-crisp.org/E-CRISP/reannotate_crispr_carpools.pl",
                             write=TRUE,
+                          outputdir=getwd(),
                           userid = NULL
                            ) # single, all
 {
@@ -74,9 +75,10 @@ if(!exists("ecrisp",envir=cp) || identical(reannotate,TRUE))
 # # call E-CRISP evaluation
 # library(RCurl)
 
+  
   ua  <- ""#"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0"
   url <- ecrisp
-  ecrisp.annotate <- httr::POST(url, 
+  ecrisp.annotate <- try(httr::POST(url, 
               body = list(ref_organism = dataset,
                            unspecific_leading_bases = unspecific_bases,
                            edit_distance_allowed = edit_distance,
@@ -87,9 +89,13 @@ if(!exists("ecrisp",envir=cp) || identical(reannotate,TRUE))
                            send = "Submit"),
               encode = "form",
               httr::add_headers("Expect"=""),
-              httr::user_agent(ua))
-# print(httr::status_code(ecrisp.annotate))
-# print(httr::content(ecrisp.annotate))
+              httr::user_agent(ua)))
+  
+  if(class(ecrisp.annotate) == "try-error")
+  {
+    stop(paste("No access to E-CRISP.org", ecrisp.annotate[1]))
+  }
+ 
 
 if(httr::status_code(ecrisp.annotate) == 200)
 {
@@ -101,7 +107,7 @@ if(httr::status_code(ecrisp.annotate) == 200)
  else
  {
     stop(paste("The server returned the following http status code:",httr::status_code(ecrisp.annotate),"\n",httr::content(ecrisp.annotate), sep=" ") )
-  }
+}
 
 #View(ECRISP)
 
@@ -111,15 +117,19 @@ if(httr::status_code(ecrisp.annotate) == 200)
 time <- R.utils::currentTimeMillis.System() # in milliseconds
 time.timeout <- time+(timeout*1000)
 
-
+# Working URL
+resultsfile <- paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse="")
 
 while(time < time.timeout )
 {
+  
   if(debug==TRUE)
   {
-    print(RCurl::url.exists(paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse="")))
+    print(httr::http_error(resultsfile))
   }
-  if(RCurl::url.exists(paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse="")) )
+  #if(RCurl::url.exists(paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse="")) )
+  # check for existence
+  if(!httr::http_error(resultsfile))
   {
    # downloaded.file <- download.file(paste("http://b110-ws01/E-CRISP/workdir/",folder[1],"/results.tab",sep="",collapse=""), destfile = "results.tab", method = "internal", quiet = FALSE, mode = "w",
     #              cacheOK = TRUE
@@ -127,21 +137,25 @@ while(time < time.timeout )
     
     Sys.sleep(sleep)
     # Download file
-    loaded.file <- download.file(paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse=""), paste(folder,"results.tab", sep=""), method="auto", quiet = FALSE, mode = "w",
-                  cacheOK = FALSE,
-                  extra = getOption("download.file.extra"))
-
+    
+    httr::GET(resultsfile, httr::write_disk(file.path(outputdir, paste(folder,"results.tab", sep="")), overwrite=TRUE))
+    
+    
+    #loaded.file <- download.file(paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse=""), paste(folder,"results.tab", sep=""), method="auto", quiet = FALSE, mode = "w",
+    #              cacheOK = FALSE,
+    #              extra = getOption("download.file.extra"))
     #ecrispresult <- read.table("results.tab", header=TRUE, sep="\t", comment.char = "", stringsAsFactors = TRUE, colClasses = c("factor","factor","numeric","numeric","character","numeric","numeric","numeric","character","character","character","numeric","numeric","numeric","numeric","numeric","character"))
-    results.old <- file.size(paste(folder,"results.tab", sep=""))
-    results.new <- file.size(paste(folder,"results.tab", sep=""))
+    results.old <- file.size(file.path(outputdir, paste(folder,"results.tab", sep="")))
+    results.new <- file.size(file.path(outputdir, paste(folder,"results.tab", sep="")) )
     
     while(results.new >= results.old)
     {
       # Download and test
-      loaded.file <- download.file(paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse=""), paste(folder,"results.tab", sep=""), method="auto", quiet = FALSE, mode = "w",
-                                   cacheOK = FALSE,
-                                   extra = getOption("download.file.extra"))
-      results.old <- file.size(paste(folder,"results.tab", sep=""))
+      #loaded.file <- download.file(paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse=""), paste(folder,"results.tab", sep=""), method="auto", quiet = FALSE, mode = "w",
+      #                             cacheOK = FALSE,
+      #                             extra = getOption("download.file.extra"))
+      httr::GET(resultsfile, httr::write_disk(file.path(outputdir, paste(folder,"results.tab", sep="")), overwrite=TRUE))
+      results.old <- file.size(file.path(outputdir, paste(folder,"results.tab", sep="")))
       
       # Since results.tab needs to be generated, which takes a while, we send this R script to a sleep
       if(nrow(cp$libFILE) < 12000)
@@ -156,15 +170,17 @@ while(time < time.timeout )
 
       }
       
-      loaded.file <- download.file(paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse=""), paste(folder,"results.tab", sep=""), method="auto", quiet = FALSE, mode = "w",
-                                   cacheOK = FALSE,
-                                   extra = getOption("download.file.extra"))
-      results.new <- file.size(paste(folder,"results.tab", sep=""))
+      #loaded.file <- download.file(paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse=""), paste(folder,"results.tab", sep=""), method="auto", quiet = FALSE, mode = "w",
+      #                             cacheOK = FALSE,
+      #                             extra = getOption("download.file.extra"))
+      httr::GET(resultsfile, httr::write_disk(file.path(outputdir, paste(folder,"results.tab", sep="")), overwrite=TRUE))
+      
+      results.new <- file.size(file.path(outputdir, paste(folder,"results.tab", sep="")))
       
       if(results.old == results.new)
       {
         #print("READ ECRISP FILE as READ TABLE")
-        ecrispresult <- read.table(paste(folder,"results.tab", sep=""), header=TRUE, sep="\t", comment.char = "", stringsAsFactors = TRUE, colClasses = c("factor","factor","numeric","numeric","character","numeric","numeric","numeric","character","character","character","numeric","numeric","numeric","numeric","numeric","character"))
+        ecrispresult <- read.table(file.path(outputdir, paste(folder,"results.tab", sep="")), header=TRUE, sep="\t", comment.char = "", stringsAsFactors = TRUE, colClasses = c("factor","factor","numeric","numeric","character","numeric","numeric","numeric","character","character","character","numeric","numeric","numeric","numeric","numeric","character"))
         break
       }
       

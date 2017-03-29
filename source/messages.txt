@@ -1,6 +1,6 @@
 ID	String
 statusanalysis	CRISPRAnalyzeR has not run any analysis yet.
-statusinfo	Please wait until CRISPRAnalyzeR has finished the re-annotation of your sgRNAs.
+statusinfo	Please wait for the re-annotation of your sgRNAs.
 checkfinal1	Files were not sucessfully uploaded yet. Please go back to 'Data' to do this.<br/>
 checkfinal2	CRISPRAnalyzeR has not finished uploading and checking your files.<br/>
 checkfinal3	Some information in the 'Set Groups and Identifier' tab is not entered yet. Please correct that first.<br/>
@@ -26,7 +26,7 @@ checkseqfiles9	Honestly, I don't even know how this happened, but 2 datapaths ar
 checkseqfilesprogress2	Filenames checked
 checkseqfilesprogress3	Check FASTQ files
 checkseqfilesprogress4	Check FASTQ regular expression
-checkseqfiles10	The entered FASTQ regular exression did only work in approximately
+checkseqfiles10	The entered FASTQ regular expression did only work for   
 checkseqfiles11	% of sequences within your FASTQ files.<br/>This is an indication for a wrong FASTQ Regular Expression or a bad quality of your sequencing library.
 checkseqfilesprogress5	Checking Readcount Data
 checkseqfiles12	Please make sure your Readcount file <strong>
@@ -49,6 +49,7 @@ checklibfile11	The regular expression revealed a problem with your sgRNA identif
 checklibfile12	The regular expression revealed a problem with your sgRNA identifier.<br/>Either the selected regular expression is not correct or you have missing/incorrect entries in your sgRNA library file.<br/>
 checklibfile13	The regular expression revealed a problem with your gene identifier as part of your sgRNA identifier.<br/>Either the selected regular expression is not correct or you have missing/incorrect entries in your sgRNA library file.<br/>
 checklibfile14	The regular expression revealed a problem with your gene/sgRNA identifier as part of your sgRNA identifier.<br/>Either the selected regular expression cannot discriminate between the gene and sgRNA part of your identifier<br/> or you have missing/incorrect entries in your sgRNA library file.<br/> As an example, this was found to be the case for sgRNA
+checklibfile15	The sgRNA identifier within your library FASTA file are not unique.
 checkgroupnames1	For a comparison at least 2 groups are needed.<br/>
 checkgroupnames2	Each group should have a unique name.<br/>
 checkgroupnames3	There is a group without a name.<br/>
@@ -58,7 +59,7 @@ checkgroups1	Some groups don't have any files associated with them.<br/>
 checkgroups3	Some files belong two more than one group.
 checkgroups2	Some groups don't have any files associated with them.<br/>
 checkextract	Provide a regular expression for target sequence extraction.<br/>
-checkextractedfiles	For further assistence please briefly describe your problem in the input form on our help page.<br>
+checkextractedfiles	For further assistence please briefly describe your problem on the CRISPRAnalyzeR Github page in the issue section @ http://github.com/boutroslab/CRISPRAnalyzeR.<br>
 checkcompare1	Positive control
 checkcompare2	was not found in sgRNA library.
 checkcompare3	Non-targeting control
@@ -69,3 +70,6 @@ checkanalysissettings4	Please use numbers for sgRNA read count thresholds only.<
 noanalysisrunyet	CRISPRAnalyzeR has not performed an analysis yet.
 bagelerror	BAGEL analysis could not be performed.
 screenbeamerror	ScreenBEAM analysis was not performed.
+getinfo1	Please wait until CRISPRAnalyzeR has sucessfully re-annotated your sgRNAs<br>to provide you even more useful information.<br/><br/>This can take up to 10-30 minutes<br>depending on your library size and CRISPRAnalyzeR usage.<br/>In the meantime you can have a closer look to the Quality Control and Hit Calling sections.
+getinfo2	Please wait until your sgRNAs have been reannotated.
+biomart1	Data could not be retrieved from Ensembl BiomaRt. Please try again later or check the proxy configuration.

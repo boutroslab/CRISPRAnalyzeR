@@ -77,8 +77,7 @@ tryFunction <- function( expr, place, log = logFile, ID = userID, dir = userDir 
     info <- switch(place,
       sq = "Something went wrong when rendering the Screen Quality part.<br/>",
       hc = "Something went wrong when rendering the Hit Calling part.<br/>",
-      id = "Something went wrong when rendering the In-Depth Analysis part.<br/>",
-      an = "Something went wrong when rendering the Annotation part.<br/>"
+      co = "Something went wrong when rendering the Hit Confirmation part.<br/>"
     )
     
     outInfo <- c(paste("progress", 1, sep = ";"), paste("info", info, sep = ";"))
@@ -89,6 +88,8 @@ tryFunction <- function( expr, place, log = logFile, ID = userID, dir = userDir 
   } else return(res)
 }
 
+
+write(paste(userID, ": loading files and libraries"), logFile, append = TRUE)  
 library(shiny)
 library(ggplot2)
 library(highcharter)
@@ -115,8 +116,8 @@ results <- list(
         "statsGeneral" = readRDS(file.path(userDir, "statsGeneral.rds")),
         "unmappedGenes" = readRDS(file.path(userDir, "unmappedGenes.rds")),
         "readDistribution" = readRDS(file.path(userDir, "readDistribution.rds")),
-        "readDistributionBox" = readRDS(file.path(userDir, "readDistributionBox.rds")),
         "readDistributionBoxNorm" = readRDS(file.path(userDir, "readDistributionBoxNorm.rds")),
+        "CDF_list" = readRDS(file.path(userDir, "CDF_list.rds")),
         "readDepth" = readRDS(file.path(userDir, "readDepth.rds")),
         "geneDesigns" = readRDS(file.path(userDir, "geneDesigns.rds")),
         "readCountVS" = readRDS(file.path(userDir, "readCountVS.rds")),
@@ -127,6 +128,8 @@ results <- list(
         "rsea" = readRDS(file.path(userDir, "rsea.rds")),
         "edger" = readRDS(file.path(userDir, "edger.rds")),
         "zratio" = readRDS(file.path(userDir, "zratio.rds")),
+        "bagel" = readRDS(file.path(userDir, "bagel.rds")),
+        "screenbeam" = readRDS(file.path(userDir, "screenbeam.rds")),
         
         "hitOverview" = readRDS(file.path(userDir, "hitOverview.rds")),
         "hitOverview_info" = readRDS(file.path(userDir, "hitOverview_info.rds")),
@@ -154,13 +157,13 @@ if(file.exists(file.path(userDir, "rawGenes.rds"))) {
   inclCO <- FALSE
 }
 
-extractedFiles <- list()
-x <- scan(file.path(userDir, "fastq_extraction.info"), what="", sep="\n", quiet = TRUE)
-xlist <- strsplit(x, split = ";", fixed = TRUE) 
-for( i in 1:length(xlist) ) extractedFiles[[xlist[[i]][1]]] <- xlist[[i]][-1]
+extractedFiles <- readRDS(file = file.path(userDir, "extractedFiles.rds"))#list()
+#x <- scan(file.path(userDir, "fastq_extraction.info"), what="", sep="\n", quiet = TRUE)
+#xlist <- strsplit(x, split = ";", fixed = TRUE) 
+#for( i in 1:length(xlist) ) extractedFiles[[xlist[[i]][1]]] <- xlist[[i]][-1]
 
-if( extractedFiles[["rqc"]] != "empty" ) {
-  rqc.qa <- readRDS(file = extractedFiles$rqc)
+if( extractedFiles[["rqc"]] != "empty" && extractedFiles[["rqc"]] != "" ) {
+  rqc.qa <- readRDS(file = file.path(userDir, "rqcqa.rds"))
   extractedFiles$rqc <- rqc.qa
 } else  extractedFiles$rqc <- ""
 

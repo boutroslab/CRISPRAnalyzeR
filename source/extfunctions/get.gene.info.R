@@ -1,4 +1,4 @@
-get.gene.info = function(gene = NULL, extractpattern=expression("^(.+?)(_.+)"), database="ENSEMBL_MART_ENSEMBL", dataset=NULL, filter="ensembl_gene_id", new.identifier = cp$miaccs$g.identifier.new, attribute = c("hgnc_symbol"), controls=FALSE, annotate = FALSE, convert.identifier = cp$miaccs$g.convert, host="www.ensembl.org")
+get.gene.info = function(gene = NULL, extractpattern=expression("^(.+?)(_.+)"), database="ensembl", dataset=NULL, filter="ensembl_gene_id", new.identifier = cp$miaccs$g.identifier.new, attribute = c("hgnc_symbol"), controls=FALSE, annotate = FALSE, convert.identifier = cp$miaccs$g.convert, host="www.ensembl.org")
 {
 
   if(dataset == "homo_sapiens") {dataset <- "hsapiens_gene_ensembl"}
@@ -69,7 +69,7 @@ if(exists("cp", mode="environment") || exists("readcount", envir=cp) )
           
           testgeneid <- NA
           replacement = FALSE
-          # check if gene identifier of the actual sgRNA could been converted, which means we hav an entry in gene.info
+          # check if gene identifier of the actual sgRNA could been converted, which means we have an entry in gene.info
           # if this is the case, mark it for replacment, otherwise the original identifier will be kept
           if(as.character(z["replace"]) %in% gene.info[,1])
           {replacement = TRUE
@@ -169,6 +169,9 @@ if(exists("cp", mode="environment") || exists("readcount", envir=cp) )
         stringsAsFactors = FALSE)
       colnames(cp$annotation) <- c("gene", "gene.old")
       cp$annotation = cp$annotation[!duplicated(cp$annotation[,"gene.old"]),]
+      
+      # So we also ste the new gene identifier to the old one as it did not work!
+      cp$miaccs$g.identifier.new <- cp$miaccs$g.identifier
       
       #stop("Gene annotation failed. Please check the used dataset, database, filter and attributes for biomaRt.")
     }

@@ -15,19 +15,19 @@ For each gene of interest, all detected mutations of various cancer samples pres
 #### All Data
 
 ```{r}
-Table_DT(indepth_geneOverview$cosmic$mutation, colNames = c("Gene", "Sample name", "Primary site", "Mutation AA", "Mutation Description", "Mutation position", "Resistance Mutation"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_Mutations", sep=""))
+tryFunction(Table_DT(indepth_geneOverview$cosmic$mutation, colNames = c("Gene", "Sample name", "Primary site", "Mutation AA", "Mutation Description", "Mutation position", "Resistance Mutation"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_Mutations", sep=""))   , place = 'co')
 ```
 
 #### Mutation Types
 
 ```{r}
-plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Mutation Description`, title = "Type of Mutation", subtitle = paste("in ", indepthOverviewGene ,sep=""), ylab ="Occurence in COSMIC database", xlab =" Type of Mutation", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_TypeMutations", sep=""))
+tryFunction(plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Mutation Description`, title = "Type of Mutation", subtitle = paste("in ", indepthOverviewGene ,sep=""), ylab ="Occurence in COSMIC database", xlab =" Type of Mutation", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_TypeMutations", sep=""))   , place = 'co')
 ```
 
 #### Tumor Types
 
 ```{r}
-plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Tumour origin`, title = "Tumor Origin", subtitle = paste("for ", indepthOverviewGene ,sep=""), ylab ="Occurence in COSMIC database", xlab =" Type of Tumor", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_TumorOrigin", sep=""))
+tryFunction(plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Tumour origin`, title = "Tumor Origin", subtitle = paste("for ", indepthOverviewGene ,sep=""), ylab ="Occurence in COSMIC database", xlab =" Type of Tumor", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_TumorOrigin", sep=""))   , place = 'co')
 ```
 
 #### Tumor Sites
@@ -39,7 +39,7 @@ plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Primary site`, title = "Prim
 #### Samples
 
 ```{r}
-plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Sample name`, title = "Samples", subtitle = paste("in which mutations for ", indepthOverviewGene , " occured",sep=""), ylab ="Number of mutations", xlab = "Primary Site", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_Samples", sep=""))
+tryFunction(plot_cosmic(indepth_geneOverview$cosmic$hcmutation$`Sample name`, title = "Samples", subtitle = paste("in which mutations for ", indepthOverviewGene , " occured",sep=""), ylab ="Number of mutations", xlab = "Primary Site", filename = paste("GeneOverview_", indepthOverviewGene ,"_COSMIC_Samples", sep=""))   , place = 'co')
 ```
 
 
