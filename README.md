@@ -74,7 +74,7 @@ __Use up to 26 external data ressources to enrich information about your favouri
 
 Finally you can document the screening data and analysis using the interactive report.  
 
-[![CRISPRAnalyzeR Report Preview](./images/CRISPRAnalyzeR_YT_report1.png)](https://www.youtube.com/embed/eusAj4LrSik)
+[![CRISPRAnalyzeR Report Preview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_report1.png)](https://www.youtube.com/embed/eusAj4LrSik)
 
 
 # How to download the CRISPRAnalyzeR
@@ -209,13 +209,13 @@ __Individual Steps__
 6. Install the Docker Toolbox
 7. Start Kitematic, which comes with the docker toolbox
 8. Search for CRISPRAnalyzeR  
-	![Search for CRISPRAnalyzeR](./images/CA_kitematic_search.png)
+	![Search for CRISPRAnalyzeR](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_search.png)
 9. Select CREATE to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR  
 10. Go to SETTINGS to adjust the parameters as shown below  
-	![CA_overview](./images/CA_kitematic_overview.png)
+	![CA_overview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_overview.png)
 11. Hit the START button to start CRISPRAnalyzeR
 12. Copy the URL to the web browser to access CRISPRAnalyzeR  
-	![CA_url](./images/CA_kitematic_URL.png)
+	![CA_url](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_URL.png)
 
 
 
@@ -223,7 +223,7 @@ __Individual Steps__
 
 Hit the start, stop or restart button.  
 
-![CA_overview](./images/CA_kitematic_overview.png)
+![CA_overview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_overview.png)
 
 ### How to adjust the CRISPRAnalyzeR settings
 
@@ -232,17 +232,17 @@ With the user-interface provided by Kitematic, you can easily adjust all paramet
 
 Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING button on the top right.
 
-![CA_Options](./images/CA_kitematic_settings.png)
+![CA_Options](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_settings.png)
 
 
 ### Install specific version
 
 1. Search for CRISPRAnalyzeR in the Kitematic UI repository
 2. Click on the three dots for more options  
-	![More options](./images/CA_kitematic_moreoptions.png)
+	![More options](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_moreoptions.png)
 3. Click on "Selected version"
 4. Select the version you want  
-	![Version](./images/CA_kitematic_version.png)
+	![Version](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_version.png)
 5. Click on the X at the bottom right
 6. Click CREATE
 
@@ -312,6 +312,8 @@ You can start and stop the CRISPRanalyzeR using docker.
 
 CRISPRAnalyzeR has been designed to be installed once on a machine and then accessed via a webbrowser. Therefore, you can adjust all parameters during the start of the CRISPRAnalyzeR.
 
+
+
 Parameter | Meaning | Default Value | Accepted Values 
 ----------|---------|---------------|-----------------
 __websockets_behind_proxy__ | use Websocket protocol | TRUE | TRUE or FALSE
@@ -324,8 +326,15 @@ __bowtie_threads__ | Number of bowtie2 threads for mapping | 2 | any number, mus
 __proxy_url__ | URL to your Proxy server | NULL | URL or NULL to inactivate
 __proxy_port__ | Proxy server Port | NULL |Port number of NULL to inactivate
 
+## How to use the parameters with the recommended Kitematic installation
 
-### How to use the parameters
+In Kitematic, just go to the settings tab and adjust the options.  
+Be sure to hit the save button and start/restart CRISPRAnalyzeR.
+
+![CA_Options](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_settings.png)
+
+
+### How to use the parameters with the command line
 
 All parameters can be set during the start by the following:
 
@@ -583,15 +592,6 @@ The first column describes which sgRNA identifier (must be the same as in the sg
 
 
 
-# Contact and Citation
-
-**Jan Winter - jan.winter@dkfz-heidelberg.de**
-
-__Twitter:__ @winterj86
-
-__Cite: http://biorxiv.org/content/early/2017/02/20/109967__
-
-
 
 ---
 
@@ -600,10 +600,10 @@ __Cite: http://biorxiv.org/content/early/2017/02/20/109967__
 All available tutorials can be found on [Youtube](https://www.youtube.com/channel/UCiR7LwZ-8l_-qdZRWsuOmNA) and are also available from within CRISPRAnalyzeR.  
 
 ## Upload Read Count Data and Setup Screen
-[![CRISPRAnalyzeR Data Upload](./images/CRISPRAnalyzeR_YT_upload_readcount.png)](https://www.youtube.com/watch?v=J2WJFAo2OTY)
+[![CRISPRAnalyzeR Data Upload](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_upload_readcount.png)](https://www.youtube.com/watch?v=J2WJFAo2OTY)
 
 ## Assessing Screen Quality
-[![CRISPRAnalyzeR Tutorial on Screen Quality](./images/CRISPRAnalyzeR_YT_tutorial_SQ.png)](https://www.youtube.com/watch?v=zIC8OZBX_5U)
+[![CRISPRAnalyzeR Tutorial on Screen Quality](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_tutorial_SQ.png)](https://www.youtube.com/watch?v=zIC8OZBX_5U)
 
 
 --- 
@@ -628,3 +628,24 @@ For 8 GB of the so called `c stack space`, you need to set the value of 8GB in K
 ```bash
 docker run --rm --ulimit core=8589934592 -v *LOGFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/log -p 80:3838 boutroslab/crispranalyzer:latest
 ```
+
+
+
+
+# Live Demo Online Status
+
+A status page for the live demo availability can be found [here](https://stats.uptimerobot.com/16rJjcOv6).
+
+
+---
+
+
+# Contact and Citation
+
+**Jan Winter - jan.winter@dkfz-heidelberg.de**
+
+__Twitter:__ @winterj86
+
+__Cite: http://biorxiv.org/content/early/2017/02/20/109967__
+
+
