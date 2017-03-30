@@ -200,7 +200,7 @@ OLDER VERSIONS are not available anymore.
 
 __Installation Tutorial__
 
-<a href="https://www.youtube.com/watch?v=jlhpsN65" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_kitematic.png" width="40%" alt="CRISPRAnalyzeR: How to install it using Kitematic"></a>
+<a href="https://www.youtube.com/watch?v=jlhpsN65-_s&t" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_kitematic.png" width="40%" alt="CRISPRAnalyzeR: How to install it using Kitematic"></a>
 
 This installation will use a tool called Kitematic to offer a user interface to start, stop or change settings of the CRISPRAnalyzeR.  
 In principal, you first install and start docker, then install and start kitematic and finally download CRISPRAnalyzeR.  
