@@ -77,6 +77,9 @@ Finally you can document the screening data and analysis using the interactive r
 [![CRISPRAnalyzeR Report Preview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_report1.png)](https://www.youtube.com/embed/eusAj4LrSik)
 
 
+---
+
+
 # How to download the CRISPRAnalyzeR
 
 #### You can also check our [live demo](http://crispr-analyzer.dkfz.de), which you can also use to analyse your screening data.
@@ -148,48 +151,6 @@ Version 1.13
 - fixed some typos
 - fixed report generation issue with larger datasets
 
-Version 1.12
-- fixed glitch that caused crash after analysis
-
-Version 1.11
-- added more detailed error handling
-- changed behaviour of automatic file renaming
-- fixed rare BAGEL/ScreenBEAM issues
-- added download of Hit Calling Data (Data Review Section) as Tab-separated .TSV or Excel .XLSX
-- added download of sgRNA re-evaluation file (Data Review Section) as Tab-separated .TSV
-- added CDF (cumulative frequency) plots for Gene and sgRNA level (takes long time to be visualized for Genome-wide screens and many samples!)
-- reworked Data Review Section to be more user-friendly
-- updated highcharts plots to latest version
-- improved data handling for less hard disk space
-- improved plot handling by adding crosshair/removing tooltips where applicable
-- added Data Review Section to report
-- improved speed of report generation
-- improved UI for easier and more streamlined appearance
-- fixed small glitches with libraries
-- improved file consistency check even more - now even rare cases should be reported
-- improved data handling to automatically correct certain flaws in file consistency to not interrupt the user experience
-- improved error handling for sgRNA re-evaluation
-- increased speed of plots
-
-
-Version 1.10
-- added possibility to have log files exported in real time for debugging using -v parameter (see bottom of the page for debugging section)
-- added status information on the Download CRISPRAnalyzeR page to show what features are active/inactive
-- added additional error message for data mapping using bowtie2, so users now see what is the exact issue
-- FASTQ options only display in case FASTQ.gz files have been uploaded
-
-Version 1.09
-- fixed glitches in data handling for Gene Overview section
-- fixed proxy/no proxy issues
-- added another progress bar to highlight sgRNA re-evaluation status
-- added short help GIF animation to show how to adjust FASTQ regular expressions
-- streamlined code
-
-Version 1.08
-- fixed rare internet connectivity issues
-- updated filename handling -> automatically removes unwanted characters
-- updated libraries
-
 OLDER VERSIONS are not available anymore.
 
 ```
@@ -223,7 +184,7 @@ __Individual Steps__
 	__ATTENTION__ In case you will see a red error message like `Could not connect to xxxx`, this is an indication that you are behind a proxy server which blocks the access!  
 	If this is the case, please use a network connection without a proxy OR follow the __[Installation Procedure for Advanced Users](https://github.com/boutroslab/CRISPRAnalyzeR#command-line-installation-advanced-users)__
 	
-9. Select CREATE to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR  
+9. __Select CREATE__ to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR  
 10. __OPTIONAL__ If required, you can adjust a couple of parameters, such as a proxy server.  
 	All parameters are described in more detail __[below](https://github.com/boutroslab/CRISPRAnalyzeR#available-paramaters-to-start-crispranalyzer)__  
 	To adjust these parameters, click on the __Settings__ tab on the upper right corner:  
@@ -235,13 +196,17 @@ __Individual Steps__
 	
 	![CA_url](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_URL.png)
 
-13. Now you successfully installed and started CRISPRAnalyzeR!
+13. __Now you successfully installed and started CRISPRAnalyzeR!__
+
+
 
 ### How to Start, Stop or Restart CRISPRAnalyzeR
 
 Hit the __start, stop or restart__ button.  
 
 ![CA_overview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_overview.png)
+
+
 
 ### How to adjust the CRISPRAnalyzeR settings
 
@@ -251,6 +216,8 @@ With the user-interface provided by Kitematic, you can easily adjust all paramet
 Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING button on the top right.  
 
 ![CA_Options](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_settings.png)
+
+
 
 
 ### Install specific version

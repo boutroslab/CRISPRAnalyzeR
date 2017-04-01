@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>CRISPR-AnalyzeR Report</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="CRISPR-AnalyzeR Report">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="CRISPR-AnalyzeR Report" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="CRISPR-AnalyzeR Report" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="enriched-11.html">
+<link rel="next" href="gene-overviews.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="libs/datatables-binding-0.2/datatables.js"></script>
+<link href="libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="libs/jszip-1.10.12/jszip.min.js"></script>
+<script src="libs/pdfmake-1.10.12/pdfmake.min.js"></script>
+<script src="libs/pdfmake-1.10.12/vfs_fonts.js"></script>
+<link href="libs/dt-ext-buttons-1.10.12/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-buttons-1.10.12/js/dataTables.buttons.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.12/js/buttons.flash.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.12/js/buttons.html5.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.12/js/buttons.colVis.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.12/js/buttons.print.min.js"></script>
+<script src="libs/proj4js-2.3.15/proj4.js"></script>
+<link href="libs/highcharts-5.0.6/css/motion.css" rel="stylesheet" />
+<script src="libs/highcharts-5.0.6/highstock.js"></script>
+<script src="libs/highcharts-5.0.6/highcharts-3d.js"></script>
+<script src="libs/highcharts-5.0.6/highcharts-more.js"></script>
+<script src="libs/highcharts-5.0.6/modules/annotations.js"></script>
+<script src="libs/highcharts-5.0.6/modules/broken-axis.js"></script>
+<script src="libs/highcharts-5.0.6/modules/data.js"></script>
+<script src="libs/highcharts-5.0.6/modules/drilldown.js"></script>
+<script src="libs/highcharts-5.0.6/modules/exporting.js"></script>
+<script src="libs/highcharts-5.0.6/modules/funnel.js"></script>
+<script src="libs/highcharts-5.0.6/modules/heatmap.js"></script>
+<script src="libs/highcharts-5.0.6/modules/map.js"></script>
+<script src="libs/highcharts-5.0.6/modules/no-data-to-display.js"></script>
+<script src="libs/highcharts-5.0.6/modules/offline-exporting.js"></script>
+<script src="libs/highcharts-5.0.6/modules/solid-gauge.js"></script>
+<script src="libs/highcharts-5.0.6/modules/treemap.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/annotations.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/draggable-legend.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/draggable-points.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/export-csv.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/grouped-categories.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/motion.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/pattern-fill-v2.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/tooltip-delay.js"></script>
+<script src="libs/highcharts-5.0.6/custom/reset.js"></script>
+<script src="libs/highcharts-5.0.6/custom/symbols-extra.js"></script>
+<script src="libs/highcharts-5.0.6/custom/text-symbols.js"></script>
+<link href="libs/fontawesome-4.5.0/font-awesome.min.css" rel="stylesheet" />
+<link href="libs/htmlwdgtgrid-1/htmlwdgtgrid.css" rel="stylesheet" />
+<script src="libs/highchart-binding-0.5.0/highchart.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="screen-information.html"><a href="screen-information.html"><i class="fa fa-check"></i><b>1</b> Screen Information</a><ul>
+<li class="chapter" data-level="1.1" data-path="experiment.html"><a href="experiment.html"><i class="fa fa-check"></i><b>1.1</b> Experiment</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="experiment.html"><a href="experiment.html#scope"><i class="fa fa-check"></i><b>1.1.1</b> Scope</a></li>
+<li class="chapter" data-level="1.1.2" data-path="experiment.html"><a href="experiment.html#procedure"><i class="fa fa-check"></i><b>1.1.2</b> Procedure</a></li>
+<li class="chapter" data-level="1.1.3" data-path="experiment.html"><a href="experiment.html#comments"><i class="fa fa-check"></i><b>1.1.3</b> Comments</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>1.2</b> Data</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="data.html"><a href="data.html#files"><i class="fa fa-check"></i><b>1.2.1</b> Files</a></li>
+<li class="chapter" data-level="1.2.2" data-path="data.html"><a href="data.html#experimental-design"><i class="fa fa-check"></i><b>1.2.2</b> Experimental Design</a></li>
+<li class="chapter" data-level="1.2.3" data-path="data.html"><a href="data.html#analysis-parameters"><i class="fa fa-check"></i><b>1.2.3</b> Analysis Parameters</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>I Screen Quality</b></span></li>
+<li class="chapter" data-level="2" data-path="data-review.html"><a href="data-review.html"><i class="fa fa-check"></i><b>2</b> Data Review</a></li>
+<li class="chapter" data-level="3" data-path="fastq-quality.html"><a href="fastq-quality.html"><i class="fa fa-check"></i><b>3</b> FASTQ Quality</a><ul>
+<li class="chapter" data-level="3.1" data-path="cycle-specific-gc-content.html"><a href="cycle-specific-gc-content.html"><i class="fa fa-check"></i><b>3.1</b> Cycle specific GC Content</a></li>
+<li class="chapter" data-level="3.2" data-path="cycle-specific-quality-distribution.html"><a href="cycle-specific-quality-distribution.html"><i class="fa fa-check"></i><b>3.2</b> Cycle specific Quality Distribution</a></li>
+<li class="chapter" data-level="3.3" data-path="cycle-specific-average-quality.html"><a href="cycle-specific-average-quality.html"><i class="fa fa-check"></i><b>3.3</b> Cycle specific Average Quality</a></li>
+<li class="chapter" data-level="3.4" data-path="cycle-specific-base-call-proportion.html"><a href="cycle-specific-base-call-proportion.html"><i class="fa fa-check"></i><b>3.4</b> Cycle specific Base Call Proportion</a></li>
+<li class="chapter" data-level="3.5" data-path="read-frequency.html"><a href="read-frequency.html"><i class="fa fa-check"></i><b>3.5</b> Read Frequency</a></li>
+<li class="chapter" data-level="3.6" data-path="read-width.html"><a href="read-width.html"><i class="fa fa-check"></i><b>3.6</b> Read Width</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="screen-readcount.html"><a href="screen-readcount.html"><i class="fa fa-check"></i><b>4</b> Screen Readcount</a><ul>
+<li class="chapter" data-level="4.1" data-path="overview.html"><a href="overview.html"><i class="fa fa-check"></i><b>4.1</b> Overview</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="overview.html"><a href="overview.html#sgrna-readcount-statistics"><i class="fa fa-check"></i><b>4.1.1</b> sgRNA Readcount Statistics</a></li>
+<li class="chapter" data-level="4.1.2" data-path="overview.html"><a href="overview.html#gene-readcount-statistics"><i class="fa fa-check"></i><b>4.1.2</b> Gene Readcount Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="readcount-distribution.html"><a href="readcount-distribution.html"><i class="fa fa-check"></i><b>4.2</b> Readcount Distribution</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="readcount-distribution.html"><a href="readcount-distribution.html#pseudodensity"><i class="fa fa-check"></i><b>4.2.1</b> Pseudodensity</a></li>
+<li class="chapter" data-level="4.2.2" data-path="readcount-distribution.html"><a href="readcount-distribution.html#cumulative-frequency-for-gene-read-counts"><i class="fa fa-check"></i><b>4.2.2</b> Cumulative Frequency for Gene Read Counts</a></li>
+<li class="chapter" data-level="4.2.3" data-path="readcount-distribution.html"><a href="readcount-distribution.html#cumulative-frequency-for-sgrna-read-counts"><i class="fa fa-check"></i><b>4.2.3</b> Cumulative Frequency for sgRNA Read Counts</a></li>
+<li class="chapter" data-level="4.2.4" data-path="readcount-distribution.html"><a href="readcount-distribution.html#boxplots"><i class="fa fa-check"></i><b>4.2.4</b> Boxplots</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="controls.html"><a href="controls.html"><i class="fa fa-check"></i><b>4.3</b> Controls</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="controls.html"><a href="controls.html#positive-controls"><i class="fa fa-check"></i><b>4.3.1</b> Positive Controls</a></li>
+<li class="chapter" data-level="4.3.2" data-path="controls.html"><a href="controls.html#non-targeting-controls"><i class="fa fa-check"></i><b>4.3.2</b> Non-targeting Controls</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="readcount-depth.html"><a href="readcount-depth.html"><i class="fa fa-check"></i><b>4.4</b> Readcount Depth</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="readcount-depth.html"><a href="readcount-depth.html#pbs_replicate1"><i class="fa fa-check"></i><b>4.4.1</b> PBS_Replicate1</a></li>
+<li class="chapter" data-level="4.4.2" data-path="readcount-depth.html"><a href="readcount-depth.html#pbs_replicate2"><i class="fa fa-check"></i><b>4.4.2</b> PBS_Replicate2</a></li>
+<li class="chapter" data-level="4.4.3" data-path="readcount-depth.html"><a href="readcount-depth.html#trail_replicate2"><i class="fa fa-check"></i><b>4.4.3</b> TRAIL_Replicate2</a></li>
+<li class="chapter" data-level="4.4.4" data-path="readcount-depth.html"><a href="readcount-depth.html#trail_replicate1"><i class="fa fa-check"></i><b>4.4.4</b> TRAIL_Replicate1</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="readcounts.html"><a href="readcounts.html"><i class="fa fa-check"></i><b>4.5</b> Readcounts</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="readcounts.html"><a href="readcounts.html#pbs_replicate1-1"><i class="fa fa-check"></i><b>4.5.1</b> PBS_Replicate1</a></li>
+<li class="chapter" data-level="4.5.2" data-path="readcounts.html"><a href="readcounts.html#pbs_replicate2-1"><i class="fa fa-check"></i><b>4.5.2</b> PBS_Replicate2</a></li>
+<li class="chapter" data-level="4.5.3" data-path="readcounts.html"><a href="readcounts.html#trail_replicate2-1"><i class="fa fa-check"></i><b>4.5.3</b> TRAIL_Replicate2</a></li>
+<li class="chapter" data-level="4.5.4" data-path="readcounts.html"><a href="readcounts.html#trail_replicate1-1"><i class="fa fa-check"></i><b>4.5.4</b> TRAIL_Replicate1</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sgrna-coverage.html"><a href="sgrna-coverage.html"><i class="fa fa-check"></i><b>5</b> sgRNA Coverage</a><ul>
+<li class="chapter" data-level="5.1" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html"><i class="fa fa-check"></i><b>5.1</b> Missing sgRNAs and Genes</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html#missing-genes"><i class="fa fa-check"></i><b>5.1.1</b> Missing Genes</a></li>
+<li class="chapter" data-level="5.1.2" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html#missing-sgrnas"><i class="fa fa-check"></i><b>5.1.2</b> Missing sgRNAs</a></li>
+<li class="chapter" data-level="5.1.3" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html#missing-non-targeting-sgrnas"><i class="fa fa-check"></i><b>5.1.3</b> % Missing Non-targeting sgRNAs</a></li>
+<li class="chapter" data-level="5.1.4" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html#missing-postive-sgrnas"><i class="fa fa-check"></i><b>5.1.4</b> % Missing Postive sgRNAs</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="designs-per-gene.html"><a href="designs-per-gene.html"><i class="fa fa-check"></i><b>5.2</b> Designs per Gene</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="designs-per-gene.html"><a href="designs-per-gene.html#pbs_replicate1-2"><i class="fa fa-check"></i><b>5.2.1</b> PBS_Replicate1</a></li>
+<li class="chapter" data-level="5.2.2" data-path="designs-per-gene.html"><a href="designs-per-gene.html#pbs_replicate2-2"><i class="fa fa-check"></i><b>5.2.2</b> PBS_Replicate2</a></li>
+<li class="chapter" data-level="5.2.3" data-path="designs-per-gene.html"><a href="designs-per-gene.html#trail_replicate2-2"><i class="fa fa-check"></i><b>5.2.3</b> TRAIL_Replicate2</a></li>
+<li class="chapter" data-level="5.2.4" data-path="designs-per-gene.html"><a href="designs-per-gene.html#trail_replicate1-2"><i class="fa fa-check"></i><b>5.2.4</b> TRAIL_Replicate1</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sample-comparison.html"><a href="sample-comparison.html"><i class="fa fa-check"></i><b>6</b> Sample Comparison</a><ul>
+<li class="chapter" data-level="6.1" data-path="overview-1.html"><a href="overview-1.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="overview-1.html"><a href="overview-1.html#foldchange-of-gene-effects"><i class="fa fa-check"></i><b>6.1.1</b> Foldchange of Gene Effects</a></li>
+<li class="chapter" data-level="6.1.2" data-path="overview-1.html"><a href="overview-1.html#z-ratio-of-gene-effects"><i class="fa fa-check"></i><b>6.1.2</b> Z-Ratio of Gene Effects</a></li>
+<li class="chapter" data-level="6.1.3" data-path="overview-1.html"><a href="overview-1.html#foldchange-of-sgrna-effects"><i class="fa fa-check"></i><b>6.1.3</b> Foldchange of sgRNA Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="scatter-plot-matrices.html"><a href="scatter-plot-matrices.html"><i class="fa fa-check"></i><b>6.2</b> Scatter Plot Matrices</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="scatter-plot-matrices.html"><a href="scatter-plot-matrices.html#scatter-plot-matrix-1"><i class="fa fa-check"></i><b>6.2.1</b> Scatter Plot Matrix 1</a></li>
+<li class="chapter" data-level="6.2.2" data-path="scatter-plot-matrices.html"><a href="scatter-plot-matrices.html#scatter-plot-matrix-2"><i class="fa fa-check"></i><b>6.2.2</b> Scatter Plot Matrix 2</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="single-scatter-plots.html"><a href="single-scatter-plots.html"><i class="fa fa-check"></i><b>6.3</b> Single Scatter Plots</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="single-scatter-plots.html"><a href="single-scatter-plots.html#scatterplot-1"><i class="fa fa-check"></i><b>6.3.1</b> Scatterplot 1</a></li>
+<li class="chapter" data-level="6.3.2" data-path="single-scatter-plots.html"><a href="single-scatter-plots.html#scatterplot-2"><i class="fa fa-check"></i><b>6.3.2</b> Scatterplot 2</a></li>
+<li class="chapter" data-level="6.3.3" data-path="single-scatter-plots.html"><a href="single-scatter-plots.html#scatterplot-3"><i class="fa fa-check"></i><b>6.3.3</b> Scatterplot 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="pca.html"><a href="pca.html"><i class="fa fa-check"></i><b>7</b> PCA</a></li>
+<li class="part"><span><b>II Hit Calling</b></span></li>
+<li class="chapter" data-level="8" data-path="gene-ranking.html"><a href="gene-ranking.html"><i class="fa fa-check"></i><b>8</b> Gene Ranking</a><ul>
+<li class="chapter" data-level="8.1" data-path="wilcox.html"><a href="wilcox.html"><i class="fa fa-check"></i><b>8.1</b> Wilcox</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="wilcox.html"><a href="wilcox.html#p-value-distribution"><i class="fa fa-check"></i><b>8.1.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.1.2" data-path="wilcox.html"><a href="wilcox.html#ranked-p-values"><i class="fa fa-check"></i><b>8.1.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.1.3" data-path="wilcox.html"><a href="wilcox.html#p-value-vs-lfc"><i class="fa fa-check"></i><b>8.1.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.1.4" data-path="wilcox.html"><a href="wilcox.html#data-1"><i class="fa fa-check"></i><b>8.1.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="deseq2.html"><a href="deseq2.html"><i class="fa fa-check"></i><b>8.2</b> DESeq2</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="deseq2.html"><a href="deseq2.html#p-value-distribution-1"><i class="fa fa-check"></i><b>8.2.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.2.2" data-path="deseq2.html"><a href="deseq2.html#ranked-p-values-1"><i class="fa fa-check"></i><b>8.2.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.2.3" data-path="deseq2.html"><a href="deseq2.html#p-value-vs-lfc-1"><i class="fa fa-check"></i><b>8.2.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.2.4" data-path="deseq2.html"><a href="deseq2.html#data-2"><i class="fa fa-check"></i><b>8.2.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mageck.html"><a href="mageck.html"><i class="fa fa-check"></i><b>8.3</b> MAGeCK</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="mageck.html"><a href="mageck.html#p-value-distribution-2"><i class="fa fa-check"></i><b>8.3.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.3.2" data-path="mageck.html"><a href="mageck.html#ranked-p-values-2"><i class="fa fa-check"></i><b>8.3.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.3.3" data-path="mageck.html"><a href="mageck.html#p-value-vs-lfc-2"><i class="fa fa-check"></i><b>8.3.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.3.4" data-path="mageck.html"><a href="mageck.html#data-3"><i class="fa fa-check"></i><b>8.3.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="sgrsea.html"><a href="sgrsea.html"><i class="fa fa-check"></i><b>8.4</b> sgRSEA</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="sgrsea.html"><a href="sgrsea.html#p-value-distribution-3"><i class="fa fa-check"></i><b>8.4.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.4.2" data-path="sgrsea.html"><a href="sgrsea.html#ranked-p-values-3"><i class="fa fa-check"></i><b>8.4.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.4.3" data-path="sgrsea.html"><a href="sgrsea.html#p-value-vs-lfc-3"><i class="fa fa-check"></i><b>8.4.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.4.4" data-path="sgrsea.html"><a href="sgrsea.html#data-4"><i class="fa fa-check"></i><b>8.4.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="edger.html"><a href="edger.html"><i class="fa fa-check"></i><b>8.5</b> EdgeR</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="edger.html"><a href="edger.html#p-value-distribution-4"><i class="fa fa-check"></i><b>8.5.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.5.2" data-path="edger.html"><a href="edger.html#ranked-p-values-4"><i class="fa fa-check"></i><b>8.5.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.5.3" data-path="edger.html"><a href="edger.html#p-value-vs-lfc-4"><i class="fa fa-check"></i><b>8.5.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.5.4" data-path="edger.html"><a href="edger.html#data-5"><i class="fa fa-check"></i><b>8.5.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="z-ratio.html"><a href="z-ratio.html"><i class="fa fa-check"></i><b>8.6</b> Z Ratio</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="z-ratio.html"><a href="z-ratio.html#z-ratio-distribution"><i class="fa fa-check"></i><b>8.6.1</b> Z Ratio Distribution</a></li>
+<li class="chapter" data-level="8.6.2" data-path="z-ratio.html"><a href="z-ratio.html#ranked-z-ratios"><i class="fa fa-check"></i><b>8.6.2</b> Ranked Z Ratios</a></li>
+<li class="chapter" data-level="8.6.3" data-path="z-ratio.html"><a href="z-ratio.html#z-ratio-vs-lfc"><i class="fa fa-check"></i><b>8.6.3</b> Z Ratio vs LFC</a></li>
+<li class="chapter" data-level="8.6.4" data-path="z-ratio.html"><a href="z-ratio.html#data-6"><i class="fa fa-check"></i><b>8.6.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="bagel.html"><a href="bagel.html"><i class="fa fa-check"></i><b>8.7</b> BAGEL</a><ul>
+<li class="chapter" data-level="8.7.1" data-path="bagel.html"><a href="bagel.html#log2-bayes-factor-distribution"><i class="fa fa-check"></i><b>8.7.1</b> Log2 Bayes Factor Distribution</a></li>
+<li class="chapter" data-level="8.7.2" data-path="bagel.html"><a href="bagel.html#ranked-by-log2-of-bayes-factor"><i class="fa fa-check"></i><b>8.7.2</b> Ranked by log2 of Bayes Factor</a></li>
+<li class="chapter" data-level="8.7.3" data-path="bagel.html"><a href="bagel.html#data-7"><i class="fa fa-check"></i><b>8.7.3</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="screenbeam.html"><a href="screenbeam.html"><i class="fa fa-check"></i><b>8.8</b> ScreenBEAM</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="screenbeam.html"><a href="screenbeam.html#p-value-distribution-5"><i class="fa fa-check"></i><b>8.8.1</b> P-Value Distribution</a></li>
+<li class="chapter" data-level="8.8.2" data-path="screenbeam.html"><a href="screenbeam.html#ranked-by-fdr"><i class="fa fa-check"></i><b>8.8.2</b> Ranked by FDR</a></li>
+<li class="chapter" data-level="8.8.3" data-path="screenbeam.html"><a href="screenbeam.html#data-8"><i class="fa fa-check"></i><b>8.8.3</b> Data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>9</b> Summary</a><ul>
+<li class="chapter" data-level="9.1" data-path="enriched-11.html"><a href="enriched-11.html"><i class="fa fa-check"></i><b>9.1</b> Enriched</a></li>
+<li class="chapter" data-level="9.2" data-path="depleted-11.html"><a href="depleted-11.html"><i class="fa fa-check"></i><b>9.2</b> Depleted</a></li>
+</ul></li>
+<li class="part"><span><b>III Hit Confirmation</b></span></li>
+<li class="chapter" data-level="10" data-path="gene-overviews.html"><a href="gene-overviews.html"><i class="fa fa-check"></i><b>10</b> Gene Overviews</a><ul>
+<li class="chapter" data-level="10.1" data-path="casp3-1.html"><a href="casp3-1.html"><i class="fa fa-check"></i><b>10.1</b> CASP3 (1)</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="casp3-1.html"><a href="casp3-1.html#general-gene-information"><i class="fa fa-check"></i><b>10.1.1</b> General Gene Information</a></li>
+<li class="chapter" data-level="10.1.2" data-path="casp3-1.html"><a href="casp3-1.html#gene-model"><i class="fa fa-check"></i><b>10.1.2</b> Gene Model</a></li>
+<li class="chapter" data-level="10.1.3" data-path="casp3-1.html"><a href="casp3-1.html#sgrna-model"><i class="fa fa-check"></i><b>10.1.3</b> sgRNA Model</a></li>
+<li class="chapter" data-level="10.1.4" data-path="casp3-1.html"><a href="casp3-1.html#published-screens"><i class="fa fa-check"></i><b>10.1.4</b> Published Screens</a></li>
+<li class="chapter" data-level="10.1.5" data-path="casp3-1.html"><a href="casp3-1.html#gene-performance"><i class="fa fa-check"></i><b>10.1.5</b> Gene Performance</a></li>
+<li class="chapter" data-level="10.1.6" data-path="casp3-1.html"><a href="casp3-1.html#cosmic-mutation-database"><i class="fa fa-check"></i><b>10.1.6</b> COSMIC Mutation Database</a></li>
+<li class="chapter" data-level="10.1.7" data-path="casp3-1.html"><a href="casp3-1.html#gene-ontology"><i class="fa fa-check"></i><b>10.1.7</b> Gene Ontology</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html"><i class="fa fa-check"></i><b>10.2</b> TNFRSF10A (2)</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#general-gene-information-1"><i class="fa fa-check"></i><b>10.2.1</b> General Gene Information</a></li>
+<li class="chapter" data-level="10.2.2" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#gene-model-1"><i class="fa fa-check"></i><b>10.2.2</b> Gene Model</a></li>
+<li class="chapter" data-level="10.2.3" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#sgrna-model-1"><i class="fa fa-check"></i><b>10.2.3</b> sgRNA Model</a></li>
+<li class="chapter" data-level="10.2.4" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#published-screens-1"><i class="fa fa-check"></i><b>10.2.4</b> Published Screens</a></li>
+<li class="chapter" data-level="10.2.5" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#gene-performance-1"><i class="fa fa-check"></i><b>10.2.5</b> Gene Performance</a></li>
+<li class="chapter" data-level="10.2.6" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#cosmic-mutation-database-1"><i class="fa fa-check"></i><b>10.2.6</b> COSMIC Mutation Database</a></li>
+<li class="chapter" data-level="10.2.7" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#gene-ontology-1"><i class="fa fa-check"></i><b>10.2.7</b> Gene Ontology</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="casp8-3.html"><a href="casp8-3.html"><i class="fa fa-check"></i><b>10.3</b> CASP8 (3)</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="casp8-3.html"><a href="casp8-3.html#general-gene-information-2"><i class="fa fa-check"></i><b>10.3.1</b> General Gene Information</a></li>
+<li class="chapter" data-level="10.3.2" data-path="casp8-3.html"><a href="casp8-3.html#gene-model-2"><i class="fa fa-check"></i><b>10.3.2</b> Gene Model</a></li>
+<li class="chapter" data-level="10.3.3" data-path="casp8-3.html"><a href="casp8-3.html#sgrna-model-2"><i class="fa fa-check"></i><b>10.3.3</b> sgRNA Model</a></li>
+<li class="chapter" data-level="10.3.4" data-path="casp8-3.html"><a href="casp8-3.html#published-screens-2"><i class="fa fa-check"></i><b>10.3.4</b> Published Screens</a></li>
+<li class="chapter" data-level="10.3.5" data-path="casp8-3.html"><a href="casp8-3.html#gene-performance-2"><i class="fa fa-check"></i><b>10.3.5</b> Gene Performance</a></li>
+<li class="chapter" data-level="10.3.6" data-path="casp8-3.html"><a href="casp8-3.html#cosmic-mutation-database-2"><i class="fa fa-check"></i><b>10.3.6</b> COSMIC Mutation Database</a></li>
+<li class="chapter" data-level="10.3.7" data-path="casp8-3.html"><a href="casp8-3.html#gene-ontology-2"><i class="fa fa-check"></i><b>10.3.7</b> Gene Ontology</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sgrnas.html"><a href="sgrnas.html"><i class="fa fa-check"></i><b>11</b> sgRNAs</a><ul>
+<li class="chapter" data-level="11.1" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html"><i class="fa fa-check"></i><b>11.1</b> TNFRSF10B (1)</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#readcount"><i class="fa fa-check"></i><b>11.1.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.1.2" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#log2-foldchange"><i class="fa fa-check"></i><b>11.1.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.1.3" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#genomic-binding-sites"><i class="fa fa-check"></i><b>11.1.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.1.4" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#z-score"><i class="fa fa-check"></i><b>11.1.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.1.5" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#efficiency-scores"><i class="fa fa-check"></i><b>11.1.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.1.6" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#e-crisp-scores"><i class="fa fa-check"></i><b>11.1.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.1.7" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#sgrna-sequences"><i class="fa fa-check"></i><b>11.1.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.1.8" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#sgrna-binding-sites"><i class="fa fa-check"></i><b>11.1.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html"><i class="fa fa-check"></i><b>11.2</b> TNFRSF10A (2)</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#readcount-1"><i class="fa fa-check"></i><b>11.2.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.2.2" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#log2-foldchange-1"><i class="fa fa-check"></i><b>11.2.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.2.3" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#genomic-binding-sites-1"><i class="fa fa-check"></i><b>11.2.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.2.4" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#z-score-1"><i class="fa fa-check"></i><b>11.2.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.2.5" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#efficiency-scores-1"><i class="fa fa-check"></i><b>11.2.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.2.6" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#e-crisp-scores-1"><i class="fa fa-check"></i><b>11.2.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.2.7" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#sgrna-sequences-1"><i class="fa fa-check"></i><b>11.2.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.2.8" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#sgrna-binding-sites-1"><i class="fa fa-check"></i><b>11.2.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="casp3-3.html"><a href="casp3-3.html"><i class="fa fa-check"></i><b>11.3</b> CASP3 (3)</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="casp3-3.html"><a href="casp3-3.html#readcount-2"><i class="fa fa-check"></i><b>11.3.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.3.2" data-path="casp3-3.html"><a href="casp3-3.html#log2-foldchange-2"><i class="fa fa-check"></i><b>11.3.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.3.3" data-path="casp3-3.html"><a href="casp3-3.html#genomic-binding-sites-2"><i class="fa fa-check"></i><b>11.3.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.3.4" data-path="casp3-3.html"><a href="casp3-3.html#z-score-2"><i class="fa fa-check"></i><b>11.3.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.3.5" data-path="casp3-3.html"><a href="casp3-3.html#efficiency-scores-2"><i class="fa fa-check"></i><b>11.3.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.3.6" data-path="casp3-3.html"><a href="casp3-3.html#e-crisp-scores-2"><i class="fa fa-check"></i><b>11.3.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.3.7" data-path="casp3-3.html"><a href="casp3-3.html#sgrna-sequences-2"><i class="fa fa-check"></i><b>11.3.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.3.8" data-path="casp3-3.html"><a href="casp3-3.html#sgrna-binding-sites-2"><i class="fa fa-check"></i><b>11.3.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="fadd-4.html"><a href="fadd-4.html"><i class="fa fa-check"></i><b>11.4</b> FADD (4)</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="fadd-4.html"><a href="fadd-4.html#readcount-3"><i class="fa fa-check"></i><b>11.4.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.4.2" data-path="fadd-4.html"><a href="fadd-4.html#log2-foldchange-3"><i class="fa fa-check"></i><b>11.4.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.4.3" data-path="fadd-4.html"><a href="fadd-4.html#genomic-binding-sites-3"><i class="fa fa-check"></i><b>11.4.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.4.4" data-path="fadd-4.html"><a href="fadd-4.html#z-score-3"><i class="fa fa-check"></i><b>11.4.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.4.5" data-path="fadd-4.html"><a href="fadd-4.html#efficiency-scores-3"><i class="fa fa-check"></i><b>11.4.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.4.6" data-path="fadd-4.html"><a href="fadd-4.html#e-crisp-scores-3"><i class="fa fa-check"></i><b>11.4.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.4.7" data-path="fadd-4.html"><a href="fadd-4.html#sgrna-sequences-3"><i class="fa fa-check"></i><b>11.4.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.4.8" data-path="fadd-4.html"><a href="fadd-4.html#sgrna-binding-sites-3"><i class="fa fa-check"></i><b>11.4.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="casp8-5.html"><a href="casp8-5.html"><i class="fa fa-check"></i><b>11.5</b> CASP8 (5)</a><ul>
+<li class="chapter" data-level="11.5.1" data-path="casp8-5.html"><a href="casp8-5.html#readcount-4"><i class="fa fa-check"></i><b>11.5.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.5.2" data-path="casp8-5.html"><a href="casp8-5.html#log2-foldchange-4"><i class="fa fa-check"></i><b>11.5.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.5.3" data-path="casp8-5.html"><a href="casp8-5.html#genomic-binding-sites-4"><i class="fa fa-check"></i><b>11.5.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.5.4" data-path="casp8-5.html"><a href="casp8-5.html#z-score-4"><i class="fa fa-check"></i><b>11.5.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.5.5" data-path="casp8-5.html"><a href="casp8-5.html#efficiency-scores-4"><i class="fa fa-check"></i><b>11.5.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.5.6" data-path="casp8-5.html"><a href="casp8-5.html#e-crisp-scores-4"><i class="fa fa-check"></i><b>11.5.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.5.7" data-path="casp8-5.html"><a href="casp8-5.html#sgrna-sequences-4"><i class="fa fa-check"></i><b>11.5.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.5.8" data-path="casp8-5.html"><a href="casp8-5.html#sgrna-binding-sites-4"><i class="fa fa-check"></i><b>11.5.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="gene-set-enrichment-analysis.html"><a href="gene-set-enrichment-analysis.html"><i class="fa fa-check"></i><b>12</b> Gene Set Enrichment Analysis</a><ul>
+<li class="chapter" data-level="12.1" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><i class="fa fa-check"></i><b>12.1</b> TNFRSF10A, TNFRSF10B, TNFRSF10C (1)</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#pathways"><i class="fa fa-check"></i><b>12.1.1</b> Pathways</a></li>
+<li class="chapter" data-level="12.1.2" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#transcription"><i class="fa fa-check"></i><b>12.1.2</b> Transcription</a></li>
+<li class="chapter" data-level="12.1.3" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#ontologies"><i class="fa fa-check"></i><b>12.1.3</b> Ontologies</a></li>
+<li class="chapter" data-level="12.1.4" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#diseases"><i class="fa fa-check"></i><b>12.1.4</b> Diseases</a></li>
+<li class="chapter" data-level="12.1.5" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#cell-types"><i class="fa fa-check"></i><b>12.1.5</b> Cell Types</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="gene-comparisons.html"><a href="gene-comparisons.html"><i class="fa fa-check"></i><b>13</b> Gene Comparisons</a><ul>
+<li class="chapter" data-level="13.1" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><i class="fa fa-check"></i><b>13.1</b> TNFRSF10A, TNFRSF10B, TNFRSF10C, CASP3, BAX, BCL2L1, MCL1 (1)</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#readcount-untreated-group"><i class="fa fa-check"></i><b>13.1.1</b> Readcount Untreated Group</a></li>
+<li class="chapter" data-level="13.1.2" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#readcount-treated-group"><i class="fa fa-check"></i><b>13.1.2</b> Readcount Treated Group</a></li>
+<li class="chapter" data-level="13.1.3" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#log2-foldchange-5"><i class="fa fa-check"></i><b>13.1.3</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="13.1.4" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#z-scores"><i class="fa fa-check"></i><b>13.1.4</b> Z-Scores</a></li>
+<li class="chapter" data-level="13.1.5" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#sgrna-binding-sites-5"><i class="fa fa-check"></i><b>13.1.5</b> sgRNA Binding Sites</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="credits.html"><a href="credits.html"><i class="fa fa-check"></i><b>14</b> Credits</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CRISPR-AnalyzeR Report</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="depleted-11" class="section level2">
+<h2><span class="header-section-number">9.2</span> Depleted</h2>
+<p>Gene foldchanges and adjusted p values of methods <em>Wilcox</em>, <em>DESeq2</em>, <em>MAGeCK</em>, <em>sgRSEA</em>, and <em>EdgeR</em> for depletion.</p>
+<div id="htmlwidget-8309cf8fbab86b47a850" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8309cf8fbab86b47a850">{"x":{"filter":"none","extensions":["Buttons"],"data":[["AAK1","ABL1","ACVR1B","ACVR1C","ADPGK","AK5","AKAP13","AKT2","ALK","ANAPC4","ANKK1","ANO10","APAF1","ATM","ATMIN","ATP23","AURKA","AXIN1","AXL","AZU1","BAD","BAK1","BAX","BBC3","BCAS2","BCL2","BCL2L1","BCL2L10","BCL2L11","BCL2L12","BCL2L13","BCL2L14","BCL2L2","BCL3","BCL6","BCL6B","BCL7A","BCL7C","BCL9","BCL9L","BCR","BDKRB2","BID","BMP2K","BMX","BNIP3","BOK","BRAF","BRSK1","BUB1","BUB1B","C8orf44-SGK3","CAMK2G","CAMK4","CASC1","CASK","CASP1","CASP2","CASP3","CASP4","CASP5","CASP6","CASP7","CASP8","CASP9","CASS4","CCND1","CCND3","CCNE1","CDAN1","CDC123","CDC16","CDC7","CDK12","CDK16","CDK2","CDK4","CDK5R1","CDK6","CDK7","CDKL1","CHKB","CHKB-CPT1B","CHUK","CINP","CIT","CKM","CKMT2","CLIC1","CLK4","CMPK2","CNTLN","CSNK1A1L","CSNK2A2","CSNK2A3","CTRB1","DAPK1","DAPK3","DCLK1","DDR1","DGKA","DGKH","DGKQ","DGKZ","DUSP11","DYRK2","DYRK3","EIF2AK1","EIF2AK2","EIF2AK4","EIF2B2","ENSG00000141720","ENSG00000143466","ENSG00000167524","ENSG00000170616","ENSG00000188280","ENSG00000258472","ENSG00000258989","ENSG00000259316","ENSG00000268434","EPHA10","EPHA2","EPHA6","EPHA7","EPHA8","EPS8","EPS8L1","ERBB2","ERBB3","ERBB4","ERCC3","ERI1","ERN1","ERN2","ETNK1","ETV6","FADD","FAM20B","FAM20C","FASTKD5","FAT1","FER","FGD2","FGF20","FGFR1","FGFR1OP","FGFR2","FGFR4","FLT1","FLT3","FOXM1","FRK","FUK","GALK2","GCK","GCKR","GKAP1","GLRA2","GRK1","GRK3","GRK4","GSG2","GTF2B","GUCY2C","HIPK3","HK3","HKDC1","HRK","HSPA9","HYKK","IARS","IFNL2","INSR","IRAK1","IRAK2","IRAK4","IRF5","IRS1","ITK","JAK3","JAKMIP2","KIRREL3","KNDC1","KSR1","KSR2","LAMA1","LATS2","LCK","LIPF","LMTK3","LTK","MAEA","MAK","MAP2K5","MAP2K6","MAP3K1","MAP3K10","MAP3K15","MAP3K21","MAP3K4","MAP3K6","MAP3K8","MAPK10","MAPK9","MAPKAP1","MAPKAPK2","MARCH4","MARK1","MAST1","MAST2","MAST3","MASTL","MCL1","MELK","MINK1","MLN","MOS","MPP1","MPP3","MPZL1","MTOR","MYLK2","MYLK3","MYO1B","MYO3B","N4BP2L1","N4BP2L2","NADK2","NEK10","NEK11","NEK3","NEK4","NIN","NME2","NME5","NME6","NME7","NME8","NME9","NOXA1","NRBP2","NRP2","NT5C2","NTRK2","NUAK1","NUAK2","NUCKS1","NUDC","NUP205","NVL","OSR1","OXSR1","PAG1","PAK2","PAK3","PAK6","PANK2","PANK3","PAPSS2","PASK","PCF11","PCNA","PDGFRL","PDK3","PDXK","PEX13","PFKFB2","PFKFB4","PFKL","PFKM","PFKP","PI4KB","PIK3C2G","PIK3CB","PIK3CG","PIK3R4","PIM2","PIM3","PIP4K2C","PIP5K1C","PKN3","PLAT","PLK1","PMVK","POLR2A","POLR2L","PPARGC1A","PRKAA2","PRKAB1","PRKAB2","PRKACB","PRKACG","PRKAR2A","PRKCB","PRKCD","PRKCI","PRKD2","PRKD3","PRPS2","PRPSAP1","PSMA7","PTK2B","PTPN5","RAF1","RAPH1","RBKS","RELN","RET","RIOK1","RIOK3","RNASEL","ROR1","RPRD1A","RPS6KA1","RPS6KA2","RPS6KA6","SBK1","SBK2","SBK3","SCYL2","SEPHS1","SESN2","SF3A3","SF3B3","SGK1","SGK3","SGMS1","SH3KBP1","SIRPD","SLC25A14","SLC36A1","SLK","SMAD7","SNRK","SOX9","SPC24","SPHK2","SRMS","SRPK1","SRPK3","STK11","STK19","STK24","STK25","STK3","STK33","STK36","STK39","STK4","STK40","STRADA","STRADB","SYK","TAF1L","TAOK3","TBK1","TCF21","TEC","TEK","TESK1","TESK2","TGFBR1","THAP1","THOP1","TIE1","TKFC","TLK1","TLK2","TLR6","TNFRSF10A","TNFRSF10B","TNFRSF10C","TNFRSF10D","TNFRSF11A","TNFRSF11B","TNFRSF14","TNFRSF18","TNFRSF19","TNFRSF1A","TNIK","TNK1","TPK1","TPT1","TRADD","TRIM24","TRIM59","TRIM7","TRPM6","TRRAP","TSSK2","TSSK3","TTBK2","TTN","TUSC3","TWF2","UAP1","UCK2","ULK4","VDAC2","WDR81","WEE2","WIF1","WNK3","XIAP","YWHAZ","ZAP70","ZFHX3","ZNF280A","random"],[0.958914452892468,1.02486151675369,0.878220308335243,0.849338512568282,1.05024186911604,0.764910594644539,1.00097547594229,1.25044187859514,0.898053157595457,0.78105035221502,0.812968814611469,1.22701705628679,0.827134613291051,0.861762323230449,1.20685681167753,0.888752734604359,1.24227416644299,1.34138068505316,1.08194990943656,0.966429937289077,0.955739266105279,0.647118918757016,1.73729224966046,0.785340924390502,0.924220914142215,0.969369157311333,0.447945889811893,0.733850329921964,0.858877104185745,0.840515894215981,0.938931452811601,0.779800466234727,0.987006174883243,0.914983035137796,1.04651447171015,0.939318846313987,1.43343153609826,1.35076432472388,0.92742396950888,1.36686137971694,0.889348428715463,1.07526508748194,1.97972041072167,1.06368186114101,1.04041709144653,0.990285972476857,1.27226959131166,0.971035092110823,0.75325012564327,0.939425969648335,1.53289788581357,0.501715961559711,0.778858264499901,0.836042369629374,1.45802205447559,0.996582072491998,1.05324036749305,0.967327029328858,4.0460289198284,1.11726390757571,0.756012085118648,1.74443213817352,1.09767665133708,5.33277873611887,0.965696862914058,0.972614028042447,1.61705030547711,1.19517096998418,1.03053725358163,0.997468060621784,0.888945965974402,1.86420739653372,0.84217648896725,0.856827855795733,0.762845822083881,0.963414103037614,1.13416969738692,1.18162718834808,0.960515706305695,1.05300188646809,1.25568781402295,0.93941044852748,0.957730240023722,1.11116572773072,0.823121845140427,1.15127944019023,1.0108107113326,0.785860768422573,1.45092343325078,1.01927404483565,0.916245932996226,1.31978696219027,0.916896711165107,0.891526703783985,0.767706407789772,0.975419318879746,0.831273685693663,1.01043753709169,0.894061678899118,1.16708309968255,0.801276107870832,1.21360702228627,1.30393144534772,1.00493154066379,0.917977803896065,1.06069523091923,0.870998023818508,0.95200805440049,0.709232150058532,1.02351139747841,0.888986257651806,1.18554881289203,0.870402913541231,1.07952450867913,0.808925727188117,0.793330030904922,1.17978214227317,1.20625793054744,0.823261971672408,1.06573223935245,0.782665538796218,0.995295370254052,1.29764743849541,1.13967647599583,0.812015071406552,1.340437461651,1.03221085002412,1.01943176766264,0.814321842656194,0.865506206056239,0.753327100385553,0.989779650289523,1.15030010132429,1.40954599495404,1.78098814442761,1.09969085187305,4.96084671795695,1.11970284562148,1.17209178467526,1.01698556243394,1.31194613195774,0.958155163627408,1.22137823078838,0.998161788900704,1.4355530370501,0.810751249060572,0.97553484573657,1.09151859125582,1.20209307216341,0.924713579408628,0.611906773646862,1.0053384527492,1.10415430568994,0.931633571109267,1.40680710159564,1.16680049221385,0.839154808880095,1.01588219493318,0.997944657850146,1.27672637522535,0.991021941990729,0.752965075810518,0.75452308163497,0.993490755640166,1.03864979487299,1.21456562815158,1.63194728405199,1.17837882930565,1.09982138142067,0.777928231273981,0.993595939364512,0.646503302783478,1.54109252899124,1.14046948415742,1.0356303632108,0.978995603972197,0.931655468570395,1.48266294549206,0.988909948442736,0.845595131925186,0.957607976894473,1.11131937836171,0.970184139045237,1.14812331161748,0.908955247384011,0.601126617830786,1.21967001405166,1.147484168394,1.28337579781997,1.11121713232795,0.946225398416112,0.893705972012255,0.904707812094893,1.40320588068569,0.930219727787919,0.815376120723226,0.863294274705556,1.05636934819928,1.25981243289677,0.953919378336726,1.20457572921208,1.36249616611458,0.75625537630336,1.19125550542216,1.25370451666303,0.925282121810974,0.763931252938192,0.702084387357115,0.974279035166994,0.914792672424925,1.19236451176832,1.0825256450466,0.757252964902239,1.31970612956794,0.972131795602292,0.953975365440614,0.985188521229773,0.967697596952273,1.25104679930423,1.03893968793379,1.38297481379123,0.987547511228656,0.934687860441551,1.21777837000515,0.773165270704881,1.05665411904412,1.22479869997283,0.63775147208373,1.06348329775283,0.416021891764377,1.14896091941003,1.14247662809976,1.03400659282955,1.02685043412653,1.17391552678837,1.89037805611328,1.0355728649119,0.887422795354076,0.936739598810827,1.12515599824906,0.822268890149652,0.922959369213109,0.903946219773977,0.90628023870012,1.5768623776612,1.17094884771038,0.634475133824345,0.881806936343575,0.838689301920669,1.10228004028555,1.03415022542371,1.14953818214559,0.906017347535334,0.897053657223164,0.930507576103984,0.809987534315744,0.966482243198947,0.941898855635137,1.11713243066885,1.34057307680383,0.88223739767596,0.839527854980721,1.20807413154403,0.555331741659151,1.16854815319284,1.17634411590732,0.97396099528646,1.95207113944708,1.18511936852855,1.17573443591324,1.16650424174861,1.26064244606754,0.78182921487286,0.912963499718045,0.904268882141792,0.871752950303353,1.14472650898384,1.08595448119262,0.983485797569352,1.12326033446102,0.83947016827783,0.8255770713889,0.900857684478811,0.781233595749697,0.618155752499464,0.703051793698666,0.920701433815619,1.91513402429725,0.783921233310626,1.00676281140765,1.31503558944657,0.939928291379108,0.769139024494807,1.08431291588536,1.50601944965159,0.855311959872197,0.787723922229808,0.787044391534041,1.19476185907409,1.20024060398768,0.535252816005449,0.925626486486806,0.844724496818776,2.09695035312123,1.41646759472755,1.32589524133093,1.04860362628358,1.80281472487882,1.17724799790023,0.823535252961363,0.891404137471527,1.09030150150382,1.21241481560813,1.03245449685374,1.81590198435403,1.32352468153129,0.912876602160051,1.09442415055908,1.12630869958434,0.981783675668582,1.48413518786619,0.924370815002908,0.568345184150213,0.813410993490141,1.35133539658538,0.73397158913881,0.574801676058408,1.202798503329,0.826454541790188,1.00852202622272,1.06049189987696,0.967761033039922,1.12158293561226,0.865959702366697,0.744503164919189,1.59616954704192,1.32283597126051,1.55928604610214,1.0010923961819,1.37474577302421,0.702079018114279,0.76776333265855,0.780336868069528,0.944016403216211,0.688100505736956,0.745629011805277,1.07832551873959,1.04223431257268,0.996473570722577,1.33313796830394,1.10144409973223,1.07772664474745,0.341478363167045,1.26083884552636,1.23795457351651,0.890571404065597,0.933822456735418,1.04570194684917,1.00849821096125,1.05198176755969,1.07204886482373,0.977805154558784,1.2357137798797,0.807361015537189,1.17269598386854,0.686149053685708,0.798740255498162,0.74087202065221,0.594004153213454,1.7250249904162,3.23088336534752,1.38164256155762,0.947245108486574,1.1232989688851,1.06459065266985,0.829104058037506,1.06988905227568,1.19766925507543,0.683144101020249,0.820338938809451,1.21623488095371,1.36194055282489,1.21958055189991,1.22497754969742,1.61783186149898,1.06742465529147,0.933477898026178,1.03262262069982,0.712107749273251,1.06000654893642,0.821749299240564,0.918648781568616,1.26819840457092,1.10373442378218,0.893720419397277,0.90544040167365,0.776692743698954,0.66149082868619,0.917168455701559,1.08904913797885,0.978177375724917,0.903265187082257,0.880736174799449,0.712296613505084,1.07950901120371,0.96441460047061,1.06957869839145,1.20181230809386,1.03076092239678],[0.945957394965045,0.930964623786003,0.747678451405727,0.930964623786003,0.991693204703141,0.930964623786003,0.930964623786003,0.610940243456573,0.930964623786003,0.930964623786003,0.945957394965045,0.930964623786003,0.970785939692891,0.930964623786003,0.945957394965045,0.930964623786003,0.831096297623375,0.831096297623375,0.945957394965045,0.930964623786003,0.831096297623375,0.88487512543167,0.000495669557253516,0.945957394965045,0.930964623786003,0.930964623786003,0.108895706595404,0.930964623786003,0.930964623786003,0.945957394965045,0.927499065463772,0.930964623786003,0.930964623786003,0.930964623786003,0.831096297623375,0.930964623786003,0.930964623786003,0.445628188358762,0.930964623786003,0.431821282003122,0.970785939692891,0.930964623786003,0.00253370762109942,0.831096297623375,0.942248584611695,0.983826858953104,0.930964623786003,0.930964623786003,0.945957394965045,0.930964623786003,0.562996210259276,0.99286044071948,0.930964623786003,0.945957394965045,0.831096297623375,0.930964623786003,0.945957394965045,0.930964623786003,0.000307000461353794,0.930964623786003,0.930964623786003,0.831096297623375,0.930964623786003,9.32684074254556e-17,0.930964623786003,0.971771426569746,0.159401619906425,0.847334050031428,0.930964623786003,0.89486144792343,0.930964623786003,0.991265249796022,0.983826858953104,0.930964623786003,0.732406580548991,0.930964623786003,0.942248584611695,0.847334050031428,0.945957394965045,0.930964623786003,0.970785939692891,0.930964623786003,0.930964623786003,0.511103643103323,0.930964623786003,0.831096297623375,0.831096297623375,0.907161405618501,0.930964623786003,0.930964623786003,0.831096297623375,0.970785939692891,0.930964623786003,0.980423935059776,0.847334050031428,0.945957394965045,0.930964623786003,0.970785939692891,0.958355580277567,0.831096297623375,0.747678451405727,0.930964623786003,0.930964623786003,0.831096297623375,0.930964623786003,0.930964623786003,0.951135568200647,0.945957394965045,0.521118145712772,0.930964623786003,0.847334050031428,0.930964623786003,0.971780790024858,0.831096297623375,0.940970590906165,0.930964623786003,0.831096297623375,0.831096297623375,0.930964623786003,0.847334050031428,0.88487512543167,0.89486144792343,0.945957394965045,0.980423935059776,0.930964623786003,0.930964623786003,0.991693204703141,0.930964623786003,0.930964623786003,0.930964623786003,0.980736941814233,0.930964623786003,0.945957394965045,0.333243678537117,0.930964623786003,0.930964623786003,1.73363489027138e-12,0.9276026265006,0.831096297623375,0.930964623786003,0.991693204703141,0.847334050031428,0.930964623786003,0.930964623786003,0.511103643103323,0.945957394965045,0.930964623786003,0.930964623786003,0.970785939692891,0.624034819453184,0.831096297623375,0.732406580548991,0.930964623786003,0.991693204703141,0.831096297623375,0.511103643103323,0.945957394965045,0.91667271877654,0.88487512543167,0.970785939692891,0.945957394965045,0.930964623786003,0.947155846254218,0.983176482823187,0.970785939692891,0.831096297623375,0.89486144792343,0.88487512543167,0.930964623786003,0.945957394965045,0.947155846254218,0.431821282003122,0.431821282003122,0.831096297623375,0.930964623786003,0.930964623786003,0.970785939692891,0.48948540584673,0.945957394965045,0.930964623786003,0.945957394965045,0.930964623786003,0.951135568200647,0.930964623786003,0.930964623786003,0.610940243456573,0.431821282003122,0.431821282003122,0.945957394965045,0.847334050031428,0.930964623786003,0.831096297623375,0.930964623786003,0.665600183094847,0.930964623786003,0.930964623786003,0.930964623786003,0.813111192917061,0.930964623786003,0.930964623786003,0.831096297623375,0.431821282003122,0.705861445765789,0.930964623786003,0.831096297623375,0.930964623786003,0.831096297623375,0.831096297623375,0.988177432288681,0.831096297623375,0.930964623786003,0.831096297623375,0.580481868073021,0.831096297623375,0.970785939692891,0.930964623786003,0.930964623786003,0.980423935059776,0.930964623786003,0.930964623786003,0.431821282003122,0.847334050031428,0.930964623786003,0.705861445765789,0.431821282003122,0.930964623786003,0.867781834294928,0.831096297623375,0.980423935059776,0.511103643103323,0.930964623786003,0.705861445765789,0.991693204703141,0.930964623786003,0.831096297623375,0.927943235601356,0.831096297623375,0.930964623786003,0.971771426569746,0.930964623786003,0.930964623786003,0.980736941814233,0.831096297623375,0.930964623786003,0.831096297623375,0.747678451405727,0.980423935059776,0.930964623786003,0.930964623786003,0.983826858953104,0.847334050031428,0.732406580548991,0.930964623786003,0.930964623786003,0.930964623786003,0.930964623786003,0.930964623786003,0.945957394965045,0.930964623786003,0.945957394965045,0.930964623786003,0.999346514820221,0.930964623786003,0.930964623786003,0.991693204703141,0.930964623786003,0.930964623786003,0.511103643103323,0.831096297623375,0.847334050031428,0.831096297623375,0.88487512543167,0.831096297623375,0.930964623786003,0.930964623786003,0.947155846254218,0.927943235601356,0.945957394965045,0.958384847437448,0.930964623786003,0.930964623786003,0.930964623786003,0.831096297623375,0.930964623786003,0.917069050330208,0.831096297623375,0.930964623786003,0.831096297623375,0.930964623786003,0.951135568200647,0.930964623786003,0.970785939692891,0.945957394965045,0.945957394965045,0.930964623786003,0.930964623786003,0.951135568200647,0.983826858953104,0.831096297623375,0.996459470140402,0.930964623786003,0.930964623786003,0.970785939692891,0.108895706595404,0.930964623786003,0.930964623786003,0.945957394965045,0.431821282003122,0.930964623786003,0.930964623786003,0.930964623786003,0.871208422012228,0.907161405618501,0.562996210259276,0.930964623786003,0.930964623786003,0.831096297623375,0.945957394965045,0.88487512543167,0.930964623786003,0.831096297623375,0.930964623786003,0.831096297623375,0.831096297623375,0.983826858953104,0.942248584611695,0.930964623786003,0.88487512543167,0.970785939692891,0.945957394965045,0.930964623786003,0.99286044071948,0.930964623786003,0.956981177946571,0.930964623786003,0.831096297623375,0.48948540584673,0.732406580548991,0.930964623786003,0.831096297623375,0.930964623786003,0.716019935273211,0.88487512543167,0.930964623786003,0.945957394965045,0.930964623786003,0.970785939692891,0.930964623786003,0.930964623786003,0.431821282003122,0.844901843839585,0.831096297623375,0.847334050031428,0.930964623786003,0.511103643103323,0.980736941814233,0.991693204703141,0.930964623786003,0.930964623786003,0.88487512543167,0.958355580277567,0.930964623786003,0.930964623786003,0.831096297623375,0.936592775808249,0.930964623786003,0.831096297623375,0.831096297623375,0.705861445765789,0.203019033045191,0.00127082219019602,0.445628188358762,0.945957394965045,0.930964623786003,0.945957394965045,0.847334050031428,0.930964623786003,0.831096297623375,0.831096297623375,0.970785939692891,0.690567327132532,0.930964623786003,0.847334050031428,0.930964623786003,0.424413455823246,0.88487512543167,0.983826858953104,0.930964623786003,0.562996210259276,0.991693204703141,0.971755574665768,0.930964623786003,0.431821282003122,0.930964623786003,0.958384847437448,0.847334050031428,0.945957394965045,0.606320119933565,0.930964623786003,0.936592775808249,0.930964623786003,0.930964623786003,0.930964623786003,0.515551841561653,0.716019935273211,0.831096297623375,0.945957394965045,0.945957394965045,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.22289594552468,1,1,1,0.00452163305157318,3.27032081070961e-10,1,1,1,1.5394799544769e-18,0.0276027451728062,1,1,1,0.452188018562594,1,1,1,1,0.00436584516192526,0.191631033428311,1,0.0451414505553131,1,1,4.99802201643866e-10,1,1,1,1,1,0.784443200259638,1,0.00436584516192526,1.6977067846297e-07,0.577199261753428,1,1,1,1,1,7.82509443759561e-58,1,1,0.00103275738764731,1,6.4534450352544e-99,1,1,3.61828390500113e-07,1,1,1,1,6.82413360545086e-09,1,1,0.411785053011635,1,1,1,1,1,1,1,1,1,1,1,1,1,0.00155252403089559,1,1,0.784443200259638,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.0644027763560519,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.081051378589662,1,1,1,1,0.4437048723577,1,1,0.0768904480828251,1.72183682487821e-10,1,1.57669018076376e-94,1,1,1,0.177991926064735,1,1,1,0.00564225051091492,1,1,1,1,1,0.00021061184053716,1,1,1,0.17794700109861,1,1,1,1,0.758327405974088,1,0.870488998045862,1,1,1,1,5.84487133457071e-07,1,1,1,1,0.00324694343687496,8.31847142740638e-05,1,1,1,1,0.000332937558907194,1,1,1,1,1,1,1,0.00525725492896044,1,1,1,1,1,1,1,0.00940345068002472,1,1,1,1,1,1,1,0.0337872403157104,0.311388961677669,1,1,1,0.521556607159652,0.00628186599654193,1,1,1,1,0.127840325350717,1,1,1,1,1,1,1,0.0111945612666392,1,1,1,1,1,1,3.57094632610045e-06,1,1.93035275212473e-20,1,1,1,1,1,3.01977946405258e-12,1,1,1,1,1,1,1,1,5.10848526607879e-06,1,0.0258384170797722,1,1,1,1,1,1,1,1,1,1,1,1,0.234219547644209,1,1,1,0.000748408881167343,1,1,1,1.88836919343809e-08,1,1,1,1,0.623648282612437,1,1,1,1,1,1,1,1,1,1,1,1.68501037057766e-06,0.0587972932169771,1,5.7939770755993e-14,0.724215715022192,1,1,1,1,1,0.000194704923332557,1,0.918806327066054,1,1,1,4.94146001459507e-09,1,1,4.29073729604776e-18,0.134695577422712,0.419546524578174,1,9.29015683264555e-09,1,1,1,1,1,1,1.22682120574931e-09,1,1,1,1,1,0.000433230393227461,1,4.96146456188179e-09,1,1,0.224634242677597,6.37070354263439e-07,1,1,1,1,1,1,1,1,6.26611524306646e-06,0.152661591456347,0.00162164348565356,1,0.0743468366435374,0.0234601529526107,0.419546524578174,1,1,0.0802700197574265,0.624849724389834,1,1,1,0.123915047154803,1,1,4.57198281840063e-20,1,1,1,1,1,1,1,1,1,1,1,1,0.00139131214631554,1,0.134248430379215,0.00122037140294508,2.30995010193242e-09,5.09940955665502e-42,0.132057390662775,1,1,1,1,1,1,0.000742837548969437,1,1,0.131055528557366,1,1,4.71870301955321e-07,1,1,1,0.00754859874213818,1,1,1,0.90782961907385,1,1,1,1,0.0113718368583465,1,1,1,1,1,0.0105682876723596,1,1,1,1,1],[0.948717,0.826977,0.923981,0.923981,0.999722,0.963894,0.948717,0.999722,0.826977,0.923981,0.826977,0.826977,0.948717,0.999722,0.923981,0.948717,0.552805,0.923981,0.999722,0.981257,0.999722,0.826977,0.999722,0.999722,0.999722,0.923981,0.549505,0.923981,0.923981,0.826977,0.96677,0.948717,0.999722,0.923981,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.948717,0.999722,0.999722,0.923981,0.999722,0.923981,0.999722,0.923981,0.923981,0.999722,0.999722,0.999722,0.826977,0.948717,0.826977,0.84342,0.999722,0.999722,0.999722,0.992227,0.923981,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.826977,0.963894,0.923981,0.999722,0.923981,0.923981,0.826977,0.933343,0.999722,0.999722,0.91143,0.826977,0.948717,0.948717,0.999722,0.999722,0.826977,0.999722,0.981257,0.84342,0.999722,0.999722,0.94485,0.826977,0.999722,0.999722,0.862366,0.948717,0.948717,0.999722,0.826977,0.999722,0.826977,0.999722,0.826977,0.923981,0.948717,0.826977,0.923981,0.999722,0.862366,0.923981,0.826977,0.999722,0.999056,0.999722,0.826977,0.923981,0.999722,0.999722,0.923981,0.923981,0.826977,0.948717,0.999722,0.826977,0.848956,0.923981,0.999722,0.999722,0.923981,0.999722,0.948717,0.826977,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.948717,0.84342,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.826977,0.999722,0.999722,0.826977,0.999722,0.93207,0.999722,0.999722,0.999722,0.923981,0.923981,0.826977,0.999722,0.999722,0.999722,0.999722,0.948717,0.999722,0.999722,0.923981,0.948717,0.826977,0.999722,0.999722,0.948717,0.826977,0.674257,0.999722,0.902426,0.923981,0.923981,0.992227,0.848956,0.923981,0.999722,0.826977,0.992006,0.999722,0.999722,0.999722,0.948717,0.826977,0.826977,0.999722,0.82962,0.948717,0.838264,0.948717,0.999722,0.992006,0.948717,0.999722,0.826977,0.999722,0.999722,0.697401,0.826977,0.826977,0.826977,0.826977,0.999722,0.948717,0.552805,0.948717,0.555693,0.999722,0.948717,0.948717,0.992227,0.923981,0.999722,0.923981,0.923981,0.923981,0.826977,0.999722,0.999722,0.88818,0.999722,0.826977,0.999722,0.948717,0.963894,0.999722,0.948717,0.948717,0.999722,0.999722,0.948717,0.999722,0.679632,0.826977,0.826977,0.923981,0.999722,0.999722,0.826977,0.923981,0.93207,0.948717,0.948717,0.999722,0.902426,0.923981,0.923981,0.923981,0.826977,0.930842,0.999722,0.948717,0.826977,0.923981,0.826977,0.826977,0.999722,0.999722,0.999722,0.999722,0.999722,0.948717,0.948717,0.948717,0.826977,0.923981,0.826977,0.930123,0.826977,0.923981,0.948717,0.999722,0.82962,0.826977,0.826977,0.826977,0.826977,0.923981,0.948717,0.999722,0.923981,0.999722,0.999722,0.999722,0.923981,0.999722,0.999722,0.826977,0.948717,0.862366,0.948717,0.889725,0.963894,0.923981,0.999722,0.999722,0.826977,0.999722,0.930123,0.999722,0.999722,0.954326,0.923981,0.999722,0.999722,0.923981,0.999722,0.97311,0.999722,0.999722,0.999722,0.999722,0.999722,0.826977,0.826977,0.923981,0.923981,0.826977,0.826977,0.999722,0.999722,0.948717,0.948717,0.948717,0.923981,0.999722,0.826977,0.999722,0.999722,0.999722,0.999722,0.999722,0.826977,0.826977,0.826977,0.84342,0.826977,0.923981,0.923981,0.999722,0.999722,0.999722,0.862366,0.999722,0.679632,0.999722,0.999722,0.999722,0.999722,0.826977,0.948717,0.948717,0.948717,0.999722,0.93207,0.826977,0.999722,0.848956,0.826977,0.923981,0.923981,0.999722,0.999722,0.999722,0.923981,0.999722,0.948717,0.826977,0.992227,0.999722,0.826977,0.826977,0.999722,0.999722,0.999722,0.999722,0.999722,0.999722,0.923981,0.826977,0.923981,0.999722,0.923981,0.826977,0.999722,0.999722,0.948717,0.826977,0.826977,0.82962,0.923981,0.999722,0.948717,0.999722,0.923981,0.826977,0.999722,0.999722,0.999722,0.999722,0.999722],[0.902761285058138,0.844596380602912,0.859417434157056,0.902761285058138,0.902761285058138,0.859417434157056,0.902761285058138,0.982910840009833,0.736826714451856,0.885719400402284,0.736826714451856,0.902761285058138,0.902761285058138,0.936722753438349,0.902761285058138,0.902761285058138,0.76541711674468,0.985897735787717,0.974294093951697,0.902761285058138,0.962125476261111,0.736826714451856,1,0.902761285058138,0.938580713074673,0.859417434157056,0.653301387055238,0.736826714451856,0.902761285058138,0.859417434157056,0.902761285058138,0.902761285058138,0.939715004341346,0.902761285058138,0.949503742509524,0.902761285058138,0.949503742509524,0.985897735787717,0.949503742509524,0.996532902437783,0.859417434157056,0.949503742509524,1,0.902761285058138,0.939715004341346,0.859417434157056,0.949503742509524,0.902761285058138,0.859417434157056,0.974294093951697,0.977252488074364,0.859417434157056,0.859417434157056,0.859417434157056,1,0.736826714451856,0.949503742509524,0.902761285058138,1,0.962125476261111,0.859417434157056,0.996530217284446,0.972952422864408,1,0.919247084440556,0.902761285058138,0.996532902437783,0.974294093951697,0.801627467279514,0.859417434157056,0.902761285058138,0.962125476261111,0.902761285058138,0.939715004341346,0.674252743491412,0.919247084440556,0.939715004341346,0.962125476261111,0.859417434157056,0.902761285058138,0.902761285058138,0.902761285058138,0.962125476261111,0.977252488074364,0.859417434157056,0.962125476261111,0.939715004341346,0.781716160235805,0.996532902437783,0.974294093951697,0.801627467279514,0.859417434157056,0.906054348872389,0.946142413112612,0.856902542119646,0.902761285058138,0.86552289353343,0.962125476261111,0.902761285058138,0.974294093951697,0.736826714451856,0.974294093951697,0.902761285058138,0.974294093951697,0.859417434157056,0.844596380602912,0.902761285058138,0.902761285058138,0.736826714451856,0.908348439126274,0.902761285058138,0.949503742509524,0.902761285058138,0.902761285058138,0.736826714451856,0.859417434157056,0.977252488074364,0.974294093951697,0.859417434157056,0.946142413112612,0.736826714451856,0.902761285058138,0.902761285058138,0.859417434157056,0.736826714451856,0.937703064298341,0.902761285058138,0.902761285058138,0.736826714451856,0.902761285058138,0.902761285058138,0.902761285058138,0.902761285058138,0.993407886977161,0.996532902437783,0.949503742509524,1,0.949503742509524,0.962125476261111,0.974294093951697,0.949503742509524,0.859417434157056,0.974294093951697,0.902761285058138,0.996532902437783,0.939715004341346,0.946142413112612,0.974294093951697,0.949503742509524,0.974294093951697,0.653301387055238,0.958160042759902,0.962125476261111,0.902761285058138,0.993407886977161,0.993069718703452,0.939715004341346,0.974294093951697,0.937703064298341,0.902761285058138,0.939715004341346,0.736826714451856,0.902761285058138,0.962125476261111,0.946142413112612,0.974294093951697,1,0.974294093951697,0.974294093951697,0.902761285058138,0.902761285058138,0.674252743491412,1,0.974294093951697,0.902761285058138,0.859417434157056,0.653301387055238,1,0.898611520301241,0.86552289353343,0.902761285058138,0.902761285058138,0.885719400402284,0.902761285058138,0.939715004341346,0.659967727739475,0.982910840009833,0.977252488074364,0.974294093951697,0.962125476261111,0.863707764901472,0.736826714451856,0.902761285058138,0.993069718703452,0.902761285058138,0.86552289353343,0.76541711674468,0.949503742509524,0.972952422864408,0.949503742509524,0.939715004341346,0.993407886977161,0.736826714451856,0.962125476261111,0.974294093951697,0.859417434157056,0.736826714451856,0.736826714451856,0.856902542119646,0.844596380602912,0.962125476261111,0.902761285058138,0.674252743491412,0.996532902437783,0.859417434157056,0.902761285058138,0.902761285058138,0.902761285058138,0.946142413112612,0.833898616500934,0.996532902437783,0.972952422864408,0.902761285058138,0.974294093951697,0.736826714451856,0.949503742509524,0.974294093951697,0.736826714451856,0.902761285058138,0.36998190797516,0.902761285058138,0.972952422864408,0.949503742509524,0.972952422864408,0.902761285058138,0.999849326441915,0.974294093951697,0.902761285058138,0.902761285058138,0.946142413112612,0.736826714451856,0.902761285058138,0.819036872374117,0.902761285058138,1,0.962125476261111,0.736826714451856,0.859417434157056,0.902761285058138,0.939715004341346,0.736826714451856,0.983230608788219,0.902761285058138,0.859417434157056,0.859417434157056,0.859417434157056,0.939715004341346,0.902761285058138,0.962125476261111,0.819036872374117,0.902761285058138,0.902761285058138,0.885719400402284,0.674252743491412,0.946142413112612,0.928941359135632,0.856902542119646,1,0.972952422864408,0.949503742509524,0.946142413112612,0.947923571581146,0.674252743491412,0.936722753438349,0.736826714451856,0.902761285058138,0.736826714451856,0.76541711674468,0.902761285058138,0.962125476261111,0.736826714451856,0.736826714451856,0.902761285058138,0.902761285058138,0.736826714451856,0.859417434157056,0.902761285058138,0.996532902437783,0.801627467279514,0.938580713074673,0.949503742509524,0.946142413112612,0.736826714451856,0.962125476261111,0.993407886977161,0.859417434157056,0.939715004341346,0.819036872374117,0.962125476261111,0.859417434157056,0.902761285058138,0.902761285058138,0.906054348872389,1,0.974294093951697,0.974294093951697,0.859417434157056,1,0.974294093951697,0.902761285058138,0.902761285058138,0.974294093951697,0.902761285058138,0.962125476261111,0.996532902437783,0.902761285058138,0.972952422864408,0.949503742509524,0.962125476261111,0.975147846234999,0.993407886977161,0.653301387055238,0.736826714451856,0.902761285058138,0.859417434157056,0.736826714451856,0.736826714451856,0.939715004341346,0.902761285058138,0.939715004341346,0.949503742509524,0.902761285058138,0.902761285058138,0.946142413112612,0.859417434157056,0.977252488074364,0.993407886977161,0.996532902437783,0.946142413112612,0.996532902437783,0.902761285058138,0.736826714451856,0.736826714451856,0.902761285058138,0.736826714451856,0.902761285058138,0.902761285058138,0.974294093951697,0.974294093951697,0.993407886977161,0.902761285058138,0.974294093951697,0.0799960882108454,0.974294093951697,0.985897735787717,0.939715004341346,0.902761285058138,0.949503742509524,0.946142413112612,0.939715004341346,0.902761285058138,0.902761285058138,0.902761285058138,0.781716160235805,0.949503742509524,0.736826714451856,0.819036872374117,0.819036872374117,0.674252743491412,1,1,1,0.902761285058138,0.949503742509524,0.902761285058138,0.736826714451856,0.939715004341346,0.974294093951697,0.736826714451856,0.76541711674468,0.974294093951697,0.962125476261111,0.974294093951697,0.962125476261111,0.996532902437783,0.962125476261111,0.902761285058138,0.859417434157056,0.859417434157056,0.902761285058138,0.902761285058138,0.859417434157056,0.985897735787717,0.974294093951697,0.859417434157056,0.859417434157056,0.859417434157056,0.736826714451856,0.902761285058138,0.949503742509524,0.902761285058138,0.946142413112612,0.902761285058138,0.674252743491412,0.974294093951697,0.974294093951697,0.902761285058138,0.946142413112612,0.974294093951697],[0.111478339350181,0.0823429203539823,0.0834144736842105,0.0668033333333333,0.055609649122807,0.0781596858638744,0.0781596858638744,0.069429012345679,0.0400108695652174,0.072106936416185,0.0185909090909091,0.0804101941747573,0.0562375,0.055609649122807,0.103001838235294,0.121159246575342,0.0621074074074074,0.498303617571059,0.193311550151976,0.0378703703703704,0.0185909090909091,0.0783407960199005,0.0782525510204082,0.069429012345679,0.090077380952381,0.0823429203539823,0.0525857142857143,0.0400108695652174,0.121159246575342,0.055609649122807,0.099589219330855,0.0185909090909091,0.151066129032258,0.0378703703703704,0.262928571428571,0.0782525510204082,0.211781899109792,0.713455112219451,0.206941791044776,0.0668033333333333,0.0857860169491526,0.0185909090909091,0.0869331983805668,0.0991748120300752,0.060881679389313,0.080474537037037,0.0804431279620853,0.05911328125,0.0823429203539823,0.0823429203539823,0.362769946808511,0.0562375,0.0525857142857143,0.0746769662921348,0.607287341772152,0.14721335504886,0.0782525510204082,0.117786219081272,0.0495105263157895,0.090077380952381,0.0462559523809524,0.093462890625,0.202652108433735,0.0462559523809524,0.0672870967741935,0.0462559523809524,0.0709735294117647,0.253882102272727,0.0462559523809524,0.0851351931330472,0.192653963414634,0.261369382022472,0.0185909090909091,0.158259554140127,0.0462559523809524,0.0869331983805668,0.0804101941747573,0.0462559523809524,0.051125,0.0834144736842105,0.191992354740061,0.206941791044776,0.0781596858638744,0.0462559523809524,0.0185909090909091,0.0804431279620853,0.0462559523809524,0.0462559523809524,0.328202997275204,0.220550872093023,0.0400108695652174,0.0672870967741935,0.051125,0.0709735294117647,0.0804431279620853,0.0477166666666667,0.04499,0.114666071428571,0.156151757188498,0.0621074074074074,0.0860604166666667,0.0980056603773585,0.080474537037037,0.213575443786982,0.0804431279620853,0.0851351931330472,0.055609649122807,0.0709735294117647,0.0400108695652174,0.100735185185185,0.0400108695652174,0.0462559523809524,0.0400108695652174,0.55209796437659,0.0668033333333333,0.0400108695652174,0.980898284313725,0.227550578034682,0.0525857142857143,0.0869331983805668,0.0400108695652174,0.128406976744186,0.36020509383378,0.0462559523809524,0.0621074074074074,0.0775302197802198,0.259801408450704,0.0378703703703704,0.0668033333333333,0.0400108695652174,0.0869331983805668,0.051125,0.0781596858638744,0.956175675675676,0.238485673352436,0.132958745874587,0.0185909090909091,0.309285123966942,0.248779202279202,0.0623652482269504,0.0462559523809524,0.05911328125,0.0963735632183908,0.055609649122807,0.278552924791086,0.0860604166666667,0.0668033333333333,0.257069209039548,0.09553861003861,0.181289877300613,0.072106936416185,0.179330769230769,0.220550872093023,0.05911328125,0.362769946808511,0.111478339350181,0.0727881355932203,0.0462559523809524,0.0804101941747573,0.200793051359517,0.0782525510204082,0.0462559523809524,0.0860604166666667,0.174650621118012,0.0400108695652174,0.326639726027397,0.674644472361809,0.452249347258486,0.71114875,0.0808704545454545,0.0378703703703704,0.0756988950276243,0.289472299168975,0.23750288184438,0.1731859375,0.0668033333333333,0.0783407960199005,0.0623652482269504,0.055609649122807,0.069429012345679,0.0857860169491526,0.0495105263157895,0.04499,0.0400108695652174,0.123117346938776,0.069429012345679,0.674644472361809,0.42248944591029,0.248321428571429,0.0869331983805668,0.0795837438423645,0.0727881355932203,0.120419860627178,0.540277493606138,0.0781596858638744,0.0495105263157895,0.0400108695652174,0.362769946808511,0.0495105263157895,0.0895200803212851,0.126530100334448,0.86316253101737,0.054912037037037,0.0185909090909091,0.255480169971671,0.0462559523809524,0.0462559523809524,0.0477166666666667,0.0378703703703704,0.0378703703703704,0.0869331983805668,0.121159246575342,0.0462559523809524,0.52623264781491,0.126530100334448,0.0378703703703704,0.171702830188679,0.0378703703703704,0.337701351351351,0.0378703703703704,0.214725,0.0860604166666667,0.069429012345679,0.448182414698163,0.05911328125,0.0378703703703704,0.390064814814815,0.0185909090909091,0.0808704545454545,0.0562375,0.337701351351351,0.0462559523809524,0.126005050505051,0.127471666666667,0.0525857142857143,0.478583116883117,0.120419860627178,0.0980056603773585,0.060881679389313,0.0477166666666667,0.0672870967741935,0.0823429203539823,0.0781596858638744,0.0185909090909091,0.949788888888889,0.05911328125,0.108220802919708,0.0462559523809524,0.195204545454545,0.0400108695652174,0.080474537037037,0.588067258883249,0.09553861003861,0.0378703703703704,0.0462559523809524,0.0462559523809524,0.0851351931330472,0.0946906614785992,0.080474537037037,0.35017876344086,0.129336092715232,0.0963735632183908,0.0709735294117647,0.0495105263157895,0.0462559523809524,0.0623652482269504,0.060881679389313,0.432140789473684,0.126005050505051,0.166318037974684,0.216494134897361,0.327982240437158,0.0621074074074074,0.121159246575342,0.069429012345679,0.0925885826771654,0.0727881355932203,0.0782525510204082,0.119829824561404,0.150231391585761,0.117786219081272,0.0980056603773585,0.0562375,0.114666071428571,0.0378703703703704,0.0400108695652174,0.0783407960199005,0.953493842364532,0.0462559523809524,0.221097101449275,0.054912037037037,0.203271771771772,0.0378703703703704,0.0668033333333333,0.151895498392283,0.0709735294117647,0.0400108695652174,0.0623652482269504,0.507560567010309,0.04499,0.0668033333333333,0.0378703703703704,0.0857860169491526,0.04499,0.0869331983805668,0.337893530997305,0.108220802919708,0.62227904040404,0.0709735294117647,0.0808704545454545,0.0462559523809524,0.0783407960199005,0.0727881355932203,0.143284539473684,0.14721335504886,0.481581606217617,0.0980056603773585,0.170954258675079,0.282323611111111,0.0808704545454545,0.214725,0.0462559523809524,0.0672870967741935,0.150231391585761,0.109314545454545,0.0400108695652174,0.114666071428571,0.538516666666667,0.0756988950276243,0.166318037974684,0.0623652482269504,0.0823429203539823,0.0709735294117647,0.0804431279620853,0.054912037037037,0.54515943877551,0.984,0.450221204188482,0.0795837438423645,0.686279448621554,0.0525857142857143,0.0378703703703704,0.0477166666666667,0.0562375,0.072106936416185,0.0462559523809524,0.0709735294117647,0.119829824561404,0.211781899109792,0.917719059405941,0.270191340782123,0.099589219330855,0.0378703703703704,0.0400108695652174,0.86316253101737,0.0185909090909091,0.080474537037037,0.0623652482269504,0.0477166666666667,0.0781596858638744,0.0668033333333333,0.115713523131673,0.125472881355932,0.0462559523809524,0.14721335504886,0.0462559523809524,0.0462559523809524,0.0586680327868852,0.0895200803212851,0.101872693726937,0.051125,0.122141638225256,0.154030448717949,0.090077380952381,0.0400108695652174,0.0781596858638744,0.220550872093023,0.46811328125,0.0462559523809524,0.0851351931330472,0.330645380434783,0.301100828729282,0.311806318681319,0.0756988950276243,0.0477166666666667,0.17790866873065,0.0562375,0.093462890625,0.051125,0.0462559523809524,0.0848362445414847,0.0586680327868852,0.17244670846395,0.384590185676393,0.179330769230769,0.121159246575342,0.0783407960199005,0.0462559523809524,0.0672870967741935,0.173920560747664,0.0781596858638744,0.0462559523809524,0.099589219330855,0.05911328125,0.237995689655172,0.0925885826771654,0.0462559523809524,0.0400108695652174,0.069429012345679]],"container":"<table class=\"stripe hover\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Fold Change<\/th>\n      <th>Wilcox<\/th>\n      <th>DESeq2<\/th>\n      <th>MAGeCK<\/th>\n      <th>sgRSEA<\/th>\n      <th>EdgeR<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bflrtip","columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6]},{"orderable":false,"targets":0}],"lengthMenu":[[5,15,50,100,-1],["5","15","50","100","All"]],"pageLength":15,"scrollX":true,"order":[1,"desc"],"buttons":["copy","print",{"extend":"csv","text":"csv","filename":"*","title":"*"},{"extend":"excel","text":"Excel","filename":"*","title":"*"},{"extend":"pdf","text":"pdf","filename":"*","title":"*"}],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nDTWidget.formatRound(this, row, data, 1, 4);\nDTWidget.formatRound(this, row, data, 2, 4);\nDTWidget.formatRound(this, row, data, 3, 4);\nDTWidget.formatRound(this, row, data, 4, 4);\nDTWidget.formatRound(this, row, data, 5, 4);\nDTWidget.formatRound(this, row, data, 6, 4);\n}"},"selection":{"mode":"multiple","selected":null,"target":"row"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<!--Part Hit Confirmation-->
+</div>
+</div>
+
+
+
+<!-- 
+save as 'overview.Rmd'
+child of 'report.Rmd'
+-->
+<!--make overview Tab for every Gene-->
+<!-- </div> -->
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="enriched-11.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="gene-overviews.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

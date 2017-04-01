@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>CRISPR-AnalyzeR Report</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="CRISPR-AnalyzeR Report">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="CRISPR-AnalyzeR Report" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="CRISPR-AnalyzeR Report" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="depleted-11.html">
+<link rel="next" href="casp3-1.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="libs/datatables-binding-0.2/datatables.js"></script>
+<link href="libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="libs/jszip-1.10.12/jszip.min.js"></script>
+<script src="libs/pdfmake-1.10.12/pdfmake.min.js"></script>
+<script src="libs/pdfmake-1.10.12/vfs_fonts.js"></script>
+<link href="libs/dt-ext-buttons-1.10.12/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="libs/dt-ext-buttons-1.10.12/js/dataTables.buttons.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.12/js/buttons.flash.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.12/js/buttons.html5.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.12/js/buttons.colVis.min.js"></script>
+<script src="libs/dt-ext-buttons-1.10.12/js/buttons.print.min.js"></script>
+<script src="libs/proj4js-2.3.15/proj4.js"></script>
+<link href="libs/highcharts-5.0.6/css/motion.css" rel="stylesheet" />
+<script src="libs/highcharts-5.0.6/highstock.js"></script>
+<script src="libs/highcharts-5.0.6/highcharts-3d.js"></script>
+<script src="libs/highcharts-5.0.6/highcharts-more.js"></script>
+<script src="libs/highcharts-5.0.6/modules/annotations.js"></script>
+<script src="libs/highcharts-5.0.6/modules/broken-axis.js"></script>
+<script src="libs/highcharts-5.0.6/modules/data.js"></script>
+<script src="libs/highcharts-5.0.6/modules/drilldown.js"></script>
+<script src="libs/highcharts-5.0.6/modules/exporting.js"></script>
+<script src="libs/highcharts-5.0.6/modules/funnel.js"></script>
+<script src="libs/highcharts-5.0.6/modules/heatmap.js"></script>
+<script src="libs/highcharts-5.0.6/modules/map.js"></script>
+<script src="libs/highcharts-5.0.6/modules/no-data-to-display.js"></script>
+<script src="libs/highcharts-5.0.6/modules/offline-exporting.js"></script>
+<script src="libs/highcharts-5.0.6/modules/solid-gauge.js"></script>
+<script src="libs/highcharts-5.0.6/modules/treemap.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/annotations.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/draggable-legend.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/draggable-points.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/export-csv.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/grouped-categories.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/motion.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/pattern-fill-v2.js"></script>
+<script src="libs/highcharts-5.0.6/plugins/tooltip-delay.js"></script>
+<script src="libs/highcharts-5.0.6/custom/reset.js"></script>
+<script src="libs/highcharts-5.0.6/custom/symbols-extra.js"></script>
+<script src="libs/highcharts-5.0.6/custom/text-symbols.js"></script>
+<link href="libs/fontawesome-4.5.0/font-awesome.min.css" rel="stylesheet" />
+<link href="libs/htmlwdgtgrid-1/htmlwdgtgrid.css" rel="stylesheet" />
+<script src="libs/highchart-binding-0.5.0/highchart.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="screen-information.html"><a href="screen-information.html"><i class="fa fa-check"></i><b>1</b> Screen Information</a><ul>
+<li class="chapter" data-level="1.1" data-path="experiment.html"><a href="experiment.html"><i class="fa fa-check"></i><b>1.1</b> Experiment</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="experiment.html"><a href="experiment.html#scope"><i class="fa fa-check"></i><b>1.1.1</b> Scope</a></li>
+<li class="chapter" data-level="1.1.2" data-path="experiment.html"><a href="experiment.html#procedure"><i class="fa fa-check"></i><b>1.1.2</b> Procedure</a></li>
+<li class="chapter" data-level="1.1.3" data-path="experiment.html"><a href="experiment.html#comments"><i class="fa fa-check"></i><b>1.1.3</b> Comments</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>1.2</b> Data</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="data.html"><a href="data.html#files"><i class="fa fa-check"></i><b>1.2.1</b> Files</a></li>
+<li class="chapter" data-level="1.2.2" data-path="data.html"><a href="data.html#experimental-design"><i class="fa fa-check"></i><b>1.2.2</b> Experimental Design</a></li>
+<li class="chapter" data-level="1.2.3" data-path="data.html"><a href="data.html#analysis-parameters"><i class="fa fa-check"></i><b>1.2.3</b> Analysis Parameters</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>I Screen Quality</b></span></li>
+<li class="chapter" data-level="2" data-path="data-review.html"><a href="data-review.html"><i class="fa fa-check"></i><b>2</b> Data Review</a></li>
+<li class="chapter" data-level="3" data-path="fastq-quality.html"><a href="fastq-quality.html"><i class="fa fa-check"></i><b>3</b> FASTQ Quality</a><ul>
+<li class="chapter" data-level="3.1" data-path="cycle-specific-gc-content.html"><a href="cycle-specific-gc-content.html"><i class="fa fa-check"></i><b>3.1</b> Cycle specific GC Content</a></li>
+<li class="chapter" data-level="3.2" data-path="cycle-specific-quality-distribution.html"><a href="cycle-specific-quality-distribution.html"><i class="fa fa-check"></i><b>3.2</b> Cycle specific Quality Distribution</a></li>
+<li class="chapter" data-level="3.3" data-path="cycle-specific-average-quality.html"><a href="cycle-specific-average-quality.html"><i class="fa fa-check"></i><b>3.3</b> Cycle specific Average Quality</a></li>
+<li class="chapter" data-level="3.4" data-path="cycle-specific-base-call-proportion.html"><a href="cycle-specific-base-call-proportion.html"><i class="fa fa-check"></i><b>3.4</b> Cycle specific Base Call Proportion</a></li>
+<li class="chapter" data-level="3.5" data-path="read-frequency.html"><a href="read-frequency.html"><i class="fa fa-check"></i><b>3.5</b> Read Frequency</a></li>
+<li class="chapter" data-level="3.6" data-path="read-width.html"><a href="read-width.html"><i class="fa fa-check"></i><b>3.6</b> Read Width</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="screen-readcount.html"><a href="screen-readcount.html"><i class="fa fa-check"></i><b>4</b> Screen Readcount</a><ul>
+<li class="chapter" data-level="4.1" data-path="overview.html"><a href="overview.html"><i class="fa fa-check"></i><b>4.1</b> Overview</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="overview.html"><a href="overview.html#sgrna-readcount-statistics"><i class="fa fa-check"></i><b>4.1.1</b> sgRNA Readcount Statistics</a></li>
+<li class="chapter" data-level="4.1.2" data-path="overview.html"><a href="overview.html#gene-readcount-statistics"><i class="fa fa-check"></i><b>4.1.2</b> Gene Readcount Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="readcount-distribution.html"><a href="readcount-distribution.html"><i class="fa fa-check"></i><b>4.2</b> Readcount Distribution</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="readcount-distribution.html"><a href="readcount-distribution.html#pseudodensity"><i class="fa fa-check"></i><b>4.2.1</b> Pseudodensity</a></li>
+<li class="chapter" data-level="4.2.2" data-path="readcount-distribution.html"><a href="readcount-distribution.html#cumulative-frequency-for-gene-read-counts"><i class="fa fa-check"></i><b>4.2.2</b> Cumulative Frequency for Gene Read Counts</a></li>
+<li class="chapter" data-level="4.2.3" data-path="readcount-distribution.html"><a href="readcount-distribution.html#cumulative-frequency-for-sgrna-read-counts"><i class="fa fa-check"></i><b>4.2.3</b> Cumulative Frequency for sgRNA Read Counts</a></li>
+<li class="chapter" data-level="4.2.4" data-path="readcount-distribution.html"><a href="readcount-distribution.html#boxplots"><i class="fa fa-check"></i><b>4.2.4</b> Boxplots</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="controls.html"><a href="controls.html"><i class="fa fa-check"></i><b>4.3</b> Controls</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="controls.html"><a href="controls.html#positive-controls"><i class="fa fa-check"></i><b>4.3.1</b> Positive Controls</a></li>
+<li class="chapter" data-level="4.3.2" data-path="controls.html"><a href="controls.html#non-targeting-controls"><i class="fa fa-check"></i><b>4.3.2</b> Non-targeting Controls</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="readcount-depth.html"><a href="readcount-depth.html"><i class="fa fa-check"></i><b>4.4</b> Readcount Depth</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="readcount-depth.html"><a href="readcount-depth.html#pbs_replicate1"><i class="fa fa-check"></i><b>4.4.1</b> PBS_Replicate1</a></li>
+<li class="chapter" data-level="4.4.2" data-path="readcount-depth.html"><a href="readcount-depth.html#pbs_replicate2"><i class="fa fa-check"></i><b>4.4.2</b> PBS_Replicate2</a></li>
+<li class="chapter" data-level="4.4.3" data-path="readcount-depth.html"><a href="readcount-depth.html#trail_replicate2"><i class="fa fa-check"></i><b>4.4.3</b> TRAIL_Replicate2</a></li>
+<li class="chapter" data-level="4.4.4" data-path="readcount-depth.html"><a href="readcount-depth.html#trail_replicate1"><i class="fa fa-check"></i><b>4.4.4</b> TRAIL_Replicate1</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="readcounts.html"><a href="readcounts.html"><i class="fa fa-check"></i><b>4.5</b> Readcounts</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="readcounts.html"><a href="readcounts.html#pbs_replicate1-1"><i class="fa fa-check"></i><b>4.5.1</b> PBS_Replicate1</a></li>
+<li class="chapter" data-level="4.5.2" data-path="readcounts.html"><a href="readcounts.html#pbs_replicate2-1"><i class="fa fa-check"></i><b>4.5.2</b> PBS_Replicate2</a></li>
+<li class="chapter" data-level="4.5.3" data-path="readcounts.html"><a href="readcounts.html#trail_replicate2-1"><i class="fa fa-check"></i><b>4.5.3</b> TRAIL_Replicate2</a></li>
+<li class="chapter" data-level="4.5.4" data-path="readcounts.html"><a href="readcounts.html#trail_replicate1-1"><i class="fa fa-check"></i><b>4.5.4</b> TRAIL_Replicate1</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sgrna-coverage.html"><a href="sgrna-coverage.html"><i class="fa fa-check"></i><b>5</b> sgRNA Coverage</a><ul>
+<li class="chapter" data-level="5.1" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html"><i class="fa fa-check"></i><b>5.1</b> Missing sgRNAs and Genes</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html#missing-genes"><i class="fa fa-check"></i><b>5.1.1</b> Missing Genes</a></li>
+<li class="chapter" data-level="5.1.2" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html#missing-sgrnas"><i class="fa fa-check"></i><b>5.1.2</b> Missing sgRNAs</a></li>
+<li class="chapter" data-level="5.1.3" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html#missing-non-targeting-sgrnas"><i class="fa fa-check"></i><b>5.1.3</b> % Missing Non-targeting sgRNAs</a></li>
+<li class="chapter" data-level="5.1.4" data-path="missing-sgrnas-and-genes.html"><a href="missing-sgrnas-and-genes.html#missing-postive-sgrnas"><i class="fa fa-check"></i><b>5.1.4</b> % Missing Postive sgRNAs</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="designs-per-gene.html"><a href="designs-per-gene.html"><i class="fa fa-check"></i><b>5.2</b> Designs per Gene</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="designs-per-gene.html"><a href="designs-per-gene.html#pbs_replicate1-2"><i class="fa fa-check"></i><b>5.2.1</b> PBS_Replicate1</a></li>
+<li class="chapter" data-level="5.2.2" data-path="designs-per-gene.html"><a href="designs-per-gene.html#pbs_replicate2-2"><i class="fa fa-check"></i><b>5.2.2</b> PBS_Replicate2</a></li>
+<li class="chapter" data-level="5.2.3" data-path="designs-per-gene.html"><a href="designs-per-gene.html#trail_replicate2-2"><i class="fa fa-check"></i><b>5.2.3</b> TRAIL_Replicate2</a></li>
+<li class="chapter" data-level="5.2.4" data-path="designs-per-gene.html"><a href="designs-per-gene.html#trail_replicate1-2"><i class="fa fa-check"></i><b>5.2.4</b> TRAIL_Replicate1</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sample-comparison.html"><a href="sample-comparison.html"><i class="fa fa-check"></i><b>6</b> Sample Comparison</a><ul>
+<li class="chapter" data-level="6.1" data-path="overview-1.html"><a href="overview-1.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="overview-1.html"><a href="overview-1.html#foldchange-of-gene-effects"><i class="fa fa-check"></i><b>6.1.1</b> Foldchange of Gene Effects</a></li>
+<li class="chapter" data-level="6.1.2" data-path="overview-1.html"><a href="overview-1.html#z-ratio-of-gene-effects"><i class="fa fa-check"></i><b>6.1.2</b> Z-Ratio of Gene Effects</a></li>
+<li class="chapter" data-level="6.1.3" data-path="overview-1.html"><a href="overview-1.html#foldchange-of-sgrna-effects"><i class="fa fa-check"></i><b>6.1.3</b> Foldchange of sgRNA Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="scatter-plot-matrices.html"><a href="scatter-plot-matrices.html"><i class="fa fa-check"></i><b>6.2</b> Scatter Plot Matrices</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="scatter-plot-matrices.html"><a href="scatter-plot-matrices.html#scatter-plot-matrix-1"><i class="fa fa-check"></i><b>6.2.1</b> Scatter Plot Matrix 1</a></li>
+<li class="chapter" data-level="6.2.2" data-path="scatter-plot-matrices.html"><a href="scatter-plot-matrices.html#scatter-plot-matrix-2"><i class="fa fa-check"></i><b>6.2.2</b> Scatter Plot Matrix 2</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="single-scatter-plots.html"><a href="single-scatter-plots.html"><i class="fa fa-check"></i><b>6.3</b> Single Scatter Plots</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="single-scatter-plots.html"><a href="single-scatter-plots.html#scatterplot-1"><i class="fa fa-check"></i><b>6.3.1</b> Scatterplot 1</a></li>
+<li class="chapter" data-level="6.3.2" data-path="single-scatter-plots.html"><a href="single-scatter-plots.html#scatterplot-2"><i class="fa fa-check"></i><b>6.3.2</b> Scatterplot 2</a></li>
+<li class="chapter" data-level="6.3.3" data-path="single-scatter-plots.html"><a href="single-scatter-plots.html#scatterplot-3"><i class="fa fa-check"></i><b>6.3.3</b> Scatterplot 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="pca.html"><a href="pca.html"><i class="fa fa-check"></i><b>7</b> PCA</a></li>
+<li class="part"><span><b>II Hit Calling</b></span></li>
+<li class="chapter" data-level="8" data-path="gene-ranking.html"><a href="gene-ranking.html"><i class="fa fa-check"></i><b>8</b> Gene Ranking</a><ul>
+<li class="chapter" data-level="8.1" data-path="wilcox.html"><a href="wilcox.html"><i class="fa fa-check"></i><b>8.1</b> Wilcox</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="wilcox.html"><a href="wilcox.html#p-value-distribution"><i class="fa fa-check"></i><b>8.1.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.1.2" data-path="wilcox.html"><a href="wilcox.html#ranked-p-values"><i class="fa fa-check"></i><b>8.1.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.1.3" data-path="wilcox.html"><a href="wilcox.html#p-value-vs-lfc"><i class="fa fa-check"></i><b>8.1.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.1.4" data-path="wilcox.html"><a href="wilcox.html#data-1"><i class="fa fa-check"></i><b>8.1.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="deseq2.html"><a href="deseq2.html"><i class="fa fa-check"></i><b>8.2</b> DESeq2</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="deseq2.html"><a href="deseq2.html#p-value-distribution-1"><i class="fa fa-check"></i><b>8.2.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.2.2" data-path="deseq2.html"><a href="deseq2.html#ranked-p-values-1"><i class="fa fa-check"></i><b>8.2.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.2.3" data-path="deseq2.html"><a href="deseq2.html#p-value-vs-lfc-1"><i class="fa fa-check"></i><b>8.2.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.2.4" data-path="deseq2.html"><a href="deseq2.html#data-2"><i class="fa fa-check"></i><b>8.2.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mageck.html"><a href="mageck.html"><i class="fa fa-check"></i><b>8.3</b> MAGeCK</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="mageck.html"><a href="mageck.html#p-value-distribution-2"><i class="fa fa-check"></i><b>8.3.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.3.2" data-path="mageck.html"><a href="mageck.html#ranked-p-values-2"><i class="fa fa-check"></i><b>8.3.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.3.3" data-path="mageck.html"><a href="mageck.html#p-value-vs-lfc-2"><i class="fa fa-check"></i><b>8.3.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.3.4" data-path="mageck.html"><a href="mageck.html#data-3"><i class="fa fa-check"></i><b>8.3.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="sgrsea.html"><a href="sgrsea.html"><i class="fa fa-check"></i><b>8.4</b> sgRSEA</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="sgrsea.html"><a href="sgrsea.html#p-value-distribution-3"><i class="fa fa-check"></i><b>8.4.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.4.2" data-path="sgrsea.html"><a href="sgrsea.html#ranked-p-values-3"><i class="fa fa-check"></i><b>8.4.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.4.3" data-path="sgrsea.html"><a href="sgrsea.html#p-value-vs-lfc-3"><i class="fa fa-check"></i><b>8.4.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.4.4" data-path="sgrsea.html"><a href="sgrsea.html#data-4"><i class="fa fa-check"></i><b>8.4.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="edger.html"><a href="edger.html"><i class="fa fa-check"></i><b>8.5</b> EdgeR</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="edger.html"><a href="edger.html#p-value-distribution-4"><i class="fa fa-check"></i><b>8.5.1</b> P Value Distribution</a></li>
+<li class="chapter" data-level="8.5.2" data-path="edger.html"><a href="edger.html#ranked-p-values-4"><i class="fa fa-check"></i><b>8.5.2</b> Ranked P Values</a></li>
+<li class="chapter" data-level="8.5.3" data-path="edger.html"><a href="edger.html#p-value-vs-lfc-4"><i class="fa fa-check"></i><b>8.5.3</b> P Value vs LFC</a></li>
+<li class="chapter" data-level="8.5.4" data-path="edger.html"><a href="edger.html#data-5"><i class="fa fa-check"></i><b>8.5.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="z-ratio.html"><a href="z-ratio.html"><i class="fa fa-check"></i><b>8.6</b> Z Ratio</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="z-ratio.html"><a href="z-ratio.html#z-ratio-distribution"><i class="fa fa-check"></i><b>8.6.1</b> Z Ratio Distribution</a></li>
+<li class="chapter" data-level="8.6.2" data-path="z-ratio.html"><a href="z-ratio.html#ranked-z-ratios"><i class="fa fa-check"></i><b>8.6.2</b> Ranked Z Ratios</a></li>
+<li class="chapter" data-level="8.6.3" data-path="z-ratio.html"><a href="z-ratio.html#z-ratio-vs-lfc"><i class="fa fa-check"></i><b>8.6.3</b> Z Ratio vs LFC</a></li>
+<li class="chapter" data-level="8.6.4" data-path="z-ratio.html"><a href="z-ratio.html#data-6"><i class="fa fa-check"></i><b>8.6.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="bagel.html"><a href="bagel.html"><i class="fa fa-check"></i><b>8.7</b> BAGEL</a><ul>
+<li class="chapter" data-level="8.7.1" data-path="bagel.html"><a href="bagel.html#log2-bayes-factor-distribution"><i class="fa fa-check"></i><b>8.7.1</b> Log2 Bayes Factor Distribution</a></li>
+<li class="chapter" data-level="8.7.2" data-path="bagel.html"><a href="bagel.html#ranked-by-log2-of-bayes-factor"><i class="fa fa-check"></i><b>8.7.2</b> Ranked by log2 of Bayes Factor</a></li>
+<li class="chapter" data-level="8.7.3" data-path="bagel.html"><a href="bagel.html#data-7"><i class="fa fa-check"></i><b>8.7.3</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="screenbeam.html"><a href="screenbeam.html"><i class="fa fa-check"></i><b>8.8</b> ScreenBEAM</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="screenbeam.html"><a href="screenbeam.html#p-value-distribution-5"><i class="fa fa-check"></i><b>8.8.1</b> P-Value Distribution</a></li>
+<li class="chapter" data-level="8.8.2" data-path="screenbeam.html"><a href="screenbeam.html#ranked-by-fdr"><i class="fa fa-check"></i><b>8.8.2</b> Ranked by FDR</a></li>
+<li class="chapter" data-level="8.8.3" data-path="screenbeam.html"><a href="screenbeam.html#data-8"><i class="fa fa-check"></i><b>8.8.3</b> Data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>9</b> Summary</a><ul>
+<li class="chapter" data-level="9.1" data-path="enriched-11.html"><a href="enriched-11.html"><i class="fa fa-check"></i><b>9.1</b> Enriched</a></li>
+<li class="chapter" data-level="9.2" data-path="depleted-11.html"><a href="depleted-11.html"><i class="fa fa-check"></i><b>9.2</b> Depleted</a></li>
+</ul></li>
+<li class="part"><span><b>III Hit Confirmation</b></span></li>
+<li class="chapter" data-level="10" data-path="gene-overviews.html"><a href="gene-overviews.html"><i class="fa fa-check"></i><b>10</b> Gene Overviews</a><ul>
+<li class="chapter" data-level="10.1" data-path="casp3-1.html"><a href="casp3-1.html"><i class="fa fa-check"></i><b>10.1</b> CASP3 (1)</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="casp3-1.html"><a href="casp3-1.html#general-gene-information"><i class="fa fa-check"></i><b>10.1.1</b> General Gene Information</a></li>
+<li class="chapter" data-level="10.1.2" data-path="casp3-1.html"><a href="casp3-1.html#gene-model"><i class="fa fa-check"></i><b>10.1.2</b> Gene Model</a></li>
+<li class="chapter" data-level="10.1.3" data-path="casp3-1.html"><a href="casp3-1.html#sgrna-model"><i class="fa fa-check"></i><b>10.1.3</b> sgRNA Model</a></li>
+<li class="chapter" data-level="10.1.4" data-path="casp3-1.html"><a href="casp3-1.html#published-screens"><i class="fa fa-check"></i><b>10.1.4</b> Published Screens</a></li>
+<li class="chapter" data-level="10.1.5" data-path="casp3-1.html"><a href="casp3-1.html#gene-performance"><i class="fa fa-check"></i><b>10.1.5</b> Gene Performance</a></li>
+<li class="chapter" data-level="10.1.6" data-path="casp3-1.html"><a href="casp3-1.html#cosmic-mutation-database"><i class="fa fa-check"></i><b>10.1.6</b> COSMIC Mutation Database</a></li>
+<li class="chapter" data-level="10.1.7" data-path="casp3-1.html"><a href="casp3-1.html#gene-ontology"><i class="fa fa-check"></i><b>10.1.7</b> Gene Ontology</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html"><i class="fa fa-check"></i><b>10.2</b> TNFRSF10A (2)</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#general-gene-information-1"><i class="fa fa-check"></i><b>10.2.1</b> General Gene Information</a></li>
+<li class="chapter" data-level="10.2.2" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#gene-model-1"><i class="fa fa-check"></i><b>10.2.2</b> Gene Model</a></li>
+<li class="chapter" data-level="10.2.3" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#sgrna-model-1"><i class="fa fa-check"></i><b>10.2.3</b> sgRNA Model</a></li>
+<li class="chapter" data-level="10.2.4" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#published-screens-1"><i class="fa fa-check"></i><b>10.2.4</b> Published Screens</a></li>
+<li class="chapter" data-level="10.2.5" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#gene-performance-1"><i class="fa fa-check"></i><b>10.2.5</b> Gene Performance</a></li>
+<li class="chapter" data-level="10.2.6" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#cosmic-mutation-database-1"><i class="fa fa-check"></i><b>10.2.6</b> COSMIC Mutation Database</a></li>
+<li class="chapter" data-level="10.2.7" data-path="tnfrsf10a-2.html"><a href="tnfrsf10a-2.html#gene-ontology-1"><i class="fa fa-check"></i><b>10.2.7</b> Gene Ontology</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="casp8-3.html"><a href="casp8-3.html"><i class="fa fa-check"></i><b>10.3</b> CASP8 (3)</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="casp8-3.html"><a href="casp8-3.html#general-gene-information-2"><i class="fa fa-check"></i><b>10.3.1</b> General Gene Information</a></li>
+<li class="chapter" data-level="10.3.2" data-path="casp8-3.html"><a href="casp8-3.html#gene-model-2"><i class="fa fa-check"></i><b>10.3.2</b> Gene Model</a></li>
+<li class="chapter" data-level="10.3.3" data-path="casp8-3.html"><a href="casp8-3.html#sgrna-model-2"><i class="fa fa-check"></i><b>10.3.3</b> sgRNA Model</a></li>
+<li class="chapter" data-level="10.3.4" data-path="casp8-3.html"><a href="casp8-3.html#published-screens-2"><i class="fa fa-check"></i><b>10.3.4</b> Published Screens</a></li>
+<li class="chapter" data-level="10.3.5" data-path="casp8-3.html"><a href="casp8-3.html#gene-performance-2"><i class="fa fa-check"></i><b>10.3.5</b> Gene Performance</a></li>
+<li class="chapter" data-level="10.3.6" data-path="casp8-3.html"><a href="casp8-3.html#cosmic-mutation-database-2"><i class="fa fa-check"></i><b>10.3.6</b> COSMIC Mutation Database</a></li>
+<li class="chapter" data-level="10.3.7" data-path="casp8-3.html"><a href="casp8-3.html#gene-ontology-2"><i class="fa fa-check"></i><b>10.3.7</b> Gene Ontology</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sgrnas.html"><a href="sgrnas.html"><i class="fa fa-check"></i><b>11</b> sgRNAs</a><ul>
+<li class="chapter" data-level="11.1" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html"><i class="fa fa-check"></i><b>11.1</b> TNFRSF10B (1)</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#readcount"><i class="fa fa-check"></i><b>11.1.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.1.2" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#log2-foldchange"><i class="fa fa-check"></i><b>11.1.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.1.3" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#genomic-binding-sites"><i class="fa fa-check"></i><b>11.1.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.1.4" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#z-score"><i class="fa fa-check"></i><b>11.1.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.1.5" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#efficiency-scores"><i class="fa fa-check"></i><b>11.1.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.1.6" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#e-crisp-scores"><i class="fa fa-check"></i><b>11.1.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.1.7" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#sgrna-sequences"><i class="fa fa-check"></i><b>11.1.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.1.8" data-path="tnfrsf10b-1.html"><a href="tnfrsf10b-1.html#sgrna-binding-sites"><i class="fa fa-check"></i><b>11.1.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html"><i class="fa fa-check"></i><b>11.2</b> TNFRSF10A (2)</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#readcount-1"><i class="fa fa-check"></i><b>11.2.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.2.2" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#log2-foldchange-1"><i class="fa fa-check"></i><b>11.2.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.2.3" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#genomic-binding-sites-1"><i class="fa fa-check"></i><b>11.2.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.2.4" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#z-score-1"><i class="fa fa-check"></i><b>11.2.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.2.5" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#efficiency-scores-1"><i class="fa fa-check"></i><b>11.2.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.2.6" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#e-crisp-scores-1"><i class="fa fa-check"></i><b>11.2.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.2.7" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#sgrna-sequences-1"><i class="fa fa-check"></i><b>11.2.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.2.8" data-path="tnfrsf10a-2-1.html"><a href="tnfrsf10a-2-1.html#sgrna-binding-sites-1"><i class="fa fa-check"></i><b>11.2.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="casp3-3.html"><a href="casp3-3.html"><i class="fa fa-check"></i><b>11.3</b> CASP3 (3)</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="casp3-3.html"><a href="casp3-3.html#readcount-2"><i class="fa fa-check"></i><b>11.3.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.3.2" data-path="casp3-3.html"><a href="casp3-3.html#log2-foldchange-2"><i class="fa fa-check"></i><b>11.3.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.3.3" data-path="casp3-3.html"><a href="casp3-3.html#genomic-binding-sites-2"><i class="fa fa-check"></i><b>11.3.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.3.4" data-path="casp3-3.html"><a href="casp3-3.html#z-score-2"><i class="fa fa-check"></i><b>11.3.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.3.5" data-path="casp3-3.html"><a href="casp3-3.html#efficiency-scores-2"><i class="fa fa-check"></i><b>11.3.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.3.6" data-path="casp3-3.html"><a href="casp3-3.html#e-crisp-scores-2"><i class="fa fa-check"></i><b>11.3.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.3.7" data-path="casp3-3.html"><a href="casp3-3.html#sgrna-sequences-2"><i class="fa fa-check"></i><b>11.3.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.3.8" data-path="casp3-3.html"><a href="casp3-3.html#sgrna-binding-sites-2"><i class="fa fa-check"></i><b>11.3.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="fadd-4.html"><a href="fadd-4.html"><i class="fa fa-check"></i><b>11.4</b> FADD (4)</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="fadd-4.html"><a href="fadd-4.html#readcount-3"><i class="fa fa-check"></i><b>11.4.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.4.2" data-path="fadd-4.html"><a href="fadd-4.html#log2-foldchange-3"><i class="fa fa-check"></i><b>11.4.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.4.3" data-path="fadd-4.html"><a href="fadd-4.html#genomic-binding-sites-3"><i class="fa fa-check"></i><b>11.4.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.4.4" data-path="fadd-4.html"><a href="fadd-4.html#z-score-3"><i class="fa fa-check"></i><b>11.4.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.4.5" data-path="fadd-4.html"><a href="fadd-4.html#efficiency-scores-3"><i class="fa fa-check"></i><b>11.4.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.4.6" data-path="fadd-4.html"><a href="fadd-4.html#e-crisp-scores-3"><i class="fa fa-check"></i><b>11.4.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.4.7" data-path="fadd-4.html"><a href="fadd-4.html#sgrna-sequences-3"><i class="fa fa-check"></i><b>11.4.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.4.8" data-path="fadd-4.html"><a href="fadd-4.html#sgrna-binding-sites-3"><i class="fa fa-check"></i><b>11.4.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="casp8-5.html"><a href="casp8-5.html"><i class="fa fa-check"></i><b>11.5</b> CASP8 (5)</a><ul>
+<li class="chapter" data-level="11.5.1" data-path="casp8-5.html"><a href="casp8-5.html#readcount-4"><i class="fa fa-check"></i><b>11.5.1</b> Readcount</a></li>
+<li class="chapter" data-level="11.5.2" data-path="casp8-5.html"><a href="casp8-5.html#log2-foldchange-4"><i class="fa fa-check"></i><b>11.5.2</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="11.5.3" data-path="casp8-5.html"><a href="casp8-5.html#genomic-binding-sites-4"><i class="fa fa-check"></i><b>11.5.3</b> Genomic Binding Sites</a></li>
+<li class="chapter" data-level="11.5.4" data-path="casp8-5.html"><a href="casp8-5.html#z-score-4"><i class="fa fa-check"></i><b>11.5.4</b> Z-Score</a></li>
+<li class="chapter" data-level="11.5.5" data-path="casp8-5.html"><a href="casp8-5.html#efficiency-scores-4"><i class="fa fa-check"></i><b>11.5.5</b> Efficiency Scores</a></li>
+<li class="chapter" data-level="11.5.6" data-path="casp8-5.html"><a href="casp8-5.html#e-crisp-scores-4"><i class="fa fa-check"></i><b>11.5.6</b> E-CRISP Scores</a></li>
+<li class="chapter" data-level="11.5.7" data-path="casp8-5.html"><a href="casp8-5.html#sgrna-sequences-4"><i class="fa fa-check"></i><b>11.5.7</b> sgRNA Sequences</a></li>
+<li class="chapter" data-level="11.5.8" data-path="casp8-5.html"><a href="casp8-5.html#sgrna-binding-sites-4"><i class="fa fa-check"></i><b>11.5.8</b> sgRNA Binding Sites</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="gene-set-enrichment-analysis.html"><a href="gene-set-enrichment-analysis.html"><i class="fa fa-check"></i><b>12</b> Gene Set Enrichment Analysis</a><ul>
+<li class="chapter" data-level="12.1" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><i class="fa fa-check"></i><b>12.1</b> TNFRSF10A, TNFRSF10B, TNFRSF10C (1)</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#pathways"><i class="fa fa-check"></i><b>12.1.1</b> Pathways</a></li>
+<li class="chapter" data-level="12.1.2" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#transcription"><i class="fa fa-check"></i><b>12.1.2</b> Transcription</a></li>
+<li class="chapter" data-level="12.1.3" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#ontologies"><i class="fa fa-check"></i><b>12.1.3</b> Ontologies</a></li>
+<li class="chapter" data-level="12.1.4" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#diseases"><i class="fa fa-check"></i><b>12.1.4</b> Diseases</a></li>
+<li class="chapter" data-level="12.1.5" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-1.html#cell-types"><i class="fa fa-check"></i><b>12.1.5</b> Cell Types</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="gene-comparisons.html"><a href="gene-comparisons.html"><i class="fa fa-check"></i><b>13</b> Gene Comparisons</a><ul>
+<li class="chapter" data-level="13.1" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><i class="fa fa-check"></i><b>13.1</b> TNFRSF10A, TNFRSF10B, TNFRSF10C, CASP3, BAX, BCL2L1, MCL1 (1)</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#readcount-untreated-group"><i class="fa fa-check"></i><b>13.1.1</b> Readcount Untreated Group</a></li>
+<li class="chapter" data-level="13.1.2" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#readcount-treated-group"><i class="fa fa-check"></i><b>13.1.2</b> Readcount Treated Group</a></li>
+<li class="chapter" data-level="13.1.3" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#log2-foldchange-5"><i class="fa fa-check"></i><b>13.1.3</b> Log2 Foldchange</a></li>
+<li class="chapter" data-level="13.1.4" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#z-scores"><i class="fa fa-check"></i><b>13.1.4</b> Z-Scores</a></li>
+<li class="chapter" data-level="13.1.5" data-path="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html"><a href="tnfrsf10a-tnfrsf10b-tnfrsf10c-casp3-bax-bcl2l1-mcl1-1.html#sgrna-binding-sites-5"><i class="fa fa-check"></i><b>13.1.5</b> sgRNA Binding Sites</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="credits.html"><a href="credits.html"><i class="fa fa-check"></i><b>14</b> Credits</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CRISPR-AnalyzeR Report</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="gene-overviews" class="section level1">
+<h1><span class="header-section-number">10</span> Gene Overviews</h1>
+<p>This section is an overview about the genes of interest. It provides gene information retrieved from various databases, gene and sgRNA models, Gene Ontology terms, mutations and performances in this and other published screens. Each subsection contains the overview of one gene which the user investigated and saved.</p>
+<!-- 
+save as 'overviewChild.Rmd'
+child of 'overview.Rmd'
+--> 
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="depleted-11.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="casp3-1.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
