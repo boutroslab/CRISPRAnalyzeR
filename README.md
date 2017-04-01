@@ -142,7 +142,10 @@ __It is your responsibility to obtain all required licenses in case of commercia
 
 
 ```
-Version 1.14 (latest)
+Version 1.141 (latest)
+- adapted to changes in ENSEMBL database structure
+
+Version 1.14
 - stability enhancements in report generation
 - fixed some UI typos
 - prepared basis for new features
