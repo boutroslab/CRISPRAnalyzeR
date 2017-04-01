@@ -74,6 +74,8 @@ __Use up to 26 external data ressources to enrich information about your favouri
 
 Finally you can document the screening data and analysis using the interactive report.  
 
+You can find an example report __[HERE](http://www.dkfz.de/signaling/crispranalyzer/report/)__.  
+
 [![CRISPRAnalyzeR Report Preview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_report1.png)](https://www.youtube.com/embed/eusAj4LrSik)
 
 
@@ -534,7 +536,7 @@ These include __four__ read count text files as well as the __sgRNA library file
 You can directly use these files with the default parameters within CRISPRAnalyzeR.  
 
 #### Download FASTQ Sequencing Data
-You can download FASTQ Sequencing files from [here](http://crispr-analyzer.dkfz.de/fasta/CRISPRAnalyzeR_NGSFASTQ_sample-data.zip).  
+You can download FASTQ Sequencing files from [here](http://www.dkfz.de/signaling/crispranalyzer/CRISPRAnalyzeR_NGSFASTQ_sample-data.zip).  
 These include __four__ NGS raw data files in compressed fastq format as well as the __sgRNA library file__ in FASTA format.  
 
 You can directly use these files with the default parameters within CRISPRAnalyzeR.  
