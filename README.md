@@ -202,42 +202,53 @@ __Installation Tutorial__
 
 <a href="https://www.youtube.com/watch?v=jlhpsN65-_s&t" target="_blank"><img src="https://github.com/boutroslab/crispr-analyzer/blob/master/images/CRISPRAnalyzeR_YT_kitematic.png" width="40%" alt="CRISPRAnalyzeR: How to install it using Kitematic"></a>
 
+
 This installation will use a tool called Kitematic to offer a user interface to start, stop or change settings of the CRISPRAnalyzeR.  
 In principal, you first install and start docker, then install and start kitematic and finally download CRISPRAnalyzeR.  
 
 __Individual Steps__
 
-1. Download the Docker Installer for your operating system from the [Docker Website](https://www.docker.com/community-edition#/download)
-2. Install the downloaded file
-3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
-   A small docker symbol in the taskbar will tell you that docker is ready.
-4. Then download the docker toolbox and proceed as described above.
-5. Download the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) from the docker [website](https://www.docker.com/products/docker-toolbox)
-6. Install the Docker Toolbox
-7. Start Kitematic, which comes with the docker toolbox
-8. Search for CRISPRAnalyzeR  
-	![Search for CRISPRAnalyzeR](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_search.png)
+1. __Download the Docker Installer__ for your operating system from the [Docker Website](https://www.docker.com/community-edition#/download)
+2. __Install the downloaded file__
+3. __Start Docker__ on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
+	A small docker symbol in the taskbar will tell you that docker is ready.
+	
+5. __Download the [Docker Toolbox](https://www.docker.com/products/docker-toolbox)__ from the docker [website](https://www.docker.com/products/docker-toolbox)
+6. __Install the Docker Toolbox__
+7. __Start Kitematic__, which comes with the docker toolbox
+8. __Search for CRISPRAnalyzeR__  
+	  
+	![Search for CRISPRAnalyzeR](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_search.png)  
+	
+	__ATTENTION__ In case you will see a red error message like `Could not connect to xxxx`, this is an indication that you are behind a proxy server which blocks the access!  
+	If this is the case, please use a network connection without a proxy OR follow the __[Installation Procedure for Advanced Users](https://github.com/boutroslab/CRISPRAnalyzeR#command-line-installation-advanced-users)__
+	
 9. Select CREATE to install the latest stable version of CRISPRAnalyzeR to install CRISPRAnalyzeR  
-10. Go to SETTINGS to adjust the parameters as shown below  
-	![CA_overview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_overview.png)
-11. Hit the START button to start CRISPRAnalyzeR
-12. Copy the URL to the web browser to access CRISPRAnalyzeR  
+10. __OPTIONAL__ If required, you can adjust a couple of parameters, such as a proxy server.  
+	All parameters are described in more detail __[below](https://github.com/boutroslab/CRISPRAnalyzeR#available-paramaters-to-start-crispranalyzer)__  
+	To adjust these parameters, click on the __Settings__ tab on the upper right corner:  
+	
+	![CA_overview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_overview.png)  
+	
+11. Hit the __START__ button to start CRISPRAnalyzeR
+12. __Copy the URL to the web browser__ to access CRISPRAnalyzeR as shown in this picture:   
+	
 	![CA_url](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_URL.png)
 
-
+13. Now you successfully installed and started CRISPRAnalyzeR!
 
 ### How to Start, Stop or Restart CRISPRAnalyzeR
 
-Hit the start, stop or restart button.  
+Hit the __start, stop or restart__ button.  
 
 ![CA_overview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_overview.png)
 
 ### How to adjust the CRISPRAnalyzeR settings
 
-As mentioned below, CRISPRAnalyzeR can be adjusted with several parameters.  
+As mentioned [below](https://github.com/boutroslab/CRISPRAnalyzeR#available-paramaters-to-start-crispranalyzer), CRISPRAnalyzeR can be adjusted with several parameters.  
 With the user-interface provided by Kitematic, you can easily adjust all parameters from the Settings section.  
 
-Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING button on the top right.
+Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING button on the top right.  
 
 ![CA_Options](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_settings.png)
 
@@ -246,10 +257,14 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
 
 1. Search for CRISPRAnalyzeR in the Kitematic UI repository
 2. Click on the three dots for more options  
-	![More options](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_moreoptions.png)
+	
+	![More options](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_moreoptions.png)  
+	
 3. Click on "Selected version"
 4. Select the version you want  
-	![Version](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_version.png)
+	
+	![Version](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_version.png)  
+	
 5. Click on the X at the bottom right
 6. Click CREATE
 
@@ -546,10 +561,17 @@ This data was published before in
 [F. Heigwer\*, T. Zhan\*, M. Breinig, J. Winter, D. Brügemann, S. Leible, M. Boutros, CRISPR library designer (CLD): software for multispecies design of single guide RNA libraries, Genome Biol., 2016, DOI:10.1186/s13059-016-0915-2](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0915-2 "Access manuscript directly")
 
 #### Download Read Count Data
-You can download pre-made read count files for data analysis from [here](http://crispr-analyzer.dkfz.de/fasta/CRISPRAnalyzeR_Readcount_sample-data.zip)
+You can download pre-made read count files for data analysis from [here](https://github.com/boutroslab/CRISPRAnalyzeR/tree/master/sampledata/readcount).  
+These include __four__ read count text files as well as the __sgRNA library file__ in FASTA format.  
+
+You can directly use these files with the default parameters within CRISPRAnalyzeR.  
 
 #### Download FASTQ Sequencing Data
-You can download FASTQ Sequencing files from [here](http://crispr-analyzer.dkfz.de/fasta/CRISPRAnalyzeR_NGSFASTQ_sample-data.zip)
+You can download FASTQ Sequencing files from [here](http://crispr-analyzer.dkfz.de/fasta/CRISPRAnalyzeR_NGSFASTQ_sample-data.zip).  
+These include __four__ NGS raw data files in compressed fastq format as well as the __sgRNA library file__ in FASTA format.  
+
+You can directly use these files with the default parameters within CRISPRAnalyzeR.  
+
 
 ### Toronto Knockout Library Data (90000 sgRNAs)
 
@@ -557,7 +579,9 @@ This data was published in
 [Steinhart,Z. et al. (2016) Genome-wide CRISPR screens reveal a Wnt-FZD5 signaling circuit as a druggable vulnerability of RNF43-mutant pancreatic tumors. Nat. Med.](http://www.nature.com/nm/journal/vaop/ncurrent/full/nm.4219.html)
 
 #### Download Read Count Data
-You can download raw read count data including a TKO sgNRA library FASTA file from [here](http://crispr-analyzer.dkfz.de/fasta/CRISPRAnalyzeR_TKO_FZD5_CRISPR_SampleData.zip)
+You can download raw read count data including a TKO sgNRA library FASTA file from [here](https://github.com/boutroslab/CRISPRAnalyzeR/tree/master/sampledata/readcount_TKO)  
+
+In order to use these files, you need to adjust the gene identifier from `Ensembl Gene ID `to `HGNC Symbol` in the Analysis Settings.  
 
 ---
 
@@ -568,13 +592,13 @@ You can use them along with your read count (please see the format) or raw NGS s
 
 |Library Name |	Lab |	Pubmed ID |	Addgene |	Download |
 |-------------|-----|-----------|---------|----------|
-|CLD Benchmarking |	Boutros |	27013184 |	NA |	[FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_CLD_library.fasta) |
-|Gecko V2	| Zhang |	25075903 |	[here](https://www.addgene.org/crispr/libraries/geckov2/)	| [A+B FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_GeckoV2_all.fasta) [A FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_GeckoV2_HGLib_A.fasta) [B FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_GeckoV2_HGLib_B.fasta) |
-|Gecko V2	MOUSE| Zhang |	25075903 |	[here](https://www.addgene.org/pooled-library/zhang-mouse-gecko-v2/)	|  [A FASTA](https://github.com/boutroslab/CRISPRAnalyzeR/blob/master/fasta/FASTA_GeckoV2_MGLib_A.fasta) [B FASTA](https://github.com/boutroslab/CRISPRAnalyzeR/blob/master/fasta/FASTA_GeckoV2_MGLib_B.fasta) |
-|Torronto KnockOut Library (TKOv1) |	Moffat |	26627737 | [here](https://www.addgene.org/pooled-library/moffat-crispr-knockout/) |	[90K FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_TKO_90K_library.fasta) & [85K FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/fasta/FASTA_TKO_85Ksupp_library.fasta) |
-|Brunello	| Doench |	26780180	| [here](https://www.addgene.org/pooled-library/broadgpp-crispr-knockout/) |	[FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_brunello_library.fasta) |
+|CLD Benchmarking |	Boutros |	27013184 |	NA |	[FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_CLD_library.fasta) |
+|Gecko V2	| Zhang |	25075903 |	[here](https://www.addgene.org/crispr/libraries/geckov2/)	| [A+B FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_all.fasta) [A FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_HGLib_A.fasta) [B FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_GeckoV2_HGLib_B.fasta) |
+|Gecko V2	MOUSE| Zhang |	25075903 |	[here](https://www.addgene.org/pooled-library/zhang-mouse-gecko-v2/)	|  [A FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_MGLib_A.fasta) [B FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_MGLib_B.fasta) |
+|Torronto KnockOut Library (TKOv1) |	Moffat |	26627737 | [here](https://www.addgene.org/pooled-library/moffat-crispr-knockout/) |	[90K FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_TKO_90K_library.fasta) & [85K FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_TKO_85Ksupp_library.fasta) |
+|Brunello	| Doench |	26780180	| [here](https://www.addgene.org/pooled-library/broadgpp-crispr-knockout/) |	[FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_brunello_library.fasta) |
 |CRISPRa / CRISPRi	| Weissmann	| 25307932 | [here](https://www.addgene.org/crispr/libraries/)	|	not available yet |
-|Human Lentiviral sgRNA library high cleavage activity	| Sabatini |	26472758 | [here](https://www.addgene.org/crispr/libraries/)	|	[185K FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_Wang_v2__185K_library.fasta) |
+|Human Lentiviral sgRNA library high cleavage activity	| Sabatini |	26472758 | [here](https://www.addgene.org/crispr/libraries/)	|	[185K FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_Wang_v2__185K_library.fasta) |
 |Human Lentiviral sgRNA sub libraries |	Sabatini |	24336569	| [here](https://www.addgene.org/crispr/libraries/) |	not available yet |
 
 
