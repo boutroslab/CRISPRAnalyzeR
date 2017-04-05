@@ -183,8 +183,8 @@ ENV COSMIC_database="CosmicMutantExport.tsv"
 ENV EnrichR_URL="http://amp.pharm.mssm.edu/Enrichr/
 ENV EnrichR=TRUE
 ENV bowtie_threads=2
-ENV proxy_url=NULL
-ENV proxy_port=NULL
+ENV proxy_url=
+ENV proxy_port=
 ENV max_upload=4096
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

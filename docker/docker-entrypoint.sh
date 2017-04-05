@@ -59,7 +59,7 @@ if [ "$1" = 'crispranalyzer' ]; then
 #   fi
 	if [ "$max_upload" ]; then
     echo "[CUSTOM] Set maximum upload Size"
-    key_value_to_cfg "max_upload" "\"4096\"" "$CRISPR_CFG"
+    key_value_to_cfg "max_upload" "\"$max_upload\"" "$CRISPR_CFG"
   fi
   if [ "$bowtie_threads" ]; then
     echo "[CUSTOM] setting number of threads for Bowtie2"
