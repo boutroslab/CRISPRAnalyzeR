@@ -6,14 +6,11 @@
 config <- list()
 
 # Version
-config[["version"]] <- 1.141
+config[["version"]] <- 1.14
 config[["versionfile"]] <- "https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/version.txt"
 
 # maximum upload size in MB
 config[["max_upload"]] <- 4096
-
-# Allow download of logs
-config[["downloadlogs"]] <- FALSE
 
 ###########################
 #### working directory ####
@@ -238,14 +235,14 @@ config[["car.proxy.port"]] <- NULL
 
 
 
-if(!is.null(config[["car.proxy.url"]]) && !is.null(config[["car.proxy.port"]]) )
+if(!is.null(config[["car.proxy.url"]]) && !is.null(config[["car.proxy.port"]]))
 {
   config[["car.proxy.port"]] <- as.numeric(config[["car.proxy.port"]])
   
   config[["car.proxy"]] <- paste(config[["car.proxy.url"]], config[["car.proxy.port"]], sep=":") # NULL
 } else
 {
-  config[["car.proxy"]] <- NULL
+  config[["car.proxy"]] <-NULL
 }
 
 

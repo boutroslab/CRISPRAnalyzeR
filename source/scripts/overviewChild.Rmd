@@ -51,7 +51,7 @@ HTML(as.character(unique(indepth_geneOverview$data$description)))
                           <tr>
                    <td><strong>Uniprot ID</strong></td>
                           <td>')
-uniqueuniprot <- unique(indepth_geneOverview$data$uniprotswissprot)
+uniqueuniprot <- unique(indepth_geneOverview$data$uniprot_swissprot)
 uniqueuniprot <- uniqueuniprot[uniqueuniprot != ""]
 HTML(as.character(paste("<i class='fa fa-external-link fa-fw'></i>&nbsp;<strong><a href='http://www.uniprot.org/uniprot/",uniqueuniprot,"' target='_blank'>", uniqueuniprot,"</a></strong>", sep="", collapse = "<br/>")))
                   HTML('</td>

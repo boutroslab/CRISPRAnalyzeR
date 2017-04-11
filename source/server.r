@@ -69,10 +69,9 @@ config$messages <- setNames(split(config$messages, seq(nrow(config$messages))), 
 # start shiny session
 shinyServer(function(input, output, session) {
   
-  print(config$max_upload)
-  # 4096MB upload limit per file as default
+
+  # 4096MB upload limit per file
   options(shiny.maxRequestSize = as.numeric(config$max_upload) * 1024^2)
-  
   
   # create objects needed throughout this session
   source(file.path(config$appDir, "init_server.r"), local = TRUE)
