@@ -57,7 +57,7 @@ indepth_geneOverview <- eventReactive(input$indepthOverviewGene, ignoreNULL = FA
     # set attributes for general data retrieval
     shiny::withProgress(message = 'Query Ensembl biomaRt', value = 0,{
       
-      attributes <- c("ensembl_gene_id","hgnc_symbol","description","uniprot_swissprot", "entrezgene")
+      attributes <- c("ensembl_gene_id","hgnc_symbol","description","uniprotswissprot", "entrezgene")
       db.list <- c("Transcription_Factor_PPIs",
                    "TRANSFAC_and_JASPAR_PWMs",
                    "ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X",
@@ -265,7 +265,7 @@ indepth_geneOverview <- eventReactive(input$indepthOverviewGene, ignoreNULL = FA
     )
     
     if(!is.na(indepth_geneOverview()["data"])) {
-      uniqueuniprot <- unique(indepth_geneOverview()$data$uniprot_swissprot)
+      uniqueuniprot <- unique(indepth_geneOverview()$data$uniprotswissprot)
       uniqueuniprot <- uniqueuniprot[uniqueuniprot != ""]
     
       HTML(as.character(paste("<i class='fa fa-external-link fa-fw'></i>&nbsp;<strong><a href='http://www.uniprot.org/uniprot/",uniqueuniprot,"' target='_blank'>", uniqueuniprot,"</a></strong>", sep="", collapse = "<br/>")))

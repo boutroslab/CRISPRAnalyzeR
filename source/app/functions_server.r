@@ -4051,7 +4051,6 @@ Plot_CDF <- function(data = NULL, filenames = extractedFiles()$gen_names, readty
 check_version <- function(url = "https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/version.txt", proxyurl = NULL, proxyport = NULL, version = NULL)
 {
   ## latest version available and version installed
-  
     # get version info from GitHub
   if(!is.null(proxyurl) && !is.null(proxyport))
   {
@@ -4066,7 +4065,7 @@ check_version <- function(url = "https://rawgit.com/boutroslab/CRISPRAnalyzeR/ma
     {
       # Compare Version Info
       versionfile <- as.numeric(httr::content(versionfile))
-      out <- paste("<span class='text'>Installed Version: <strong>", version , "</strong></span></br><span class='text-success'>The latest version is <strong>", versionfile ,"</strong></span>", sep="")
+      out <- paste("<span class='text'>Installed Version: <strong>", version , "</strong></span></br><span class='text'>The latest version is <strong>", versionfile ,"</strong></span>", sep="")
       # Output Version with notice if new version is available
     } else {
       

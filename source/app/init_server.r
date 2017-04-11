@@ -508,7 +508,7 @@ output$enrichr_active <- shinydashboard::renderValueBox({
 ## Version
 output$version <- shinydashboard::renderValueBox({
 
-  out <- try(check_version(url = config$versionfile, proxyurl = config$car.proxy.url, proxyport = config$car.proxy.port, version = config$version))
+  out <- try(check_version(url = config$versionfile, proxyurl = config$car.proxy.url, proxyport = as.numeric(config$car.proxy.port), version = config$version))
   col = "green"
   if(class(out) == "try-error")
    {
@@ -527,7 +527,7 @@ output$version <- shinydashboard::renderValueBox({
 ## Internet Access
 output$internet_access <- shinydashboard::renderValueBox({
   
-  out <- try(check_version(url = config$versionfile, proxyurl = config$car.proxy.url, proxyport = config$car.proxy.port, version = config$version))
+  out <- try(check_version(url = config$versionfile, proxyurl = config$car.proxy.url, proxyport = as.numeric(config$car.proxy.port), version = config$version))
   if(class(out) == "try-error")
   {
     out <- HTML("<span class=' text'><strong>No Internet Access - Please check the proxy settings</strong></span>")
@@ -557,7 +557,8 @@ output$proxy <- shinydashboard::renderValueBox({
     out <- HTML("<span class=' text'><strong>No Proxy Server is used</strong></span>")
     col = "green"
   } else {
-    out <- HTML("<span class=' text'><strong>Proxy Server is used</strong></span>")
+    out <- HTML("<span class=' text'><strong>Proxy Server is used</strong>
+                </span>")
     col = "green"
   }
   
@@ -571,4 +572,56 @@ output$proxy <- shinydashboard::renderValueBox({
   
   
 })
+
+## Download Log files
+
+output$downloadlogs <- renderUI({
+  
+  # make logs downloadable for docker
+  # is located in /var/log/shiny-server
+  # will have CRISPRAnalyzeR in name
+  config$downloadlogs <- TRUE
+  if(config$downloadlogs)
+  {
+    out <- downloadButton("downloadlogs_button",label = "Download all log files",icon = icon("cloud-download"), width = "250px")
+  } else {
+    out <- ""
+  }
+  
+  return(out)
+  
+})
+
+output$downloadlogs_button <- downloadHandler(
+  filename = paste("CRISPRAnalyzeR", format(startTime, format = "%y-%m-%d"), "logs.zip", sep = "_"),
+  content = function(file) {
+    if( config$downloadlogs ){
+      
+      # get all downloaded stuff
+      # is located in /var/log/shiny-server
+      # and /srv/shiny-server/CRISPRAnalyzer/log
+      # will have CRISPRAnalyzeR in name
+      
+      # make dir
+      system2(command = "mkdir", args = c(file.path(userDir,"logs") ))
+      
+      # copy files to userdir
+      command <- "cp"
+      args1 <- c("-R","/srv/shiny-server/CRISPRAnalyzeR/log/*", file.path(userDir,"logs"))
+      args2 <- c("-R","/var/log/shiny-server/CRISPRAnalyzeR*", file.path(userDir,"logs"))
+      system2(command,args1)
+      system2(command,args2)
+      
+      # make it zip
+      system2("zip", args = c("-r", file.path(userDir,"logs", "CRISPRAnalyzeR_logs.zip"), file.path(userDir,"logs") )) 
+      
+
+      file.copy(file.path(userDir,"logs", "CRISPRAnalyzeR_logs.zip"), file, overwrite = TRUE)
+      
+    } else { NULL }
+  }
+)
+
+
+
 

@@ -136,6 +136,7 @@ tryFunction <- function( expr, place, log = logFile, ID = userID, dir = userDir 
       readcount = "We have problems reading the read count files. Please make sure they meet the formatting criteria.<br/>Please see the help for more information.<br/>",
       biomart = "Gene Identifier handling via the biomaRt service failed.<br/><br/>There might be several reasons for this, e.g. the biomaRt service might be down (in this case, please try again later).<br/>Additional, please check whether you have selected the correct <b>gene identifier ans organism in the 'Set Groups and Identifier' tab</b>.</br>
       Please make sure you select the correct identifiers.<br/><br/>If you do not want gene identifiers to be converted, please select your gene identifier also as the identifier to convert it to.<br/>",
+      checkbiomart = "<strong>Unfortunately, the ENSEMBL biomaRt web-service seems to be offline.</strong></br> Please try again later or ask CRISPRAnalyzeR to not convert gene identifiers.</br> <strong>You can also get the latest ENSEMBL status updates on the <a href='http://http://www.ensembl.info/' target='_blank'>Ensembl Blog</a></strong></br></br>.",
       cpnorm = "It looks like you have duplicate sgRNA identifier in your sgRNA library file.<br/>Please make sure only unique sgRNA identifier are present in your sgRNA fasta library file.",
       pre = "Something went wrong when pre-processing the data.<br/>",
       qc = "Quality Calculations could not be performed on your data.<br/>A reason might be that the read count is 0 for the majority of sgRNAs.<br/>",
@@ -476,6 +477,9 @@ write(paste(userID, ": Dataset:",  info$annoDataset), logFile, append = TRUE)
 
 if( is.null(info$proxy) || is.na(info$proxy) || length(info$proxy) == 0 ) info$proxy <- ""
 options(RCurlOptions = list(proxy = info$proxy, http.version = 1))
+
+# check for availability of biomaRt
+checkbiomaRt <- tryFunction(biomaRt::listEnsembl(host="www.ensembl.org"), "checkbiomart")
 
 tryFunction(
  get.gene.info(extractpattern = cp$miaccs$g.extractpattern,
