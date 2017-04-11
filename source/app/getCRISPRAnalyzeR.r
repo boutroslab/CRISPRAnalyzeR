@@ -34,8 +34,6 @@ tabItem(tabName = "getCRISPRAnalyzeR", align = "center",
                #shiny::tags$hr(width="50%", style="padding-bottom:60px"),
                shiny::tags$br(),
                shiny::tags$div(width=12,
-                                  
-                 
                 # # Version
                 # shiny::tags$h4("Installed Version"),
                 shinydashboard::infoBoxOutput("version"),
@@ -63,6 +61,18 @@ tabItem(tabName = "getCRISPRAnalyzeR", align = "center",
                  # 
                  
                ),
+               shiny::tags$hr(width="50%"),
+               column(width=12,
+                      shiny::tags$br(),
+                      shiny::tags$h4("Download log files for debugging"),
+                      column(width=6, offset = 3,
+                             # download log files
+                             # is set in config, by default is TRUE
+                             uiOutput("downloadlogs"),
+                             shiny::tags$br()
+                      ),
+                      shiny::tags$br()
+                ),
                
                shiny::tags$hr(width="50%", style="padding-bottom:60px"),
                
@@ -78,6 +88,7 @@ tabItem(tabName = "getCRISPRAnalyzeR", align = "center",
                       shiny::tags$img(src="./images/large_h-trans.png", class="img-responsive"),
                       shiny::tags$a(href="https://github.com/boutroslab/crispr-analyzer/wiki/Installation:-How-to-download-and-install-CRISPRAnalyzeR", target="_blank" ,shiny::tags$button(type="button", class="btn btn-primary btn-lg", shiny::icon("download", class = NULL, lib = "font-awesome"), "Download Ready-to-use Docker Container"))
                       )
+               
                
                ),
         column(width=10,offset=1,

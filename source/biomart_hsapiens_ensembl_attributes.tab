@@ -85,9 +85,9 @@ rnacentral	RNACentral ID
 ucsc	UCSC ID
 unigene	Unigene ID
 uniparc	UniParc
-uniprot_sptrembl	UniProt/TrEMBL Accession
-uniprot_swissprot	UniProt/SwissProt Accession
-uniprot_genename	UniProt Gene Name
+uniprotsptrembl	UniProt/TrEMBL Accession
+uniprotswissprot	UniProt/SwissProt Accession
+uniprotgenename	UniProt Gene Name
 uniprot_genename_transcript_name	Uniprot Transcript Name
 wikigene_name	WikiGene Name
 wikigene_id	WikiGene ID
