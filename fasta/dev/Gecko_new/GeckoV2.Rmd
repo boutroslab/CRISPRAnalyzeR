@@ -1,0 +1,158 @@
+---
+title: "GeckoV2 FASTA"
+author: "Jan Winter"
+date: "7 März 2017"
+output: html_document
+---
+
+```{r load-data}
+library(biomaRt)
+library(readr)
+path <- ""
+files <- list(
+  "A" = "Mouse_GeCKOv2_Library_A_09Mar2015.csv",
+  "B" = "Mouse_GeCKOv2_Library_B_09Mar2015.csv"
+)
+
+data <- list()
+for(i in 1:length(files))
+{
+  data[[i]] <- readr::read_csv(file = file.path(path,files[[i]]), col_names = TRUE)
+  data[[i]]$X4 <- NULL
+}
+
+names(data) <- names(files)
+
+
+
+for(i in 1:length(data))
+{
+  # check for gene symbol
+  
+  handling <- biomaRt::useEnsembl(biomart = "ensembl", dataset = "mmusculus_gene_ensembl") #hsapiens_gene_ensembl
+  # print(listFilters(handling))
+  gene.info <- biomaRt::getBM(
+    attributes = c("mgi_symbol","ensembl_gene_id"), #hgnc_symbol
+    filters = "mgi_symbol",
+    values = data[[i]]$gene_id,
+    mart = handling
+  )
+  
+  data[[i]] <- dplyr::left_join(x = data[[i]], y = gene.info, by = c("gene_id" = "mgi_symbol"))
+  
+  # # get hsa-mir-XXX and add XXX to sgRNA identifier
+  # data[[i]]$seq <- apply(data[[i]], 1, FUN = function(x)
+  #   {
+  #     if(grepl(pattern = "hsa-mir.*", x = x[["gene_id"]],perl = TRUE))
+  #     {
+  #       return(paste(x[["seq"]], sub(pattern = "hsa-mir-(.*)", replacement = "\\1", x = x[["gene_id"]], perl = TRUE)))
+  #     } else
+  #     {
+  #       return(x[["seq"]])
+  #     }
+  #   
+  #   })
+  
+  # get NonTargetingControlGuideForHuman_XXX and put XXX to sgRNA identifier
+   # data[[i]]$seq <- apply(data[[i]], 1, FUN = function(x)
+   #  {
+   #    
+   #    if(grepl(pattern = "NonTargetingControlGuideForHuman.*", x = x[["gene_id"]], perl = TRUE))
+   #    {
+   #      return(paste(x[["seq"]], sub(pattern = "NonTargetingControlGuideForHuman_(.*)", replacement = "\\1", x = x[["gene_id"]], perl = TRUE), sep=""))
+   #    } else
+   #    {
+   #      return(x[["seq"]])
+   #    }
+   #    
+   #  })
+  
+  data[[i]]$gene_id <- sapply(data[[i]]$gene_id, FUN = function(x)
+    {
+      if(grepl(x=x, pattern = "NonTargetingControlGuideForMouse.*", perl=TRUE))
+      {
+        return(sub(pattern = "(NonTargetingControlGuideForMouse)_.*", replacement = "\\1", x = x, perl = TRUE))
+      }
+      else {
+        return(x)
+      }
+    })
+  
+   data[[i]]$UID <- sapply(data[[i]]$UID, FUN = function(x)
+    {
+      return(sub(pattern = "^(.+?)_.+$", replacement = "\\1", x = x, perl = TRUE))
+    })
+  
+  # add sgRNA column with unique identifiers
+  data[[i]]$design <- apply(data[[i]],1,function(x)
+    {
+      return(paste(x[["gene_id"]], x[["seq"]], sep="_"))
+    })
+  
+  data[[i]]$designCOMBINE <- apply(data[[i]],1,function(x)
+    {
+      return(paste(x[["gene_id"]], paste(x[["seq"]], x[["UID"]], sep="-"), sep="_"))
+    })
+  
+  
+  
+  # make FASTA and check for uniqueness
+  
+# Make df
+libdf <- data.frame(
+  design = data[[i]]$design,
+  sgrna = toupper(data[[i]]$seq),
+  stringsAsFactors = FALSE
+)
+
+
+# extract identifier
+pattern1 <- expression("^(.+?)_(.+)$")
+libdf$Genes <- sub(pattern = pattern1, replacement = "\\1", x=libdf$design)
+libdf$sgRNAidentifier <- sub(pattern = pattern1, replacement = "\\2", x=libdf$design)
+
+
+# check for uniqueness
+nrow(libdf)
+
+length(unique(libdf$sgrna))
+length(unique(libdf$sgRNAidentifier))
+
+if(any(duplicated(libdf$sgrna)))
+{
+  duplicated <- libdf[duplicated(libdf$sgrna),]
+  # Remove duplicated
+  libdf <- libdf[!duplicated(libdf$sgrna),]
+}
+
+# rewrite sgRNA identifier to use sgrna sequence
+libdf$design <- apply(libdf,1, function(x){
+    
+    return(paste(as.character(x["Genes"]), "_", as.character(x["sgrna"]), sep=""))
+  })
+
+libdf$sgrna <- tolower(libdf$sgrna)
+
+###
+# OPTIONAL: SPlit library in halves
+#regex to identify to which library it is splitted into
+#regex_split <- "^HGLib(.)-.+$"
+# is applied to sgRNA identifier
+
+
+
+###
+
+
+# Write back to FASTA
+
+oligos <- as.list(libdf$sgrna)
+names(oligos) <- libdf$design
+seqinr::write.fasta(sequences = oligos,names = names(oligos) ,file.out = file.path(path,paste(unique(data[[i]]$UID),"_COMBINE",".fasta", sep="")))
+
+}
+
+
+
+
+```
