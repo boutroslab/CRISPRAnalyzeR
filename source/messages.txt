@@ -32,6 +32,7 @@ checkseqfilesprogress5	Checking Readcount Data
 checkseqfiles12	Please make sure your Readcount file <strong>
 checkseqfiles13	</strong> is properly formatted.<br/>Your sgRNA identifier must be separated by a tabular from the read count for this sgRNA.<br/>In this case it seems you have not only digits where we expect read counts (excluding the header).<br/>Please see the help for more information.<br/><br/>
 checkseqfiles14	</strong> is properly formatted.<br/>Your sgRNA identifier must be separated by a tabular from the read count for this sgRNA.<br/>In this case, it seems you have more than two columns that are separated by a tabular.<br/>Please see the help for more information.<br/>
+checkseqfiles15	If you use FASTQ data, please make sure the files are gzipped and carry the file ending .fastq.gz or .fq.gz.</br>
 checklibfileprogress1	Checking sgRNA Library File
 checklibfileprogress2	checking filenames
 checklibfileprogress3	Check Regular Expressions

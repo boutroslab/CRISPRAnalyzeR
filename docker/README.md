@@ -24,43 +24,14 @@ wget https://sourceforge.net/projects/bowtie-bio/files/bowtie/1.2.0/bowtie-1.2-l
 wget http://downloads.sourceforge.net/project/mageck/0.5/mageck-0.5.5.tar.gz
 ```
 
-## Add the CRISPRAnalyzeR source code
-
-Make a new folder **caR-release**
-
-```bash
-mkdir ./caR-release
-```
-
-Now you can just copy the contents of the **source** folder into the **caR-release** folder OR you can clone the source from the GitHub repository.  
-
-### Alternative 1: Copy the contents from the source folder
-
-
-Just copy all files and folders from within the source folder to the caR-release folder and you can proceed **with building the image**.
-
-
-### Alternative 2: Clone from GitHub repository
-If you want to clone it instead of copy the source folder, clone the CRISPRAnalyzeR project into the caR-release-git folder and sync the source to caR-release. 
-The content of caR-release is the source code of CRISPRAnalyzeR and will be used for building the docker image.
-
-```bash
-git clone git@github.com:boutroslab/CRISPRAnalyzeR.git ./caR-release-git
-
-rsync -rav caR-release-git/ caR-release/source --exclude=.git
-```
-
 ## Build the image
 
 Finally build the image, which takes 1-3 hours depending on the computer and network speed.
+
 ```bash
 docker build -t CRISPRAnalyzeR .
 ```
-or squash it
 
-```bash
-docker build -squash -t CRISPRAnalyzeR .
-```
 
 ## Test the image
 

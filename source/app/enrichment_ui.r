@@ -56,16 +56,34 @@ tabItem(tabName = "enrichment", align = "center",
         
         # Page
         fluidRow(
-          column(width = 6, offset=3,
-                 shinydashboard::box(title = NULL, width = 12, solidHeader = FALSE, color = "gray",
-                   
-                                     shiny::tags$h4("Select genes for Gene Set Analysis"),
-                                     uiOutput("enrichmentGene"),
-                                     textInput("enrichmentFDR", label = "FDR cutoff", value = 0.05, placeholder = "FDR cutoff for analysis"),
-                                     helpText("You can add up to 200 genes for the analysis."),
-                                     div(style="display:inline-block;", actionButton("submit_enrichment", "Perform Gene Set Analysis")),
-                                     div(style="display:inline-block;", actionButton("addReport_enr", "Add to Report")),
-                                     shiny::tags$br()
+          column(width = 10, offset=1,
+                 shinydashboard::box(title = "Select Genes", width = 12, solidHeader = TRUE, status = "primary",
+                                     shiny::tags$h4(class="text text-success", "Select individual genes or gene lists"),
+                                     
+                                     textInput("enrichmentFDR", label = "FDR cutoff", value = 0.05, placeholder = "FDR cutoff for analysis", width="30%"),
+                                     
+                                     column(width=6,
+                                            shiny::tags$h4("Select individual genes for Gene Set Analysis"),
+                                            uiOutput("enrichmentGene")
+                                            ),
+                                     column(width=6,
+                                            shiny::tags$h4("Select gene lists for Gene Set Analysis"),
+                                            checkboxInput(inputId = "GSE_selectList",label = "Do you want to use pre-defined gene lists?",value = FALSE),
+                                            shiny::tags$br(),
+                                            # user can select TOP or significant ones of eahc method,
+                                            uiOutput(outputId = "GSE_methods"),
+                                            uiOutput(outputId = "GSE_methods_genes"),
+                                            uiOutput(outputId = "GSE_top")
+                                            ),
+                                     column(width=12,
+                                            helpText("You can add up to 200 genes for the analysis."),
+                                            div(style="display:inline-block;", actionButton("submit_enrichment", "Perform Gene Set Analysis")),
+                                            div(style="display:inline-block;", actionButton("addReport_enr", "Add to Report")),
+                                            shiny::tags$br()
+                                            )
+                                     
+                                     
+                                     
                  )
                  
                  )
@@ -312,22 +330,22 @@ tabItem(tabName = "enrichment", align = "center",
                           )
                           
                           
-                 )#,
-                 # tabPanel("Protein Interactions",
-                 #             column(width=6, offset=3,
-                 #                    helpText("Depending on the selected Threshold, the interaction network can be very large, so please start with the default threshold of 999."),
-                 #                    sliderInput("stringDBthreshold", "Please set the StringDB interaction threshold:",
-                 #                                min = 500, max = 999, value = 999
-                 #                    ),
-                 #                    shiny::tags$br(),
-                 #                    helpText("Please note that the plot requires several minutes of computation time."),
-                 #                    actionButton(inputId = "startstringdb",label = "Calculate protein interactions")
-                 #             ),
-                 #             column(width=12,
-                 #                    shiny::tags$h3("Protein Interactions"),
-                 #                    highchartOutput("stringDBnetwork")
-                 #             )
-                 # )
+                 ),
+                 tabPanel("Protein Interactions",
+                             column(width=6, offset=3,
+                                    helpText("The StringDB allows a maximum of 400 proteins."),
+                                    sliderInput("stringDBthreshold", "Select the maximum number of proteins to be shown",
+                                                 min = 10, max = 400, value = 100
+                                     ),
+                                    shiny::tags$br(),
+                                    helpText("Please note that the plot requires several minutes of computation time depending on the number of interactions.")
+                                    #actionButton(inputId = "startstringdb",label = "Calculate protein interactions")
+                             ),
+                             column(width=12,
+                                    shiny::tags$h3("Protein Interactions"),
+                                    plotOutput("stringDBnetwork",width = "100%",height = "1000px")
+                             )
+                 )
                  
               )
         )

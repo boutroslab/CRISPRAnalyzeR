@@ -338,6 +338,16 @@ These pseudodensity curves are based on normalized, log2-transformed readcount h
 tryFunction(Plot_coverage_readDistro( results$readDistribution, bApp = FALSE )   , place = 'sq')
 ```
 
+### Essential and Non-Essential Density
+
+```{r sq_essentialDensity1}
+tryFunction(Plot_essential_distribution(results$essentialDistribution[[1]], bApp = TRUE, filename = "QualityControl_Essential_Distribution_Untreated")  , place = 'sq')
+```
+
+```{r sq_essentialDensity2}
+tryFunction(Plot_essential_distribution(results$essentialDistribution[[2]], bApp = TRUE, filename = "QualityControl_Essential_Distribution_Treated")  , place = 'sq')
+```
+
 ### Cumulative Frequency for Gene Read Counts
 
 Below you find the log2-transformed, normalized cumulative frequency for each sample's gene read counts.

@@ -224,7 +224,7 @@ stat.edgeR <- function( sorting=FALSE, groups=cp$groups.compare, filename.edger=
   #test <- limma::camera(xglm, index=genesymbollist, design = des, contrast=2)
    
   genes.top <- limma::mroast(xglm, index=genesymbollist,
-                            des, contrast=c(-1,1), adjust.method="holm" ,nrot = 9999, set.statistic="mean")#adjust.method = "BH"
+                            des, contrast=c(-1,1), adjust.method="holm" , nrot = 9999, set.statistic="mean")#adjust.method = "BH"
    
   ## Display sgRNA and GENE results for output similar to DESeq2
   

@@ -116,6 +116,7 @@ results <- list(
         "statsGeneral" = readRDS(file.path(userDir, "statsGeneral.rds")),
         "unmappedGenes" = readRDS(file.path(userDir, "unmappedGenes.rds")),
         "readDistribution" = readRDS(file.path(userDir, "readDistribution.rds")),
+        "essentialDistribution" = readRDS(file.path(userDir, "essentialDistribution.rds")),
         "readDistributionBoxNorm" = readRDS(file.path(userDir, "readDistributionBoxNorm.rds")),
         "CDF_list" = readRDS(file.path(userDir, "CDF_list.rds")),
         "readDepth" = readRDS(file.path(userDir, "readDepth.rds")),

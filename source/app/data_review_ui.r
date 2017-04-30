@@ -107,7 +107,7 @@ tabItem(tabName = "data_review", align = "center",
                  column(width = 6,
                         
                         shiny::tags$h4("Download the sgRNA Re-Evaluation File"),
-                        shiny::helpText("You can download the sgRNA Re-Evaluation file that includes genomic locations and scores for each individual sgRNA or your library."),
+                        shiny::helpText("You can download the sgRNA Re-Evaluation file that includes genomic locations and scores for each individual sgRNA of your library."),
                         downloadButton('downloadSGRNA', 'Download .TSV')#,
                         #shiny::tags$br(),
                         #shiny::tags$h4("Download all data as RDS Objects for R"),

@@ -716,11 +716,11 @@ genomecrispr <- function(genes = genes, database="ensembl", dataset="homo_sapien
     shiny::incProgress(amount = 0.2)
     
     # Check if meaningful data comes back
-    if(!grepl(pattern =".*pubmed.*", x = httr::content(r), perl=TRUE ))
+    if(grepl(pattern =".*pubmed.*", x = httr::content(r), perl=TRUE ))
     {
-      output$sgrnas2 <- NA
-    } else {
       output$sgrnas2 <- httr::content(r) %>% lapply(function(x) list(log2fc=x$log2fc, pubmed=x$pubmed, condition=x$condition, score=x$score, scoredist=x$scoredist, hit=x$hit)) %>% bind_rows
+    } else {
+      output$sgrnas2 <- NA 
       
       #if()
       

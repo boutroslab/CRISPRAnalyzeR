@@ -25,32 +25,45 @@ extract_fastq <- reactiveValues("needed" = FALSE)
 # also set extract_fastq
 observe({
   status$seqFiles
-  if( is.null(input$seqFiles_upload$name) || is.na(input$seqFiles_upload$name) || 
-    length(input$seqFiles_upload$name) == 0 ) {
-    extract_fastq$needed <- FALSE
-    shinyjs::disable("seqFiles_regexTarget")
-    shinyjs::disable("seqFiles_rev")
-    shinyjs::disable("seqFiles_bt2Sens")
-    shinyjs::disable("seqFiles_bt2quali")
-    shinyjs::hide("fastqsettings")
-    
-    
-  } else if( any(grepl(".*\\.fastq\\.gz$", tolower(input$seqFiles_upload$name), perl = TRUE)) ){
-    extract_fastq$needed <- TRUE
-    shinyjs::enable("seqFiles_regexTarget")
-    shinyjs::enable("seqFiles_rev")
-    shinyjs::enable("seqFiles_bt2Sens")
-    shinyjs::enable("seqFiles_bt2quali")
-    shinyjs::show("fastqsettings")
-    
+  
+  if(status$seqFiles == TRUE && status$libFile == TRUE && status$extract == TRUE)
+  {
+    # if everything is ready for extraction, we do not change anything anymore
   } else {
-    extract_fastq$needed <- FALSE
-    shinyjs::disable("seqFiles_regexTarget")
-    shinyjs::disable("seqFiles_rev")
-    shinyjs::disable("seqFiles_bt2Sens")
-    shinyjs::disable("seqFiles_bt2quali")
-    shinyjs::hide("fastqsettings")
-  } 
+    if( is.null(input$seqFiles_upload$name) || is.na(input$seqFiles_upload$name) || length(input$seqFiles_upload$name) == 0 ) {
+      extract_fastq$needed <- FALSE
+      shinyjs::disable("seqFiles_regexTarget")
+      shinyjs::disable("seqFiles_rev")
+      shinyjs::disable("seqFiles_bt2Sens")
+      shinyjs::disable("seqFiles_bt2quali")
+      shinyjs::disable("custom_fastqregex")
+      shinyjs::disable("override_low_alignment")
+      shinyjs::hide("fastqsettings")
+      
+      
+    } else if( any(grepl(".*\\.fastq\\.gz$", tolower(input$seqFiles_upload$name), perl = TRUE)) ){
+      extract_fastq$needed <- TRUE
+      shinyjs::enable("seqFiles_regexTarget")
+      shinyjs::enable("seqFiles_rev")
+      shinyjs::enable("seqFiles_bt2Sens")
+      shinyjs::enable("seqFiles_bt2quali")
+      shinyjs::enable("custom_fastqregex")
+      shinyjs::enable("override_low_alignment")
+      shinyjs::show("fastqsettings")
+      
+    } else {
+      extract_fastq$needed <- FALSE
+      shinyjs::disable("seqFiles_regexTarget")
+      shinyjs::disable("seqFiles_rev")
+      shinyjs::disable("seqFiles_bt2Sens")
+      shinyjs::disable("seqFiles_bt2quali")
+      shinyjs::disable("custom_fastqregex")
+      shinyjs::disable("override_low_alignment")
+      shinyjs::hide("fastqsettings")
+    } 
+  }
+  
+  
 })
 
 
@@ -60,7 +73,13 @@ extract <- reactive({
   status$extract <- FALSE
   
   needed <- extract_fastq$needed
-  target <- input$seqFiles_regexTarget
+  # get fastq regex or custom regex
+  if(input$seqFiles_regexTargetcustom != "")
+  {
+    target <- input$seqFiles_regexTargetcustom
+  } else {
+    target <- input$seqFiles_regexTarget
+  }
   
   #Calculate bt2 quality for perfect
   # M{20,21}$ -> perfect
@@ -131,13 +150,22 @@ observeEvent(input$submit_seqFiles, {
   write(paste(userID, ": clicked on submit_seqFiles at", Sys.time()), logFile, append = TRUE)
   
   if( status$seqFiles == TRUE && status$libFile == TRUE && status$extract == TRUE){
-    shinyjs::disable("submit_seqFiles") 
+    shinyjs::disable("submit_seqFiles")
+    
+    shinyjs::disable("libFile_upload")
+    shinyjs::disable("seqFiles_upload")
+    
     shinyjs::disable("reset_data") 
     shinyjs::disable("seqFiles_regexTarget")
     shinyjs::disable("seqFiles_rev")
     shinyjs::disable("seqFiles_bt2Sens")
     shinyjs::disable("seqFiles_bt2quali")
+    shinyjs::disable("custom_fastqregex")
     shinyjs::disable("libFile_regex")
+    shinyjs::disable("libFile_regexCustom")
+    shinyjs::disable("custom_libregex")
+    shinyjs::disable("override_low_alignment")
+    
     shinyjs::disable("download_readcounts")
     shinyjs::disable("download_fastq_report")
     
@@ -501,9 +529,24 @@ observeEvent(input$reset_data, {
   status$results <- FALSE
   error$extractedFiles <- ""
   shinyjs::enable("libFile_regex")
+  shinyjs::enable("libFile_regexCustom")
+  shinyjs::enable("custom_libregex")
   shinyjs::enable("submit_seqFiles")
   shinyjs::enable("startAnalysis")
   shinyjs::enable("submit_groups")
+  
+  shinyjs::enable("libFile_upload")
+  shinyjs::enable("seqFiles_upload")
+
+  shinyjs::enable("reset_data") 
+  shinyjs::enable("seqFiles_regexTarget")
+  shinyjs::enable("seqFiles_rev")
+  shinyjs::enable("seqFiles_bt2Sens")
+  shinyjs::enable("seqFiles_bt2quali")
+  shinyjs::enable("custom_fastqregex")
+  shinyjs::enable("override_low_alignment")
+  shinyjs::disable("download_readcounts")
+  shinyjs::disable("download_fastq_report")
   
   # Remove files if present
   command <- "rm"
@@ -684,6 +727,36 @@ output$download_readcounts <- downloadHandler(
   }
 )
 
+
+output$download_singlereadcount <- downloadHandler(
+  #shiny::validate(
+  #  shiny::need(extractedFiles()$paths, message=FALSE)
+  #), 
+  filename = function(file) {
+    paste('Readcount_',userID,'.tar.gz', sep="")
+  },
+  
+  content = function(con) {
+    
+    # generate read count single tab data from environment
+    # this will only be present after the analysis
+    
+    if(status$results == TRUE)
+    {
+      
+      # get read count data from results file
+      
+      
+      gzipped <- try(system2("tar", args = arguments))
+      
+      file.copy(file.path(userDir, paste("Readcount_",userID,".tar.gz", sep="")), con)
+    } else {
+      return(NULL)
+    }
+    
+    
+  }
+)
 
 ### Download of FASTQ Report
 

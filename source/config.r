@@ -6,7 +6,7 @@
 config <- list()
 
 # Version
-config[["version"]] <- 1.141
+config[["version"]] <- 1.16
 config[["versionfile"]] <- "https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/version.txt"
 
 # maximum upload size in MB
@@ -104,7 +104,7 @@ config[["biomart.geneid"]] <- list(
   "hgnc_id",
   "hgnc_symbol",
   "unigene",
-  "uniprot_genename",
+  "uniprot_gn",
   "mgi_symbol"
 )
 names(config[["biomart.geneid"]]) <- biomart.attributes[biomart.attributes$name %in% config[["biomart.geneid"]],"description"]

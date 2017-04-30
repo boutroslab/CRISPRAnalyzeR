@@ -82,6 +82,25 @@ tabItem(tabName = "sq_stats", align = "center",
           )
         ),
         
+        br(),
+        
+        fluidRow(
+          column(width=12,
+                 shiny::tags$h3("Essential Genes"),
+                 column(width=6,
+                        shiny::tags$h4("Untreated Group", class="text text-success"),
+                        shiny::tags$div(width="100%", highchartOutput("sqCoverage_essential_plot1")),
+                        helpText("Click on legend to exclude/include data. Drag rectangle to zoom.")
+                        ),
+                 column(width=6,
+                        shiny::tags$h4("Treated Group", class="text text-success"),
+                        shiny::tags$div(width="100%", highchartOutput("sqCoverage_essential_plot2")),
+                        helpText("Click on legend to exclude/include data. Drag rectangle to zoom.")
+                 )
+                 
+          )
+        ),
+        
         "Normalized Overview",
         shiny::tags$p(class="lead","Below you find the normalized, log2-transformed read count distribution for each sample in a boxplot representation.", br()
         ),

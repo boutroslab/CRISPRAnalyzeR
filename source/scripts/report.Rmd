@@ -11,7 +11,7 @@ pandoc_args: [
 
 # Screen Information
 
-![](../www/images/CRISPRAnalyzR_logo5.png "CRISPRAnalzyeR Report")
+![](../../www/images/CRISPRAnalyzR_logo5.png "CRISPRAnalzyeR Report")
 
 **Date of Report Generation:** "`r format(Sys.time(), '%d %B, %Y')`"
 

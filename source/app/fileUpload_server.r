@@ -66,12 +66,20 @@ seqFiles <- eventReactive(input$submit_seqFiles, {
   
   names <- input$seqFiles_upload$name
   paths <- input$seqFiles_upload$datapath
-  regex <- input$seqFiles_regexTarget
+  # get fastq regex or custom regex
+  if(input$seqFiles_regexTargetcustom != "")
+  {
+    regex <- input$seqFiles_regexTargetcustom
+  } else {
+    regex <- input$seqFiles_regexTarget
+  }
+  
   
   needed <- extract_fastq$needed
   
   test <- Check_extract(regex, needed, messages = config$messages)
   if( test$error == TRUE ){
+    status$seqFiles <- FALSE
     error$extract <- test$message
     return()
   }
@@ -84,9 +92,10 @@ seqFiles <- eventReactive(input$submit_seqFiles, {
     gen_names <- c(gen_names, input[[paste0("seqFile_gen_name_", i)]])
   }
     #as.numeric(config[["car.bt2.threads"]])
-  test <- Check_seqFiles(names, paths, gen_names, regex, messages = config$message, threads = 1, userdir = userDir, ID = userID)
+  test <- Check_seqFiles(names, paths, gen_names, regex, messages = config$message, threads = 1, userdir = userDir, ID = userID, overridealignment = input$override_low_alignment)
   
   if( test$error == TRUE ){
+    status$seqFiles <- FALSE
     error$seqFiles <- test$message
     return()
   }
@@ -106,6 +115,9 @@ observeEvent(error$seqFiles, {
     shinyBS::toggleModal(session, "seqfileerror", toggle = "open")
   }
   
+  # disbale sgRNA re-evaluation button
+  shinyjs::disable(id="restartevaluation")
+  
 })
 
 #### create error Messages
@@ -118,8 +130,31 @@ output$seqFiles_error <- renderUI(
 observe(seqFiles())
 
 
+observe(
+  if(input$custom_fastqregex == TRUE)
+  {
+    shinyjs::show(id = "customfastqregex")
+    shinyjs::enable(id = "seqFiles_regexTargetcustom")
+    shinyjs::disable("seqFiles_regexTarget")
+  } else {
+    shinyjs::hide(id = "customfastqregex")
+    shinyjs::disable(id = "seqFiles_regexTargetcustom")
+    shinyjs::enable("seqFiles_regexTarget")
+  }
+)
 
-
+observe(
+  if(input$custom_libregex == TRUE)
+  {
+    shinyjs::show(id = "customlibregex")
+    shinyjs::enable(id = "libFile_regexCustom")
+    shinyjs::disable("libFile_regex")
+  } else {
+    shinyjs::hide(id = "customlibregex")
+    shinyjs::disable(id = "libFile_regexCustom")
+    shinyjs::enable("libFile_regex")
+  }
+)
 
 
 
@@ -146,7 +181,14 @@ libFile <- eventReactive(input$submit_seqFiles, {
   
   name <- input$libFile_upload$name
   path <- input$libFile_upload$datapath
-  regex <- input$libFile_regex
+  
+  # get fastq regex or custom regex
+  if(input$libFile_regexCustom != "")
+  {
+    regex <- input$libFile_regexCustom
+  } else {
+    regex <- input$libFile_regex
+  }
 
   test <- Check_libFile(name, path, regex, messages = config$message)
 
@@ -192,7 +234,15 @@ observe({
 #### visualize regex
 output$libFile_upload_example <- renderUI({
   file <- input$libFile_upload$datapath
-  pat <- input$libFile_regex
+  
+  # get fastq regex or custom regex
+  if(input$libFile_regexCustom != "")
+  {
+    pat <- input$libFile_regexCustom
+  } else {
+    pat <- input$libFile_regex
+  }
+ 
   
   # n = lines to show, colors will be recycled
   n <- 5

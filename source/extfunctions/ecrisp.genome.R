@@ -5,7 +5,7 @@ ecrisp.genome <- function(organism = "homo_sapiens",
                             host = "www.ensembl.org",
                             biomart = TRUE,
                             local.genome.release = NULL,
-                            timeout = 6000,
+                            timeout = 60000,
                             sleep = 10,
                             unspecific_bases = 1,
                             edit_distance = 2,
@@ -119,6 +119,7 @@ time.timeout <- time+(timeout*1000)
 
 # Working URL
 resultsfile <- paste("http://www.e-crisp.org/E-CRISP/workdir/",folder,"/results.tab",sep="",collapse="")
+print(resultsfile)
 
 while(time < time.timeout )
 {

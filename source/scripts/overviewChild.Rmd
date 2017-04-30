@@ -51,7 +51,7 @@ HTML(as.character(unique(indepth_geneOverview$data$description)))
                           <tr>
                    <td><strong>Uniprot ID</strong></td>
                           <td>')
-uniqueuniprot <- unique(indepth_geneOverview$data$uniprot_swissprot)
+uniqueuniprot <- unique(indepth_geneOverview$data$uniprotswissprot)
 uniqueuniprot <- uniqueuniprot[uniqueuniprot != ""]
 HTML(as.character(paste("<i class='fa fa-external-link fa-fw'></i>&nbsp;<strong><a href='http://www.uniprot.org/uniprot/",uniqueuniprot,"' target='_blank'>", uniqueuniprot,"</a></strong>", sep="", collapse = "<br/>")))
                   HTML('</td>
@@ -265,38 +265,165 @@ if( !is.null(res) && length(res) > 0 && class(res) != "character" ){
 [GenomeCRISPR](http://genomecrispr.dkfz.de/#!/) is a database curating high-throughput CRISPR/Cas screens. 
 If the gene of interest was targeted, or one of the sgRNAs was used in a published screen before it will be shown here.
 
+#### Overview
+
+```{r}
+if(!is.na(indepth_geneOverview$genomecrispr$sgrnas))
+{
+    # Screening conditions
+  screencond <- indepth_geneOverview$genomecrispr$sgrnas %>% select(pubmed, condition,cellline) %>% distinct() %>% group_by(condition) %>% summarise(N = length(condition))
+      
+      gene <- indepthOverviewGene
+      title <- "Screening Conditions"
+      subtitle <- paste(gene, "was screened in the following conditions according to GenomeCRISPR", sep= " ")
+      export = TRUE
+      plotx = "condition"
+      
+      plot <- try(genomecrispr_pie(data = screencond, gene, title, subtitle, export = TRUE, plotx))
+      
+      if(class(plot) == "try-error")
+      {
+        Plot_blank("hc", msg = "No Data available.")
+      } else
+      {
+        plot
+      }
+      
+      # hits
+      hits <- indepth_geneOverview$genomecrispr$sgrnas %>% select(pubmed, condition,cellline, hit) %>% distinct() %>% group_by(hit) %>% summarise(N = length(hit))
+      # replace values
+      hits <- mutate(hits, hit=replace(hit, is.na(hit), "no information provided")) %>% mutate(hit=replace(hit, hit == "false", "no phenotype observed")) %>% mutate(hit=replace(hit, hit == "true", "phenotype observed"))
+      
+      gene <- indepthOverviewGene
+      title <- "Phenotype Observation"
+      subtitle <- paste(gene, "showed phenotypic effects according to GenomeCRISPR", sep= " ")
+      export <- TRUE
+      plotx <- "hit"
+      
+      plot <- try(genomecrispr_pie(data = hits, gene, title, subtitle, export = TRUE, plotx))
+      
+      if(class(plot) == "try-error")
+      {
+        Plot_blank("hc", msg = "No Data available.")
+      } else
+      {
+      plot
+      }
+      
+      # cell lines
+      
+      cells <-  indepth_geneOverview$genomecrispr$sgrnas %>% select(pubmed, condition,cellline, hit) %>% distinct()  %>% group_by(cellline) %>% summarise(N = length(cellline))
+      
+      gene <- indepthOverviewGene 
+      title <- "Screened Cell Lines"
+      subtitle <- paste(gene, "was used in the following cell lines according to GenomeCRISPR", sep= " ")
+      export <- TRUE
+      plotx <- "cellline"
+      
+      plot <- try(genomecrispr_pie(data = cells, gene, title, subtitle, export = TRUE, plotx))
+      
+      if(class(plot) == "try-error")
+      {
+        Plot_blank("hc", msg = "No Data available.")
+      } else
+      {
+        plot
+      }
+      
+  
+      # screened conditions
+      # replace anything with viability and resistance to just viability and resistance
+      data <- indepth_geneOverview$genomecrispr$sgrnas
+      data <- mutate(data, condition=replace(condition, grepl(pattern = ".*resistance.*",x = condition), "resistance")) %>% mutate(condition=replace(condition, grepl(x = condition, pattern = ".*viability.*"), "viability"))
+      
+      screencond <- data %>% select(pubmed, condition,cellline) %>% distinct() %>% group_by(condition) %>% summarise(N = length(condition))
+      
+      gene <- input$indepthOverviewGene
+      title <- "Screening Conditions"
+      subtitle <- paste(gene, "was screened in the following conditions according to GenomeCRISPR", sep= " ")
+      export = TRUE
+      plotx = "condition"
+      
+      plot <- try(genomecrispr_pie(data = screencond, gene, title, subtitle, export = TRUE, plotx))
+      
+      if(class(plot) == "try-error")
+      {
+        Plot_blank("hc", msg = "No Data available.")
+      } else
+      {
+        plot
+      }
+      
+      # hits
+       hits <- indepth_geneOverview$genomecrispr$sgrnas %>% select(pubmed, condition,cellline, hit) %>% filter(hit == "true") %>% distinct() %>% group_by(condition) %>% summarise(N = length(condition))
+      # replace values
+      #hits <- mutate(hits, hit=replace(hit, is.na(hit), "no information provided")) %>% mutate(hit=replace(hit, hit == "false", "no phenotype observed")) %>% mutate(hit=replace(hit, hit == "true", "phenotype observed"))
+      
+      if(nrow(hits) == 0)
+      {
+        # nothing showed up as a hit
+        Plot_blank("hc", msg = "No phenotypes observed.")
+      }
+      
+      gene <- input$indepthOverviewGene
+      title <- "Phenotype Observation"
+      subtitle <- paste(gene, "showed phenotypic effects according to GenomeCRISPR", sep= " ")
+      export <- TRUE
+      plotx <- "condition"
+      
+      plot <- try(genomecrispr_pie(data = hits, gene, title, subtitle, export = TRUE, plotx))
+      
+      if(class(plot) == "try-error")
+      {
+        Plot_blank("hc", msg = "No Data available.")
+      } else
+      {
+        plot
+      }
+      
+      
+}
+
+```
+
+
 #### Reported Gene
 
 The gene of interest has already been assayed in the following published CRISPR screens.
 
 ```{r}
 write(paste(userID, ": writing overviewChild - Published Screens"), logFile, append = TRUE) 
-gcrispr_gene_header <- '<table class="table">
-<thead>
-  <tr>
-  <th style="width:10%;">Pubmed ID</th>
-  <th style="width:20%;">Title</th>
-  <th style="width:70%;">Abstract</th>
-  </tr>
-  </thead>
-  <tbody>'
-  
-gcrispr_gene_footer <- '</tbody>
-  </table>'
-  
-gcrispr_gene_body <- ""
-  # make table
-for( i in 1:length(indepth_geneOverview$genomecrispr$genes) ){
-gcrispr_gene_body2 <- paste( '<tr>
-                                 <td style="width:10%;">
-                                 <a href="http://www.ncbi.nlm.nih.gov/pubmed/', indepth_geneOverview$genomecrispr$genes[[i]]$pubmed, '" target="_blank">', indepth_geneOverview$genomecrispr$genes[[i]]$pubmed, '</a>
-                                 </td>
-                                 <td style="width:20%;">', indepth_geneOverview$genomecrispr$genes[[i]]$title, '</td>
-                                 <td style="width:70%;">', indepth_geneOverview$genomecrispr$genes[[i]]$abstract,'</td>
-                                 </tr>', sep="")
-    gcrispr_gene_body <- paste0(gcrispr_gene_body, gcrispr_gene_body2)
+if(!is.na(indepth_geneOverview$genomecrispr$sgrnas2))
+{
+  gcrispr_gene_header <- '<table class="table">
+  <thead>
+    <tr>
+    <th style="width:10%;">Pubmed ID</th>
+    <th style="width:20%;">Title</th>
+    <th style="width:70%;">Abstract</th>
+    </tr>
+    </thead>
+    <tbody>'
+    
+  gcrispr_gene_footer <- '</tbody>
+    </table>'
+    
+  gcrispr_gene_body <- ""
+    # make table
+  for( i in 1:length(indepth_geneOverview$genomecrispr$genes) ){
+  gcrispr_gene_body2 <- paste( '<tr>
+                                   <td style="width:10%;">
+                                   <a href="http://www.ncbi.nlm.nih.gov/pubmed/', indepth_geneOverview$genomecrispr$genes[[i]]$pubmed, '" target="_blank">', indepth_geneOverview$genomecrispr$genes[[i]]$pubmed, '</a>
+                                   </td>
+                                   <td style="width:20%;">', indepth_geneOverview$genomecrispr$genes[[i]]$title, '</td>
+                                   <td style="width:70%;">', indepth_geneOverview$genomecrispr$genes[[i]]$abstract,'</td>
+                                   </tr>', sep="")
+      gcrispr_gene_body <- paste0(gcrispr_gene_body, gcrispr_gene_body2)
+  }
+  HTML(paste0(gcrispr_gene_header, gcrispr_gene_body, gcrispr_gene_footer))
+} else {
+  HTML("No Data available")
 }
-HTML(paste0(gcrispr_gene_header, gcrispr_gene_body, gcrispr_gene_footer))
 ```
 
 #### Reported Phenotype

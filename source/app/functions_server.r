@@ -78,7 +78,7 @@ GetCaptures <- function(s, pat){
 #
 
 
-Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$messages,  threads = as.numeric(config$car.bt2.threads), userdir = userDir, ID = userID) {
+Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$messages,  threads = as.numeric(config$car.bt2.threads), userdir = userDir, ID = userID, overridealignment = FALSE) {
   out <- list(error = FALSE, message = "")
 
   withProgress(value = 0.1, message = messages$checkseqfilesprogress1$String, {
@@ -98,7 +98,7 @@ Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$mes
   }
   
   
-  # no dublicates in names
+  # no duplicates in names
   if( anyDuplicated(names) ){
     out$error <- TRUE
     out$message <- paste0(out$message,messages$checkseqfiles3$String) 
@@ -118,6 +118,20 @@ Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$mes
     out$message <- paste0(out$message,messages$checkseqfiles5$String) 
     #out$message <- paste0(out$message, "Please only upload compressed FASTQ files. Compression is usually done using the gzip command. <br/> By default, your sequencing company should provide you with already compressed files (*.fastq.gz).<br/>")
   }
+    
+  # if fastq, it must be gzipped
+  if( any(grepl(".*(\\.txt.gz)$", tolower(names), perl = TRUE)) ){
+    out$error <- TRUE
+    out$message <- paste0(out$message,messages$checkseqfiles15$String) 
+    #out$message <- paste0(out$message, "Please only upload compressed FASTQ files. Compression is usually done using the gzip command. <br/> By default, your sequencing company should provide you with already compressed files (*.fastq.gz).<br/>")
+  }
+  
+  # # check if it is gzip
+  #   for(i in 1:length(paths))
+  #   {
+  #     checkgz <- system2(command = "file", args = c(paths[i]))
+  #   }
+  
   
   # no empty gen_name entries
   if( any(gen_names == "") ){
@@ -234,7 +248,7 @@ Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$mes
          
          
          
-         if(any(out$extractRatio < 30, na.rm = TRUE)) # give out an error if ratio is bad, this will be stored as additional information and displayed in FASTQ Quality and DATA Review
+         if(any(out$extractRatio < 30, na.rm = TRUE) && overridealignment == FALSE) # give out an error if ratio is bad, this will be stored as additional information and displayed in FASTQ Quality and DATA Review
          {
            
            out$error <- TRUE
@@ -1576,6 +1590,81 @@ Plot_coverage_readDistroBox <- function( data, bApp = TRUE, type = "sgRNA", file
   return(hc)
 }
 
+##################################
+#### Plot_essential_distribution ####
+##################################
+# function to plot read distribution of all datasets with highcharter
+# necessary argument is data
+# arguments   data  data.frame of results$readDistribution
+#             bApp  bool TRUE will adjust appearance for shiny app
+# value       highcharter plot object
+Plot_essential_distribution <- function( data, bApp = TRUE , filename = NULL){
+  
+  tit <- "Normalized log2 Read Count Density"
+  
+  if( bApp == TRUE ){
+    ex <- TRUE
+    #tit <- ""
+    
+  } else {
+    ex <- TRUE # subsequent correction
+  }
+  
+  df <- data
+  
+  # Ds <- list()
+  # Ds2 <- list()
+  # for( i in 1:length(df) ){
+  #   d <- diff(df[[i]][["essentials"]]$breaks)
+  #   Ds[[i]] <- list_parse(dplyr::data_frame(x = df[[i]][["essentials"]]$mids, y = df[[i]][["essentials"]]$counts, 
+  #                                           name = sprintf("Readcount from: %s to %s", 
+  #                                                          round(2^(df[[i]][["essentials"]]$mids - d / 2), digits = 0), 
+  #                                                          round(2^(df[[i]][["essentials"]]$mids + d / 2)), digits = 0)))
+  # }
+  # 
+  # for( i in 1:length(df) ){
+  #   d2 <- diff(df[[i]][["nonessentials"]]$breaks)
+  #   Ds2[[i]] <- list_parse(dplyr::data_frame(x = df[[i]][["nonessentials"]]$mids, y = df[[i]][["nonessentials"]]$counts, 
+  #                                           name = sprintf("Readcount from: %s to %s", 
+  #                                                          round(2^(df[[i]][["nonessentials"]]$mids - d2 / 2), digits = 0), 
+  #                                                          round(2^(df[[i]][["nonessentials"]]$mids + d2 / 2)), digits = 0)))
+  # }
+  
+  hc <- highcharter::highchart() %>%
+    highcharter::hc_chart(type = "area", zoomType = "x") %>%
+    highcharter::hc_title(text = tit) %>%
+    highcharter::hc_plotOptions(area = list(dashStyle = "Dash", 
+                                            marker = list(enabled = FALSE, symbol = "circle", radius = 2, 
+                                                          states = list(hover = list(enabled = TRUE))))) %>%
+    highcharter::hc_xAxis(title = list(text = "log2 Readcount"), align = "middle", crosshair = TRUE) %>%
+    highcharter::hc_yAxis(title = list(text = "Density"), align = "left", crosshair = TRUE) %>%
+    highcharter::hc_exporting(enabled = ex,
+                              printMaxWidth = 3000,
+                              scale=8,
+                              filename = filename,
+                              formAttributes = list(target = "_blank")) %>%
+    highcharter::hc_tooltip(enabled=FALSE) %>%
+    highcharter::hc_size(height="800px")
+  
+  #if( length(Ds) <= 4 ){
+  hc <- highcharter::hc_add_theme(hc, hc_theme_google2())
+  #}
+  
+  for( i in 1:length(df) ){
+    df2 <- df[i]
+    hc <- highcharter::hc_add_series(hc, name = paste(attr(df, which = "name")[i], "essentials", sep=" "), data = df2[[1]]$essentials, 
+                                     type = "area", fillOpacity = 0.3)
+    hc <- highcharter::hc_add_series(hc, name = paste(attr(df, which = "name")[i], "non-essentials", sep=" "), data = df2[[1]]$nonessentials, 
+                                     type = "area", fillOpacity = 0.3)
+  }
+  # for( i in 1:length(Ds2) ){
+  #   hc <- highcharter::hc_add_series(hc, name = paste(attr(df, which = "name")[i], "non-essential", sep=" "), data = Ds2[[i]], 
+  #                                    type = "area", fillOpacity = 0.3)
+  # }
+  
+  return(hc)
+}
+
 
 
 
@@ -2294,7 +2383,7 @@ Plot_performance <- function(data = NULL, thresh = NULL, bApp = TRUE,  method = 
     file <- filename
     
     p <- Plot_scatter( list(rand, hlight), c("not significant", "significant"), zoom = "x", 
-                       col = c("rgba( 0 , 0 , 0 , 0.3)", "#D50F25"), tooltip = tt, turboT = 12000,
+                       col = c("rgba( 0 , 0 , 0 , 0.3)", "#D50F25"), tooltip = tt, turboT = 0,
                        xLab = xl, yLab = yl, title = tit, subtitle = sub, export = ex , filename = file, crosshair = c(TRUE,TRUE))
     
   }
@@ -2865,7 +2954,7 @@ Table_blank <- function( msg = config$messages$noanalysisrunyet$String, col = "#
 Table_DT <- function( data, colNames = NULL, bRownames = FALSE, style = "default", class = "display", 
     dom = "flrtip", ordering = NULL, alignment = list(centre = NULL, justify = NULL, left = NULL), 
     formatCurr = NULL, formatPerc = NULL, formatRoun = NULL, buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
-    pageLen = 15, bScroll = FALSE, filename = "*" ){
+    pageLen = 15, bScroll = TRUE, filename = "*" ){
   
   if( !is.null(colNames) ) names(data) <- colNames
   if( !is.null(buttons) ) dom <- paste0("B", dom)
@@ -3829,25 +3918,34 @@ getenrichr <- function(gene.list = NULL, dataset=NULL, database = config$car.bm.
 ## get StringDB information ###
 ###############################
 
-protein_interactions <- function(genes = NULL, graphplot = NULL, mapped = NULL, interactions = NULL, stringdb = NULL,database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", host="www.ensembl.org", new.identifier = annos()$IDnew , deseq2 = as.data.frame(results()$deseq$data$genes), threshold = 999, title = "", subtitle = "", database_path = config$database_path, interactive=TRUE, filename = "", cutscore = 100){
+protein_interactions <- function(genes = NULL, graphplot = NULL, mapped = NULL, interactions = NULL, stringdb = NULL,database="ENSEMBL_MART_ENSEMBL", dataset="homo_sapiens", host="www.ensembl.org", new.identifier = annos()$IDnew , deseq2 = as.data.frame(results()$deseq$data$genes), threshold = 999, title = "", subtitle = "", database_path = config$database_path, interactive=TRUE, filename = "", cutscore = 150){
   if(is.null(genes) )
   {
     stop("No gene provided.")
   }
   
-  if(dataset == "homo_sapiens") { dataset <- "hsapiens_gene_ensembl"}
-  if(dataset == "mus_musculus") { dataset <- "mmusculus_gene_ensembl"}
-  if(dataset == "dario_rerio") { dataset <- "drerio_gene_ensembl"}
+  if(dataset == "homo_sapiens") {
+    dataset <- "hsapiens_gene_ensembl"
+    species_string <- 9606
+    }
+  if(dataset == "mus_musculus") {
+    dataset <- "mmusculus_gene_ensembl"
+    species_string <- 10090
+    }
+  if(dataset == "dario_rerio") {
+    dataset <- "drerio_gene_ensembl"
+    species_string <- 7955
+    }
   
   #print(genes)
   #print(str(genes))
-  
+  library(STRINGdb)
   if(is.null(graphplot) || is.null(stringdb))
   {
     # set up stringDB
-    string_db <- STRINGdb::STRINGdb$new( version="10", species=9606 , score_threshold=400, input_directory=database_path )
-    graphplot <- string_db$get_graph()
-    graphplot <- igraph::simplify(graphplot, remove.multiple=TRUE, remove.loops=TRUE)
+    string_db <- STRINGdb::STRINGdb$new( version="10", species=species_string , score_threshold=300, input_directory=database_path )
+    #graphplot <- string_db$get_graph()
+    #graphplot <- igraph::simplify(graphplot, remove.multiple=TRUE, remove.loops=TRUE)
   }
   
   shiny::incProgress(amount = 0.1, detail = "Generate StringDB (might take a while)")
@@ -3855,46 +3953,47 @@ protein_interactions <- function(genes = NULL, graphplot = NULL, mapped = NULL, 
   if(is.null(mapped))
   {
     # map genes provided
-    genes <- string_db$mp(unique(genes))
+    #genes <- string_db$mp(unique(genes))
+    interactions <- string_db$map(data.frame("genes" =  genes),"genes", removeUnmappedRows = TRUE)
   } else {
-    genes <- mapped
+    interactions <- mapped
   }
   
   
   shiny::incProgress(amount = 0.1, detail = "Get Involved Proteins")
   
-  if(is.null(interactions))
-  {
-    # get neighbors and the interactions
-    neighbors <- string_db$get_neighbors( c(genes) )
-    shiny::incProgress(amount = 0.1, detail = "Get Protein Interactions")
-    interactions <- string_db$get_interactions( c(neighbors, genes) )
-  }
+  # if(is.null(interactions))
+  # {
+  #   # get neighbors and the interactions
+  #   neighbors <- string_db$get_neighbors( c(genes) )
+  #   shiny::incProgress(amount = 0.1, detail = "Get Protein Interactions")
+  #   interactions <- string_db$get_interactions( c(neighbors, genes) )
+  # }
   
   
   #print(str(interactions))
   
   # filter those interactions in which the protein is directly involved
-  interactions1 <- dplyr::filter(interactions, from == genes)
-  interactions2 <- dplyr::filter(interactions, to == genes)
-
-  
-  
-  interactions.all <- dplyr::anti_join(interactions1, interactions2, by = "from")
-  
-  #print(str(interactions.all))
-  
-  interactions2 <- dplyr::anti_join(interactions1, interactions2, by = "to")
-  
-  shiny::incProgress(amount = 0.1)
-  
-  interactions.all <- dplyr::bind_rows(interactions.all, interactions2)
-  
-  #print(str(interactions.all))
-  
+  # interactions1 <- dplyr::filter(interactions, from == genes)
+  # interactions2 <- dplyr::filter(interactions, to == genes)
+  # 
+  # 
+  # 
+  # interactions.all <- dplyr::anti_join(interactions1, interactions2, by = "from")
+  # 
+  # print(str(interactions.all))
+  # 
+  # interactions2 <- dplyr::anti_join(interactions1, interactions2, by = "to")
+  # 
+  # shiny::incProgress(amount = 0.1)
+  # 
+  # interactions.all <- dplyr::bind_rows(interactions.all, interactions2)
+  # 
+  # print(str(interactions.all))
+  # 
   # filter by score
-  interactions.all <- dplyr::filter(interactions.all, combined_score >= threshold)
-  
+  #interactions.all <- dplyr::filter(interactions.all, combined_score >= threshold)
+  #interactions.all <- dplyr::filter(interactions, combined_score >= threshold)
 
   #print(str(interactions.all))
   #print(nrow(interactions.all))
@@ -3902,7 +4001,7 @@ protein_interactions <- function(genes = NULL, graphplot = NULL, mapped = NULL, 
   shiny::incProgress(amount = 0.2)
   
   # check if Threshold is to high and we dont have any data left
-  if(nrow(interactions.all) == 0)
+  if(nrow(interactions) == 0)
   {
     return("threshold")
     stop("threshold")
@@ -3911,68 +4010,78 @@ protein_interactions <- function(genes = NULL, graphplot = NULL, mapped = NULL, 
     # cut number of interactions by score
     if(!is.null(cutscore)){
       # just take the top 100 at maximum
-      interactions.all <- dplyr::top_n(interactions.all, as.numeric(cutscore), combined_score)
+      #interactions.all <- dplyr::top_n(interactions.all, as.numeric(cutscore), combined_score)
+      if(cutscore <= nrow(interactions))
+      {
+        interactions <- interactions$STRING_id[1:cutscore]
+      } else {
+        interactions <- interactions$STRING_id
+      }
+      
+    } else 
+    {
+      interactions <- interactions$STRING_id
     }
     
     # Create highcharts?
-    if(identical(interactive, TRUE) && nrow(interactions.all) <= 100)
-    {
-      shiny::incProgress(amount = 0.1, message="Get stringDB graph information")
-      
-      
-      # use stringdb for subsetting and put this to the graph
-      graphplot2 <- igraph::induced.subgraph(graph=graphplot,vids=unique(interactions.all$to))
-      
-      interactions.call <- sub(pattern = "\\d+?\\.(.+)", replacement = "\\1", x = interactions.all$to, perl=TRUE)
-      
-      shiny::incProgress(amount = 0.1, message="Retrieve biomaRt information")
-      
-      handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL, mirror = NULL, verbose = FALSE)
-      # Call biomaRt
-      #print(new.identifier)
-
-      gene.info <- try(biomaRt::getBM(
-        filters = "ensembl_peptide_id",
-        attributes = c("ensembl_peptide_id", new.identifier),
-        values = unique(interactions.call),
-        mart = handling))
-      # join it
-      interactions.all <- data.frame("StringDB" = interactions.all$to, "ensembl_peptide_id" = interactions.call, stringsAsFactors = FALSE)
-      
-      interactions.all <- dplyr::left_join(interactions.all, gene.info, by = "ensembl_peptide_id")
-      interactions.all <- interactions.all[interactions.all$StringDB == unique(interactions.all$StringDB),]
-      
-      
-      # Add labels
-      igraph::V(graphplot2)$label <- as.character(interactions.all[,3])
-      #igraph::V(graphplot2)$color <- highcharter::colorize(deseq2[deseq2$genes %in% gene.info[,2], "log2FoldChange"])
-      
-      shiny::incProgress(amount = 0.2, message = "Creating Plot")
-      
-      # Create Highcharter plot
-      hc <- highcharter::hchart(graphplot2, layout = igraph::layout_with_fr) %>%
-        highcharter::hc_title(text = title) %>%
-        highcharter::hc_subtitle(text = subtitle) %>%
-        highcharter::hc_legend(enabled = FALSE) %>%
-        highcharter::hc_exporting(enabled = TRUE,
-                                  printMaxWidth = 2000,
-                                  scale=8,
-                                  filename = filename,
-                                  formAttributes = list(target = "_blank")) %>%
-        highcharter::hc_tooltip(shared = TRUE, borderWidth = 0, delayForDisplay = 1500,
-                                useHTML = TRUE, headerFormat = "<table>", pointFormat = shiny::tagList(
-                                  shiny::tags$h3("{point.label}") ), footerFormat = "</table>") %>%
-      highcharter::hc_add_theme( hc_theme_google2())
-      
-      return(hc)
-      
-    } else
-    {
+    # if(identical(interactive, TRUE) && nrow(interactions.all) <= 100)
+    # {
+    #   shiny::incProgress(amount = 0.1, message="Get stringDB graph information")
+    #   
+    #   
+    #   # use stringdb for subsetting and put this to the graph
+    #   graphplot2 <- igraph::induced.subgraph(graph=graphplot,vids=unique(interactions.all$to))
+    #   
+    #   interactions.call <- sub(pattern = "\\d+?\\.(.+)", replacement = "\\1", x = interactions.all$to, perl=TRUE)
+    #   
+    #   shiny::incProgress(amount = 0.1, message="Retrieve biomaRt information")
+    #   
+    #   handling <- biomaRt::useEnsembl(database, dataset, host, version = NULL, mirror = NULL, verbose = FALSE)
+    #   # Call biomaRt
+    #   #print(new.identifier)
+    # 
+    #   gene.info <- try(biomaRt::getBM(
+    #     filters = "ensembl_peptide_id",
+    #     attributes = c("ensembl_peptide_id", new.identifier),
+    #     values = unique(interactions.call),
+    #     mart = handling))
+    #   # join it
+    #   interactions.all <- data.frame("StringDB" = interactions.all$to, "ensembl_peptide_id" = interactions.call, stringsAsFactors = FALSE)
+    #   
+    #   interactions.all <- dplyr::left_join(interactions.all, gene.info, by = "ensembl_peptide_id")
+    #   interactions.all <- interactions.all[interactions.all$StringDB == unique(interactions.all$StringDB),]
+    #   
+    #   
+    #   # Add labels
+    #   igraph::V(graphplot2)$label <- as.character(interactions.all[,3])
+    #   #igraph::V(graphplot2)$color <- highcharter::colorize(deseq2[deseq2$genes %in% gene.info[,2], "log2FoldChange"])
+    #   
+    #   shiny::incProgress(amount = 0.2, message = "Creating Plot")
+    #   
+    #   # Create Highcharter plot
+    #   hc <- highcharter::hchart(graphplot2, layout = igraph::layout_with_fr) %>%
+    #     highcharter::hc_title(text = title) %>%
+    #     highcharter::hc_subtitle(text = subtitle) %>%
+    #     highcharter::hc_legend(enabled = FALSE) %>%
+    #     highcharter::hc_exporting(enabled = TRUE,
+    #                               printMaxWidth = 2000,
+    #                               scale=8,
+    #                               filename = filename,
+    #                               formAttributes = list(target = "_blank")) %>%
+    #     highcharter::hc_tooltip(shared = TRUE, borderWidth = 0, delayForDisplay = 1500,
+    #                             useHTML = TRUE, headerFormat = "<table>", pointFormat = shiny::tagList(
+    #                               shiny::tags$h3("{point.label}") ), footerFormat = "</table>") %>%
+    #   highcharter::hc_add_theme( hc_theme_google2())
+    #   
+    #   return(hc)
+    #   
+    # } else
+    # {
       # only create regular stringdb plot
       #network <- string_db$map(unique(genes), "gene", removeUnmappedRows = TRUE )
       shiny::incProgress(amount = 0.2, message = "Creating Plot")
-      return(string_db$plot_network(interactions.all$StringDB) )
-    }
+      return(string_db$plot_network(interactions) )
+   # }
   }
   
   
@@ -4041,6 +4150,49 @@ Plot_CDF <- function(data = NULL, filenames = extractedFiles()$gen_names, readty
   
 }
 
+
+### GenomeCRISPR Pie Charts
+
+genomecrispr_pie <- function(data = NULL, gene = "", title = "Screening Conditions", subtitle = "", export = TRUE, plotx = NULL)
+{
+  # data = a tible with counted data to plot
+  #   PLOTX = column with values
+  #   N = column with occurence of the value in PLOTX
+  # gene = selected gene in Gene Overview
+  # title = title to show
+  # subtitle = if subtitle needs to be shown
+  # export = whether plot can be exported
+  # plotx = the column name to be used in the tible
+  if(!is.null(plotx) && !is.null(data))
+  {
+    if(plotx == "condition")
+    {
+      hc <- highcharter::hchart(data, "pie", hcaes(x = condition, y = N))
+    }
+    if(plotx == "cellline")
+    {
+      hc <- highcharter::hchart(data, "pie", hcaes(x = cellline, y = N))
+    } else
+    {
+      hc <- highcharter::hchart(data, "pie", hcaes(x = condition, y = N))
+    }
+    
+      hc <- highcharter::hc_chart(hc, zoomType="x") %>%
+      highcharter::hc_title(text = title) %>%
+      highcharter::hc_subtitle(text = subtitle) %>%
+      highcharter::hc_exporting(enabled = export,
+                                printMaxWidth = 2000,
+                                scale=8,
+                                filename = paste("HitConfirmation", gene,"GenomeCRISPR", plotx , sep="_")) %>%
+      highcharter::hc_tooltip(enabled = TRUE,pointFormat = "<b>{point.percentage:.1f} %</b>")%>%
+      highcharter::hc_add_theme(hc_theme_google2())
+    
+    return(hc)
+  } else {
+    return("No selection to plot")
+  }
+  
+}
 
 
 #### About page and Status

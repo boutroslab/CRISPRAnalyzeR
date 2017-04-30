@@ -126,9 +126,16 @@ tabItem(tabName = "data", align = "center",
                               shiny::tags$hr()
                               
                             ),
-                            shiny::tags$h4("How to separate the gene-specific and sgRNA-specific identifier?"),
-                            
-                            shiny::tags$img(src = "./images/regex2.png", class="img-responsive", width="90%")
+                            shiny::tags$h3(class="text text-success", "Expert Options"),
+                            shiny::tags$h4("You can add/modify the regular expression?"),
+                            shiny::checkboxInput(inputId = "custom_libregex", label = "Do you want to use a custom regular expression for the FASTA library?",value = FALSE),
+                            shiny::tags$p(class="text text-danger", "This will override the default settings to the left and is only for expert users."),
+                            shiny::helpText("Please check out the help or the tutorials section to find further information."),
+                            shiny::tags$div(id="customlibregex",
+                                            shiny::textInput(inputId = "libFile_regexCustom",label = "Please enter a custom regular expression", placeholder = "Please enter a custom regular expression"),
+                                            shiny::tags$br()
+                            )
+                            #shiny::tags$img(src = "./images/regex2.png", class="img-responsive", width="90%")
                             
                             )
                   ))),
@@ -230,6 +237,7 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
       #textInput("seqFiles_regexTarget", "Regex for target sequence in fastQ files", value = "ACC(.{20,21})GTT"),
       selectizeInput('seqFiles_regexTarget', 'Regular Expression for sgRNA target sequence extraction from FASTQ files)',
           choices = config[["fastq_regex"]], options = list(create=TRUE, maxItems = 1)),
+     
       checkboxInput("seqFiles_rev", "Is data in FASTQ in reverse complement?", value = FALSE),
       selectInput("seqFiles_bt2Sens", "Bowtie2 sensitivity", choices = list("very-sensitive-local", "local", "very-sensitive")),
       selectInput("seqFiles_bt2quali", "Bowtie2 quality", choices = list("perfect", "high", "seed")),
@@ -238,9 +246,22 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
     ),
     column(width=6,
            shiny::tags$br(),
+           shiny::tags$h3(class="text text-success", "Expert Options"),
            shiny::tags$h4("You can modify / add your own regular expression"),
            shiny::tags$br(),
-           shiny::tags$img(src="./images/CA_UserRegex.gif", class="img-responsive", width="80%")
+           shiny::checkboxInput(inputId = "custom_fastqregex", label = "Do you want to use a custom regular expression?",value = FALSE),
+           shiny::tags$p(class="text text-danger", "This will override the default settings to the left and is only for expert users."),
+           shiny::helpText("Please check out the help or the tutorials section to find further information."),
+           shiny::tags$div(id="customfastqregex",
+                           shiny::textInput(inputId = "seqFiles_regexTargetcustom",label = "Please enter a custom regular expression", placeholder = "Please enter a custom regular expression"),
+                           shiny::tags$br()
+           ),
+           shiny::tags$hr(width="50%"),
+           shiny::tags$h4("You can override the warning for low alignment rates"),
+           shiny::helpText("By default, CRISPRAnalyzeR prevents you from data analysis in case the alignment rate is below 30%. However you can override this to also use samples of such low quality."),
+           shiny::tags$p(class="text text-danger", "This is only for expert users."),
+           shiny::checkboxInput(inputId = "override_low_alignment",label = "Do you really want to override the alignment quality check?",value = FALSE)
+           #shiny::tags$img(src="./images/CA_UserRegex.gif", class="img-responsive", width="80%")
            )
     )
     # other half
@@ -253,8 +274,8 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
     ## Submit and Reset Buttons for File Upload and Extraction
     shiny::tags$br(),
     shiny::tags$br(),
-    div(style="display:inline-block", actionButton("submit_seqFiles", "Check Files", class="btn-lg")),
-    div(style="display:inline-block", actionButton("reset_data", "Use other Files", icon = icon("refresh"), class="btn-lg")),
+    div(style="display:inline-block", actionButton("submit_seqFiles", "Upload and Check Files", class="btn-lg")),
+    div(style="display:inline-block", actionButton("reset_data", "Reset", icon = icon("refresh"), class="btn-lg")),
     shiny::tags$br(),
     uiOutput("fastq_progressBar"),
     shiny::tags$br(),

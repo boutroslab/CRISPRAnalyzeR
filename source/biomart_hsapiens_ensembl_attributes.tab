@@ -87,7 +87,7 @@ unigene	Unigene ID
 uniparc	UniParc
 uniprotsptrembl	UniProt/TrEMBL Accession
 uniprotswissprot	UniProt/SwissProt Accession
-uniprotgenename	UniProt Gene Name
+uniprot_gn	UniProt Gene Name
 uniprot_genename_transcript_name	Uniprot Transcript Name
 wikigene_name	WikiGene Name
 wikigene_id	WikiGene ID

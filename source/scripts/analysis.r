@@ -136,6 +136,7 @@ tryFunction <- function( expr, place, log = logFile, ID = userID, dir = userDir 
       readcount = "We have problems reading the read count files. Please make sure they meet the formatting criteria.<br/>Please see the help for more information.<br/>",
       biomart = "Gene Identifier handling via the biomaRt service failed.<br/><br/>There might be several reasons for this, e.g. the biomaRt service might be down (in this case, please try again later).<br/>Additional, please check whether you have selected the correct <b>gene identifier ans organism in the 'Set Groups and Identifier' tab</b>.</br>
       Please make sure you select the correct identifiers.<br/><br/>If you do not want gene identifiers to be converted, please select your gene identifier also as the identifier to convert it to.<br/>",
+      checkbiomart = "<strong>Unfortunately, the ENSEMBL biomaRt web-service seems to be offline.</strong></br> Please try again later or ask CRISPRAnalyzeR to not convert gene identifiers.</br> <strong>You can also get the latest ENSEMBL status updates on the <a href='http://http://www.ensembl.info/' target='_blank'>Ensembl Blog</a></strong></br></br>.",
       cpnorm = "It looks like you have duplicate sgRNA identifier in your sgRNA library file.<br/>Please make sure only unique sgRNA identifier are present in your sgRNA fasta library file.",
       pre = "Something went wrong when pre-processing the data.<br/>",
       qc = "Quality Calculations could not be performed on your data.<br/>A reason might be that the read count is 0 for the majority of sgRNAs.<br/>",
@@ -477,6 +478,9 @@ write(paste(userID, ": Dataset:",  info$annoDataset), logFile, append = TRUE)
 if( is.null(info$proxy) || is.na(info$proxy) || length(info$proxy) == 0 ) info$proxy <- ""
 options(RCurlOptions = list(proxy = info$proxy, http.version = 1))
 
+# check for availability of biomaRt
+checkbiomaRt <- tryFunction(biomaRt::listEnsembl(host="www.ensembl.org"), "checkbiomart")
+
 tryFunction(
  get.gene.info(extractpattern = cp$miaccs$g.extractpattern,
              database = cp$miaccs$a.database,
@@ -716,6 +720,41 @@ write(outInfo, file.path(userDir, "analysis.info"))
 ## read distros
 write(paste(userID, ": creating object readDistribution"), logFile, append = TRUE)
 readDistribution <- tryFunction(car.read.distribution(statistics = TRUE, dataframe = TRUE), "qc") 
+
+write(paste(userID, ": creating object essentialDistribution"), logFile, append = TRUE)
+
+DAISY_essentials <- readRDS(file = file.path(cp$miaccs$scriptpath, "DAISY_Essentials.rds"))
+
+essentialDistribution <- as.list(names(cp$miaccs$treatmentgroup))
+attr(essentialDistribution, which="name") <- names(cp$miaccs$treatmentgroup)
+
+for(i in 1:length(essentialDistribution))
+{
+  files <- cp$miaccs$treatmentgroup[[attr(essentialDistribution, which="name")[i]]]
+
+  for(x in 1:length(files))
+  {
+    # get all info from daisy essentials
+    essentials <- dplyr::filter(cp$normalized.readcount, gene %in% DAISY_essentials[,cp$miaccs$g.identifier.new][[1]])
+    nonessentials <- dplyr::filter(cp$normalized.readcount, !gene %in% DAISY_essentials[,cp$miaccs$g.identifier.new][[1]])
+    if(x==1)
+    {
+      essentialDistribution2 = list(list("essentials" = density(log2(essentials[, files[x]])), "nonessentials" = density(log2(nonessentials[, files[x]]))))
+      attr(essentialDistribution2, which="name") <- files[x]
+    } else
+    {
+      attr.old <- attr(essentialDistribution2, which="name")
+      essentialDistribution2 <- c(essentialDistribution2, list(list("essentials" = density(log2(essentials[, files[x] ])), "nonessentials" = density(log2(nonessentials[, files[x]])))))
+      attr(essentialDistribution2, which="name") <- c(attr.old, files[x])
+    }
+  }
+  # add to essentialDistribution
+  essentialDistribution[[i]] <- essentialDistribution2
+  
+}
+
+
+
 
 ### progress
 progress <- 0.21
@@ -958,6 +997,8 @@ write(outInfo, file.path(userDir, "analysis.info"))
 #DEBUG
 #readr::write_tsv(x=cp$readcount, path=file.path(userDir, "test.txt") )
 
+GSE_methodlist <- list()
+
 #### Wilcox
 write(paste(userID, ": creating object wilcox"), logFile, append = TRUE)
 wilcox <- list()
@@ -969,6 +1010,8 @@ write(outInfo, file.path(userDir, "analysis.info"))
 
 wilcox[["data"]] <- tryFunction(stat.wilcox(normalize = cp$miaccs$normalize, controls = cp$miaccs$controls.nontarget, 
   control.picks = cp$miaccs$control.picks, sorting = FALSE, groups = cp$groups.compare, logfile = NULL), "wilcox")
+
+GSE_methodlist <- list("Wilcox" = "wilcox")
 
 ### progress 45%
 progress <- 0.45
@@ -989,6 +1032,7 @@ deseq[["data"]] <- tryFunction(stat.DESeq(extractpattern = cp$miaccs$g.extractpa
   sorting = FALSE, groups = cp$groups.compare, sgRNA.pval = cp$miaccs$sig.pval.deseq, 
   fitType = "mean", filename.deseq = "deseq2_data"), "deseq")
 
+GSE_methodlist <- c(GSE_methodlist, "DESeq2" = "deseq")
 
 ### progress 55%
 progress <- 0.55
@@ -1006,7 +1050,7 @@ mageck[["data"]] <- tryFunction(stat.mageck(norm.fun = 'none', extractpattern = 
                                     adjust.method = "fdr", fdr.pval = cp$miaccs$sig.pval.mageck,
                                     filename = "mageckdata"), "mageck")
 
-
+GSE_methodlist <- c(GSE_methodlist,"MAGeCK" = "mageck")
 
 ### progress 60%
 progress <- 0.60
@@ -1021,6 +1065,8 @@ rsea[["info"]] <- list("pval" = cp$miaccs$sig.pval.rsea)
 rsea[["data"]] <- tryFunction(stat.RSEA(extractpattern = cp$miaccs$g.extractpattern, sorting = FALSE, 
                             groups = cp$groups.compare, normalize = TRUE, rsea.multiplier = 50, 
                             rsea.seed = NULL, type = "standard"), "rsea")
+
+GSE_methodlist <- c(GSE_methodlist,"sgRSEA" = "rsea")
 
 ### progress 65%
 progress <- 0.65
@@ -1076,7 +1122,6 @@ outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, se
 write(outInfo, file.path(userDir, "analysis.info"))
 ###
 
-write(paste(userID, ": zratio 4"), logFile, append = TRUE)
 zratio$zscore.treated <- sapply(zratio$gene, function(x){
   treated.readcount <- log10(mean(unlist(as.list(cp$normalized.aggregated.readcount[cp$normalized.aggregated.readcount$gene == as.character(x),(cp$treatmentgroup[[2]])+1])), na.rm = TRUE))
   if(is.infinite(treated.readcount)) { treated.readcount <- NA}
@@ -1090,22 +1135,6 @@ zratio$zscore.treated <- sapply(zratio$gene, function(x){
 zratio$zscore.untreated[!is.finite(zratio$zscore.untreated)] <- NA
 zratio$zscore.treated[!is.finite(zratio$zscore.treated)] <- NA
 
-# zratio$zscore.untreated <- sapply(zratio$zscore.untreated, function(x){
-#   if(is.infinite(x))
-#   {return(NA)} else {
-#     return(x)
-#   }
-# })
-
-# zratio$zscore.treated <- sapply(zratio$zscore.treated, function(x){
-#   if(is.infinite(x))
-#   {return(NA)} else {
-#     return(x)
-#   }
-# })
-
-write(paste(userID, ": zratio 5"), logFile, append = TRUE)
-
 # Calculate Z-Ratio
 zratio$zratio <- apply(zratio, 1, function(x){
   ratio <-  ((as.numeric(x["zscore.treated"]) - as.numeric(x["zscore.untreated"])) / sd(zratio$zscore.treated - zratio$zscore.untreated, na.rm = TRUE))
@@ -1113,6 +1142,7 @@ zratio$zratio <- apply(zratio, 1, function(x){
 })
   
  
+GSE_methodlist <- c(GSE_methodlist,"Z-Ratio" = "zratio")
 
 
 #######################
@@ -1142,6 +1172,8 @@ edger[["data"]] <- tryFunction(stat.edgeR(sorting = FALSE,
                           groups = cp$groups.compare, type = edger.type, fdr = edger[["info"]],
                           filename.edger = "edger_data"), "edger")
 
+GSE_methodlist <- c(GSE_methodlist,"edgeR" = "edger")
+
 ### progress 73%
 progress <- 0.73
 outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
@@ -1167,6 +1199,7 @@ if(class(bageldf) == "try-error")
 {
   bagel[["info"]] <- bageldf$info
   bagel[["data"]] <- bageldf$data
+  GSE_methodlist <- c(GSE_methodlist,"BAGEL" = "bagel")
 }
 
 
@@ -1204,6 +1237,7 @@ if(info$analysisScreenBEAMRun)
   {
     screenbeam[["info"]] <- list("iterations" = info$analysisScreenBEAMIterations, "burnin" = info$analysisScreenBEAMBurnin, "cutoff" = as.numeric(info$analysisScreenBEAMPval))
     screenbeam[["data"]] <- screenbeamdf
+    GSE_methodlist <- c(GSE_methodlist,"ScreenBEAM" = "screenbeam")
   }
   # screenbeam[["info"]] <- screenbeamdf$info
   # screenbeam[["data"]] <- screenbeamdf$data
@@ -1309,7 +1343,8 @@ write(outInfo, file.path(userDir, "analysis.info"))
 saveRDS(pca, file = file.path(userDir, "PCA.rds"))
 saveRDS(statsGeneral, file = file.path(userDir, "statsGeneral.rds"))
 saveRDS(unmappedGenes, file = file.path(userDir, "unmappedGenes.rds"))
-saveRDS(readDistribution, file = file.path(userDir, "readDistribution.rds"))
+saveRDS(readDistribution, file = file.path(userDir, "readDistribution.rds")) 
+saveRDS(essentialDistribution, file = file.path(userDir, "essentialDistribution.rds"))
 #saveRDS(readDistributionBox, file = file.path(userDir, "readDistributionBox.rds"))
 saveRDS(readDistributionBoxNorm, file = file.path(userDir, "readDistributionBoxNorm.rds"))
 
@@ -1367,6 +1402,8 @@ saveRDS(ctrls, file = file.path(userDir, "ctrls.rds"))
 
 saveRDS(uniquegenes, file = file.path(userDir, "uniqueGenes.rds"))
 saveRDS(sample.list, file = file.path(userDir, "sampleList.rds"))
+
+saveRDS(GSE_methodlist, file = file.path(userDir, "GSE_methodlist.rds"))
 
 ### progress 94%
 progress <- 0.94

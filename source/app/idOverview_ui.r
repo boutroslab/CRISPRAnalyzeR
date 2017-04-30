@@ -241,7 +241,29 @@ tabItem(tabName = "id_overview", align = "center",
         ## GenomeCRISPR Information
         # Screens
         tabPanel("Published Screens", width="85%",
-        
+                 
+                 ### Overview PIEs
+                 shiny::column(width=12,
+                               
+                               # Screening conditions / phenotypes
+                               shiny::column(width=4,
+                                             shiny::tags$h4("GenomeCRISPR - Screened Phenotypes"),
+                                             highchartOutput(outputId = "indepth_GC_plot_screencond")
+                                             ),
+                               # Hits
+                               shiny::column(width=4,
+                                             shiny::tags$h4("GenomeCRISPR - Hit"),
+                                             highchartOutput(outputId = "indepth_GC_plot_hit")
+                               ),
+                               # used cell lines
+                               shiny::column(width=4,
+                                             shiny::tags$h4("GenomeCRISPR - Screened Cell Lines"),
+                                             highchartOutput(outputId = "indepth_GC_plot_lines")
+                               )
+                               ),
+                 shiny::tags$br(),
+                 shiny::tags$hr(),
+                 shiny::tags$br(),
             ## DT Overview
             shiny::tags$div(style="text-align: center;",
             shiny::tags$p(class="lead","In previous screens, authors reported the following phenotypes for your gene of interest"),

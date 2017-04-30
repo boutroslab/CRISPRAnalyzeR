@@ -17,10 +17,10 @@ startTime <- Sys.time()
 userID <- paste0(format(startTime, format = "%y%m%d_%H%M%S_"), paste(sample(0:9, 4), collapse = ""))
 cData <- session$clientData
 
-if( config$userDir_loc == "TMP" ){
-  userDir <- tempfile(userID) 
+if( config$userDir_loc != "WD" ){
+  userDir <- file.path(config$userDir_loc, userID)
 } else {
-  userDir <- file.path(config$wd, userID)
+  userDir <- file.path(config$wd, "userdata", userID)
 }
 dir.create(userDir)
 
@@ -580,7 +580,6 @@ output$downloadlogs <- renderUI({
   # make logs downloadable for docker
   # is located in /var/log/shiny-server
   # will have CRISPRAnalyzeR in name
-  config$downloadlogs <- TRUE
   if(config$downloadlogs)
   {
     out <- downloadButton("downloadlogs_button",label = "Download all log files",icon = icon("cloud-download"), width = "250px")
@@ -595,6 +594,7 @@ output$downloadlogs <- renderUI({
 output$downloadlogs_button <- downloadHandler(
   filename = paste("CRISPRAnalyzeR", format(startTime, format = "%y-%m-%d"), "logs.zip", sep = "_"),
   content = function(file) {
+    
     if( config$downloadlogs ){
       
       # get all downloaded stuff

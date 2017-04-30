@@ -33,6 +33,7 @@ observeEvent(input$startAnalysis, {
   error$final <- test$message
   shinyjs::disable("startAnalysis")
   shinyjs::disable("resetAnalysis")
+  shinyjs::disable(id="restartevaluation")
   shinyjs::disable("reset_data")
   shinyjs::disable("reset_data2")
   
@@ -293,6 +294,7 @@ results <- eventReactive(progress_analysis(),{
         "statsGeneral" = readRDS(file.path(userDir, "statsGeneral.rds")),
         "unmappedGenes" = readRDS(file.path(userDir, "unmappedGenes.rds")),
         "readDistribution" = readRDS(file.path(userDir, "readDistribution.rds")),
+        "essentialDistribution" = readRDS(file.path(userDir, "essentialDistribution.rds")),
         #"readDistributionBox" = readRDS(file.path(userDir, "readDistributionBox.rds")),
         "readDistributionBoxNorm" = readRDS(file.path(userDir, "readDistributionBoxNorm.rds")),
         "CDF_list" = readRDS(file.path(userDir, "CDF_list.rds")),
@@ -326,7 +328,12 @@ results <- eventReactive(progress_analysis(),{
         
         "uniqueGenes" = readRDS(file.path(userDir, "uniqueGenes.rds")),
         "sampleList" = readRDS(file.path(userDir, "sampleList.rds")),
-        "error" = test$error
+        "error" = test$error,
+        
+        "GenomeCRISPR_essentials" = readRDS(file.path(config$scriptpath, "GenomeCRISPR_Essentials.rds")),
+        "DAISY_essentials" = readRDS(file.path(config$scriptpath, "DAISY_Essentials.rds")),
+        
+        "GSE_methodlist" = readRDS(file.path(userDir, "GSE_methodlist.rds"))
         )
       
       ### Open MODAL when Analysis Extraction is done

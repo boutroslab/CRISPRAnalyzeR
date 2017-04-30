@@ -22,7 +22,7 @@ key_value_to_cfg() {
 # if we are a crispranalyzer
 if [ "$1" = 'crispranalyzer' ]; then
   if [ "$websockets_behind_proxy" ]; then
-     echo "[CUSTOM] setting enhanced websocket settings (useful for problematic corporate proxy servers"
+     echo "[CUSTOM] setting enhanced websocket settings"
      # make changes to the app config, this is needed for some problematic
      # cooperate proxy servers
      sed -i.bak.proxy 's#location / {#location / {\napp_init_timeout 18000;\napp_idle_timeout 18000;\ndisable_protocols  xhr-streaming xhr-polling xdr-polling iframe-xhr-polling jsonp-polling;\n#g' /etc/shiny-server/shiny-server.conf 
@@ -35,6 +35,7 @@ if [ "$1" = 'crispranalyzer' ]; then
      sed -i.bak.verbose 's#run_as shiny;#run_as shiny;\npreserve_logs true; #g' /etc/shiny-server/shiny-server.conf
      # enable full debugging output for the shiny server
      sed -i.bak.verbose 's#exec shiny-server\(.*\)#export SHINY_LOG_LEVEL=TRACE\nexec shiny-server \1#g' /usr/bin/shiny-server.sh
+	 key_value_to_cfg "downloadlogs" "\"$verbose_logfiles\"" "$CRISPR_CFG"
   fi 
   # default is "./database", overwrite if environment variable is set  
   #if [ "$database_path" ]; then

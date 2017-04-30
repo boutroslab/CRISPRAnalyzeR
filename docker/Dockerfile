@@ -62,6 +62,7 @@ RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("biomaRt")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("DESeq2")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("edgeR")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("Gviz")'
+RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("STRINGdb")'
 RUN R -e 'devtools::install_version("dplyr", version = "0.5.0", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_github("jyyu/ScreenBEAM", ref = "d6204b3")'
 RUN R -e 'devtools::install_version("readr", version = "1.0.0", repos = "http://cloud.r-project.org/")'
@@ -70,14 +71,14 @@ RUN R -e 'devtools::install_version("jsonlite", version = "1.1", repos = "http:/
 RUN R -e 'devtools::install_version("shinyBS", version = "0.61", repos = "http://cloud.r-project.org/")'
 #RUN R -e 'devtools::install_version("highcharter", version = "0.5.0", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_github("jbkunst/highcharter", ref = "cc5f1e0157c50fc67233bc1bad6c3ad906d418c8")'
-RUN R -e 'devtools::install_version("seqinr", version = "3.3-3", repos = "http://cloud.r-project.org/")'
+RUN R -e 'devtools::install_version("seqinr", version = "3.3-6", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("openxlsx", version = "4.0.0", repos = "http://cloud.r-project.org/")'
 #RUN R -e 'devtools::install_github("awalker89/openxlsx", ref = "6d0fed9")'
 RUN R -e 'devtools::install_version("caTools", version = "1.17.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("reshape2", version = "1.4.2", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("MESS", version = "0.4-3", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("igraph", version = "1.0.1", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("data.table", version = "1.10.0", repos = "http://cloud.r-project.org/")'
+RUN R -e 'devtools::install_version("data.table", version = "1.10.4", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_github("jimhester/gmailr", ref = "d5ee3c2")'
 RUN R -e 'devtools::install_version("d3heatmap", version = "0.6.1.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("DEoptim", version = "2.2-3", repos = "http://cloud.r-project.org/")'
@@ -88,13 +89,13 @@ RUN R -e 'devtools::install_version("VennDiagram", version = "1.6.17", repos = "
 RUN R -e 'devtools::install_version("tidyverse", version = "1.0.0", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("htmltools", version = "0.3.5", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("DT", version = "0.2", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("tidyr", version = "0.6.0", repos = "http://cloud.r-project.org/")'
+RUN R -e 'devtools::install_version("tidyr", version = "0.6.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("sm", version = "2.2-5.4", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("shinyjs", version = "0.8", repos = "http://cloud.r-project.org/")'
+RUN R -e 'devtools::install_version("shinyjs", version = "0.9", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("ggplot2", version = "2.2.0", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("markdown", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("knitr", version = "1.15.1", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("shiny", version = "0.14.2", repos = "http://cloud.r-project.org/")'
+RUN R -e 'devtools::install_version("shiny", version = "1.0.2", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("bookdown", version = "0.3", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("R.utils", version = "2.5.0", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("htmltools", version = "0.3.5", repos = "http://cloud.r-project.org/")'
@@ -155,19 +156,62 @@ COPY ./mageck-0.5.5.tar.gz /tmp/
 RUN cd /tmp/; tar xvf ./mageck-0.5.5.tar.gz; cd /tmp/mageck-0.5.5; python setup.py install
 RUN rm -rf /tmp/mageck-0.5.5 /tmp/mageck-0.5.5.tar.gz
 
-# NOTE: since we dont have a public repos yet, clone the car repo in this local docker dir and copy latest development onto the docker image
-COPY ./caR-release/ /srv/shiny-server/CRISPRAnalyzeR
+# Cloning CRISPRAnalyzeR
+RUN git clone git@github.com:boutroslab/CRISPRAnalyzeR.git /tmp/
+
+# Copy to the shiny-server
+COPY /tmp/CRISPRAnalyzeR-master/source/ /srv/shiny-server/CRISPRAnalyzeR
 
 # we will run crispranalyzer as user 
 RUN chown -R shiny:shiny /srv/shiny-server/CRISPRAnalyzeR
 
-# install caR (TODO: replace private gitlab repos with public github account later..)
-# RUN git clone git@b110-sv7.inet.dkfz-heidelberg.de:jwinter6/caR-devel.git /srv/shiny-server/caR
+
 
 # add R profile options
 
 RUN echo 'setwd("/srv/shiny-server/CRISPRAnalyzeR")' >> /usr/local/lib/R/etc/Rprofile.site
 RUN echo 'options(download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site
+
+
+# BEGIN RUST CODE
+# install  RUST compiler with mapper and extractor components
+RUN \
+    curl https://sh.rustup.rs > /tmp/sh.rustup.rs && \
+    chmod +x /tmp/sh.rustup.rs && \
+    /tmp/sh.rustup.rs -y && \
+rm /tmp/sh.rustup.rs
+
+ENV PATH=/root/.cargo/bin:$PATH
+
+# compile CRISPRAnalyzer mapper and extractor
+RUN \
+    git clone https://github.com/OliPelz/fastq_extractor_proof_of_principle.git \
+    /tmp/crispranalyzer-rust-tools
+# target dir for compiled executables
+RUN \
+    mkdir -p /opt/crispranalyzer-tools
+
+# source cargo env file so we can use it
+RUN \
+    cd /tmp/crispranalyzer-rust-tools/extractor_in_RUST/fastq_parser && \
+    cargo build --release && \
+    cp ./target/release/fastq_parser /opt/crispranalyzer-tools/ && \
+    chmod +x /opt/crispranalyzer-tools/fastq_parser
+
+RUN \
+   cd /tmp/crispranalyzer-rust-tools/sam_mapper_in_RUST/sam_mapper/ && \
+   cargo build --release && \
+   cp ./target/release/sam_mapper /opt/crispranalyzer-tools/ && \
+   chmod +x /opt/crispranalyzer-tools/sam_mapper
+
+
+ENV PATH=/opt/crispranalyzer-tools:$PATH
+RUN echo 'export PATH=/opt/crispranalyzer-tools/:$PATH' >> /etc/profile
+
+##### end of RUST CODE
+
+
+
 
 COPY docker-entrypoint.sh /
 COPY index.html /srv/shiny-server

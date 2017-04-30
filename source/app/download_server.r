@@ -235,7 +235,7 @@ observeEvent(input$addReport_enr, {
                       data = enrichment$data,
                       status = enrichment$status,
                       enrichr = enrichment$enrichr,
-                      stringdbplot = enrichment$stringdbplot      
+                      stringDBthreshold = input$stringDBthreshold      
                     ))
                   )
 }, ignoreNULL = TRUE)
@@ -340,7 +340,10 @@ observeEvent(input$report_enCheck,
 # while creating report, reactive value is set FALSE
 reportFile <- reactiveValues(status = FALSE, error = FALSE, msg = "")
 observeEvent(input$createReport, {
-    if( status$results == FALSE ) reportFile$status <- FALSE else {
+    if( status$results == FALSE )
+      {
+        reportFile$status <- FALSE
+        } else {
       reportFile$status <- FALSE
       reportFile$error <- FALSE
       reportFile$msg <- ""
@@ -401,9 +404,7 @@ observeEvent(input$createReport, {
       system2("echo", args = c("Write Info"), stdout = "/tmp/write_info")
       
       # check for existence of the cosmic DB
-      cosmicreadable <- try(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4))
-      
-      if(cosmicreadable == 0)
+      if(try(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4)) == 0)
       {
         cosmicDB = "yes"
       } else
@@ -420,6 +421,10 @@ observeEvent(input$createReport, {
                 paste("appDir", config$appDir, sep = ";"),
                 paste("funDir", config$Fundir, sep = ";"),
                 paste("logReport", logReport, sep = ";"),
+                paste("proxyurl", config$car.proxy.url, sep = ";"),
+                paste("proxyport", config$car.proxy.url, sep = ";"),
+                paste("proxy", config$car.proxy, sep = ";"),
+                paste("database_path", config$database_path, sep = ";"),
                 
                 paste("libName", extractedFiles()$libName, sep = ";"),
                 paste("libPath", extractedFiles()$libPath, sep = ";"),
@@ -828,15 +833,10 @@ observe({
         "Essential?" =  results()$bagel$data$BAGEL.Essential,
         stringsAsFactors = FALSE
       )
-      
-      print(str(bageldf))
-      
       l_all <- c(l_all, "BAGEL" = bageldf)
       
       bageldf <- NULL
     }
-    
-    print(str(l_all))
     
     res <- try(openxlsx::write.xlsx(l_all, file.path(userDir, "HitCalling_all.xlsx"), asTable = TRUE, colNames = TRUE, rowNames = TRUE, overwrite = TRUE))
     if(class(res) == "try-error")

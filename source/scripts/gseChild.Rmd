@@ -832,7 +832,30 @@ tryFunction(Table_DT(filtered, colNames = c("Database", "Term", "P-Value", "Adju
 
 
 
+### StringDB Interactions
 
+```{r, eval=TRUE, echo=FALSE}
+
+if(info$proxy != ""){
+     plotting <- try(httr::with_config(httr::use_proxy(url = info$proxyurl, port = as.numeric(info$proxyport)), protein_interactions(genes = enrichment$genes,   new.identifier = annos()$IDnew, deseq2 = as.data.frame(results()$deseq$data$genes), dataset = annos()$dataset, title="Protein Interactions", subtitle = paste(input$enrichmentselectgene, collapse = ","), database_path = info$database_path, interactive=FALSE, cutscore = enrichment$stringDBthreshold, filename = paste("Protein_Interactions_",paste(enrichment$genes, collapse = "-"), sep="")  )))
+     
+     if(class(plotting) == "try-error")
+     {
+       Plot_blank( msg = "No data available")
+     }
+      
+    } else
+    {
+     plotting <- try(protein_interactions(genes = enrichment$genes, new.identifier = annos()$IDnew, deseq2 = as.data.frame(results()$deseq$data$genes), dataset = annos()$dataset, title="Protein Interactions", subtitle = paste(input$enrichmentselectgene, collapse = ","), database_path = info$database_path, interactive=FALSE,  cutscore = enrichment$stringDBthreshold, filename = paste("Protein_Interactions_", paste(enrichment$genes, collapse = "-"), sep="") ))
+     
+     if(class(plotting) == "try-error")
+     {
+       Plot_blank( msg = "No data available")
+     }
+    }
+
+
+```
 
 
 

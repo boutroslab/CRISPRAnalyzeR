@@ -337,6 +337,15 @@ write(outInfo, file.path(userDir, "fastq_extraction.info"))
 # FastQ: unzip -> extract -> map
 # Always: check file content
 
+# reverse order
+if(info$reverse)
+{
+  info$reverse <- "yes"
+} else {
+  info$reverse <- "no"
+}
+
+
 # make filename rdy for RQC later
 
 rqcqa <- list()
@@ -387,13 +396,34 @@ if( nfiles > 1 ){
       write(testlines, logFile, append = TRUE)
       
       ## extract
-      extractstring <- file.path(info$scriptDir, "CRISPR-extract.pl")
-      arguments <- c(extractstring, shQuote(info$targetRegex), shQuote(info$paths[i]), info$reverse, paste(info$oldpaths[i],"_stats.txt", sep="") )
-      write(paste(userID, ": run:", "perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
-      tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_extract_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_extract_stderr.log", sep=""))), "extract", info$names[i], info$oldpaths[i])
-      info$paths[i] <- c(paste0(info$paths[i], "_extracted.fastq"))
+      # check if RUST or PERL needs to be used
+      # check for RUST
+      rust <- try(system2(command = "fastq_parser", args = c("--help")))
       
-      info$oldextractedpaths[i] <- info$paths[i]
+      # if RUST is not present, we switch back to PERL
+      write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
+      if(rust == 0)
+      { # RUST file is present
+       
+        #paste(info$oldpaths[i],"_stats.txt", sep="")
+        arguments <- c("-p", shQuote(info$targetRegex), "-f", shQuote(info$paths[i]), "-c", info$reverse, "-l",  paste(info$oldpaths[i],"_stats.txt", sep=""))
+        write(paste(userID, ": run:", "fastq_parser", paste(arguments, collapse = " ")), logFile, append = TRUE)
+        tryFun(system2("fastq_parser", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_extract_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_extract_stderr.log", sep=""))), "extract", info$names[i], info$oldpaths[i])
+        info$paths[i] <- c(paste0(info$paths[i], "_extracted.fastq"))
+        
+        info$oldextractedpaths[i] <- info$paths[i]
+      } else
+      { # no RUST file is present
+        extractstring <- file.path(info$scriptDir, "CRISPR-extract.pl")
+        arguments <- c(extractstring, shQuote(info$targetRegex), shQuote(info$paths[i]), info$reverse, paste(info$oldpaths[i],"_stats.txt", sep="") )
+        write(paste(userID, ": run:", "perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
+        tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_extract_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_extract_stderr.log", sep=""))), "extract", info$names[i], info$oldpaths[i])
+        info$paths[i] <- c(paste0(info$paths[i], "_extracted.fastq"))
+        
+        info$oldextractedpaths[i] <- info$paths[i]
+      }
+      
+      
       
       # remove unzipped FASTQ
       command <- "rm"
@@ -414,11 +444,28 @@ if( nfiles > 1 ){
       write(paste(userID, ": run:", "bowtie2", paste(arguments, collapse = " ")), logFile, append = TRUE)
       tryFun(system2("bowtie2", args = arguments, stderr = file.path(paste(info$oldpaths[i],"_bt2_error.log", sep="")), stdout = file.path(paste(info$oldpaths[i],"_bt2.log", sep=""))), "map", info$names[i], path = info$oldpaths[i])
     
-      extractstring <- shQuote(file.path(info$scriptDir, "CRISPR-mapping.pl"))
-      arguments <- c(extractstring, info$libPath, paste0(info$paths[i], ".sam"), info$bt2Quality, genedivider, paste(info$oldpaths[i],"_map_stats.txt", sep=""))
-      write(paste(userID, ": run: perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
-      tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_map_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_map_stderr.log", sep=""))), "map2", info$names[i], path = info$oldpaths[i])
-      info$paths[i] <- paste0(info$paths[i], "-designs.txt")
+      # check for RUST
+      rust <- try(system2(command = "sam_mapper", args = c("--help")))
+      # if RUST is not present, we switch back to PERL
+      
+      write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
+      if(rust == 0)
+      {
+        arguments <- c("-f", info$libPath,"-s", paste0(info$paths[i], ".sam"),"-m", info$bt2Quality, "-g", genedivider, "-l", paste(info$oldpaths[i],"_map_stats.txt", sep=""))
+        write(paste(userID, ": sam_mapper", paste(arguments, collapse = " ")), logFile, append = TRUE)
+        tryFun(system2("sam_mapper", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_map_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_map_stderr.log", sep=""))), "map2", info$names[i], path = info$oldpaths[i])
+        info$paths[i] <- paste0(info$paths[i], "-designs.txt")
+        
+      } else {
+        
+        extractstring <- shQuote(file.path(info$scriptDir, "CRISPR-mapping.pl"))
+        arguments <- c(extractstring, info$libPath, paste0(info$paths[i], ".sam"), info$bt2Quality, genedivider, paste(info$oldpaths[i],"_map_stats.txt", sep=""))
+        write(paste(userID, ": run: perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
+        tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_map_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_map_stderr.log", sep=""))), "map2", info$names[i], path = info$oldpaths[i])
+        info$paths[i] <- paste0(info$paths[i], "-designs.txt")
+      }
+      
+     
 
 
       # Write couple of lines to log
@@ -516,12 +563,35 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   write(testlines, logFile, append = TRUE)
   
   ## extract
-  extractstring <- file.path(info$scriptDir, "CRISPR-extract.pl")
-  arguments <- c(extractstring, shQuote(info$targetRegex), info$paths[i], info$reverse, paste(info$oldpaths[i],"_stats.txt", sep=""))
-  write(paste(userID, ": run: perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
-  tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_extract_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_extract_stderr.log", sep=""))), "extract", info$names[i], path = info$oldpaths[i])
-  info$paths[i] <- c(paste0(info$paths[i], "_extracted.fastq"))
-  info$oldextractedpaths[i] <- info$paths[i]
+  # check if RUST or PERL needs to be used
+  # check for RUST
+  rust <- try(system2(command = "fastq_parser", args = c("--help")))
+
+  write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
+  
+  # if RUST is not present, we switch back to PERL
+  
+  if(rust == 0)
+  { # RUST file is present
+    
+    #paste(info$oldpaths[i],"_stats.txt", sep="")
+    arguments <- c("-p", shQuote(info$targetRegex), "-f", shQuote(info$paths[i]), "-c", info$reverse, "-l",  paste(info$oldpaths[i],"_stats.txt", sep=""))
+    write(paste(userID, ": run:", "fastq_parser", paste(arguments, collapse = " ")), logFile, append = TRUE)
+    tryFun(system2("fastq_parser", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_extract_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_extract_stderr.log", sep=""))), "extract", info$names[i], info$oldpaths[i])
+    info$paths[i] <- c(paste0(info$paths[i], "_extracted.fastq"))
+    
+    info$oldextractedpaths[i] <- info$paths[i]
+  } else
+  { # no RUST file is present
+    extractstring <- file.path(info$scriptDir, "CRISPR-extract.pl")
+    arguments <- c(extractstring, shQuote(info$targetRegex), shQuote(info$paths[i]), info$reverse, paste(info$oldpaths[i],"_stats.txt", sep="") )
+    write(paste(userID, ": run:", "perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
+    tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_extract_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_extract_stderr.log", sep=""))), "extract", info$names[i], info$oldpaths[i])
+    info$paths[i] <- c(paste0(info$paths[i], "_extracted.fastq"))
+    
+    info$oldextractedpaths[i] <- info$paths[i]
+  }
+  
   
   # remove unzipped FASTQ
   command <- "rm"
@@ -541,12 +611,28 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   write(paste(userID, ": run: bowtie2", paste(arguments, collapse = " ")), logFile, append = TRUE)
   tryFun(system2("bowtie2", args = arguments, stderr = file.path( paste(info$oldpaths[i],"_bt2_error.log", sep="")), stdout = file.path( paste(info$oldpaths[i],"_bt2.log", sep=""))), "map", info$names[i], path = info$oldpaths[i])
 
-  extractstring <- file.path(info$scriptDir, "CRISPR-mapping.pl")
-  arguments <- c(extractstring, info$libPath, paste0(info$paths[i], ".sam"), info$bt2Quality, genedivider, paste(info$oldpaths[i],"_map_stats.txt", sep=""))
-  write(paste(userID, ": run: perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
-  tryFun(system2("perl", args = arguments, stdout = file.path( paste(info$oldpaths[i],"_map_stdout.log", sep="")), stderr = file.path( paste(info$oldpaths[i],"_map_stderr.log", sep=""))), "map2", info$names[i], path = info$oldpaths[i])
-  info$paths[i] <- paste0(info$paths[i], "-designs.txt")
 
+  # check for RUST
+  rust <- try(system2(command = "sam_mapper", args = c("--help")))
+  # if RUST is not present, we switch back to PERL
+  write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
+  
+  if(rust == 0)
+  {
+    arguments <- c("-f", info$libPath,"-s", paste0(info$paths[i], ".sam"),"-m", info$bt2Quality, "-g", genedivider, "-l", paste(info$oldpaths[i],"_map_stats.txt", sep=""))
+    write(paste(userID, ": sam_mapper", paste(arguments, collapse = " ")), logFile, append = TRUE)
+    tryFun(system2("sam_mapper", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_map_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_map_stderr.log", sep=""))), "map2", info$names[i], path = info$oldpaths[i])
+    info$paths[i] <- paste0(info$paths[i], "-designs.txt")
+    
+  } else {
+    
+    extractstring <- shQuote(file.path(info$scriptDir, "CRISPR-mapping.pl"))
+    arguments <- c(extractstring, info$libPath, paste0(info$paths[i], ".sam"), info$bt2Quality, genedivider, paste(info$oldpaths[i],"_map_stats.txt", sep=""))
+    write(paste(userID, ": run: perl", paste(arguments, collapse = " ")), logFile, append = TRUE)
+    tryFun(system2("perl", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_map_stdout.log", sep="")), stderr = file.path(paste(info$oldpaths[i],"_map_stderr.log", sep=""))), "map2", info$names[i], path = info$oldpaths[i])
+    info$paths[i] <- paste0(info$paths[i], "-designs.txt")
+  }
+  
 
   # remove extracted FASTQ and SAM
   command <- "rm"

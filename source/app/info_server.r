@@ -28,6 +28,7 @@ progress_info <- reactivePoll(500, NULL, Info_trigger_info, Info_read_info)
 # value         NULL
 # side effects  writes on status$info and error$info
 info <- eventReactive( progress_info(), {
+  shinyjs::disable(id="restartevaluation")
   if( progress_info()$progress == 1 ){
       write(paste(userID, ": get_info.r finished at", Sys.time()), logFile, append = TRUE)
 
@@ -58,7 +59,10 @@ info <- eventReactive( progress_info(), {
         
         # open modal to show error
         shinyBS::toggleModal(session, "info_error", toggle = "open")
-        shinyjs::hide(id="reevaluation-progress")
+        shinyjs::hide(id="info_progressBar")
+        
+        # activate RESTART button
+        shinyjs::enable(id="restartevaluation")
         
         return()
       }
@@ -70,6 +74,8 @@ info <- eventReactive( progress_info(), {
       ### Open MODAL when Reannotation Extraction is done
       shinyBS::toggleModal(session, "reannotation_finished", toggle = "open")
       status$info <- TRUE
+      
+      shinyjs::enable(id="restartevaluation")
       
       list("rawGenes" = readRDS(file.path(userDir, "rawGenes.rds")), "ecrisp" = readRDS(file.path(userDir, "ecrisp.rds")))
   } else {
@@ -136,3 +142,71 @@ output$info_errormodal <- renderUI(
   return(HTML(error$info))
 )
 
+
+
+# RESTART sgRNA re-evaluation of required
+observeEvent(input$"restartevaluation", {
+  if(status$results==TRUE && status$info==FALSE)
+  {
+    
+    ##########################
+    #### start get_info.r ####
+    ##########################
+    # communicate necessary variables to get_info.r via .info file
+    # start get_info.r and exit
+    
+    scriptpath <- file.path(info$scriptDir, "get_info.r")
+    filepath <- file.path(userDir, "get_info.info")
+
+
+    write(paste(userID, ": databasepath ", info$databasepath), logFile, append = TRUE)
+
+    # set proxy 
+    if(is.null(config$car.proxy.url))
+    {
+      proxurl <- "NULL"
+    } else {
+      proxurl <- config$car.proxy.url
+    }
+    
+    if(is.null(config$car.proxy.port))
+    {
+      proxport <- "NULL"
+    } else {
+      proxport <- config$car.proxy.port
+    }
+    filepath <- file.path(userDir, "get_info.info")
+
+    info <- c(paste("progress", 0, sep = ";"),
+              paste("info", "", sep = ";"),
+              paste("logDir", config$logDir, sep = ";"),
+              paste("userID", userID, sep = ";"),
+              paste("signature", signature, sep = ";"),
+              paste("userDir", userDir, sep = ";"),
+              paste("scriptDir", config$scriptpath, sep = ";"),
+              paste("funDir", config$Fundir, sep = ";"),
+              paste("databasepath", config$databasepath, sep = ";"),
+              paste("annoDataset",  annos()$dataset, sep = ";"),
+              paste("organism",  annos()$dataset, sep = ";"),
+              paste("bt2Threads", paste(config$car.bt2.threads, collapse = ";"), sep = ";"),
+              paste("proxyurl", proxurl, sep = ";"),
+              paste("proxyport", proxport, sep = ";"),
+              paste("ecrisp", config$ecrisp, sep = ";")
+    )
+    write(info, filepath)
+    logFile <- file.path(config$logDir, "get_info.log")
+    write(paste(userID, ": execute: Rscript", config$scriptpath, filepath), logFile, append = TRUE)
+    system2("Rscript", args = c(config$scriptpath, filepath), wait = FALSE, stdout = NULL, stderr = NULL)
+
+    shinyjs::show(id="info_progressBar")
+    shinyjs::disable(id="restartevaluation")
+    
+    
+    
+  }
+  
+  
+  
+  
+  
+})

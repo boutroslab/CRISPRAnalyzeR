@@ -151,6 +151,22 @@ output$sqCoverage_distro_plot <- renderHighchart(
   }
 )
 
+output$sqCoverage_essential_plot1 <- renderHighchart(
+  if( status$results == FALSE ){
+    Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
+  } else {
+    Plot_essential_distribution( results()$essentialDistribution[[1]], bApp = TRUE, filename = "QualityControl_Essential_Distribution_Untreated")
+  }
+)
+
+output$sqCoverage_essential_plot2 <- renderHighchart(
+  if( status$results == FALSE ){
+    Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
+  } else {
+    Plot_essential_distribution( results()$essentialDistribution[[2]], bApp = TRUE, filename = "QualityControl_Essential_Distribution_Treated" )
+  }
+)
+
 # output$sqCoverage_distroBox_plot <- renderHighchart(
 #   if( status$results == FALSE ){
 #     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)

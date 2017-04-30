@@ -65,11 +65,6 @@ indepth_geneOverview <- eventReactive(input$indepthOverviewGene, ignoreNULL = FA
                    "ChEA_2015"
       )
       
-      
-      print(config$car.proxy.url)
-      print(config$car.proxy.port)
-      
-      
      # print("Gene Overview - Get Data from Ensembl")
       out <- NULL
       data <- NA
@@ -86,9 +81,6 @@ indepth_geneOverview <- eventReactive(input$indepthOverviewGene, ignoreNULL = FA
         {
           data <- NA
         }
-        print(data)
-        print("Ensembl Called")
-      
       
         if(config[["EnrichR"]] && !is.na(data))
         {
@@ -101,7 +93,6 @@ indepth_geneOverview <- eventReactive(input$indepthOverviewGene, ignoreNULL = FA
           enrichr <- NA
         }
         
-        print("Enrichr Called")
         # LOAD COSMIC INFO if available
         
         if(!is.null(results()$COSMICDB) && !is.na(data))
@@ -116,7 +107,6 @@ indepth_geneOverview <- eventReactive(input$indepthOverviewGene, ignoreNULL = FA
         {
           datacosmic <- NA
         }
-        print("COSMIC Called")
       #}
       
       # get KEGG information directly
@@ -137,7 +127,6 @@ indepth_geneOverview <- eventReactive(input$indepthOverviewGene, ignoreNULL = FA
         
       } else {keggdata <- NA}
       
-        print("KEGG Called")
     })
       # GO
       shiny::withProgress(message = 'Generating Gene Ontology Information', value = 0,{
@@ -151,8 +140,7 @@ indepth_geneOverview <- eventReactive(input$indepthOverviewGene, ignoreNULL = FA
           indepth_GO <- res
         }
       })
-      
-      print("GO Called")
+
       
       # Genomecrispr
       shiny::withProgress(message = 'Retrieve Screening Information', value = 0,{
@@ -171,8 +159,6 @@ indepth_geneOverview <- eventReactive(input$indepthOverviewGene, ignoreNULL = FA
         }
         
       })
-      
-      print("Genomecrispr Called")
       
       ## Additional log2FC data
       sgrna.d <- as.data.frame(results()$deseq$data$sgRNA[results()$deseq$data$sgRNA$genes == input$indepthOverviewGene,c("padj","sgRNA")]) #log2FoldChange if DESeq2 log2FC should be shown 
@@ -651,42 +637,42 @@ output$indepth_DT_overview <- renderDataTable({
   )
   
   if(!is.na(indepth_geneOverview()["genomecrispr"]) ) {
-    if(!is.na(indepth_geneOverview()$genomecrispr$sgrnas))
+    if(!is.na(indepth_geneOverview()$genomecrispr$sgrnas) && !is.null(indepth_geneOverview()$genomecrispr$sgrnas))
     {
       return(Table_DT(indepth_geneOverview()$genomecrispr$sgrnas, colNames = c("Pubmed ID", "Cell Line", "Screening Condition", "Hit?", "sgRNA Sequence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", input$indepthOverviewGene ,"_PublishedCRISPRScreens", sep="")))
     } else {
-      HTML("No data found in GenomeCRISPR.")
+      return(HTML("No data found in GenomeCRISPR."))
     }
      
   } else {
-    HTML("Could not connect to GenomeCRISPR.")
+    return(HTML("Could not connect to GenomeCRISPR."))
   }
   
  
   
 })
 
-output$indepth_HC_overview <- renderDataTable({
-  shiny::validate(
-    shiny::need(input$indepthOverviewGene != "", 'Please select a gene'),
-    shiny::need(indepth_geneOverview(), config$messages$getinfo2$String)
-  )
-  
-  if(!is.na(indepth_geneOverview()["genomecrispr"]) ) {
-    if(!is.na(indepth_geneOverview()$genomecrispr$sgrnas))
-    { 
-      df <- indepth_geneOverview()$genomecrispr$sgrnas
-    } else {
-      HTML("No data found in GenomeCRISPR.")
-    }
-    
-  } else {
-    HTML("Could not connect to GenomeCRISPR.")
-  }
-  
-  
-  
-})
+# output$indepth_HC_overview <- renderDataTable({
+#   shiny::validate(
+#     shiny::need(input$indepthOverviewGene != "", 'Please select a gene'),
+#     shiny::need(indepth_geneOverview(), config$messages$getinfo2$String)
+#   )
+#   
+#   if(!is.na(indepth_geneOverview()["genomecrispr"]) ) {
+#     if(!is.na(indepth_geneOverview()$genomecrispr$sgrnas))
+#     { 
+#       df <- indepth_geneOverview()$genomecrispr$sgrnas
+#     } else {
+#       HTML("No data found in GenomeCRISPR.")
+#     }
+#     
+#   } else {
+#     HTML("Could not connect to GenomeCRISPR.")
+#   }
+#   
+#   
+#   
+# })
 
 ## 2
 # make information for other screens where this gene was used, will be put as HTML
@@ -697,7 +683,7 @@ output$indepth_screens <- renderUI({
   )
   
   if(!is.na(indepth_geneOverview()["genomecrispr"]) ) {
-    if(!is.na(indepth_geneOverview()$genomecrispr$genes))
+    if(!is.na(indepth_geneOverview()$genomecrispr$genes) && !is.null(indepth_geneOverview()$genomecrispr$genes))
     {
       gcrispr_gene_header <- '<table class="table">
   <thead>
@@ -733,12 +719,12 @@ output$indepth_screens <- renderUI({
       HTML(paste0(gcrispr_gene_header, gcrispr_gene_body, gcrispr_gene_footer))
       
     } else {
-      HTML("No data found in GenomeCRISPR.")
+      return(HTML("No data found in GenomeCRISPR."))
     }
      
     
   } else {
-    HTML("Could not connect to GenomeCRISPR.")
+    return(HTML("Could not connect to GenomeCRISPR."))
   }
   
  
@@ -751,11 +737,10 @@ output$indepth_DT_sgrna <- renderDataTable({
     shiny::need(input$indepthOverviewGene != "", 'Please select a gene'),
     shiny::need(indepth_geneOverview(), config$messages$getinfo2$String)
   )
-  print(indepth_geneOverview()$genomecrispr$sgrnas2)
   
   if(!is.na(indepth_geneOverview()["genomecrispr"])) {
     
-    if(!is.na(indepth_geneOverview()$genomecrispr$sgrnas2) && !is.null(indepth_geneOverview()$genomecrispr$sgrnas2))
+    if(!is.na(indepth_geneOverview()$genomecrispr$sgrnas2)  && !is.null(indepth_geneOverview()$genomecrispr$sgrnas2) && !(class(indepth_geneOverview()$genomecrispr$sgrnas2) %in% c("html")) )
     {
       return(Table_DT(indepth_geneOverview()$genomecrispr$sgrnas2, colNames = c("Pubmed ID", "Cell Line", "Screening Condition", "Hit?", "sgRNA Sequence"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_", input$indepthOverviewGene , "_sgRNAs",sep="")) )
     } else {
@@ -768,6 +753,133 @@ output$indepth_DT_sgrna <- renderDataTable({
   
   
 })
+
+
+# GenomeCRISPR Plots
+
+output$indepth_GC_plot_screencond <- renderHighchart({
+  shiny::validate(
+    shiny::need(input$indepthOverviewGene != "", 'Please select a gene'),
+    shiny::need(indepth_geneOverview(), config$messages$getinfo2$String)
+  )
+  
+  if(!is.na(indepth_geneOverview()["genomecrispr"])) {
+    
+    if(!is.na(indepth_geneOverview()$genomecrispr$sgrnas) && !is.null(indepth_geneOverview()$genomecrispr$sgrnas))
+    {
+      
+      # replace anything with viability and resistance to just viability and resistance
+      data <- indepth_geneOverview()$genomecrispr$sgrnas
+      data <- mutate(data, condition=replace(condition, grepl(pattern = ".*resistance.*",x = condition), "resistance")) %>% mutate(condition=replace(condition, grepl(x = condition, pattern = ".*viability.*"), "viability"))
+      
+      screencond <- data %>% select(pubmed, condition,cellline) %>% distinct() %>% group_by(condition) %>% summarise(N = length(condition))
+      
+      gene <- input$indepthOverviewGene
+      title <- "Screening Conditions"
+      subtitle <- paste(gene, "was screened in the following conditions according to GenomeCRISPR", sep= " ")
+      export = TRUE
+      plotx = "condition"
+      
+      plot <- try(genomecrispr_pie(data = screencond, gene, title, subtitle, export = TRUE, plotx))
+      
+      if(class(plot) == "try-error")
+      {
+        return(Plot_blank("hc", msg = "No Data available."))
+      } else
+      {return(plot)}
+      
+    } else {
+      return(Plot_blank("hc", msg = "No Data available."))
+    }
+    
+  } else {
+    return(Plot_blank("hc", msg = "Connection to GenomeCRISPR failed."))
+  }
+  
+})
+
+output$indepth_GC_plot_hit <- renderHighchart({
+  shiny::validate(
+    shiny::need(input$indepthOverviewGene != "", 'Please select a gene'),
+    shiny::need(indepth_geneOverview(), config$messages$getinfo2$String)
+  )
+  
+  if(!is.na(indepth_geneOverview()["genomecrispr"])) {
+    
+    if(!is.na(indepth_geneOverview()$genomecrispr$sgrnas) && !is.null(indepth_geneOverview()$genomecrispr$sgrnas))
+    {
+      
+      hits <- indepth_geneOverview()$genomecrispr$sgrnas %>% select(pubmed, condition,cellline, hit) %>% filter(hit == "true") %>% distinct() %>% group_by(condition) %>% summarise(N = length(condition))
+      # replace values
+      #hits <- mutate(hits, hit=replace(hit, is.na(hit), "no information provided")) %>% mutate(hit=replace(hit, hit == "false", "no phenotype observed")) %>% mutate(hit=replace(hit, hit == "true", "phenotype observed"))
+      
+      if(nrow(hits) == 0)
+      {
+        # nothing showed up as a hit
+        return(Plot_blank("hc", msg = "No phenotypes observed."))
+      }
+      
+      gene <- input$indepthOverviewGene
+      title <- "Phenotype Observation"
+      subtitle <- paste(gene, "showed phenotypic effects according to GenomeCRISPR", sep= " ")
+      export <- TRUE
+      plotx <- "condition"
+      
+      plot <- try(genomecrispr_pie(data = hits, gene, title, subtitle, export = TRUE, plotx))
+      
+      if(class(plot) == "try-error")
+      {
+        return(Plot_blank("hc", msg = "No Data available."))
+      } else
+      {return(plot)}
+      
+    } else {
+      return(Plot_blank("hc", msg = "No Data available."))
+    }
+    
+  } else {
+    return(Plot_blank("hc", msg = "Connection to GenomeCRISPR failed."))
+  }
+  
+})
+
+output$indepth_GC_plot_lines <- renderHighchart({
+  shiny::validate(
+    shiny::need(input$indepthOverviewGene != "", 'Please select a gene'),
+    shiny::need(indepth_geneOverview(), config$messages$getinfo2$String)
+  )
+  
+  if(!is.na(indepth_geneOverview()["genomecrispr"])) {
+    
+    if(!is.na(indepth_geneOverview()$genomecrispr$sgrnas) && !is.null(indepth_geneOverview()$genomecrispr$sgrnas))
+    {
+      
+      cells <- indepth_geneOverview()$genomecrispr$sgrnas %>% select(pubmed, condition,cellline, hit) %>% distinct()  %>% group_by(cellline) %>% summarise(N = length(cellline))
+      
+      gene <- input$indepthOverviewGene 
+      title <- "Screened Cell Lines"
+      subtitle <- paste(gene, "was used in the following cell lines according to GenomeCRISPR", sep= " ")
+      export <- TRUE
+      plotx <- "cellline"
+      
+      plot <- try(genomecrispr_pie(data = cells, gene, title, subtitle, export = TRUE, plotx))
+      
+      if(class(plot) == "try-error")
+      {
+        return(Plot_blank("hc", msg = "No Data available."))
+      } else
+      {return(plot)}
+      
+    } else {
+      return(Plot_blank("hc", msg = "No Data available."))
+    }
+    
+  } else {
+    return(Plot_blank("hc", msg = "Connection to GenomeCRISPR failed."))
+  }
+  
+})
+
 
 
 
@@ -866,7 +978,7 @@ output$indepth_DT_sgrna2 <- renderDataTable({
     
     return(Table_DT(indepth_geneOverview()$sgrna.dt, colNames = c("sgRNA", "DESeq2 Adjusted P-Value",  "Log2 FoldChange", "Sequence", "Gene"), bRownames = FALSE, class = "stripe hover", filename = paste("GeneOverview_",input$indepthOverviewGene , "Log2FC_sgRNAs", sep="")))
   } else {
-    HTML("No data found.")
+    return(HTML("No data found."))
   }
   
   
@@ -889,7 +1001,7 @@ output$indepth_hc_sgrna_log2fc <- renderHighchart({
                         crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL, filename = paste("GeneOverview_",input$indepthOverviewGene , "LOG2FC_sgRNAs", sep="") )
   })
   } else {
-    HTML("No data found.")
+    return(HTML("No data found."))
   }
   
 })
@@ -916,7 +1028,7 @@ output$indepth_GO_table1 <- renderDataTable({
     
    
   } else {
-    HTML(config$messages$biomart1$String)
+    return(HTML(config$messages$biomart1$String))
   }
   
   
@@ -941,7 +1053,7 @@ output$indepth_GO_table2 <- renderDataTable({
     
     
   } else {
-    HTML(config$messages$biomart1$String)
+    return(HTML(config$messages$biomart1$String))
   }
   
   
@@ -966,7 +1078,7 @@ output$indepth_GO_table3 <- renderDataTable({
     
     
   } else {
-    HTML(config$messages$biomart1$String)
+    return(HTML(config$messages$biomart1$String))
   }
   
   
@@ -997,7 +1109,7 @@ output$indepth_GO_plot1 <- renderImage({
     })
     
   } else {
-    HTML(config$messages$biomart1$String)
+    return(HTML(config$messages$biomart1$String))
   }
   
   
@@ -1028,7 +1140,7 @@ output$indepth_GO_plot2 <- renderImage({
       
     
   } else {
-    HTML(config$messages$biomart1$String)
+    return(HTML(config$messages$biomart1$String))
   }
   
   
