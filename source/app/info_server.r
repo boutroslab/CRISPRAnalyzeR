@@ -145,7 +145,7 @@ output$info_errormodal <- renderUI(
 
 
 # RESTART sgRNA re-evaluation of required
-observeEvent(input$"restartevaluation", {
+observeEvent(input$restartevaluation, {
   if(status$results==TRUE && status$info==FALSE)
   {
     
