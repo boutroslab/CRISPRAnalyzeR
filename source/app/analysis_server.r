@@ -65,6 +65,7 @@ observeEvent(input$startAnalysis, {
   scriptpath <- file.path(config$scriptpath, "analysis.r")
   
   signature <- paste(sample(0:9, 4), collapse = "")
+  status$signature <- signature
   write(signature, file.path(userDir, "analysis.sign"))
   
   log <- c(paste(userID, ": status of seqFiles, libFile, extract, groups, anno, compare, analysis, extractedFiles: good"),

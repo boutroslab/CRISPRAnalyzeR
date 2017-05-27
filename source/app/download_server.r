@@ -404,7 +404,19 @@ observeEvent(input$createReport, {
       system2("echo", args = c("Write Info"), stdout = "/tmp/write_info")
       
       # check for existence of the cosmic DB
-      if(try(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4)) == 0)
+      # For some reasing, file.access sometimes results in an empty value
+      cosmicfile <- -1
+      print(config$database_path)
+      print(config$COSMIC_database)
+      print(file.path(config$database_path, config$COSMIC_database))
+      print(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4))
+      print(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 0))
+      print(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 1))
+      print(file.access(names = file.path(config$database_path, "testwrong"), mode = 4))
+      cosmicfile <- try(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4))
+      print(cosmicfile)
+      
+      if(cosmicfile == 0)
       {
         cosmicDB = "yes"
       } else
@@ -485,7 +497,10 @@ observeEvent(input$createReport, {
                 paste("inclCO", input$report_coCheck, sep = ";"),
                 paste("inclAN", input$report_anCheck, sep = ";"),
                 paste("inclGS", input$report_enCheck, sep = ";"))
+      
       write(info, infoFiles$report)
+      
+      print(info)
       
       system2("echo", args = c("Copy file"), stdout = "/tmp/copy_files")
       write(paste(userID, ": Copy files to ", userDir), logReport, append = TRUE)

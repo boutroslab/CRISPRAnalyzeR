@@ -41,30 +41,6 @@ if( !file.exists(logFile) ){
 }
 
 
-
-# ### Get proxy settings
-# 
-# if(info$proxyurl != "NULL" && info$proxyport != "NULL")
-# {
-#   Write(paste(userID, ": no proxy set "), logFile, bAppend = TRUE)
-#   opts <- list(
-#     proxy         = info$proxyurl, 
-#     proxyusername = NULL, 
-#     proxypassword = NULL, 
-#     proxyport     = info$proxyport
-#   )
-# } else {
-#   Write(paste(userID, ": proxy set "), logFile, bAppend = TRUE)
-#   opts <- list(
-#     proxy         = NULL, 
-#     proxyusername = NULL, 
-#     proxypassword = NULL, 
-#     proxyport     = NULL
-#   )
-#   
-# }
-
-
 ###############
 #### Write ####
 ###############

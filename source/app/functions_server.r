@@ -1156,7 +1156,7 @@ registerInputHandler("shinyjsexamples.chooser", function(data, ...) {
 #             col     chr or num for colour
 #             size    int which directs size of message
 # value       highcharter or base R plot object
-Plot_blank <- function( device, pos = c(1, 1), msg = config$messages$noanalysisrunyet$String, col = "#37474F", size = 3 ){
+Plot_blank <- function( device = "base", pos = c(1, 1), msg = config$messages$noanalysisrunyet$String, col = "#37474F", size = 3 ){
   
   if( device == "hc" ){
     size <- paste0(size, "0px")

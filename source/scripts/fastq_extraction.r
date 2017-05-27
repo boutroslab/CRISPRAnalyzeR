@@ -385,16 +385,6 @@ if( nfiles > 1 ){
         file.rqc <-  c(file.rqc, list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) )
       }
       
-  
-      ## unzip
-      arguments <- c("-d", paste0(info$paths[i], ".gz"))
-      write(paste(userID, ": run: gzip", paste(arguments, collapse = " ")), logFile, append = TRUE)
-      tryFun(system2("gzip", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_gzip_stdout.log", sep="")), stderr = file.path( paste(info$oldpaths[i],"_gzip_stderr.log", sep=""))), "unzip", info$names[i], info$oldpaths[i]) # 
-
-      ### add couple of lines to log
-      testlines <- Check_File_log(info$paths[i], info$names[i], userID, 27)
-      write(testlines, logFile, append = TRUE)
-      
       ## extract
       # check if RUST or PERL needs to be used
       # check for RUST
@@ -404,7 +394,7 @@ if( nfiles > 1 ){
       write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
       if(rust == 0)
       { # RUST file is present
-       
+        file.rename(paste0(info$paths[i], ".gz"), info$paths[i])
         #paste(info$oldpaths[i],"_stats.txt", sep="")
         arguments <- c("-p", shQuote(info$targetRegex), "-f", shQuote(info$paths[i]), "-c", info$reverse, "-l",  paste(info$oldpaths[i],"_stats.txt", sep=""))
         write(paste(userID, ": run:", "fastq_parser", paste(arguments, collapse = " ")), logFile, append = TRUE)
@@ -414,6 +404,17 @@ if( nfiles > 1 ){
         info$oldextractedpaths[i] <- info$paths[i]
       } else
       { # no RUST file is present
+        
+        ## unzip
+        arguments <- c("-d", paste0(info$paths[i], ".gz"))
+        write(paste(userID, ": run: gzip", paste(arguments, collapse = " ")), logFile, append = TRUE)
+        tryFun(system2("gzip", args = arguments, stdout = file.path(paste(info$oldpaths[i],"_gzip_stdout.log", sep="")), stderr = file.path( paste(info$oldpaths[i],"_gzip_stderr.log", sep=""))), "unzip", info$names[i], info$oldpaths[i]) # 
+        
+        ### add couple of lines to log
+        testlines <- Check_File_log(info$paths[i], info$names[i], userID, 27)
+        write(testlines, logFile, append = TRUE)
+        
+        
         extractstring <- file.path(info$scriptDir, "CRISPR-extract.pl")
         arguments <- c(extractstring, shQuote(info$targetRegex), shQuote(info$paths[i]), info$reverse, paste(info$oldpaths[i],"_stats.txt", sep="") )
         write(paste(userID, ": run:", "perl", paste(arguments, collapse = " ")), logFile, append = TRUE)

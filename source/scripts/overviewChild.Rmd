@@ -472,14 +472,14 @@ This is a brief overview of how the gene of interest performed compared to all o
 
 ```{r, warning=FALSE, message=FALSE}
 write(paste(userID, ": writing overviewChild - Log2-Fold-Change"), logFile, append = TRUE) 
-gene.plotdistribution(data = results$deseq$data$genes, gene = indepthOverviewGene , type = "log2fc", sgrna=FALSE, tooltip = paste("Log2 FoldChange:", "{point.log2FoldChange}", sep=" "), title = "Log2 Foldchanges", subtitle = "for all genes", xLab = "Genes", yLab = "Log2 FoldChange", zoom = "x", crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL, filename = paste("GeneOverview_", indepthOverviewGene , "LOG2FC", sep="") )
+try(gene.plotdistribution(data = results$deseq$data$genes, gene = indepthOverviewGene , type = "log2fc", sgrna=FALSE, tooltip = paste("Log2 FoldChange:", "{point.log2FoldChange}", sep=" "), title = "Log2 Foldchanges", subtitle = "for all genes", xLab = "Genes", yLab = "Log2 FoldChange", zoom = "x", crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL, filename = paste("GeneOverview_", indepthOverviewGene , "LOG2FC", sep="") ))
 ```
 
 #### Z-Ratio
 
 ```{r, warning=FALSE, message=FALSE}
 write(paste(userID, ": writing overviewChild - Z-Ratio"), logFile, append = TRUE) 
-gene.plotdistribution(data = results$zratio, gene = indepthOverviewGene , type = "zratio", sgrna=FALSE, tooltip = paste("Z-Ratio:", "{point.zratio}", sep=" "), title = "Z-Ratios", subtitle = "for all genes", xLab = "Genes", yLab = "Z-Ratio between Treated and Untreated", zoom = "x", crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL , filename = paste("GeneOverview_", indepthOverviewGene , "Z-Ratio", sep=""))
+try(gene.plotdistribution(data = results$zratio, gene = indepthOverviewGene , type = "zratio", sgrna=FALSE, tooltip = paste("Z-Ratio:", "{point.zratio}", sep=" "), title = "Z-Ratios", subtitle = "for all genes", xLab = "Genes", yLab = "Z-Ratio between Treated and Untreated", zoom = "x", crosshair = TRUE, legend = FALSE, export = TRUE, cols = NULL , filename = paste("GeneOverview_", indepthOverviewGene , "Z-Ratio", sep="")))
 ```
 
 #### Individual sgRNAs
