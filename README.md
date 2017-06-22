@@ -224,6 +224,8 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
 
 
 
+#### ATTENTION: For some genome-wide screens, the available "C Stack" memory might not be sufficient to render the report. In this case, [please increase the stack limit as shown HERE](https://github.com/boutroslab/CRISPRAnalyzeR/#increasing-the-core-ulimit).
+
 
 ### Install specific version
 
@@ -270,10 +272,16 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
    
    All pre-configured versions are listed at the [Docker Hub](https://hub.docker.com/r/boutroslab/crispranalyzer/tags/).  
    
+   #### ATTENTION: For some genome-wide screens, the available "C Stack" memory might not be sufficient to render the report. In this case, [please increase the stack limit as shown HERE](https://github.com/boutroslab/CRISPRAnalyzeR/#increasing-the-core-ulimit).
+
+   
    
 5. __Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.__
 
 6. Access CRISPRAnalyzeR using your web-browser - __http://localhost/CRISPRAnalyzeR__
+
+#### ATTENTION: For some genome-wide screens, the available "C Stack" memory might not be sufficient to render the report. In this case, [please increase the stack limit as shown HERE](https://github.com/boutroslab/CRISPRAnalyzeR/#increasing-the-core-ulimit).
+
 
 
 CRISPRAnalyzeR re-evaluates every sgRNA during the analysis process. Thus, it needs to map each sgRNA against the reference genome.  
@@ -299,6 +307,7 @@ to download the latest version and then run it as described above:
 ## How to Start and Restart the CRISPRAnalyzeR
 
 You can start and stop the CRISPRanalyzeR using docker.
+
 
 ---
 
@@ -352,8 +361,6 @@ docker run --rm -e bowtie_threads=4 -e proxy_url="http://thisismyproxy.com" -e p
 
 
 ## Installation Tutorial Windows
-
-## Installation Tutorial Ubuntu
 
 
 ---
