@@ -66,13 +66,39 @@ config$messages <- setNames(split(config$messages, seq(nrow(config$messages))), 
 
 
 
+############################
+## Load COSMIC database ####
+############################
+
+
+if(!is.null(config$COSMIC_database)){
+  
+  cosmicreadable <- file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4)
+  
+  if(cosmicreadable == 0)
+  {
+      COSMICDB <- try(readr::read_tsv(file = file.path(config$database_path, config$COSMIC_database), col_names = TRUE))
+      if(class(COSMICDB) == "try-error")
+      {
+        COSMICDB <- NULL
+      }
+  } else
+  {
+    COSMICDB <- NULL
+  }
+} else {
+  COSMICDB <- NULL
+}
+
+
+
+#############################
+
+
 # start shiny session
 shinyServer(function(input, output, session) {
-  
-  print(config$max_upload)
-  # 4096MB upload limit per file as default
+  # 4096MB upload limit per file
   options(shiny.maxRequestSize = as.numeric(config$max_upload) * 1024^2)
-  
   
   # create objects needed throughout this session
   source(file.path(config$appDir, "init_server.r"), local = TRUE)
@@ -129,7 +155,7 @@ shinyServer(function(input, output, session) {
   # creating and rendering heatmaps
   source(file.path(config$appDir, "sqHeatmap_server.r"), local = TRUE)
   
-  
+  source(file.path(config$appDir, "essentials_server.r"), local = TRUE)
   
   
   #### Hit Calling

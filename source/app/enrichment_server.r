@@ -39,7 +39,7 @@ observe({
     
     if(input$GSE_methods_selected %in% c("wilcox", "deseq", "mageck", "edger", "rsea","zratio") )
     {
-      ret <- NULL
+      ret <- NA
       # enriched or depleted?
       if(input$GSE_methods_genes_list == "enriched")
       {
@@ -173,7 +173,7 @@ observe({
     GSE_list_selected(ret)
     
   } else {
-    GSE_list_selected(NULL)
+    GSE_list_selected(NA)
   }
   
 })

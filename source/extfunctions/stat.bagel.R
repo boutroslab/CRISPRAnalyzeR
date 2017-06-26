@@ -1,4 +1,4 @@
-stat.bagel=function(numiter=1000, scriptpath = cp$miaccs$scriptpath, outputfolder=NULL, groups=NULL, lowercutoff = -50, highercutoff = 100){
+stat.bagel=function(numiter=1000, scriptpath = cp$miaccs$scriptpath, outputfolder=NULL, groups=NULL, lowercutoff = -50, highercutoff = 100, logfile = NULL){
   # OLD ARGUMENTS
   
   # Dataste is taken from DESeq, or any other data.frame that provides fold changes
@@ -36,18 +36,51 @@ stat.bagel=function(numiter=1000, scriptpath = cp$miaccs$scriptpath, outputfolde
       stringsAsFactors=FALSE
     )
     
+    write(paste("BAGEL Treatment: ", paste(cp$treatmentgroup[[groups[2]]], collapse = "," )), logFile, append = TRUE)
+    write(paste("BAGEL Untreated: ", paste(cp$treatmentgroup[[groups[1]]], collapse = "," )), logFile, append = TRUE)
     # Always take replicates of treated group and compare it to mean of untreated - most people will also have only one day0 file
-    num.replicates = length(cp$treatmentgroup[[groups[2]]])
-    compare.cols <- paste(seq(1:length(cp$treatmentgroup[[groups[2]]])), collapse = "," )
-    for(i in 1:num.replicates)
+    num.replicates.treated = length(cp$treatmentgroup[[groups[2]]])
+    # compare.cols <- paste(cp$treatmentgroup[[groups[2]]], collapse = "," )
+    
+    # make columns in BAGEL TAB
+    for(i in 1:length(cp$treatmentgroup[[groups[2]]]))
     {
-      df.bagel[,paste("Replicate","-",i, sep="")] <- log2(cp$normalized.readcount[,(cp$treatmentgroup[[groups[2]]][i]+1)]/mean(cp$normalized.readcount[,(cp$treatmentgroup[[groups[1]]])]))
-      df.bagel[!is.finite(df.bagel[,paste("Replicate","-",i, sep="")]),paste("Replicate","-",i, sep="")] <- as.numeric(0) #sapply(df.bagel[,paste("Replicate","-",i, sep="")], function(x) { if(is.infinite(x) || is.na(x)) { return(0)} else { return(x)}})
+      if(i==1)
+      {
+        compare.cols <- as.character(i)
+      } else {
+        compare.cols <- paste(compare.cols, i, sep=",")
+      }
+      
     }
-   
-  
-  
-  
+    
+    write(paste("BAGEL: ", "Comapre columns ", compare.cols), logFile, append = TRUE)
+    
+    # check for number of replicates of untreated!
+    num.replicates.untreated = length(cp$treatmentgroup[[groups[1]]])
+    
+    #if more than 1 untreated is used, we calculate the mean of it
+    if(num.replicates.untreated > 1){
+      write(paste("BAGEL: ", "More than 1 file for untreated"), logFile, append = TRUE)
+      num.replicates.untreated.data <-  as.data.frame(apply(cp$normalized.readcount[,(cp$treatmentgroup[[groups[1]]]+1)],1,mean), stringsAsFactors = FALSE )#mean of replicates
+      colnames(num.replicates.untreated.data) <- "untreated"
+      
+      write(paste("BAGEL: ", "Calculate BAGEL DF"), logFile, append = TRUE)
+      for(i in 1:num.replicates.treated)
+      {
+        df.bagel[,paste("Replicate","-",i, sep="")] <- log2(cp$normalized.readcount[,(cp$treatmentgroup[[groups[2]]][i]+1)]/num.replicates.untreated.data$untreated)
+        df.bagel[!is.finite(df.bagel[,paste("Replicate","-",i, sep="")]),paste("Replicate","-",i, sep="")] <- as.numeric(0) #sapply(df.bagel[,paste("Replicate","-",i, sep="")], function(x) { if(is.infinite(x) || is.na(x)) { return(0)} else { return(x)}})
+      }
+    } else {
+      write(paste("BAGEL: ", "Calculate BAGEL DF"), logFile, append = TRUE)
+      for(i in 1:num.replicates.treated)
+      {
+        df.bagel[,paste("Replicate","-",i, sep="")] <- log2(cp$normalized.readcount[,(cp$treatmentgroup[[groups[2]]][i]+1)]/mean(cp$normalized.readcount[,(cp$treatmentgroup[[groups[1]]]+1)]))
+        df.bagel[!is.finite(df.bagel[,paste("Replicate","-",i, sep="")]),paste("Replicate","-",i, sep="")] <- as.numeric(0) #sapply(df.bagel[,paste("Replicate","-",i, sep="")], function(x) { if(is.infinite(x) || is.na(x)) { return(0)} else { return(x)}})
+      }
+    }
+    
+    
   # Write FC file
   
   if(is.null(outputfolder))
@@ -72,6 +105,11 @@ stat.bagel=function(numiter=1000, scriptpath = cp$miaccs$scriptpath, outputfolde
   
   bagel.args <- c(file.path(scriptpath, "BAGEL.py"), "-i", df.bagel.file, "-o", df.bagel.outputfile, "-e", training.essentials, "-n", training.nonessentials, "-c", compare.cols)
   
+  # Write LOG
+  if(!is.null(logfile))
+  {
+    write(paste("### bagel called -", "python2", paste(bagel.args, collapse = " ")), logFile, append = TRUE)
+  }
   
   res <- system2(command = "python2", args = bagel.args, stderr = file.path(dirstore, "stderr_bagel.log"), stdout = file.path(dirstore, "stdout_bagel.log"))
   

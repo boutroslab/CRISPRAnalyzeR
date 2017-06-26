@@ -250,42 +250,8 @@ results <- eventReactive(progress_analysis(),{
       
       time$finishAnalysis <- Sys.time()
       
-      # Load cosmic DB?
-      if(!is.null(config$COSMIC_database)){
-        
-        ########################
-        #### Load Databases ####
-        ########################
-        # Load COSMIC ONLY ONCE
-       
-        # check first if COSMIC DB is accessible
-        write(paste(userID, ": Access COSMIC Database at ", file.path(config$database_path, config$COSMIC_database)), logFile, append = TRUE)
-        cosmicreadable <- file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4)
-        
-        if(cosmicreadable == 0)
-        {
-          write(paste(userID, ": Loading COSMIC Database at ", file.path(config$database_path, config$COSMIC_database)), logFile, append = TRUE)
-          
-          withProgress(value=0.3, message="Loading COSMIC Database, please be patient.", {
-            
-            COSMICDB <- try(readr::read_tsv(file = file.path(config$database_path, config$COSMIC_database), col_names = TRUE))
-            if(class(COSMICDB) == "try-error")
-            {
-              write(paste(userID, ": COSMIC Database could not be loaded"), logFile, append = TRUE)
-              write(paste(userID, ": ",COSMICDB[1]), logFile, append = TRUE)
-              COSMICDB <- NULL
-            }
-          })
-        } else
-        {
-          write(paste(userID, ": COSMIC Database could not be loaded at ", file.path(config$database_path,config$COSMIC_database)), logFile, append = TRUE)
-          
-          COSMICDB <- NULL
-        }
-          
-
-      }
-      else {
+      # COSMIC DB loaded?
+      if(is.null(COSMICDB)){
         COSMICDB <- NULL
       }
      

@@ -117,7 +117,8 @@ sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Hit Calling", tabName = "hc", icon = icon("list"),
     collapsible = TRUE,
       menuSubItem("Gene Ranking", tabName = "hc_candidates"), 
-      menuSubItem("Overview", tabName = "hc_overview")
+      menuSubItem("Overview", tabName = "hc_overview"),
+      menuSubItem("Essential Genes", tabName = "hc_essentials")
   ),
   
   
@@ -147,7 +148,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Help", tabName = "help", icon = icon("question"),
            collapsible = TRUE,
            menuSubItem("Tutorials", tabName = "help_tutorials"),
-             #menuSubItem("Ask us for help", tabName = "help_ticket"),
+             menuSubItem("Ask us for help", tabName = "help_ticket"),
              menuSubItem("Forum", tabName = "help_forum"),
            menuSubItem("Help", tabName = "help_analyzer")
            ),
@@ -178,6 +179,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
 body <- dashboardBody(
   shiny::tags$head(
     shiny::tags$style(HTML(config$stylesheet)),
+    
     shiny::includeScript("tooltip-delay.js")
   ),
   #busyIndicator(),
@@ -228,7 +230,7 @@ body <- dashboardBody(
     source(file.path(config$appDir, "hcOverview_ui.r"), local = TRUE)$value,
     
     # Essential Genes
-    
+    source(file.path(config$appDir, "essentials_ui.r"), local = TRUE)$value,
     
     
     ## Hit Confirmation
@@ -257,7 +259,7 @@ body <- dashboardBody(
     source(file.path(config$appDir, "help_ui.r"), local = TRUE)$value,
     source(file.path(config$appDir, "tutorials_ui.r"), local = TRUE)$value,
     source(file.path(config$appDir, "helpforum_ui.r"), local = TRUE)$value,
-    #source(file.path(config$appDir, "help_analyzer.r"), local = TRUE)$value,
+    source(file.path(config$appDir, "help_analyzer.r"), local = TRUE)$value,
     
     # Impressum
     source(file.path(config$appDir, "impressum_ui.r"), local = TRUE)$value,
@@ -324,18 +326,20 @@ shinyBS::bsModal(id = "reportCreated_modal", title = "Report Created", trigger =
                    )
                  )
 ),
-shinyBS::bsModal(id = "reportCreated_modal", title = "Warning: CRISPRAnalyzeR could not finish the report", trigger = "libfileerrormodal", size = "large", 
+shinyBS::bsModal(id = "reportError_modal", title = "Warning: CRISPRAnalyzeR could not finish the report", trigger = "libfileerrormodal", size = "large", 
                  fluidRow(
                    style="width:100%;",
                    column(width=8,offset=2, class="alert alert-danger text-center",
                           shiny::tags$span(style="float:left;padding:10px;", HTML('<i class="fa fa-exclamation-triangle fa-4x"></i>')),
-                          shiny::tags$span(shiny::tags$p(class="lead text-center", "CRISPRAnalyzeR failed to generate the report for you.", shiny::tags$br(),
+                          shiny::tags$span(shiny::tags$p(class="lead text-center", "CRISPRAnalyzeR was not able to generate the report for you.", shiny::tags$br(),
                                                          "In most cases, the allocated space was not enough to render the complete report.", shiny::tags$br(),shiny::tags$br(),
                                                          shiny::tags$strong("You can try the following:"),shiny::tags$br(),
-                                                         "Try to remove sections from the report and run several smaller reports with the individual section",shiny::tags$br(),
-                                                         "Ask your administrator to increase the ULIMIT value as described on the CRISPRAnalyzeR Github page.", shiny::tags$br(),shiny::tags$br(),
+                                                         "Try to remove sections from the report and run several smaller reports with the individual sections.",shiny::tags$br(),
+                                                         "Ask your administrator to increase the C-Stack value as described on the CRISPRAnalyzeR Github page.", shiny::tags$br(),shiny::tags$br(),
                                                          
-                                                         shiny::tags$strong("In most cases it is recommended to just select individual sections and run/download several reports.")
+                                                         shiny::tags$strong("In most cases, especially for genome-wide screens, it is recommended to just select individual sections and run/download several reports."),
+                                                         shiny::tags$br()
+                                                         
                                                          
                                                          ))
                    )

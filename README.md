@@ -142,7 +142,17 @@ __It is your responsibility to obtain all required licenses in case of commercia
 
 
 ```
-Version 1.141 (latest)
+Version 1.17 (latest)
+- fixed BAGEL issues
+- added the possibility to download all data from the DATA REVIEW tab
+- improved the performance ovberall
+- replaced FASTQ handling by new FASTQ and SAM parser based oN RUST -> speed increase by 6x!
+- improved report
+- added Visualization of GenomeCRISPR data in Hit Confirmation -> Gene Overview
+- added Essential / Non-essential gene Read count in Quality Control
+- added Essential/non-essential Log2 FC in Hit Calling section -> you can compare the effect to any published CRISPR screened cell line in GenomeCRISPR
+
+Version 1.141
 - adapted to changes in ENSEMBL database structure
 
 Version 1.14

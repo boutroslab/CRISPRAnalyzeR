@@ -207,10 +207,7 @@ tryFun <- function( expr, place, name,  path = info$paths, log = logFile, ID = u
         std_out <- "No Log available."
       }
       write(paste(userID, ": Gzip Error", std_err, std_out, collapse = "\n"), log, append = TRUE)
-      
-      
-      
-      
+    
       
       
     }
@@ -244,7 +241,8 @@ tryFun <- function( expr, place, name,  path = info$paths, log = logFile, ID = u
       {
         std_out <- "No Log available."
       }
-      write(paste(userID, ": Perl Mapping Error", std_err, std_out, collapse = "\n"), log, append = TRUE)
+      write(paste(userID, ": Mapping Error", std_err, std_out, collapse = "\n"), log, append = TRUE)
+      write(paste(userID, ": Logs",  file.path(path,"_map_stderr.log") ,  file.path(path,"_map_stdout.log"), collapse = "\n"), log, append = TRUE)
       #file.path(userDir, "bt2build_error.log")
       #file.path(userDir, "bt2build.log")
     }
@@ -255,7 +253,7 @@ tryFun <- function( expr, place, name,  path = info$paths, log = logFile, ID = u
       unzip = gsub(pattern = "[\n;]", replacement = " ", x = paste0("Unfortunately your fastq.gz file ", name, " could not be unzipped.<br/>Are you sure it is a valid .fastq.gz file?<br/><strong>The gzip error log is:</strong></br><pre>", htmltools::htmlEscape(std_err) ,"</pre></br><strong>The gzip output log is:</strong></br><pre>", htmltools::htmlEscape(std_out),"</pre>")),
       extract = gsub(pattern = "[\n;]", replacement = " ", x = paste0("Sorry, but sgRNA target sequences could not be extracted from your file ", name, ".<br/>Please make sure your FASTQ.gz file content match the RegEx you selected.<br/> See the help for more information.<br/><br/><strong>The error log is:</strong></br><pre>", htmltools::htmlEscape(std_err) ,"</pre></br><strong>The output log is:</strong></br><pre>", htmltools::htmlEscape(std_out),"</pre>")),
       #extract = paste0("Sorry, but sgRNA target sequences could not be extracted from your file ", name, ".<br/>Please make sure your FASTQ.gz file content match the RegEx you selected.<br/> See the help for more information.<br/>"),
-      map = gsub(pattern = "[\n;]", replacement = " ", x = paste0("Sorry but CRISPRAnalyzeR could not map your file ", name, " to the provided sgRNA library.<br/>Please make sure you uploaded corresponding files and selected a mathcing regular expression.<br/><strong>The bowtie2 error log is:</strong></br><pre>", htmltools::htmlEscape(std_err) ,"</pre></br><strong>The bowtie2 output log is:</strong></br><pre>", htmltools::htmlEscape(std_out),"</pre>")),
+      map = gsub(pattern = "[\n;]", replacement = " ", x = paste0("Sorry but CRISPRAnalyzeR could not map your file ", name, " to the provided sgRNA library.<br/>Please make sure you uploaded corresponding files and selected a matching regular expression.<br/><strong>The bowtie2 error log is:</strong></br><pre>", htmltools::htmlEscape(std_err) ,"</pre></br><strong>The bowtie2 output log is:</strong></br><pre>", htmltools::htmlEscape(std_out),"</pre>")),
       map2 = gsub(pattern = "[\n;]", replacement = " ", x = paste0("Sorry but CRISPRAnalyzeR could not find mapping information for  ", name, " using the provided sgRNA library.<br/>Please make sure you uploaded corresponding files.<br/><strong>The error log is:</strong></br><pre>", htmltools::htmlEscape(std_err) ,"</pre></br><strong>The output log is:</strong></br><pre>", htmltools::htmlEscape(std_out),"</pre>")),
       rqc = paste0("CRISPRAnalyzeR could not generate the FASTQ quality control report.</br>Please try again.")
     )

@@ -165,7 +165,12 @@ tabItem(tabName = "downloads", align = "center",
            shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),
            shiny::tags$span(
              HTML("Depending on the size of your screen the <strong>report generation might take several minutes up to an hour</strong>.</br>
-                  <strong>Please be patient</strong> - the report will be <strong>ready for download </strong> as soon as it is finished.")
+                  <strong>Please be patient</strong> - the report will be <strong>ready for download </strong> as soon as it is finished.</br>
+                  </br>
+                  <hr>
+                  </br>
+                  <strong>For genome-wide screens, the report generation might fail due to memory limitations.</br>
+                  You can find a solution <a href='https://github.com/boutroslab/CRISPRAnalyzeR#increasing-the-core-ulimit' target='_blank' >at the Github page</a></strong>.")
            )
     )
   ),

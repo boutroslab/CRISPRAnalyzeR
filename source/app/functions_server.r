@@ -4251,3 +4251,156 @@ helpPopup <- function(title, content,
 }
 
 
+######### Plot Essentials ###############
+## This plots various information (Fold Changes, VENN diagram) about known essentials from the DAISY model, GenomeCRISPR or a selected cell line using GenomeCRISPR
+## By default, it uses BAGEL information, but can also be used with Wilcox,mageck, deseq2, edgeR and RSEA
+## @ data -> tibble with gene identifier and Log2 fold change (gene and fc). For fc plot, this must be DESEQ2 data on gene level!
+## @ genes -> vector containing all genes!
+## @ identifier -> the identifier used, e.g. hgnc_symbol -> is provided by anno() or cp$miaccs$g.identifier.new
+## @ mode -> either daisy, gcrispr or the available cell line from gcrispr data
+## @ type -> either distribution, box or VENN
+## @ celllines -> a vector containing cellline elements of GenomeCRISPR_essentials
+## @ essentials -> the tibble with the essential gene list, either daisy or genomecrispr derived from 
+##                "GenomeCRISPR_essentials" = readRDS(file.path(config$database_path, "GenomeCRISPR_Essentials.rds"))
+##                "DAISY_essentials" = readRDS(file.path(config$database_path, "DAISY_Essentials.rds"))
+
+
+Plot_Essentials <- function(data = NULL, identifier = "hgnc_symbol", mode = "diasy", type = "distribution", essentials = NULL, celllines = NULL)
+{
+  if(is.null(essentials) || is.null(data) || is.null(mode) || is.null(type))
+  {
+    stop("Please provide all required [arguments.parameters")
+  }
+  
+  if(mode == "daisy")
+  {
+    # get all info from daisy CORE essentials
+    essentials_data <- dplyr::filter(data, gene %in% essentials[,identifier][[1]])
+    nonessentials_data <- dplyr::filter(data, !gene %in% essentials[,identifier][[1]])
+    
+    filename <- paste("DAISY_Essentials","_",type, sep="")
+  } 
+  else if (mode == "gcrispr" && !is.null(celllines))
+  {
+    # get all info from GenomeCRISPR for cell lines
+    nonessentials <- essentials %>% dplyr::filter(essential == FALSE & cellline %in% celllines)
+    essentials <- essentials %>% dplyr::filter(essential == TRUE & cellline %in% celllines)
+    
+    essentials_data <- dplyr::filter(data, gene %in% unique(essentials[,identifier][[1]]) )
+    nonessentials_data <- dplyr::filter(data, gene %in% unique(nonessentials[,identifier][[1]]))
+    
+    filename <- paste("GenomeCRISPR_Essentials_",paste(celllines, collapse = "_"),"_",type, sep="")
+    
+  } else {
+    # get all info from daisy CORE essentials
+    essentials_data <- dplyr::filter(data, gene %in% unique(essentials[,identifier][[1]]))
+    nonessentials_data <- dplyr::filter(data, !gene %in% unique(essentials[,identifier][[1]]))
+    filename <- paste("DAISY_Essentials","_",type, sep="")
+  }
+  
+  # check if empty, if so return NA
+  if(nrow(essentials) == 0 && nrow(nonessentials) == 0)
+  {return(NA)}
+  
+  
+  essentialDistribution = density(essentials_data[, "fc"][[1]])
+  nonessentialDistribution =  density(nonessentials_data[, "fc"][[1]])
+  
+  
+  # plotting distribution
+  if(type == "distribution")
+  {
+    tit <- "Log2 Fold Cange Distribution"
+    xlab <- "Log2 Fold Change"
+    ylab <- "Frequency"
+    
+    hc <- highcharter::highchart() %>%
+      highcharter::hc_chart(type = "area", zoomType = "x") %>%
+      highcharter::hc_title(text = tit)
+    # Add subtitle if cell line is used
+    if(!is.null(celllines))
+    {
+      hc <- highcharter::hc_subtitle(hc, paste("Essential Data in ",paste(celllines, collapse = " ")))
+    }
+    
+    hc <- highcharter::hc_plotOptions(hc, area = list(dashStyle = "Dash", 
+                                                      marker = list(enabled = FALSE, symbol = "circle", radius = 2, 
+                                                                    states = list(hover = list(enabled = TRUE))))) %>%
+      highcharter::hc_xAxis(title = list(text = xlab), align = "middle", crosshair = TRUE) %>%
+      highcharter::hc_yAxis(title = list(text = ylab), align = "left", crosshair = TRUE) %>%
+      highcharter::hc_exporting(enabled = TRUE,
+                                printMaxWidth = 3000,
+                                scale=8,
+                                filename = filename,
+                                formAttributes = list(target = "_blank")) %>%
+      highcharter::hc_tooltip(enabled=FALSE)
+    
+    hc <- highcharter::hc_add_theme(hc, hc_theme_google2())
+    
+    hc <- highcharter::hc_add_series(hc, name = "Essential Genes", data = essentialDistribution, 
+                                     type = "area", fillOpacity = 0.3)
+    hc <- highcharter::hc_add_series(hc, name = "Non-essential Genes", data = nonessentialDistribution, 
+                                     type = "area", fillOpacity = 0.3)
+    # Return element
+    return(hc) 
+  }
+  
+  
+  
+  
+}
+
+
+  # information of gene and if it is essentials or not
+  # - gene symbol
+  # - essential in this analysis (yes/no)
+  # essential in DAISY (yes/no)
+  # essentials in GCRISPR cell line (yes/no)
+  
+  Table_essentials <- function(data = NULL, identifier = "hgnc_symbol", mode = "diasy", essentials = NULL, celllines = NULL)
+  {
+    if(is.null(essentials) || is.null(data) || is.null(mode) )
+    {
+      stop("Please provide all required [arguments.parameters")
+    }
+    
+    if(mode == "daisy")
+    {
+      # get all info from daisy CORE essentials
+      datadf <- data %>% dplyr::mutate(CORE = gene %in% essentials[,identifier][[1]])
+      colnames(datadf) <- c("Gene","Log2 Fold Change", "Daisy Core Essential?")
+      filename <- paste("DAISY_Essentials", sep="")
+    } 
+    else if (mode == "gcrispr" && !is.null(celllines))
+    {
+      # get all info from GenomeCRISPR for cell lines
+      essentials <- essentials %>% dplyr::filter(essential == TRUE & cellline %in% celllines)
+      
+      datadf <- data %>% dplyr::mutate(CORE = gene %in% unique(essentials[,identifier][[1]] ))
+      
+      colnames(datadf) <- c("Gene","Log2 Fold Change", paste("Essential in:", celllines, collapse = " ") )
+      
+      filename <- paste("GenomeCRISPR_Essentials_",paste(celllines, collapse = "_"), sep="")
+      
+    } else {
+      # get all info from daisy CORE essentials
+      datadf <- data %>% dplyr::mutate(CORE = gene %in% unique(essentials[,identifier][[1]]))
+      colnames(datadf) <- c("Gene","Log2 Fold Change", "Daisy Core Essential?")
+      filename <- paste("DAISY_Essentials", sep="")
+    }
+    
+    # check if empty, if so return NA
+    if(nrow(essentials) == 0 && nrow(nonessentials) == 0)
+    {return(NA)}
+    
+    # make data table output
+    
+    datadf$`Log2 Fold Change` <- round(datadf$`Log2 Fold Change`,digits = 2)
+    
+    table <- Table_DT( datadf, colNames = colnames(datadf), bRownames = FALSE, style = "default", class = "display", 
+                       dom = "flrtip", ordering = NULL, alignment = list(centre = NULL, justify = NULL, left = NULL), 
+                       formatCurr = NULL, formatPerc = NULL, formatRoun = NULL, buttons = c('copy', 'csv', 'excel', 'pdf', 'print'), bResponsive = FALSE,
+                       pageLen = 15, bScroll = TRUE, filename = filename )
+    
+    return(table)
+  }

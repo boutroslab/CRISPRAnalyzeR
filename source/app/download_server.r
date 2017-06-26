@@ -406,15 +406,7 @@ observeEvent(input$createReport, {
       # check for existence of the cosmic DB
       # For some reasing, file.access sometimes results in an empty value
       cosmicfile <- -1
-      print(config$database_path)
-      print(config$COSMIC_database)
-      print(file.path(config$database_path, config$COSMIC_database))
-      print(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4))
-      print(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 0))
-      print(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 1))
-      print(file.access(names = file.path(config$database_path, "testwrong"), mode = 4))
       cosmicfile <- try(file.access(names = file.path(config$database_path, config$COSMIC_database), mode = 4))
-      print(cosmicfile)
       
       if(cosmicfile == 0)
       {
@@ -564,9 +556,12 @@ observeEvent(input$createReport, {
           message = "Compiling Report") )
       
       if( inherits(res, "try-error") ){
+        
+        write(paste(userID, ": Error during report generation: ", paste(res[1], collapse = "; ") ), logReport, append = TRUE)
+        
         reportFile$status <- FALSE
         reportFile$error <- TRUE
-        reportFile$msg <- "<div style='color:red;'>Error occurred during report rendering.</div>"
+        reportFile$msg <- res[1]
         
         shinyBS::toggleModal(session, "reportError_modal", toggle = "open")
         
@@ -648,10 +643,14 @@ observe({
     shinyjs::enable("downloadanalysisdata")
     shinyjs::enable("downloadHC_TSV")
     shinyjs::enable("downloadHC_XLSX")
+    shinyjs::enable("downloadHC_rawdata")
+    shinyjs::enable("download_alldata")
   } else {
     shinyjs::disable("downloadanalysisdata")
     shinyjs::disable("downloadHC_TSV")
     shinyjs::disable("downloadHC_XLSX")
+    shinyjs::disable("downloadHC_rawdata")
+    shinyjs::disable("download_alldata")
   }
   
 })
@@ -687,6 +686,36 @@ output$downloadHC_XLSX <- downloadHandler(
   }
 )
 
+# Download all RAW data files
+
+output$downloadHC_rawdata <- downloadHandler(
+  filename = paste("CRISPR-AnalyzeR", format(startTime, format = "%y-%m-%d"), "HitCalling_rawdata.zip", sep = "_"),
+  content = function(file) {
+    if( status$results == FALSE ) NULL else {
+      
+      # zip the following files
+      try(system2( "zip", args = c("-r", file.path(userDir, "rawdata.zip"), file.path(userDir,"*.txt"), file.path(userDir,"*.tab") )) )
+      
+      file.copy(file.path(userDir, "rawdata.zip"), file, overwrite = TRUE)
+    }
+  }
+)
+
+# Download all data files
+
+output$download_alldata <- downloadHandler(
+  filename = paste("CRISPR-AnalyzeR", format(startTime, format = "%y-%m-%d"), "ALL-DATA.zip", sep = "_"),
+  content = function(file) {
+    if( status$results == FALSE ) NULL else {
+      
+      # zip the following files
+      try(system2( "zip", args = c("-r", file.path(userDir, "alldata.zip"), file.path(userDir, "*.txt"),file.path(userDir,"*.tab"), file.path(userDir,"*.rds") )) )
+      
+      file.copy(file.path(userDir, "alldata.zip"), file, overwrite = TRUE)
+    }
+  }
+)
+
 
 #################################
 #### toggle Download Buttons ####
@@ -708,6 +737,7 @@ observeEvent(status$results, {
     shinyjs::disable("createReport")
     shinyjs::disable("downloads_sqData")
     shinyjs::disable("downloads_hcData")
+    
     shinyjs::disable("report_sqCheck")
     shinyjs::disable("report_hcCheck")
     shinyjs::disable("report_ovCheck")
@@ -831,7 +861,7 @@ observe({
     # make XLSX
     
     library(openxlsx)
-    l_all <- list("HitCalling ALL" = df_all, "DESeq2" = as.data.frame(results()$deseq$data$genes), "MAGeCK" = as.data.frame(results()$mageck$data$genes), "Wilcoxon" = as.data.frame(results()$wilcox$data), "edgeR" = as.data.frame(results()$edger$data$genes), "sgRSEA enriched" = as.data.frame(results()$rsea$data$gene.pos), "sgRSEA depleted" = as.data.frame(results()$rsea$data$gene.neg), "Z-Ratio" = as.data.frame(results()$zratio))
+    l_all <- list("HitCalling ALL" = df_all, "DESeq2" = as.data.frame(results()$deseq$data$genes), "DESeq2 sgRNA" = as.data.frame(results()$deseq$data$sgRNA), "MAGeCK" = as.data.frame(results()$mageck$data$genes), "Wilcoxon" = as.data.frame(results()$wilcox$data), "edgeR" = as.data.frame(results()$edger$data$genes), "sgRSEA enriched" = as.data.frame(results()$rsea$data$gene.pos), "sgRSEA depleted" = as.data.frame(results()$rsea$data$gene.neg), "Z-Ratio" = as.data.frame(results()$zratio))
     
     # add BAGEL and Screenbeam if available
     if(!is.null(results()$screenbeam$info))
@@ -856,6 +886,15 @@ observe({
     res <- try(openxlsx::write.xlsx(l_all, file.path(userDir, "HitCalling_all.xlsx"), asTable = TRUE, colNames = TRUE, rowNames = TRUE, overwrite = TRUE))
     if(class(res) == "try-error")
     {return(NULL)}
+    
+    # Create sgRNA FoldChange File
+    
+    
+    # Create ZIP with all RDS file
+    
+    # Create ZIP with all raw data
+    
+    
   } else {NULL}
   
 })

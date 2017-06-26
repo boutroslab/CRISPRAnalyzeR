@@ -1185,7 +1185,7 @@ write(paste(userID, ": creating object bagel"), logFile, append = TRUE)
 write(paste(userID, ": bagel cutoffs -", info$analysisBagelLower, "-" , info$analysisBagelHigher), logFile, append = TRUE)
 bagel <- list()
 
-bageldf <- try(stat.bagel(scriptpath = cp$miaccs$scriptpath, outputfolder=userDir, groups = cp$groups.compare,  lowercutoff = info$analysisBagelLower, highercutoff = info$analysisBagelHigher))
+bageldf <- try(stat.bagel(scriptpath = cp$miaccs$scriptpath, outputfolder=userDir, groups = cp$groups.compare,  lowercutoff = info$analysisBagelLower, highercutoff = info$analysisBagelHigher, logfile = logFile))
 
 if(class(bageldf) == "try-error")
 {

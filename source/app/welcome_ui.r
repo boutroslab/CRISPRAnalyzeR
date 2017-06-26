@@ -41,9 +41,10 @@ tabItem(tabName = "welcome", align = "center",
           
           fluidRow(
                    column(width=4, offset=4,
-                          shiny::tags$h4("Last Update: 2017-04-26 ", shiny::tags$span(class="label label-default", "Version 1.16"))
+                          shiny::tags$h4("Last Update: 2017-06-22 ", shiny::tags$span(class="label label-default", "Version 1.17"))
                           
                           )),
+        
         shiny::tags$br(),
           # CRISPRAnalyzeR Description with CRISPRAnalyzeR Workflow
           # left half: Workflow, right half: description
@@ -98,7 +99,36 @@ tabItem(tabName = "welcome", align = "center",
                                 shiny::tags$img(class="img-responsive", src="./images/CRISPRAnalyzeR_workflow3.png")
                                 )
                           
+                          ),
+                   
+                   column(width=10, offset=1,
+                          shiny::tags$br(),
+                          shiny::tags$hr(),
+                          
+                          shiny::tags$h2("Download CRISPRAnalyzeR for offline use"),
+                          
+                          # Short video here
+                          
+                          column(width=12,
+                                 ## How to download
+                                 shiny::tags$br(),
+                                 shiny::tags$p(class="text-justify", "You can use our online web service, but also download CRISPRAnalyzeR to install it on your local computer or within your lab/institute.",
+                                               "CRISPRAnalyzeR is open-source and free for non-commercial use, please check out the download pages below."),
+                                 shiny::tags$p(class="lead", "CRISPRAnalyzeR can be downloaded so you can install it on your computer"),
+                                 
+                                 shiny::tags$br(),
+                                 shiny::tags$h4("For further information please check our Github page:"),
+                                 shiny::tags$a(href="https://github.com/boutroslab/crispr-analyzer/", target="_blank" ,shiny::tags$button(type="button", class="btn btn-success btn-lg", shiny::icon("github", class = NULL, lib = "font-awesome"), "Visit the Github page")),
+                                 shiny::tags$br(),
+                                 shiny::tags$h4("Or download CRISPRAnalyzeR directly:"),
+                                 shiny::tags$a(href="https://github.com/boutroslab/crispr-analyzer/releases", target="_blank" ,shiny::tags$button(type="button", class="btn btn-primary btn-lg", shiny::icon("download", class = NULL, lib = "font-awesome"), "Download Source Code")),
+                                 shiny::tags$a(href="https://github.com/boutroslab/crispr-analyzer/wiki/Installation:-How-to-download-and-install-CRISPRAnalyzeR", target="_blank" ,shiny::tags$button(type="button", class="btn btn-primary btn-lg", shiny::icon("download", class = NULL, lib = "font-awesome"), "Download Ready-to-use Docker Container"))
+                                 
+                                 
+                                 
                           )
+                          
+                   )
                    ),
           
         # load footer  

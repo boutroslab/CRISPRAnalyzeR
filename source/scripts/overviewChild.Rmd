@@ -4,6 +4,7 @@ child of 'overview.Rmd'
 --> 
 
 ```{r, results='asis', eval=ovBool[counter]}
+library(tidyverse)
 write(paste(userID, ": writing overviewChild"), logFile, append = TRUE) 
 gene <- geneList$overview[[counter]]$gene
 cat("##", gene, sprintf("(%s)", counter))
@@ -165,8 +166,11 @@ HTML(if(data == "") "No data available" else data) )
 #### Further Information
 
 ```{r}
+
 write(paste(userID, ": writing overviewChild - Further Information"), logFile, append = TRUE) 
+write(paste(userID, str(indepth_geneOverview$enrichr)), logFile, append = TRUE) 
 data <- (dplyr::filter(indepth_geneOverview$enrichr, database == "ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X", database == "ChEA 2015") %>% dplyr::select(category))$category
+
 chipseqbinding <- if(length(data) > 0) paste(data, collapse = "<br>") else "No data available"
 
 data <- (dplyr::filter(indepth_geneOverview$enrichr, database == "TargetScan_microRNA") %>% dplyr::select(category))$category

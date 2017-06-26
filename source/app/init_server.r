@@ -28,6 +28,8 @@ dir.create(userDir)
 command = "chmod"
 args = c("-R", "777", userDir)
 
+system2(command = command,args = args)
+
 session$onSessionEnded(function() {
   unlink(userDir, recursive = TRUE)
   log <- paste(userID, ": shiny session finished at", Sys.time())

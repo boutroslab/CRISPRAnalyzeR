@@ -101,8 +101,18 @@ tabItem(tabName = "data_review", align = "center",
                         shiny::tags$h4("Download All Analysis Data"),
                         shiny::helpText("You can download all raw data form the individual hit calling methods either as a tab-separated .TSV file or as a fully formatted .XLSX Excel file."),
                         downloadButton('downloadHC_TSV', 'Download .TSV'),
-                        downloadButton('downloadHC_XLSX', 'Download as Excel .XLSX')
+                        downloadButton('downloadHC_XLSX', 'Download as Excel .XLSX'),
                         
+                        shiny::tags$hr(),
+                        
+                        shiny::tags$h4("Download All Intermediate Analysis Data"),
+                        downloadButton('downloadHC_rawdata', 'Download .ZIP'),
+                        
+                        shiny::tags$hr(),
+                        
+                        shiny::tags$h4("Download All Generated Raw Data"),
+                        shiny::helpText("This will download everything that has been generated and is only for advanced users. The filesize can be larger than 1 GB."),
+                        downloadButton('download_alldata', 'Download .ZIP')
                         ),
                  column(width = 6,
                         
