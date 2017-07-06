@@ -35,7 +35,7 @@ nfiles <- length(info$paths)
 # gene / sgRNA Divider
 # Catching first symbol in second bracket
 genedivider = ""
-genedivider <- try(sub(pattern = "^.*?\\(.+?\\)\\((.{1}).*\\).*$", replacement = "\\1", x = info$libRegex))
+#genedivider <- try(sub(pattern = "^.*?\\(.+?\\)\\((.{1}).*\\).*$", replacement = "\\1", x = info$libRegex))
 if(class(genedivider) == "try-error" || genedivider == "")
 {
   genedivider = "_" # set default to _ (underscore)
@@ -409,7 +409,7 @@ if( nfiles > 1 ){
       
       # DEBUG: disable rust
       
-      rust = 1
+      #rust = 1
       
       # if RUST is not present, we switch back to PERL
       write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
@@ -472,7 +472,7 @@ if( nfiles > 1 ){
       
       # DEBUG: disable rust
       
-      rust = 1
+      #rust = 1
       
       write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
       if(rust == 0)
@@ -575,7 +575,6 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   
   file.rename(info$paths[i], paste0(info$paths[i], ".gz"))
   
-  # FASTQ QC file to add to report
   # FASTQ QC file to add to report
   if(!exists("file.rqc"))
   {

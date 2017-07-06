@@ -30,20 +30,25 @@ tabItem(tabName = "help_forum", align = "center",
             </div>
             </div>
             "),
+       
+       shiny::tags$p(class="head",
+                     "Please have a look into the google groups of CRISPRAnalyzer for additional help.",
+                     HTML("<a href='https://groups.google.com/forum/#!forum/crispr-analyzer' target='_blank'><strong> Check out the CRISPRAnalyzeR google group</strong>.</a>")
+                     ),
         
-        HTML("<iframe id='forum_embed'
-  src='javascript:void(0)'
-             scrolling='no'
-             frameborder='0'
-             width='900'
-             height='700'>
-             </iframe>
-             <script type='text/javascript'>
-             document.getElementById('forum_embed').src =
-             'https://groups.google.com/forum/embed/?place=forum/crispr-analyzer'
-             + '&showsearch=true&showpopout=true&showtabs=false'
-             + '&parenturl=' + encodeURIComponent(window.location.href);
-             </script>"),
+  #       HTML("<iframe id='forum_embed'
+  # src='javascript:void(0)'
+  #            scrolling='no'
+  #            frameborder='0'
+  #            width='900'
+  #            height='700'>
+  #            </iframe>
+  #            <script type='text/javascript'>
+  #            document.getElementById('forum_embed').src =
+  #            'https://groups.google.com/forum/embed/?place=forum/crispr-analyzer'
+  #            + '&showsearch=true&showpopout=true&showtabs=false'
+  #            + '&parenturl=' + encodeURIComponent(window.location.href);
+  #            </script>"),
        br()
         ),
   # load footer  
