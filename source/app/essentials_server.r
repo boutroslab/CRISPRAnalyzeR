@@ -26,7 +26,7 @@ output$essentials_daisy_distribution <- renderHighchart({
                    "fc"= results()$deseq$data$genes$log2FoldChange
     )
     # make plot
-    Plot_Essentials(data = data, identifier = annos()$IDnew, mode = "diasy", type = "distribution", essentials = results()$DAISY_essentials, celllines = NULL)
+    Plot_Essentials(data = data, identifier = annos()$IDnew, mode = "daisy", type = "distribution", essentials = results()$DAISY_essentials, celllines = NULL)
   }
   
   

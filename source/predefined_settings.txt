@@ -1,0 +1,138 @@
+Library	Setting	Value
+Example	FASTA	pilotscreen.fasta
+Example	regexFASTA	(.*)?_(.*)
+Example	regexFASTQ	ACC(.*{20,21})G
+Example	symbol	ensembl_gene_id
+Example	organism	homo_sapiens
+Example	URL	https://github.com/boutroslab/cld
+GeckoV2 A+B	FASTA	GeckoV2_HGLib_A-B.fasta
+GeckoV2 A+B	regexFASTA	(.*)?_(.*)
+GeckoV2 A+B	regexFASTQ	CACC(.*{20})
+GeckoV2 A+B	symbol	hgnc_symbol
+GeckoV2 A+B	organism	homo_sapiens
+GeckoV2 A+B	URL	https://www.addgene.org/pooled-library/zhang-human-gecko-v2/
+GeckoV2 A	FASTA	pilotscreen.fasta
+GeckoV2 A	regexFASTA	(.*)?_(.*)
+GeckoV2 A	regexFASTQ	CACC(.*{20})
+GeckoV2 A	symbol	hgnc_symbol
+GeckoV2 A	organism	homo_sapiens
+GeckoV2 A	URL	https://www.addgene.org/pooled-library/zhang-human-gecko-v2/
+GeckoV2 B	FASTA	pilotscreen.fasta
+GeckoV2 B	regexFASTA	(.*)?_(.*)
+GeckoV2 B	regexFASTQ	CACC(.*{20})
+GeckoV2 B	symbol	hgnc_symbol
+GeckoV2 B	organism	homo_sapiens
+GeckoV2 B	URL	https://www.addgene.org/pooled-library/zhang-human-gecko-v2/
+GeckoV2 Mouse A	FASTA	FASTA_GeckoV2_Mouse_A.fasta
+GeckoV2 Mouse A	regexFASTA	(.*)?_(.*)
+GeckoV2 Mouse A	regexFASTQ	CACC(.*{20})
+GeckoV2 Mouse A	symbol	mgi_symbol
+GeckoV2 Mouse A	organism	mus_musculus
+GeckoV2 Mouse A	URL	https://www.addgene.org/1000000052/
+GeckoV2 Mouse B	FASTA	FASTA_GeckoV2_Mouse_B.fasta
+GeckoV2 Mouse B	regexFASTA	(.*)?_(.*)
+GeckoV2 Mouse B	regexFASTQ	CACC(.*{20})
+GeckoV2 Mouse B	symbol	mgi_symbol
+GeckoV2 Mouse B	organism	mus_musculus
+GeckoV2 Mouse B	URL	https://www.addgene.org/1000000052/
+TKO v1 90K	FASTA	FASTA_TKO_90K_library.fasta
+TKO v1 90K	regexFASTA	(.*)?_(.*)
+TKO v1 90K	regexFASTQ	ACCG(.*{20})
+TKO v1 90K	symbol	hgnc_symbol
+TKO v1 90K	organism	homo_sapiens
+TKO v1 90K	URL	https://www.addgene.org/pooled-library/moffat-crispr-knockout/
+TKO v1 85K supplement	FASTA	FASTA_TKO_85Ksupp_library.fasta
+TKO v1 85K supplement	regexFASTA	(.*)?_(.*)
+TKO v1 85K supplement	regexFASTQ	ACCG(.*{20})
+TKO v1 85K supplement	symbol	hgnc_symbol
+TKO v1 85K supplement	organism	homo_sapiens
+TKO v1 85K supplement	URL	https://www.addgene.org/pooled-library/moffat-crispr-knockout/
+WangV2 185K	FASTA	pilotscreen.fasta
+WangV2 185K	regexFASTA	(.*)?_(.*)
+WangV2 185K	regexFASTQ	ACC(.*{20,21})G
+Brie	FASTA	FASTA_Brie.fasta
+Brie	regexFASTA	(.*)?_(.*)
+Brie	regexFASTQ	ACACC(.*{20})
+Brie	symbol	mgi_symbol
+Brie	organism	mus_musculus
+Brie	URL	https://www.addgene.org/pooled-library/broadgpp-mouse-knockout-brie/
+Brunello	FASTA	FASTA_brunello_library.fasta
+Brunello	regexFASTA	(.*)?_(.*)
+Brunello	regexFASTQ	ACACC(.*{20})
+Brunello	symbol	hgnc_symbol
+Brunello	organism	homo_sapiens
+Brunello	URL	https://www.addgene.org/pooled-library/broadgpp-human-knockout-brunello/
+Brie Kinome	FASTA	Broad_GPP_Brie.fasta
+Brie Kinome	regexFASTA	(.*)?_(.*)
+Brie Kinome	regexFASTQ	ACACC(.*{20})
+Brie Kinome	symbol	mgi_symbol
+Brie Kinome	organism	mus_musculus
+Brie Kinome	URL	https://www.addgene.org/pooled-library/broadgpp-mouse-knockout-brie/
+Brunello Kinome A	FASTA	FASTA_Brunnello_Kinome_A.fasta
+Brunello Kinome A	regexFASTA	(.*)?_(.*)
+Brunello Kinome A	regexFASTQ	ACACC(.*{20})
+Brunello Kinome A	symbol	hgnc_symbol
+Brunello Kinome A	organism	homo_sapiens
+Brunello Kinome A	URL	https://www.addgene.org/pooled-library/broadgpp-human-kinome/
+Brunello Kinome B	FASTA	FASTA_Brunnello_Kinome_B.fasta
+Brunello Kinome B	regexFASTA	(.*)?_(.*)
+Brunello Kinome B	regexFASTQ	ACACC(.*{20})
+Brunello Kinome B	symbol	hgnc_symbol
+Brunello Kinome B	organism	homo_sapiens
+Brunello Kinome B	URL	https://www.addgene.org/pooled-library/broadgpp-human-kinome/
+Brunello Kinome A+B	FASTA	FASTA_Brunnello_Kinome_A+B.fasta
+Brunello Kinome A+B	regexFASTA	(.*)?_(.*)
+Brunello Kinome A+B	regexFASTQ	ACACC(.*{20})
+Brunello Kinome A+B	symbol	hgnc_symbol
+Brunello Kinome A+B	organism	homo_sapiens
+Brunello Kinome A+B	URL	https://www.addgene.org/pooled-library/broadgpp-human-kinome/
+CRISPRa V2	FASTA	FASTA_CRISPRa_V2.fasta
+CRISPRa V2	regexFASTA	(.*)?_(.*)
+CRISPRa V2	regexFASTQ	ccttg(.*{20})
+CRISPRa V2	symbol	hgnc_symbol
+CRISPRa V2	organism	homo_sapiens
+CRISPRa V2	URL	https://www.addgene.org/pooled-library/weissman-human-crispra-v2/
+CRISPRi V2	FASTA	FASTA_CRISPRi_V2.fasta
+CRISPRi V2	regexFASTA	(.*)?_(.*)
+CRISPRi V2	regexFASTQ	ccttg(.*{20})
+CRISPRi V2	symbol	hgnc_symbol
+CRISPRi V2	organism	homo_sapiens
+CRISPRi V2	URL	https://www.addgene.org/pooled-library/weissman-human-crispri-v2/
+Human Lentiviral CRISPR Library V1	FASTA	FASTA_HumanGenomeWide.fasta
+Human Lentiviral CRISPR Library V1	regexFASTA	(.*)?_(.*)
+Human Lentiviral CRISPR Library V1	regexFASTQ	ttgtt(.*{20})
+Human Lentiviral CRISPR Library V1	symbol	ensembl_gene_id
+Human Lentiviral CRISPR Library V1	organism	homo_sapiens
+Human Lentiviral CRISPR Library V1	URL	https://www.addgene.org/pooled-library/wu-human-crispr-v1/
+TKO V3	FASTA	FASTA_TKOv3.fasta
+TKO V3	regexFASTA	(.*)?_(.*)
+TKO V3	regexFASTQ	ACCG(.*{20})
+TKO V3	symbol	hgnc_symbol
+TKO V3	organism	homo_sapiens
+TKO V3	URL	https://www.addgene.org/pooled-library/moffat-crispr-knockout/
+CUSTOM	FASTA	NULL
+CUSTOM	regexFASTA	NULL
+CUSTOM	regexFASTQ	NULL
+CUSTOM	symbol	NULL
+CUSTOM	organism	NULL
+CUSTOM	URL	NULL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

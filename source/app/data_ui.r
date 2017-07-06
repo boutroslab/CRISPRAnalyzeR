@@ -50,34 +50,87 @@ tabItem(tabName = "data", align = "center",
   
   fluidRow(
            column(10,offset=1,
+                  
+                  ## The user is first asked whether he would like to choose from a pre-defined library combination
+                  ## OR
+                  ## whether he would like to upload and set libraries in a custom manner (as before)
+                  
+                  ## In case the user chooses a pre-defined setting, everything is GREYED OUT and COLLAPSED.
+                  ## If CUSTOM is selected, the nothing is GREYED out and COLLAPSED items will extend
+                  
+                  
+                  # show items
+                  
+                  box(width=12,title = "Step 1: Please select the screening library", collapsible = FALSE,
+                      solidHeader = TRUE,
+                      status = "primary",
+                         shiny::tags$h3("Please select which screening library you would like to analyze"),
+                      
+                      # Make box with information and link to addgene
+                      column(width=12,
+                      column(width=8, offset=2, class="alert alert-info", style="margin-top:40px;",
+                             shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),
+                             shiny::tags$span(
+                              shiny::tags$strong("You can select pre-made settings for various CRISPR Screening libraries available from Addgene."),
+                              shiny::tags$br(),
+                             "But you can always analyze any type of pooled CRISPR screen by selecting ",shiny::strong("CUSTOM"),""
+                             )
+                      )
+                      ),
+                         shiny::tags$br(),
+                         # Here comes the RADIO BUTTONS
+                         # Input  radio buttons
+                        #shiny::helpText("You can always analyze any type of pooled CRISPR screen by selecting the CUSTOM option."),
+                        column(width = 12,
+                               column(width=8, offset=2,
+                                      shiny::htmlOutput("input_screeninglibrary")
+                                      )
+                               ),
+                         
+                         # Show box/modal that user can go on with uploading files
+                         shiny::tags$br(),
+                      column(width = 12,
+                             uiOutput("selectedFASTA")
+                             ),
+                      shiny::tags$br()
+                         ),
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
                   # Now we add the box
                   ## sgRNA library upload Box  
-                  box(title = "Step 1: Upload Your sgRNA Library File", collapsible = TRUE, 
+                  box(title = "Step 1a: Upload Your sgRNA Library File", collapsible = TRUE,
                        width = 12,
+                      id = "dataUpload_step1a",
                        solidHeader = TRUE,
                        status = "primary",
                       
                       # Sample Data
-                      column(width=8, offset=2, style="margin-top:20px;margin-bottom:20px;",
-                             column(width=12,
-                                    shiny::tags$h3(class="text-success", "New to CRISPRAnalyzeR? Try our sample data:"),
-                                    shiny::tags$br()
-                                    ),
-                             
-                             column(width=6,
-                                    HTML('<a class="btn btn-block btn-danger btn-md" href="https://cdn.rawgit.com/boutroslab/CRISPRAnalyzeR/f77fdab0/sampledata/caR_Readcount_sample-data.zip"
-                                                                                   target="_blank"><i class="fa fa-download fa-fw"></i>Read Count Package&nbsp;&nbsp;<span class="badge">0.5 MB</span></a>')
-                                    ),
-                             column(width=6,
-                                    HTML('<a class="btn btn-block btn-danger btn-md center" href="http://www.dkfz.de/signaling/crispranalyzer/CRISPRAnalyzeR_NGSFASTQ_sample-data.zip"
-                                                                                   target="_blank"><i class="fa fa-download fa-fw"></i>Raw data Package&nbsp;&nbsp;<span class="badge">1.38 GB</span></a>')
-                                    ),
-                             column(width=12,
-                                    shiny::tags$br(),
-                                    shiny::tags$h4("The sample data can be used with the default settings.")
-                                    )
-                             
-                      ),
+                      # column(width=8, offset=2, style="margin-top:20px;margin-bottom:20px;", id="example_data1",
+                      #        column(width=12,
+                      #               shiny::tags$h3(class="text-success", "New to CRISPRAnalyzeR? Try our sample data:"),
+                      #               shiny::tags$br()
+                      #               ),
+                      #        
+                      #        column(width=6,
+                      #               HTML('<a class="btn btn-block btn-danger btn-md" href="https://cdn.rawgit.com/boutroslab/CRISPRAnalyzeR/f77fdab0/sampledata/caR_Readcount_sample-data.zip"
+                      #                                                              target="_blank"><i class="fa fa-download fa-fw"></i>Read Count Package&nbsp;&nbsp;<span class="badge">0.5 MB</span></a>')
+                      #               ),
+                      #        column(width=6,
+                      #               HTML('<a class="btn btn-block btn-danger btn-md center" href="http://www.dkfz.de/signaling/crispranalyzer/CRISPRAnalyzeR_NGSFASTQ_sample-data.zip"
+                      #                                                              target="_blank"><i class="fa fa-download fa-fw"></i>Raw data Package&nbsp;&nbsp;<span class="badge">1.38 GB</span></a>')
+                      #               ),
+                      #        column(width=12,
+                      #               shiny::tags$br(),
+                      #               shiny::tags$h4("The sample data can be used with the default settings.")
+                      #               )
+                      #        
+                      # ),
                       
                       
                       column(width=6,
@@ -98,8 +151,8 @@ tabItem(tabName = "data", align = "center",
                                    shiny::tags$br(),
                                    shiny::tags$hr(),
                                    #textInput("libFile_regex", "Regex for gene extraction", value = "^(.+?)(_.*)$"),
-                                   selectizeInput( 'libFile_regex', 'Please select a regular expression which matches your sgRNA library', 
-                                                   choices = config[["sgrna_regex"]], options = list(create = TRUE)),
+                                   shiny::uiOutput("inputlibFile_regex"),
+
                                    
                                    helpText("The regular expression depends on how you designed the sgRNA identifiers within your sgRNA library file.",
                                             shiny::tags$br(),
@@ -127,8 +180,9 @@ tabItem(tabName = "data", align = "center",
                               
                             ),
                             shiny::tags$h3(class="text text-success", "Expert Options"),
-                            shiny::tags$h4("You can add/modify the regular expression?"),
-                            shiny::checkboxInput(inputId = "custom_libregex", label = "Do you want to use a custom regular expression for the FASTA library?",value = FALSE),
+                            shiny::tags$h4("You can add/modify the regular expression"),
+                            shiny::tags$strong("Do you want to use a custom regular expression for the FASTA library?"),
+                            shinyWidgets::switchInput(inputId = "custom_libregex",value = FALSE, onStatus = "danger"),
                             shiny::tags$p(class="text text-danger", "This will override the default settings to the left and is only for expert users."),
                             shiny::helpText("Please check out the help or the tutorials section to find further information."),
                             shiny::tags$div(id="customlibregex",
@@ -147,7 +201,29 @@ tabItem(tabName = "data", align = "center",
     box( title = "Step 2: Upload Your Sequencing Files", collapsible = TRUE,
       solidHeader = TRUE,
       width = 12,
+      id = "dataUpload_step2",
       status = "primary",
+      
+      column(width=8, offset=2, style="margin-top:20px;margin-bottom:20px;", id="example_data1",
+             column(width=12,
+                    shiny::tags$h3(class="text-success", "New to CRISPRAnalyzeR? Try our sample data:"),
+                    shiny::tags$br()
+             ),
+             
+             column(width=6,
+                    HTML('<a class="btn btn-block btn-danger btn-md" href="https://cdn.rawgit.com/boutroslab/CRISPRAnalyzeR/f77fdab0/sampledata/caR_Readcount_sample-data.zip"
+                         target="_blank"><i class="fa fa-download fa-fw"></i>Read Count Package&nbsp;&nbsp;<span class="badge">0.5 MB</span></a>')
+                    ),
+             column(width=6,
+                    HTML('<a class="btn btn-block btn-danger btn-md center" href="http://www.dkfz.de/signaling/crispranalyzer/CRISPRAnalyzeR_NGSFASTQ_sample-data.zip"
+                         target="_blank"><i class="fa fa-download fa-fw"></i>Raw data Package&nbsp;&nbsp;<span class="badge">1.38 GB</span></a>')
+                    ),
+             column(width=12,
+                    shiny::tags$br(),
+                    shiny::tags$h4("The sample data can be used with the default settings.")
+             )
+             
+             ),
       
       column(width=6,
                     column(width=10,offset=1, class="alert alert-info", style="margin-top:40px;",
@@ -235,8 +311,8 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
       
       shiny::tags$br(),
       #textInput("seqFiles_regexTarget", "Regex for target sequence in fastQ files", value = "ACC(.{20,21})GTT"),
-      selectizeInput('seqFiles_regexTarget', 'Regular Expression for sgRNA target sequence extraction from FASTQ files)',
-          choices = config[["fastq_regex"]], options = list(create=TRUE, maxItems = 1)),
+      
+      shiny::uiOutput(outputId = "InputseqFiles_regexTarget"),
      
       checkboxInput("seqFiles_rev", "Is data in FASTQ in reverse complement?", value = FALSE),
       selectInput("seqFiles_bt2Sens", "Bowtie2 sensitivity", choices = list("very-sensitive-local", "local", "very-sensitive")),
@@ -249,7 +325,8 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
            shiny::tags$h3(class="text text-success", "Expert Options"),
            shiny::tags$h4("You can modify / add your own regular expression"),
            shiny::tags$br(),
-           shiny::checkboxInput(inputId = "custom_fastqregex", label = "Do you want to use a custom regular expression?",value = FALSE),
+           shiny::tags$strong("Do you want to use a custom regular expression?"),
+           shinyWidgets::switchInput(inputId = "custom_fastqregex",value = FALSE, onStatus = "danger"),
            shiny::tags$p(class="text text-danger", "This will override the default settings to the left and is only for expert users."),
            shiny::helpText("Please check out the help or the tutorials section to find further information."),
            shiny::tags$div(id="customfastqregex",
@@ -260,7 +337,8 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
            shiny::tags$h4("You can override the warning for low alignment rates"),
            shiny::helpText("By default, CRISPRAnalyzeR prevents you from data analysis in case the alignment rate is below 30%. However you can override this to also use samples of such low quality."),
            shiny::tags$p(class="text text-danger", "This is only for expert users."),
-           shiny::checkboxInput(inputId = "override_low_alignment",label = "Do you really want to override the alignment quality check?",value = FALSE)
+           shiny::tags$strong("Do you really want to override the alignment quality check?"),
+           shinyWidgets::switchInput(inputId = "override_low_alignment",value = FALSE, onStatus = "danger")
            #shiny::tags$img(src="./images/CA_UserRegex.gif", class="img-responsive", width="80%")
            )
     )

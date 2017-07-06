@@ -209,3 +209,70 @@ observeEvent(input$reset_data2, {
 })
 
 
+## BiomaRt interface
+
+output$martdataset <- renderUI({
+  shiny::validate(
+    shiny::need(libFile, message ="Please select a library first.")
+  )
+  if(!is.null(libFile()$organism))
+  {
+    select <- libFile()$organism
+  }
+  
+  if(is.null(libFile()$organism))
+  {
+    select <- config[["organism"]]["Human"]
+  }
+  
+  out <- selectizeInput("biomart_dataset", "Please select the screening organism",
+                        choices = config[["organism"]], options = list(create=FALSE, maxItems = 1), selected = select)
+  
+  return(out)
+  
+})
+
+
+
+output$martID <- renderUI({
+  shiny::validate(
+    shiny::need(libFile, message ="Please select a library first.")
+  )
+  if(!is.null(libFile()$ID))
+  {
+    select <- libFile()$ID
+  }
+  
+  if(is.null(libFile()$ID))
+  {
+    select <- config[["biomart.geneid"]]["Ensembl Gene ID"]
+  }
+  
+  out <- selectizeInput(
+    'biomart_ID', 'Please select the gene identifier used in your sgRNA library file',
+    choices = config[["biomart.geneid"]], options = list(create=FALSE, maxItems = 1), selected = select
+  )
+  
+  return(out)
+  
+})
+
+
+
+
+output$martIDnew <- renderUI({
+  shiny::validate(
+    shiny::need(libFile, message ="Please select a library first.")
+  )
+  
+  out <- selectizeInput(
+    'biomart_IDnew', 'Please select the gene identifier you want CRISPRAnalyzeR to converted it to',
+    choices = config[["biomart.geneid"]], options = list(create=FALSE, maxItems = 1), selected = config[["biomart.geneid"]]["HGNC symbol"]
+  )
+  
+  return(out)
+  
+})
+
+
+

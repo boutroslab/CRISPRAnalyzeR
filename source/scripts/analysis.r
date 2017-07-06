@@ -164,7 +164,7 @@ tryFunction <- function( expr, place, log = logFile, ID = userID, dir = userDir 
 
 # check for missing data after applying the thresholds
 # if now median/mean is 0, we have some issues!
-check_thresholds <- function(threshold_to_check){
+check_thresholds <- function(threshold_to_check, nontargeting = NULL, positivcontrol = NULL){
   # check number of rows
   if(nrow(cp$readcount) <= 10){
     stop("Less than 10 sgRNAs left after applying the cutoff.")
@@ -175,8 +175,32 @@ check_thresholds <- function(threshold_to_check){
   check_mean <- dplyr::summarise_each(cp$readcount[,cp$miaccs$file.names], dplyr::funs(mean))
   if(check_median[1,] <= threshold_to_check || check_mean[1,] <= threshold_to_check)
   {
-    stop("Mean or Median read count of you data is 0.")
+    stop("Mean or Median read count of your data is 0.")
   } else { return(NULL) }
+  
+  # check controls if required
+  
+  if(!is.null(nontargeting) )
+  {
+    # check read count
+    check_median <- dplyr::filter(cp$readcount[,cp$miaccs$file.names], gene %in%  nontargeting) %>% dplyr::summarise_each( dplyr::funs(median))
+    check_mean <- dplyr::filter(cp$readcount[,cp$miaccs$file.names], gene %in%  nontargeting) %>% dplyr::summarise_each( dplyr::funs(mean))
+    if(check_median[1,] <= threshold_to_check || check_mean[1,] <= threshold_to_check)
+    {
+      stop("Mean or Median read count of your non-targeting control data is 0.")
+    } else { return(NULL) }
+  }
+  if(!is.null(positivcontrol) )
+  {
+    # check read count
+    check_median <- dplyr::filter(cp$readcount[,cp$miaccs$file.names], gene %in%  positivcontrol) %>% dplyr::summarise_each( dplyr::funs(median))
+    check_mean <- dplyr::filter(cp$readcount[,cp$miaccs$file.names], gene %in%  positivcontrol) %>% dplyr::summarise_each( dplyr::funs(mean))
+    if(check_median[1,] <= threshold_to_check || check_mean[1,] <= threshold_to_check)
+    {
+      stop("Mean or Median read count of your positive control data is 0.")
+    } else { return(NULL) }
+  }
+  
 }
 
 progress <- 0.02
@@ -457,8 +481,6 @@ if(info$removeHigh)
 }
 
 
-
-
 progress <- 0.05
 outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
 write(outInfo, file.path(userDir, "analysis.info"))
@@ -724,25 +746,31 @@ readDistribution <- tryFunction(car.read.distribution(statistics = TRUE, datafra
 write(paste(userID, ": creating object essentialDistribution"), logFile, append = TRUE)
 
 DAISY_essentials <- readRDS(file = file.path(cp$miaccs$scriptpath, "DAISY_Essentials.rds"))
-
+write(paste(userID, ": DAISY read"), logFile, append = TRUE)
 essentialDistribution <- as.list(names(cp$miaccs$treatmentgroup))
 attr(essentialDistribution, which="name") <- names(cp$miaccs$treatmentgroup)
+write(paste(userID, ": go in FOR"), logFile, append = TRUE)
 
 for(i in 1:length(essentialDistribution))
 {
   files <- cp$miaccs$treatmentgroup[[attr(essentialDistribution, which="name")[i]]]
-
+  write(paste(userID, ": files ", files), logFile, append = TRUE)
+  write(paste(userID, ": Go through files ", i), logFile, append = TRUE)
   for(x in 1:length(files))
   {
     # get all info from daisy essentials
     essentials <- dplyr::filter(cp$normalized.readcount, gene %in% DAISY_essentials[,cp$miaccs$g.identifier.new][[1]])
     nonessentials <- dplyr::filter(cp$normalized.readcount, !gene %in% DAISY_essentials[,cp$miaccs$g.identifier.new][[1]])
+    
+    write(paste(userID, ": checked ",x), logFile, append = TRUE)
     if(x==1)
     {
+      write(paste(userID, ": 1"), logFile, append = TRUE)
       essentialDistribution2 = list(list("essentials" = density(log2(essentials[, files[x]])), "nonessentials" = density(log2(nonessentials[, files[x]]))))
       attr(essentialDistribution2, which="name") <- files[x]
     } else
     {
+      write(paste(userID, ": 2"), logFile, append = TRUE)
       attr.old <- attr(essentialDistribution2, which="name")
       essentialDistribution2 <- c(essentialDistribution2, list(list("essentials" = density(log2(essentials[, files[x] ])), "nonessentials" = density(log2(nonessentials[, files[x]])))))
       attr(essentialDistribution2, which="name") <- c(attr.old, files[x])
@@ -1256,7 +1284,7 @@ write(outInfo, file.path(userDir, "analysis.info"))
 
 #### Hit Candidates Overview 
 write(paste(userID, ": creating object hitOverview"), logFile, append = TRUE)
-hitOverview <- tryFunction(hit.overview(dataframe = TRUE), "ha")
+hitOverview <- tryFunction(hit.overview( cutoff.deseq = cp$miaccs$sig.pval.deseq, cutoff.wilcox = cp$miaccs$sig.pval.wilcox, cutoff.mageck = cp$miaccs$sig.pval.mageck, cutoff.edger = cp$miaccs$sig.pval.edger, cutoff.rsea = cp$miaccs$sig.pval.rsea, cutoff.override=cp$miaccs$cutoff.override, cutoff.hits=cp$miaccs$compare.cutoff,methods=NULL, dataframe=TRUE), "ha")
 hitOverview$color[which(hitOverview$color == "#D3D3D3FF")] <- "Not Enriched/ Depleted"
 hitOverview$color[which(hitOverview$color == "#FFA500FF")] <- "Non-Overlapping Hit"
 hitOverview$color[which(hitOverview$color == "#D92323FF")] <- "Overlapping Hit Enriched"

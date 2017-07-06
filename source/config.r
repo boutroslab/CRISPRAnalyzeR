@@ -6,14 +6,14 @@
 config <- list()
 
 # Version
-config[["version"]] <- 1.16
+config[["version"]] <- 1.20
 config[["versionfile"]] <- "https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/version.txt"
 
 # maximum upload size in MB
 config[["max_upload"]] <- 4096
 
 # Allow download of logs
-config[["downloadlogs"]] <- FALSE
+config[["downloadlogs"]] <- TRUE
 
 ###########################
 #### working directory ####
@@ -64,6 +64,16 @@ config[["EnrichR_URL"]] <- 'http://amp.pharm.mssm.edu/Enrichr/'
 #############################
 #### sgRNA Library and FASTQ Extraction Regex ####
 #############################
+
+# Load pre-defined settings
+config[["screeninglibraries"]] <- readr::read_tsv(file = "predefined_settings.txt",col_names = TRUE) %>% dplyr::arrange(Library)
+
+## Here, the information is stored in a tibble:
+# Library | Option | Value of this Option
+
+
+
+
 # This containes a list of sgRNA regular Expression to be used in the data upload folder
 # Are set as default, can be edited
 config[["sgrna_regex"]] <- list(
@@ -81,11 +91,13 @@ config[["fastq_regex"]] <- list(
             "ACC(.{20,21})G",
             "GTTT(.{20})G",
             "ACCG(.{20,21})G",
-            "GTTG(.{20})GTT")
+            "CTTG(.{20})",
+            "GTTG(.{20})")
 names(config[["fastq_regex"]]) <- c("Standard for LenticrispV2, LentiGuide ACC(.{20,21})G",
                                               "Human Lentivirus Library V1 GTTT(.{20})G",
-                                              "pLCKO (TKO Library) ACCG(.{20,21})G",
-                                              "pU6-sgRNA EF1Alpha-puro-T2A-BFP (CRISPRa/i) GTTG(.{20})GTT")
+                                              "pLCKO (TKO V1 and V3) ACCG(.{20,21})G",
+                                              "pCRISPRia-v2 (CRISPRa/i V2) CTTG(.{20})",
+                                              "pU6-sgRNA EF1Alpha-puro-T2A-BFP (CRISPRa/i V1) GTTG(.{20})")
 
 
 
@@ -112,8 +124,8 @@ names(config[["biomart.geneid"]]) <- biomart.attributes[biomart.attributes$name 
 ## Organism
 # select which organisms are available
 # CRISPRAnalyzeR is only tested for homo_sapiens so far!
-config[["organism"]] <- list("homo_sapiens","mus_musuclus","danio_rerio")
-names(config[["organism"]]) <- c("Human", "Mouse", "Zebrafish")
+config[["organism"]] <- list("homo_sapiens","mus_musculus")#,"danio_rerio")
+names(config[["organism"]]) <- c("Human", "Mouse")#, "Zebrafish")
 
 ####################
 #### stylesheet ####
@@ -238,7 +250,7 @@ config[["car.proxy.port"]] <- NULL
 
 
 
-if(!is.null(config[["car.proxy.url"]]) && !is.null(config[["car.proxy.port"]]) )
+if( !is.null(config[["car.proxy.url"]]) && !is.null(config[["car.proxy.port"]]) )
 {
   config[["car.proxy.port"]] <- as.numeric(config[["car.proxy.port"]])
   
@@ -302,13 +314,13 @@ config[["activate.mail"]] <- FALSE
 
 # json secret file for gmail authentification
 # please see https://github.com/jimhester/gmailr for how to obtain the json file and auth key
-config[["gmailjson"]] <- ""
+config[["gmailjson"]] <- NULL
 
 # Email adress used
-config[["email.from"]] <- ""
+config[["email.from"]] <- NULL
 
 # Standard to send email to
-config[["email.to"]] <- ""
+config[["email.to"]] <- NULL
 
 # Standard subject
 config[["emailsubject"]] <- "[CRISPRAnalyzeR]"

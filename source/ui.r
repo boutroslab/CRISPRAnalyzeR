@@ -14,6 +14,7 @@ library(highcharter)
 library(DT)
 library(VennDiagram)
 library(shinyBS)
+library(shinyWidgets)
 
 
 # load configuration
@@ -179,7 +180,6 @@ sidebar <- dashboardSidebar(sidebarMenu(
 body <- dashboardBody(
   shiny::tags$head(
     shiny::tags$style(HTML(config$stylesheet)),
-    
     shiny::includeScript("tooltip-delay.js")
   ),
   #busyIndicator(),
@@ -326,7 +326,7 @@ shinyBS::bsModal(id = "reportCreated_modal", title = "Report Created", trigger =
                    )
                  )
 ),
-shinyBS::bsModal(id = "reportError_modal", title = "Warning: CRISPRAnalyzeR could not finish the report", trigger = "libfileerrormodal", size = "large", 
+shinyBS::bsModal(id = "reportError_modal", title = "Warning: CRISPRAnalyzeR could not finish the report", trigger="reportError_modal",  size = "large", 
                  fluidRow(
                    style="width:100%;",
                    column(width=8,offset=2, class="alert alert-danger text-center",

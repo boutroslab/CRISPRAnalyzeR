@@ -163,6 +163,8 @@ observeEvent(input$submit_seqFiles, {
     shinyjs::disable("custom_fastqregex")
     shinyjs::disable("libFile_regex")
     shinyjs::disable("libFile_regexCustom")
+    shinyjs::disable("screeninglibrary")
+    
     shinyjs::disable("custom_libregex")
     shinyjs::disable("override_low_alignment")
     
@@ -537,6 +539,8 @@ observeEvent(input$reset_data, {
   
   shinyjs::enable("libFile_upload")
   shinyjs::enable("seqFiles_upload")
+  
+  shinyjs::enable("screeninglibrary")
 
   shinyjs::enable("reset_data") 
   shinyjs::enable("seqFiles_regexTarget")

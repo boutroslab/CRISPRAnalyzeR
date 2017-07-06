@@ -211,6 +211,25 @@ tryFun <- function( expr, place, name,  path = info$paths, log = logFile, ID = u
       
       
     }
+    if(place == "extract")
+    {
+      # attach extract log file to output
+    
+      std_err <- try(readr::read_file(file = file.path(path,"_extract_stderr.log")))
+      if(class(std_err) == "try-error"  || std_err == "")
+      {
+        std_err <- "No Log available."
+      }
+      std_out <- try(readr::read_file(file = file.path(path,"_extract_stdout.log")))
+      if(class(std_out) == "try-error" || std_out == "")
+      {
+        std_out <- "No Log available."
+      }
+      write(paste(userID, ": FASTQ Extraction Error", std_err, std_out, collapse = "\n"), log, append = TRUE)
+      
+      
+      
+    }
     if(place == "map")
     {
       # attach bt2 log file to output
@@ -388,6 +407,10 @@ if( nfiles > 1 ){
       # check for RUST
       rust <- try(system2(command = "fastq_parser", args = c("--help")))
       
+      # DEBUG: disable rust
+      
+      rust = 1
+      
       # if RUST is not present, we switch back to PERL
       write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
       if(rust == 0)
@@ -446,6 +469,10 @@ if( nfiles > 1 ){
       # check for RUST
       rust <- try(system2(command = "sam_mapper", args = c("--help")))
       # if RUST is not present, we switch back to PERL
+      
+      # DEBUG: disable rust
+      
+      rust = 1
       
       write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
       if(rust == 0)
@@ -549,7 +576,16 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   file.rename(info$paths[i], paste0(info$paths[i], ".gz"))
   
   # FASTQ QC file to add to report
-  file.rqc <-  c(file.rqc, list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) )
+  # FASTQ QC file to add to report
+  if(!exists("file.rqc"))
+  {
+    file.rqc <-  list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) 
+  }
+  else
+  {
+    file.rqc <-  c(file.rqc, list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) )
+  }
+  
   
   ## unzip
   arguments <- c("-d", paste0(info$paths[i], ".gz"))

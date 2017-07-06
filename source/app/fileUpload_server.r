@@ -4,6 +4,164 @@
 
 
 
+################################################
+#### User interface with Pre-defined settings ##
+################################################
+
+# Users can select from a pre-defined list of screening libraries located in ./scripts/predefinedsettings.txt
+# If user wants to make their own individual selection, they have to go for CUSTOM
+
+# Required input:
+## input$screeninglibrary -> will be the chosen predefined setting
+
+# uiOutput for pre-defined settings
+output$input_screeninglibrary <- renderUI({
+  
+  # Pre-defined settings are stored in config$screeninglibraries as a tibble
+  # 
+  libs_available <- unique(config$screeninglibraries$Library)
+  #out <- selectInput(inputId = "screeninglibrary",multiple = FALSE,width = "80%", selected = "Example",
+  #                         label = "Please select the screening Library", choices = libs_available
+  #                         )
+  
+  
+  out <- radioGroupButtons2(inputId = "screeninglibrary", label = "Please select the screening Library", choices = libs_available, selected = "Example",
+                       status = "default", size = "normal", direction = "horizontal",
+                       justified = FALSE, individual = TRUE, checkIcon = list(yes = icon("ok", lib = "glyphicon"), no = icon("remove", lib = "glyphicon")) )
+  
+  return(out)
+  
+})
+
+output$selectedFASTA <- renderUI({
+  shiny::validate(
+    shiny::need(input$screeninglibrary, message = FALSE)
+  )
+
+  if(input$screeninglibrary == "CUSTOM")
+  {
+    # show the link to Addgene and tell the user that pre-defined settings have been loaded
+    HTML <- column(width=12,
+                   column(width=8, offset=2, class="alert alert-danger", style="margin-top:40px;",
+                          shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),
+                          shiny::tags$span(
+                            shiny::strong("You have chosen to use a CUSTOM library."),
+                            shiny::tags$br(),
+                            shiny::tags$p("Please upload a FASTA library file and adjust all settings on this and the next pages accordingly.")
+                          )
+                   )
+    )
+  } else if(input$screeninglibrary == "Example")
+  {
+    # show the link to Addgene and tell the user that pre-defined settings have been loaded
+    HTML <- column(width=12,
+                   column(width=8, offset=2, class="alert alert-info", style="margin-top:40px;",
+                          shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),
+                          shiny::tags$span(
+                            shiny::strong("You have chosen to use the sample library.", shiny::tags$br(), "Please go ahead and download the sample data below."),
+                            shiny::tags$br()
+                            
+                          )
+                   )
+    )
+  } else {
+    print("library selected")
+    URL  <- config$screeninglibraries %>% filter(Library == input$screeninglibrary) %>% filter(Setting == "URL") %>% select(Value) %>% .[[1]]
+    # show the link to Addgene and tell the user that pre-defined settings have been loaded
+    HTML <- column(width=12,
+                   column(width=8, offset=2, class="alert alert-info", style="margin-top:40px;",
+                          shiny::tags$span(style="float:left;" , shiny::HTML('<i class="fa fa-info fa-4x" aria-hidden="true"></i>')),
+                          shiny::tags$span(
+                            shiny::strong("You have chosen to use a ", paste(input$screeninglibrary,sep=""), " library."),
+                            shiny::tags$br(),
+                            shiny::tags$p("CRISPRAnalyzeR has automatically set pre-defined settings for this library."),
+                            shiny::tags$br(),
+                            shiny::tags$p("More information about this library can be found at ", HTML('<a href="',URL,'" target="_blank" class="text" style="font-weight:bold"><i class="fa fa-external-link fa-fw text "></i> Addgene</a>'))
+                          )
+                   )
+    )
+  }
+  
+  return(HTML)
+  
+})
+
+
+observe({
+  shiny::validate(
+    shiny::need(input$screeninglibrary, message = FALSE)
+  )
+  if(input$screeninglibrary == "CUSTOM")
+  {
+    shinyjs::show("dataUpload_step1a")
+    # shinyjs::show("fastqsettings")
+    shinyjs::show("libFile_upload")
+    shinyjs::hide("example_data1")
+    
+  } else if(input$screeninglibrary == "Example")
+  {
+    shinyjs::show("example_data1")
+    shinyjs::hide("dataUpload_step1a")
+    shinyjs::hide("libFile_upload")
+    
+  } else {
+    shinyjs::hide("dataUpload_step1a")
+    # shinyjs::hide("fastqsettings")
+    shinyjs::hide("libFile_upload")
+    shinyjs::hide("example_data1")
+  }
+  
+})
+
+
+### FASTQ Regex Settings
+
+output$InputseqFiles_regexTarget <- renderUI({
+  
+  shiny::validate(
+    shiny::need(input$screeninglibrary, message = "Please select a screening library.")
+  )
+  
+  if(input$screeninglibrary != "CUSTOM")
+  {
+    regex <- config$screeninglibraries %>% filter(Library == input$screeninglibrary) %>% filter(Setting == "regexFASTQ") %>% select(Value) %>% .[[1]]
+    
+     out <- selectizeInput('seqFiles_regexTarget', 'Regular Expression for sgRNA target sequence extraction from FASTQ files)',
+                          choices = regex, options = list(create=TRUE, maxItems = 1))
+  } else {
+    # user might have selected custom library
+    out <- selectizeInput('seqFiles_regexTarget', 'Regular Expression for sgRNA target sequence extraction from FASTQ files)',
+                          choices = config[["fastq_regex"]], options = list(create=TRUE, maxItems = 1))
+  }
+  
+  
+  
+  return(out)
+})
+
+
+
+## FASTA REGEx setting
+output$inputlibFile_regex <- renderUI({
+  shiny::validate(
+    shiny::need(input$screeninglibrary, message = "Please select a screening library.")
+  )
+  
+  if(input$screeninglibrary != "CUSTOM")
+  {
+    regex <- config$screeninglibraries %>% filter(Library == input$screeninglibrary) %>% filter(Setting == "regexFASTA") %>% select(Value) %>% .[[1]]
+    out <- selectizeInput( 'libFile_regex', 'Please select a regular expression which matches your sgRNA library', 
+                           choices = regex, options = list(create = TRUE))
+  } else {
+    # user might have selected custom library
+    out <- selectizeInput( 'libFile_regex', 'Please select a regular expression which matches your sgRNA library', 
+                           choices = config[["sgrna_regex"]], options = list(create = TRUE))
+  }
+  
+  return(out)
+  
+  
+})
 
 
 
@@ -59,13 +217,18 @@ output$seqFiles_rename <- renderUI({
 #### sequencing files
 # write seqFiles if no errors
 seqFiles <- eventReactive(input$submit_seqFiles, {
-        if( is.null(input$seqFiles_upload$name) ){
-        error$seqFiles <- "No sequencing files have been uploaded yet."
-        return()
-       }
-  
-  names <- input$seqFiles_upload$name
-  paths <- input$seqFiles_upload$datapath
+        
+    
+    if( is.null(input$seqFiles_upload$name) ){
+      error$seqFiles <- "No sequencing files have been uploaded yet."
+      return()
+    }
+    
+    # Get file names and paths
+    names <- input$seqFiles_upload$name
+    paths <- input$seqFiles_upload$datapath
+    
+ 
   # get fastq regex or custom regex
   if(input$seqFiles_regexTargetcustom != "")
   {
@@ -174,25 +337,50 @@ observe(
 
 # write libFile if no error
 libFile <- eventReactive(input$submit_seqFiles, {
-  if( is.null(input$libFile_upload$name) ){
-    error$libFile <- "You have not uploaded a sgRNA library yet"
-    return()
-  }
-  
-  name <- input$libFile_upload$name
-  path <- input$libFile_upload$datapath
-  
-  # get fastq regex or custom regex
-  if(input$libFile_regexCustom != "")
+  # check if pre-defined library is used
+  if(input$screeninglibrary == "CUSTOM")
   {
-    regex <- input$libFile_regexCustom
+    if( is.null(input$libFile_upload$name) ){
+      error$libFile <- "You have not uploaded a sgRNA library yet"
+      return()
+    }
+    
+    name <- input$libFile_upload$name
+    path <- input$libFile_upload$datapath
+    
+    organism <- NULL
+    ID <- NULL
+    URL <- NULL
+    
+    # get fastq regex or custom regex
+    if(input$libFile_regexCustom != "")
+    {
+      regex <- input$libFile_regexCustom
+    } else {
+      regex <- input$libFile_regex
+    }
+    
   } else {
+    
+    # A pre-defined screening library has been chosen
+    #name <- GETFILENAME HERE
+    # path <- put the PATH in here including the filename, so it can be loaded
+    
+    organism <- NULL
+    ID <- NULL
+    URL <- NULL
+    
+    name <- config$screeninglibraries %>% filter(Library == input$screeninglibrary) %>% filter(Setting == "FASTA") %>% select(Value) %>% .[[1]]
+    path <- file.path(config$scriptpath,"external",config$screeninglibraries %>% filter(Library == input$screeninglibrary) %>% filter(Setting == "FASTA") %>% select(Value) %>% .[[1]])
+    organism <- config$screeninglibraries %>% filter(Library == input$screeninglibrary) %>% filter(Setting == "organism") %>% select(Value) %>% .[[1]]
+    ID <- config$screeninglibraries %>% filter(Library == input$screeninglibrary) %>% filter(Setting == "symbol") %>% select(Value) %>% .[[1]]
+    URL  <- config$screeninglibraries %>% filter(Library == input$screeninglibrary) %>% filter(Setting == "URL") %>% select(Value) %>% .[[1]]
     regex <- input$libFile_regex
+    
   }
-
+  
   test <- Check_libFile(name, path, regex, messages = config$message)
 
-  
   if( test$error == TRUE ){
     error$libFile <- test$message
     return()
@@ -200,7 +388,7 @@ libFile <- eventReactive(input$submit_seqFiles, {
   
   status$libFile <- TRUE
   error$libFile <- test$message
-  list("name" = name, "path" = path, "regex" = regex)
+  list("name" = name, "path" = path, "regex" = regex, "organism" = organism, "ID" = ID, "URL" = URL)
 })
 
 

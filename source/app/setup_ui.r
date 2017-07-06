@@ -89,18 +89,16 @@ tabItem(tabName = "setup", align = "center",
                              "If you want to stay with your gene identifier, just select the same identifier twice.",
                              "Please note: Gene ID conversion is done using the Ensembl BiomaRt service."),
                     uiOutput("annos_error"),
-                    selectizeInput("biomart_dataset", "Please select the screening organism",
-                                   choices = config[["organism"]], options = list(create=FALSE, maxItems = 1), selected = config[["organism"]]["Human"]),
-                    #selectInput("biomart_ID", "gene ID in read count file", choices = c("ensembl_gene_id")),
-                    selectizeInput(
-                      'biomart_ID', 'Please select the gene identifier used in your sgRNA library file',
-                      choices = config[["biomart.geneid"]], options = list(create=FALSE, maxItems = 1), selected = config[["biomart.geneid"]]["Ensembl Gene ID"]
-                    ),
-                    #selectInput("biomart_IDnew", "convert gene ID to", choices = c("hgnc_symbol"))
-                    selectizeInput(
-                      'biomart_IDnew', 'Please select the gene identifier you want CRISPRAnalyzeR to converted it to',
-                      choices = config[["biomart.geneid"]], options = list(create=FALSE, maxItems = 1), selected = config[["biomart.geneid"]]["HGNC symbol"]
-                    )
+                    
+                    # Screening Organism
+                    uiOutput("martdataset"),
+                    
+                    # Gene Identifier in Library
+                    uiOutput("martID"),
+                    
+                    # Convert Gene Identifier to
+                    uiOutput("martIDnew")
+                    
                     )
              )
              ),
