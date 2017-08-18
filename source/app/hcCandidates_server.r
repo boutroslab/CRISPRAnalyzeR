@@ -58,6 +58,7 @@ output$hcPerformance_wilcox_data <- DT::renderDataTable({
     th <- results()$wilcox$info$pval
     sign <- input$hcPerformance_wilcox_sign
     df <- results()$wilcox$data
+    #View(df)
     Table_hcPerf( df, sign, th, radio, "wilcox" , filename = "HitCalling_Wilcox")
   }
 })

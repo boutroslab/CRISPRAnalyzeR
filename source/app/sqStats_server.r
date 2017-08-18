@@ -143,29 +143,37 @@ observe({
 # this is a plot showing readcount distributions of all datasets as area curves
 # datasets can be excluded/included by clicking on legend
 # zoom is possible by dragging a rectangle with mouse
-output$sqCoverage_distro_plot <- renderHighchart(
+output$sqCoverage_distro_plot <- renderHighchart({
+  
+  
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
     Plot_coverage_readDistro( results()$readDistribution, bApp = TRUE, filename = "QualityControl_ReadCount_Distribution" )
   }
-)
+})
 
-output$sqCoverage_essential_plot1 <- renderHighchart(
+output$sqCoverage_essential_plot1 <- renderHighchart({
+  shiny::validate(
+    shiny::need(results()$essentialDistribution[[1]], message="Essential Distribution could not be calculated.")
+  )
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
     Plot_essential_distribution( results()$essentialDistribution[[1]], bApp = TRUE, filename = "QualityControl_Essential_Distribution_Untreated")
   }
-)
+})
 
-output$sqCoverage_essential_plot2 <- renderHighchart(
+output$sqCoverage_essential_plot2 <- renderHighchart({
+  shiny::validate(
+    shiny::need(results()$essentialDistribution[[2]], message="Essential Distribution could not be calculated.")
+  )
   if( status$results == FALSE ){
     Plot_blank("hc", msg = config$messages$noanalysisrunyet$String)
   } else {
-    Plot_essential_distribution( results()$essentialDistribution[[2]], bApp = TRUE, filename = "QualityControl_Essential_Distribution_Treated" )
+    Plot_essential_distribution(results()$essentialDistribution[[2]], bApp = TRUE, filename = "QualityControl_Essential_Distribution_Treated" )
   }
-)
+})
 
 # output$sqCoverage_distroBox_plot <- renderHighchart(
 #   if( status$results == FALSE ){

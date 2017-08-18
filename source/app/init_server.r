@@ -597,7 +597,7 @@ output$downloadlogs_button <- downloadHandler(
   filename = paste("CRISPRAnalyzeR", format(startTime, format = "%y-%m-%d"), "logs.zip", sep = "_"),
   content = function(file) {
     
-    if( config$downloadlogs ){
+    if(config$downloadlogs){
       
       # get all downloaded stuff
       # is located in /var/log/shiny-server

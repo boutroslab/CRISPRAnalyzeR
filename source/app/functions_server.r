@@ -83,7 +83,7 @@ Check_seqFiles <- function(names, paths, gen_names, regex, messages = config$mes
 
   withProgress(value = 0.1, message = messages$checkseqfilesprogress1$String, {
   # at least 2 files must be uploaded
-  if( length(names) < 2 ){
+  if( length(names) < 1 ){
     out$error <- TRUE
     out$message <- paste(out$message, messages$checkseqfiles1$String)  
  # out$message <- paste0(out$message, "You will compare 2 conditions, so we expect at 

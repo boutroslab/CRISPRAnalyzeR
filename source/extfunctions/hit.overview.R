@@ -64,7 +64,7 @@ hit.overview = function( cutoff.deseq = cp$miaccs$sig.pval.deseq, cutoff.wilcox 
   #Wilcox
   if("wilcox"  %in% load.analysis)
   {
-    df.wilcox=data.frame(p.value = wilcox[,"p.value"], log2fc = log2(wilcox[,"foldchange"]), stringsAsFactors=FALSE)
+    df.wilcox=data.frame(p.value = wilcox[,"p.value"], log2fc = log2(as.numeric(wilcox[,"foldchange"])), stringsAsFactors=FALSE)
     df.wilcox$genes = rownames(wilcox)
     colnames(df.wilcox) = c("wilcox.pval","wilcox.log2fc","genes")
     plot.method <- c(plot.method, list("Wilcox" = c("wilcox.pval","wilcox.log2fc","Wilcox", cutoff.wilcox,"-log10 Adjusted Wilcox pval", "Wilcox log2 Foldchange")))

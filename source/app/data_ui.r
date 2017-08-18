@@ -93,14 +93,12 @@ tabItem(tabName = "data", align = "center",
                              uiOutput("selectedFASTA")
                              ),
                       shiny::tags$br()
-                         ),
+                         )
                   
                   
                   
-                  
-                  
-                  
-                  
+           ),
+           column(width=10,offset=1,
                   
                   # Now we add the box
                   ## sgRNA library upload Box  

@@ -5,7 +5,7 @@ checkfinal1	Files were not sucessfully uploaded yet. Please go back to 'Data' to
 checkfinal2	CRISPRAnalyzeR has not finished uploading and checking your files.<br/>
 checkfinal3	Some information in the 'Set Groups and Identifier' tab is not entered yet. Please correct that first.<br/>
 checkfinal4	Some information in this tab is not entered correctly yet. Please correct it first.<br/>
-checkresults	For further assistence please briefly describe your problem by sending us a ticket or posting it to the forum.<br>
+checkresults	For further assistence please briefly describe your problem by either contacting us via email or the google forum.<br>
 checkheatmap	Is there something wrong with the results?<br/>
 checkinfo	For further assistence please briefly describe your problem in the input form on our help page.<br>
 checkhit1	You did not enter a gene name yet.<br/>

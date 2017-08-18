@@ -13,11 +13,21 @@ stat.wilcox=function(normalize=TRUE, controls=NULL, control.picks=300, sorting=T
     designs=cp$normalized.readcount[,"design"]
     # get treatment groups
     treatment.groups <- unlist(cp$treatmentgroup)
-    
+
     # Make untreated df
     data.list <- data.frame(
       "designs" = cp$normalized.readcount[,"design"]
     )
+    
+    # gene.names = cp$stabilized.readcount[,"gene"]
+    # designs=cp$stabilized.readcount[,"design"]
+    # # get treatment groups
+    # treatment.groups <- unlist(cp$treatmentgroup)
+    # 
+    # # Make untreated df
+    # data.list <- data.frame(
+    #   "designs" = cp$stabilized.readcount[,"design"]
+    # )
   }
   else
   {
@@ -54,6 +64,8 @@ stat.wilcox=function(normalize=TRUE, controls=NULL, control.picks=300, sorting=T
       # add to treatment group
       treat.df <- cbind.data.frame(treat.df, cp$normalized.readcount[,(this.treatment)+1])
       treatname <- colnames(cp$normalized.readcount)[(this.treatment)+1]
+      # treat.df <- cbind.data.frame(treat.df, cp$stabilized.readcount[,(this.treatment)+1])
+      # treatname <- colnames(cp$stabilized.readcount)[(this.treatment)+1]
       colnames(treat.df) = c("designs",treatname)
       treat.df$designs <- NULL
     
@@ -158,30 +170,37 @@ stat.wilcox=function(normalize=TRUE, controls=NULL, control.picks=300, sorting=T
   dataset.combined <- data.frame( 
     untreated = as.numeric(untreated),
     treated = as.numeric(treated),
+    designs = designs,
     genes=gene.names,
     foldchange=as.numeric(treated)/as.numeric(untreated),
-    row.names = designs, 
     stringsAsFactors=FALSE)
+  
+  rownames(dataset.combined) = designs
 
   if(!is.null(logfile))
   {
     write(paste(": wilcox 6"), logfile, append = TRUE)
+    write(rownames(dataset.combined), logfile, append = TRUE)
   }
   
   # remove data where entry is NaN, -Inf or +Inf
   # this will lead to NaN in future calculations
   #print("remove unwanted chars")
-  for(i in 1: nrow(dataset.combined))
-  {
-    # check if either TREATED or UNTREATED Readcount is either NaN, NA, +Inf or -Inf
-    # if this is the case, delete the line
-    if(!is.finite(dataset.combined[i,4])){
-      # set fold change to 1
-      dataset.combined[i,4] = 1
-    }else if(dataset.combined[i,4] ==0 ){
-      dataset.combined[i,4] = 1
-    }
-  }
+  
+  dataset.combined <- dataset.combined %>% dplyr::filter(is.finite(treated) & is.finite(untreated) & is.finite(foldchange) )
+  dataset.combined <- as.data.frame(dataset.combined, stringsAsFactors = FALSE)
+  rownames(dataset.combined) = dataset.combined$designs
+  # for(i in 1: nrow(dataset.combined))
+  # {
+  #   # check if either TREATED or UNTREATED Readcount is either NaN, NA, +Inf or -Inf
+  #   # if this is the case, delete the line
+  #   if(!is.finite(dataset.combined[i,4])){
+  #     # set fold change to 1
+  #     dataset.combined[i,4] = 1
+  #   }else if(dataset.combined[i,4] ==0 ){
+  #     dataset.combined[i,4] = 1
+  #   }
+  # }
   
   if(!is.null(logfile))
   {
@@ -218,44 +237,92 @@ stat.wilcox=function(normalize=TRUE, controls=NULL, control.picks=300, sorting=T
   #print("Do p-val calculation")
   # still a bit too slow with large libraries
   options(bphost="localhost")
-    pvals=do.call(
-      "rbind.data.frame",
-      BiocParallel::bplapply(
+    # pvals=do.call(
+    #   "rbind.data.frame",
+      pvals <- BiocParallel::bplapply(
         split(dataset.combined ,
                f = dataset.combined$genes ),
         FUN = function(x) 
         {
           
-          c(mean(x$untreated),
+          ret <- c(unique(x$genes),
+            mean(x$untreated),
             mean(x$treated),
             mean(x$foldchange),
             wilcox.test(x$foldchange,
                         control.test,alternative = "t")$p.value
           )
+          
+          names(ret) <- c(
+            "genes",
+            "untreated",
+            "treated",
+            "foldchange",
+            "p.value"
+          )
+          
+          return(ret)
+          
         }
           
       )
+    #)
+      
+    # Now we need to make the rows
+    # Make tibble
+    df.wilcox <- tibble::tibble(
+      "genes",
+      "untreated",
+      "treated",
+      "foldchange",
+      "p.value"
     )
+    
+    colnames(df.wilcox) <- c(
+      "genes",
+      "untreated",
+      "treated",
+      "foldchange",
+      "p.value"
+    )
+    
+    # Add everything
+    for(i in 1:length(pvals))
+    {
+      df.wilcox <- df.wilcox %>% dplyr::bind_rows(pvals[[i]])
+    }
+    
+    # remove first row
+    df.wilcox <- df.wilcox[-1,]
     
     if(!is.null(logfile))
     {
       write(paste(": wilcox 9"), logfile, append = TRUE)
+      #write(print(str(pvals)), logfile, append = TRUE)
     }
   
-  names(pvals)=c(
-                "untreated",
-                "treated",
-                "foldchange",
-                "p.value"
-                 )
+  #pvals <- as.data.frame(pvals,
+  #                       stringsAsFactors = FALSE)
+  # names(pvals)=c(
+  #               "genes",
+  #               "untreated",
+  #               "treated",
+  #               "foldchange",
+  #               "p.value"
+  #                )
+  df.wilcox <- as.data.frame(df.wilcox,
+                             stringsAsFactors = FALSE)
+  rownames(df.wilcox) = df.wilcox$genes
+  df.wilcox$genes = NULL
   #print("correct for multiple testing")
   # correct for multiple testing
-  pvals$p.value.unadjusted = pvals$p.value
-  pvals$p.value = p.adjust(pvals$p.value, method = "BH", n = length(pvals$p.value))
+  df.wilcox$p.value.unadjusted = as.numeric(df.wilcox$p.value)
+  df.wilcox$p.value = as.numeric(p.adjust(df.wilcox$p.value, method = "BH", n = length(df.wilcox$p.value)))
   
   if(!is.null(logfile))
   {
     write(paste(": wilcox 10"), logfile, append = TRUE)
+    write(row.names(df.wilcox), logfile, append = TRUE)
   }
   
  # print("Sorting")
@@ -263,14 +330,23 @@ stat.wilcox=function(normalize=TRUE, controls=NULL, control.picks=300, sorting=T
   if(sorting)
   {
     # Return
-    cp$wilcox <- pvals[order(pvals$p.value),]
+    cp$wilcox <- df.wilcox[order(df.wilcox$p.value),]
   }
   else
   {
-    cp$wilcox <- pvals
+    cp$wilcox <- df.wilcox
   }
   
   # Return
+  # make numeric
+  cp$wilcox$untreated <- as.numeric(cp$wilcox$untreated)
+  cp$wilcox$treated <- as.numeric(cp$wilcox$treated)
+  cp$wilcox$foldchange <- as.numeric(cp$wilcox$foldchange)
+  cp$wilcox$foldchange <- as.numeric(round(cp$wilcox$foldchange, digits=2))
+  cp$wilcox$treated <- as.numeric(round(cp$wilcox$treated, digits=2))
+  cp$wilcox$untreated <- as.numeric(round(cp$wilcox$untreated, digits=2))
+  
+  
   return(cp$wilcox)
   
 }

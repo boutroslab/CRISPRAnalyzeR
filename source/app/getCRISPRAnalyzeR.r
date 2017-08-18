@@ -68,7 +68,7 @@ tabItem(tabName = "getCRISPRAnalyzeR", align = "center",
                       column(width=6, offset = 3,
                              # download log files
                              # is set in config, by default is TRUE
-                             uiOutput("downloadlogs"),
+                             shiny::htmlOutput("downloadlogs"),
                              shiny::tags$br()
                       ),
                       shiny::tags$br()

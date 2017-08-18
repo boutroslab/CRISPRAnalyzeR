@@ -500,6 +500,8 @@ write(paste(userID, ": Dataset:",  info$annoDataset), logFile, append = TRUE)
 if( is.null(info$proxy) || is.na(info$proxy) || length(info$proxy) == 0 ) info$proxy <- ""
 options(RCurlOptions = list(proxy = info$proxy, http.version = 1))
 
+
+
 # check for availability of biomaRt
 checkbiomaRt <- tryFunction(biomaRt::listEnsembl(host="www.ensembl.org"), "checkbiomart")
 
@@ -759,20 +761,45 @@ for(i in 1:length(essentialDistribution))
   for(x in 1:length(files))
   {
     # get all info from daisy essentials
-    essentials <- dplyr::filter(cp$normalized.readcount, gene %in% DAISY_essentials[,cp$miaccs$g.identifier.new][[1]])
-    nonessentials <- dplyr::filter(cp$normalized.readcount, !gene %in% DAISY_essentials[,cp$miaccs$g.identifier.new][[1]])
+    essentials <- try(dplyr::filter(cp$normalized.readcount, gene %in% DAISY_essentials[,cp$miaccs$g.identifier.new][[1]]))
+    nonessentials <- try(dplyr::filter(cp$normalized.readcount, !gene %in% DAISY_essentials[,cp$miaccs$g.identifier.new][[1]]))
+    
     
     write(paste(userID, ": checked ",x), logFile, append = TRUE)
     if(x==1)
     {
       write(paste(userID, ": 1"), logFile, append = TRUE)
-      essentialDistribution2 = list(list("essentials" = density(log2(essentials[, files[x]])), "nonessentials" = density(log2(nonessentials[, files[x]]))))
+      ess <- try(density(log2(essentials[, files[x]])))
+      if(class(ess) == "try-error")
+      {
+        ess <- NA
+      }
+      noness <- try(density(log2(nonessentials[, files[x]])))
+      if(class(noness) == "try-error")
+      {
+        noness <- NA
+      }
+      
+      
+      essentialDistribution2 = list(list("essentials" = ess, "nonessentials" = noness))
       attr(essentialDistribution2, which="name") <- files[x]
     } else
     {
       write(paste(userID, ": 2"), logFile, append = TRUE)
       attr.old <- attr(essentialDistribution2, which="name")
-      essentialDistribution2 <- c(essentialDistribution2, list(list("essentials" = density(log2(essentials[, files[x] ])), "nonessentials" = density(log2(nonessentials[, files[x]])))))
+      
+      ess <- try(density(log2(essentials[, files[x]])))
+      if(class(ess) == "try-error")
+      {
+        ess <- NA
+      }
+      noness <- try(density(log2(nonessentials[, files[x]])))
+      if(class(noness) == "try-error")
+      {
+        noness <- NA
+      }
+      
+      essentialDistribution2 <- c(essentialDistribution2, list(list("essentials" = ess, "nonessentials" = noness)))
       attr(essentialDistribution2, which="name") <- c(attr.old, files[x])
     }
   }
@@ -1036,8 +1063,8 @@ progress <- 0.42
 outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
 write(outInfo, file.path(userDir, "analysis.info"))
 
-wilcox[["data"]] <- tryFunction(stat.wilcox(normalize = cp$miaccs$normalize, controls = cp$miaccs$controls.nontarget, 
-  control.picks = cp$miaccs$control.picks, sorting = FALSE, groups = cp$groups.compare, logfile = NULL), "wilcox")
+wilcox[["data"]] <- tryFunction(stat.wilcox(normalize = FALSE, controls = cp$miaccs$controls.nontarget, 
+  control.picks = cp$miaccs$control.picks, sorting = FALSE, groups = cp$groups.compare, logfile = logFile), "wilcox")
 
 GSE_methodlist <- list("Wilcox" = "wilcox")
 
@@ -1284,6 +1311,21 @@ write(outInfo, file.path(userDir, "analysis.info"))
 
 #### Hit Candidates Overview 
 write(paste(userID, ": creating object hitOverview"), logFile, append = TRUE)
+
+saveRDS(wilcox, file = file.path(userDir, "wilcox.rds"))
+saveRDS(deseq, file = file.path(userDir, "deseq.rds"))
+saveRDS(mageck, file = file.path(userDir, "mageck.rds"))
+saveRDS(rsea, file = file.path(userDir, "rsea.rds"))
+saveRDS(edger, file = file.path(userDir, "edger.rds"))
+saveRDS(zratio, file = file.path(userDir, "zratio.rds"))
+saveRDS(bagel, file = file.path(userDir, "bagel.rds"))
+saveRDS(cp$readcount, file = file.path(userDir, "readcount.rds"))
+saveRDS(cp$normalized.readcount, file = file.path(userDir, "normalizedReadcount.rds"))
+saveRDS(cp$aggregated.readcount, file = file.path(userDir, "aggregatedReadcount.rds"))
+
+
+
+write(paste(userID, ": ", cp$miaccs$sig.pval.wilcox), logFile, append = TRUE)
 hitOverview <- tryFunction(hit.overview( cutoff.deseq = cp$miaccs$sig.pval.deseq, cutoff.wilcox = cp$miaccs$sig.pval.wilcox, cutoff.mageck = cp$miaccs$sig.pval.mageck, cutoff.edger = cp$miaccs$sig.pval.edger, cutoff.rsea = cp$miaccs$sig.pval.rsea, cutoff.override=cp$miaccs$cutoff.override, cutoff.hits=cp$miaccs$compare.cutoff,methods=NULL, dataframe=TRUE), "ha")
 hitOverview$color[which(hitOverview$color == "#D3D3D3FF")] <- "Not Enriched/ Depleted"
 hitOverview$color[which(hitOverview$color == "#FFA500FF")] <- "Non-Overlapping Hit"
