@@ -162,7 +162,7 @@ Sys.setenv(R_ZIPCMD = "/usr/bin/zip")
 # from working directory
 # write path in quotes ("")
 # DEFAULT "./app"
-config[["appDir"]] <- "/srv/shiny-server/CRISPRAnalyzeR/app"
+config[["appDir"]] <- "app"
 
 
 
@@ -201,7 +201,7 @@ config[["ticketDir"]] <- "/srv/shiny-server/CRISPRAnalyzeR/tickets"
 # from working directory
 # write path in quotes ("")
 # DEFAULT "scripts"
-config[["scriptpath"]] <- "/srv/shiny-server/CRISPRAnalyzeR/scripts"
+config[["scriptpath"]] <- "scripts"
 
 #########################
 #### path to E-CRISP Reevaluation Databases ####
