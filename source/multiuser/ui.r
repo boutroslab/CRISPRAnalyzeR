@@ -22,6 +22,8 @@ source("config.r", local = TRUE)
 
 
 # load ui functions
+print(file.path(config$appDir, "functions_ui.r"))
+print(config$appDir)
 source(file.path(config$appDir, "functions_ui.r"), local = TRUE)
 
 # repeated ui stuff for modals
