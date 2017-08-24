@@ -220,7 +220,7 @@ config[["databasepath"]] <- "/srv/shiny-server/CRISPRAnalyzeR/database/data/scri
 # from working directory
 # write path in quotes ("")
 # DEFAULT "extfunctions"
-config[["Fundir"]] <- "/srv/shiny-server/CRISPRAnalyzeR/extfunctions"
+config[["Fundir"]] <- "extfunctions"
 
 
 
