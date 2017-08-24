@@ -176,7 +176,7 @@ config[["appDir"]] <- "app"
 # mainly for monitoring processes which run in background
 # write path in quotes ("")
 # DEFAULT "log"
-config[["logDir"]] <- "/srv/shiny-server/CRISPRAnalyzeR/log"
+config[["logDir"]] <- "log"
 
 
 
@@ -189,7 +189,7 @@ config[["logDir"]] <- "/srv/shiny-server/CRISPRAnalyzeR/log"
 # tickets can be written by user as text input in help tab
 # write path in quotes ("")
 # DEFAULT "tickets"
-config[["ticketDir"]] <- "/srv/shiny-server/CRISPRAnalyzeR/tickets"
+config[["ticketDir"]] <- "tickets"
 
 
 
