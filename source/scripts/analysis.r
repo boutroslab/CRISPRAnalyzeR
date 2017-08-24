@@ -1064,7 +1064,7 @@ outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, se
 write(outInfo, file.path(userDir, "analysis.info"))
 
 wilcox[["data"]] <- tryFunction(stat.wilcox(normalize = FALSE, controls = cp$miaccs$controls.nontarget, 
-  control.picks = cp$miaccs$control.picks, sorting = FALSE, groups = cp$groups.compare, logfile = logFile), "wilcox")
+  control.picks = cp$miaccs$control.picks, sorting = FALSE, groups = cp$groups.compare, logfile = FALSE), "wilcox") #logfile=logFile if logging is used
 
 GSE_methodlist <- list("Wilcox" = "wilcox")
 
@@ -1103,7 +1103,7 @@ mageck[["info"]] <- list("pval" = cp$miaccs$sig.pval.mageck)
 mageck[["data"]] <- tryFunction(stat.mageck(norm.fun = 'none', extractpattern = cp$miaccs$g.extractpattern, 
                                     groups = cp$groups.compare, sort.criteria = "neg", 
                                     adjust.method = "fdr", fdr.pval = cp$miaccs$sig.pval.mageck,
-                                    filename = "mageckdata"), "mageck")
+                                    filename = "mageckdata", mageckfolder = userDir), "mageck")
 
 GSE_methodlist <- c(GSE_methodlist,"MAGeCK" = "mageck")
 

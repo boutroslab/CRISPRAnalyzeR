@@ -180,7 +180,7 @@ stat.wilcox=function(normalize=TRUE, controls=NULL, control.picks=300, sorting=T
   if(!is.null(logfile))
   {
     write(paste(": wilcox 6"), logfile, append = TRUE)
-    write(rownames(dataset.combined), logfile, append = TRUE)
+    #write(rownames(dataset.combined), logfile, append = TRUE)
   }
   
   # remove data where entry is NaN, -Inf or +Inf
