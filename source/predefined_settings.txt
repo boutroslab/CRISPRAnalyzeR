@@ -56,7 +56,7 @@ Brie	regexFASTQ	ACACC(.{20})
 Brie	symbol	mgi_symbol
 Brie	organism	mus_musculus
 Brie	URL	https://www.addgene.org/pooled-library/broadgpp-mouse-knockout-brie/
-Brunello	FASTA	FASTA_brunello_library.fasta
+Brunello	FASTA	FASTA_Brunello.fasta
 Brunello	regexFASTA	^(.+?)(_.*)$
 Brunello	regexFASTQ	ACACCG(.{20})
 Brunello	symbol	hgnc_symbol
