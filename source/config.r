@@ -66,7 +66,7 @@ config[["EnrichR_URL"]] <- 'http://amp.pharm.mssm.edu/Enrichr/'
 #############################
 
 # Load pre-defined settings
-config[["screeninglibraries"]] <- readr::read_tsv(file = "predefined_settings.txt",col_names = TRUE) %>% dplyr::arrange(Library)
+config[["screeninglibraries"]] <- readr::read_tsv(file = file.path(config[["wd"]],"predefined_settings.txt"),col_names = TRUE) %>% dplyr::arrange(Library)
 
 ## Here, the information is stored in a tibble:
 # Library | Option | Value of this Option
@@ -104,7 +104,7 @@ names(config[["fastq_regex"]]) <- c("Standard for LenticrispV2, LentiGuide ACC(.
 #### LOAD Biomart attributes file
 ## Also generate gene conversion
 # Loads biomart attributes
-biomart.attributes <- unique(read.table(file="biomart_hsapiens_ensembl_attributes.tab", header=TRUE, sep="\t", stringsAsFactors = FALSE, as.is = TRUE, quote=""))
+biomart.attributes <- unique(read.table(file=file.path(config[["wd"]],"biomart_hsapiens_ensembl_attributes.tab"), header=TRUE, sep="\t", stringsAsFactors = FALSE, as.is = TRUE, quote=""))
 
 # please do not change
 config[["biomart.attributes"]] <- as.list(biomart.attributes$name)
