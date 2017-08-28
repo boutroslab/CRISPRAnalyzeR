@@ -1064,7 +1064,7 @@ outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, se
 write(outInfo, file.path(userDir, "analysis.info"))
 
 wilcox[["data"]] <- tryFunction(stat.wilcox(normalize = FALSE, controls = cp$miaccs$controls.nontarget, 
-  control.picks = cp$miaccs$control.picks, sorting = FALSE, groups = cp$groups.compare, logfile = FALSE), "wilcox") #logfile=logFile if logging is used
+  control.picks = cp$miaccs$control.picks, sorting = FALSE, groups = cp$groups.compare, logfile = NULL), "wilcox") #logfile=logFile if logging is used
 
 GSE_methodlist <- list("Wilcox" = "wilcox")
 
