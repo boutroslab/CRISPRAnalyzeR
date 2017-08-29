@@ -270,8 +270,8 @@ system2(command = "mageck", args = mageck.args)
 # sample1.sgrna_summary.txt
 
 
-data.mageck.genes = read.table(paste(filename, "gene_summary.txt", sep="." ), header= TRUE, sep="\t", comment.char="")
-data.mageck.sgrna = read.table(paste(filename, "sgrna_summary.txt", sep="." ), header= TRUE, sep="\t", comment.char="")
+data.mageck.genes = read.table(file.path(dirstore, paste(filename, "gene_summary.txt", sep="." )), header= TRUE, sep="\t", comment.char="")
+data.mageck.sgrna = read.table(file.path(dirstore, paste(filename, "sgrna_summary.txt", sep="." )), header= TRUE, sep="\t", comment.char="")
 
 #str(data.mageck.genes)
 #str(data.mageck.sgrna)
