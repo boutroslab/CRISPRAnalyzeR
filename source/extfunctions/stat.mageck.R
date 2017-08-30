@@ -276,6 +276,10 @@ system2(command = "mageck", args = mageck.args)
 if(!is.null(logfile))
 {
   write(paste(": MAGeCK 4"), logfile, append = TRUE)
+  write(paste(dirstore ,": MAGeCK 4"), logfile, append = TRUE)
+  write(paste(filename ,": MAGeCK 4"), logfile, append = TRUE)
+  write(paste(file.path(dirstore, paste(filename, "gene_summary.txt", sep="." )) ,": MAGeCK 4"), logfile, append = TRUE)
+  
 }
 # load files created by Mageck
 # Filenames:
@@ -284,6 +288,8 @@ if(!is.null(logfile))
 
 
 data.mageck.genes = read.table(file.path(dirstore, paste(filename, "gene_summary.txt", sep="." )), header= TRUE, sep="\t", comment.char="")
+
+
 if(!is.null(logfile))
 {
   write(paste(": MAGeCK 5"), logfile, append = TRUE)
