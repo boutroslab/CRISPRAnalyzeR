@@ -1098,12 +1098,13 @@ write(outInfo, file.path(userDir, "analysis.info"))
 
 #### mageck
 write(paste(userID, ": creating object mageck"), logFile, append = TRUE)
+write(paste(userID, " Userdir", userDir), logFile, append = TRUE)
 mageck <- list()
 mageck[["info"]] <- list("pval" = cp$miaccs$sig.pval.mageck)
 mageck[["data"]] <- tryFunction(stat.mageck(norm.fun = 'none', extractpattern = cp$miaccs$g.extractpattern, 
                                     groups = cp$groups.compare, sort.criteria = "neg", 
                                     adjust.method = "fdr", fdr.pval = cp$miaccs$sig.pval.mageck,
-                                    filename = "mageckdata", mageckfolder = userDir), "mageck")
+                                    filename = "mageckdata", mageckfolder = userDir, logfile = logFile), "mageck")
 
 GSE_methodlist <- c(GSE_methodlist,"MAGeCK" = "mageck")
 

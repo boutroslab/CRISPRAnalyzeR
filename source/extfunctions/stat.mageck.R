@@ -1,4 +1,4 @@
-stat.mageck=function(norm.fun="median", extractpattern=expression("^(.+?)(_.+)"), groups=cp$groups.compare, mageckfolder=NULL, sort.criteria="neg", adjust.method="fdr", filename=NULL, fdr.pval=0.05){
+stat.mageck=function(norm.fun="median", extractpattern=expression("^(.+?)(_.+)"), groups=cp$groups.compare, mageckfolder=NULL, sort.criteria="neg", adjust.method="fdr", filename=NULL, fdr.pval=0.05, logfile = NULL){
   # OLD ARGUMENTS
   # untreated.list, treated.list, namecolumn=1, fullmatchcolumn=2,
   # mageckfolder: where to store analysis files
@@ -81,7 +81,10 @@ stat.mageck=function(norm.fun="median", extractpattern=expression("^(.+?)(_.+)")
       treat.df.sgRNA$designs <- NULL
     }
     
-    
+    if(!is.null(logfile))
+    {
+      write(paste(": MAGeCK 1"), logfile, append = TRUE)
+    }
     
     # add to treatment group
     #treat.df <- cbind.data.frame(treat.df, cp$readcount[,(this.treatment)+1])
@@ -158,7 +161,10 @@ stat.mageck=function(norm.fun="median", extractpattern=expression("^(.+?)(_.+)")
   ## add untreated via cbind
   #dataset.combined <- cbind.data.frame(dataset.combined, data.list[[groups[1]]][2:(ncol(data.list[[groups[1]]]))])
   
-  
+  if(!is.null(logfile))
+  {
+    write(paste(": MAGeCK 2"), logfile, append = TRUE)
+  }
   # Write file to pass on to Mageck
   if(is.null(filename)) { filename="mageckanalysisfile"}
   if(is.null(mageckfolder)) {dirstore = getwd()} else {dirstore = mageckfolder}
@@ -166,6 +172,10 @@ stat.mageck=function(norm.fun="median", extractpattern=expression("^(.+?)(_.+)")
   dataset.combined.file=file.path(dirstore,paste(filename, "_MAGeCK_sgRNA.tab", sep="") )
   write.table(dataset.combined, file=dataset.combined.file, row.names=FALSE,quote=FALSE)
   
+  if(!is.null(logfile))
+  {
+    write(paste(": MAGeCK 3"), logfile, append = TRUE)
+  }
   #print(dataset.combined$designs)
   
   # pass on the dataset to Mageck via rPython
@@ -263,7 +273,10 @@ stat.mageck=function(norm.fun="median", extractpattern=expression("^(.+?)(_.+)")
 mageck.args <- c("test", paste("--count-table", dataset.combined.file, sep=" "), paste("--treatment-id", treated.samples , sep=" "), paste("--control-id", untreated.samples,sep=" "), paste("--norm-method", norm.fun,sep=" "), paste("--sort-criteria", sort.criteria,sep=" "), paste( "--gene-test-fdr-threshold ", fdr.pval,sep=" "), paste("--adjust-method", adjust.method,sep=" "), paste("--output-prefix", file.path(dirstore,filename),sep=" "))
 system2(command = "mageck", args = mageck.args)
 #test <- system(mageckstring, intern=TRUE)
-
+if(!is.null(logfile))
+{
+  write(paste(": MAGeCK 4"), logfile, append = TRUE)
+}
 # load files created by Mageck
 # Filenames:
 # sample1.gene_summary.txt
@@ -271,6 +284,10 @@ system2(command = "mageck", args = mageck.args)
 
 
 data.mageck.genes = read.table(file.path(dirstore, paste(filename, "gene_summary.txt", sep="." )), header= TRUE, sep="\t", comment.char="")
+if(!is.null(logfile))
+{
+  write(paste(": MAGeCK 5"), logfile, append = TRUE)
+}
 data.mageck.sgrna = read.table(file.path(dirstore, paste(filename, "sgrna_summary.txt", sep="." )), header= TRUE, sep="\t", comment.char="")
 
 #str(data.mageck.genes)
@@ -300,6 +317,11 @@ dataset.return = data.frame(
 # now add the correct number of significant sgRNAs
 #dataset.return$sgrna.neg = apply(dataset.return, 1, function(u) return(sgRNA.sig.neg[sgRNA.sig.neg$Group.1==u["genes"],"x"]))
 #dataset.return$sgrna.pos = apply(dataset.return, 1, function(u) return(sgRNA.sig.pos[sgRNA.sig.pos$Group.1==u["genes"],"x"]))
+
+if(!is.null(logfile))
+{
+  write(paste(": MAGeCK 6"), logfile, append = TRUE)
+}
 
 # Return data
 cp$mageck <- list(genes = dataset.return, sgRNA = data.mageck.sgrna)
