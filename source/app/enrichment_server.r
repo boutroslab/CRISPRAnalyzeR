@@ -204,7 +204,7 @@ observe(
 
 
 output$GSE_top <- renderUI({
-  return(sliderInput(inputId = "GSE_select_top",label = "Select the percentage of genes",min = 0.1,max = 10,value = 2,round = FALSE))
+  return(sliderInput(inputId = "GSE_select_top",label = "Select the percentage of genes",min = 0.01,max = 10,value = 1,round = FALSE))
 })
 
 output$GSE_methods <- renderUI({

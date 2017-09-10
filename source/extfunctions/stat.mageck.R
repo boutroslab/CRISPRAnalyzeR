@@ -278,6 +278,7 @@ if(!is.null(logfile))
   write(paste(": MAGeCK 4"), logfile, append = TRUE)
   write(paste(dirstore ,": MAGeCK 4"), logfile, append = TRUE)
   write(paste(filename ,": MAGeCK 4"), logfile, append = TRUE)
+  write(paste("MAGeCK Arguments :", paste(mageck.args, collapse = " ") ), logfile, append = TRUE)
   write(paste(file.path(dirstore, paste(filename, "gene_summary.txt", sep="." )) ,": MAGeCK 4"), logfile, append = TRUE)
   
 }
