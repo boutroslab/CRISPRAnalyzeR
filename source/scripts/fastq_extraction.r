@@ -599,7 +599,7 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   
   if(rust == 0)
   { # RUST file is present
-    
+    file.rename(paste0(info$paths[i], ".gz"), info$paths[i])
     #paste(info$oldpaths[i],"_stats.txt", sep="")
     arguments <- c("-p", shQuote(info$targetRegex), "-f", shQuote(info$paths[i]), "-c", info$reverse, "-l",  paste(info$oldpaths[i],"_stats.txt", sep=""))
     write(paste(userID, ": run:", "fastq_parser", paste(arguments, collapse = " ")), logFile, append = TRUE)
