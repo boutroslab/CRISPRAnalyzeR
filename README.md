@@ -142,7 +142,14 @@ __It is your responsibility to obtain all required licenses in case of commercia
 
 
 ```
-Version 1.17 (latest)
+Version 1.20 (latest)
+- added new user interface for data upload
+- fixed many sgRNA libraries
+- added Addgene sgRNA libraries for easier use
+- started with BETA feature for gene essentiality
+- improved overall speed
+
+Version 1.17
 - fixed BAGEL issues
 - added the possibility to download all data from the DATA REVIEW tab
 - improved the performance ovberall
@@ -151,20 +158,6 @@ Version 1.17 (latest)
 - added Visualization of GenomeCRISPR data in Hit Confirmation -> Gene Overview
 - added Essential / Non-essential gene Read count in Quality Control
 - added Essential/non-essential Log2 FC in Hit Calling section -> you can compare the effect to any published CRISPR screened cell line in GenomeCRISPR
-
-Version 1.141
-- adapted to changes in ENSEMBL database structure
-
-Version 1.14
-- stability enhancements in report generation
-- fixed some UI typos
-- prepared basis for new features
-- added new parameter: max_upload -> sets the maximum allowed upload limit
-- introduced Kitematic-based installation
-
-Version 1.13
-- fixed some typos
-- fixed report generation issue with larger datasets
 
 OLDER VERSIONS are not available anymore.
 
