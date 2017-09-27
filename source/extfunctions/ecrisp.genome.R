@@ -14,7 +14,6 @@ ecrisp.genome <- function(organism = "homo_sapiens",
                             dataframe = FALSE,
                             extractpattern = expression("^(.+?)(_.+)"), # should be cp$miaccs$g.extractpattern in final version
                             debug=FALSE,
-                            #ecrisp = "http://b110-ws01/E-CRISP/reannotate_crispr_carpools.pl"
                             ecrisp = "http://www.e-crisp.org/E-CRISP/reannotate_crispr_carpools.pl",
                             write=TRUE,
                           outputdir=getwd(),
@@ -34,26 +33,6 @@ ecrisp.genome <- function(organism = "homo_sapiens",
     host <- host
   } 
   
-#   organism = "homo_sapiens"
-#   ensembl.genome.release = "hg19"
-#   database = cp$miaccs$a.database
-#   dataset = cp$miaccs$a.dataset
-#   host = "www.ensembl.org"
-#   biomart = TRUE
-#   local.genome.release = NULL
-#   timeout = 600
-#   sleep = 10
-#   unspecific_bases = 1
-#   edit_distance = 0
-#   type = "single"
-#   labelgene = "BAX"
-#   mapping.sgRNA = "all" # missing enriched depleted
-#   annotate = c("regulation","foldchange","fdr", "doench","CDS","seed_GC") #unmappedXU
-#   from.zoom=NULL
-#   to.zoom=NULL
-#   get.model = "single"
-#   overwrite=FALSE
-#   span = 0.4
 
 # ####### Idea is to
 # ## Load fasta library file sgRNAs and re-evaluate them using E-CRISP evaluation

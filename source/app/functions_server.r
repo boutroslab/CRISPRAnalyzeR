@@ -416,6 +416,14 @@ Check_libFile <- function(name, path, regex, messages = config$messages) {
       out$message <- paste0(out$message,messages$checklibfile10$String) 
       #out$message <- paste0(out$message, "The sgRNA identifiers in the provided sgRNA library file are not unique.<br/> Please make sure only unique identifiers are used.<br/>")
     }
+    
+    # check for unwanted whitespaces in name
+    if(grepl(pattern = "\\s+",x = check.fasta.names))
+    {
+      out$error <- TRUE
+      out$message <- paste0(out$message,messages$checklibfile16$String) 
+    }
+    
     # Check for regular expression
     check.fasta.names.regex.gene <- sub(pattern = regex,x = check.fasta.names, replacement = "\\1")
     # make available for all

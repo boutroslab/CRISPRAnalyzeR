@@ -421,7 +421,6 @@ if( nfiles > 1 ){
       # DEBUG: disable rust
       
       #rust = 1
-      
       # if RUST is not present, we switch back to PERL
       write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
       

@@ -51,6 +51,7 @@ checklibfile12	The regular expression revealed a problem with your sgRNA identif
 checklibfile13	The regular expression revealed a problem with your gene identifier as part of your sgRNA identifier.<br/>Either the selected regular expression is not correct or you have missing/incorrect entries in your sgRNA library file.<br/>
 checklibfile14	The regular expression revealed a problem with your gene/sgRNA identifier as part of your sgRNA identifier.<br/>Either the selected regular expression cannot discriminate between the gene and sgRNA part of your identifier<br/> or you have missing/incorrect entries in your sgRNA library file.<br/> As an example, this was found to be the case for sgRNA
 checklibfile15	The sgRNA identifier within your library FASTA file are not unique.
+checklibfile16	You have whitespace characters (e.g. spaces) within your sgRNA identifier or sgRNA sequence. Please remove any whitespace characters to match the FASTA file format.</br>
 checkgroupnames1	For a comparison at least 2 groups are needed.<br/>
 checkgroupnames2	Each group should have a unique name.<br/>
 checkgroupnames3	There is a group without a name.<br/>

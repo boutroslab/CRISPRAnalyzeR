@@ -294,6 +294,7 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
       width = 12,
       status = "primary",
       
+      
       column(width=6,
       helpText("This is relevant if you upload compressed FASTQ files.", 
                "These defaults should work fine in most cases."),
@@ -312,15 +313,21 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
       
       shiny::uiOutput(outputId = "InputseqFiles_regexTarget"),
      
-      checkboxInput("seqFiles_rev", "Is data in FASTQ in reverse complement?", value = FALSE),
-      selectInput("seqFiles_bt2Sens", "Bowtie2 sensitivity", choices = list("very-sensitive-local", "local", "very-sensitive")),
-      selectInput("seqFiles_bt2quali", "Bowtie2 quality", choices = list("perfect", "high", "seed")),
-      helpText("If you have a really low overall read count, you can try to go down with these parameters
-               and accept mapping mismatches.")
+      checkboxInput("seqFiles_rev", "Is data in FASTQ in reverse complement?", value = FALSE)
+      
     ),
     column(width=6,
+           selectInput("seqFiles_bt2Sens", "Bowtie2 sensitivity", choices = list("very-sensitive-local", "local", "very-sensitive")),
+           selectInput("seqFiles_bt2quali", "Bowtie2 quality", choices = list("perfect", "high", "seed")),
+           helpText("If you have a really low overall read count, you can try to go down with these parameters
+                    and accept mapping mismatches.")
+    ),
+    column(width=12,
            shiny::tags$br(),
-           shiny::tags$h3(class="text text-success", "Expert Options"),
+           shiny::tags$h3(class="text text-success", "Expert Options")
+           ),
+    column(width = 6,
+           
            shiny::tags$h4("You can modify / add your own regular expression"),
            shiny::tags$br(),
            shiny::tags$strong("Do you want to use a custom regular expression?"),
@@ -338,7 +345,10 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
            shiny::tags$strong("Do you really want to override the alignment quality check?"),
            shinyWidgets::switchInput(inputId = "override_low_alignment",value = FALSE, onStatus = "danger"),
            #shiny::tags$img(src="./images/CA_UserRegex.gif", class="img-responsive", width="80%")
-           shiny::tags$br(),
+           shiny::tags$br()
+           
+           ),
+    column(width=6,
            
            # make FASTQ quality report optional
            shiny::tags$hr(width="50%"),
@@ -354,6 +364,7 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
            shiny::helpText("By default, CRISPRAnalyzeR processes FASTQ files using a specialized tool for faster processing. In case you have issues with FASTQ extraction (e.g. all read counts are 0), you can try to disable the fast processing of FASTQ files and revert back to the old method."),
            shinyWidgets::switchInput(inputId = "RUSTtools",value = TRUE, onStatus = "danger")
            )
+      
     )
     # other half
     )
