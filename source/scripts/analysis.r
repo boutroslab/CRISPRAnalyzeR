@@ -630,16 +630,16 @@ write(paste(userID, ": Check for Gene level read counts"), logFile, append = TRU
 # get colnames apart from design
 
 test <- cp$aggregated.readcount %>% select_(.dots = cp$miaccs$file.names) %>% summarise_all(mean)
-test <- test %>% filter_all(any_vars(. == 0))
+test <- test %>% filter_all(any_vars(. > 1))
 
 if(nrow(test) == 0)
 {
-  write(paste(userID, ": Gene-leve mean read Count is 0"), log, append = TRUE)
+  write(paste(userID, ": Gene-leve mean read Count is 0"), logFile, append = TRUE)
 
   outInfo <- c(paste("progress", 1, sep = ";"), paste("info", "Mean gene-level read count is 0. Please check the Regular Expressions used, as an alternative you can remove low read counts from the analsys. Please try it again.", sep = ";"))
   write(outInfo, file.path(dir, "analysis.info"))
   
-  write(paste(userID, ": analysis.r quit at", Sys.time()), log, append = TRUE)
+  write(paste(userID, ": analysis.r quit at", Sys.time()), logFile, append = TRUE)
   quit(save = "no", status = 1)
 }
 
