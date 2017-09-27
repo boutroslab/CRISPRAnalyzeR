@@ -628,9 +628,11 @@ write(paste(userID, ": Check for Gene level read counts"), logFile, append = TRU
 
 ### CHECK if readcount is not 0! In this case -> throw error message
 # get colnames apart from design
-sampledraw <- sample(x = c(2:length(cp$miaccs$file.names)), size = 1)
 
-if(mean(cp$aggregated.readcount[,sampledraw]) == 0)
+test <- cp$aggregated.readcount %>% select_(.dots = cp$miaccs$file.names) %>% summarise_all(mean)
+test <- test %>% filter_all(any_vars(. == 0))
+
+if(nrow(test) == 0)
 {
   write(paste(userID, ": Gene-leve mean read Count is 0"), log, append = TRUE)
 
