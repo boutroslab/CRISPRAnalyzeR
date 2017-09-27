@@ -409,7 +409,7 @@ if( nfiles > 1 ){
       ## extract
       # check if RUST or PERL needs to be used
       # check for RUST
-      if(info$rust_tools == TRUE) # user can disable rust tools
+      if(info$RUSTtools == TRUE) # user can disable rust tools
       {
         rust <- try(system2(command = "fastq_parser", args = c("--help")))
       } else 
@@ -479,7 +479,7 @@ if( nfiles > 1 ){
       tryFun(system2("bowtie2", args = arguments, stderr = file.path(paste(info$oldpaths[i],"_bt2_error.log", sep="")), stdout = file.path(paste(info$oldpaths[i],"_bt2.log", sep=""))), "map", info$names[i], path = info$oldpaths[i])
     
       # check for RUST
-      if(info$rust_tools == TRUE)
+      if(info$RUSTtools == TRUE)
       {
         rust <- try(system2(command = "sam_mapper", args = c("--help")))
       } else 
@@ -611,9 +611,10 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   ## extract
   # check if RUST or PERL needs to be used
   # check for RUST
-  if(info$rust_tools == TRUE)
+  if(info$RUSTtools == TRUE)
   {
     rust <- try(system2(command = "fastq_parser", args = c("--help")))
+    
   } else 
   {
     rust <- 127
@@ -676,7 +677,7 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
 
 
   # check for RUST
-  if(info$rust_tools == TRUE)
+  if(info$RUSTtools == TRUE)
   {
     rust <- try(system2(command = "sam_mapper", args = c("--help")))
   } else 
