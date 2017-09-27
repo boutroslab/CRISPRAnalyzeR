@@ -308,6 +308,7 @@ write(outInfo, file.path(userDir, "analysis.info"))
 ###################
 if(info$optimizeFASTA == TRUE)
 {
+  libpath <- cp$miaccs$datapath$libFile
   write(paste(userID, ": Optimize sgRNA library"), logFile, append = TRUE)
   extract_geneID = info$libregex # extract gene ID in first capture group and sgRNA identifier in second capture group
   
