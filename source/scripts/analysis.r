@@ -336,7 +336,8 @@ if(info$optimizeFASTA == TRUE)
   # extract identifiers and remove unwanted characters
   libdf$Genes <- sub(pattern = "[[:space:][:blank:]]", replacement = "", x = sub(pattern = extract_geneID, replacement = "\\1", x=libdf$design))
   write(paste(userID, ": Optimize sgRNA library - 8"), logFile, append = TRUE)
-  libdf$sgRNAidentifier <- sub(pattern = "[[:punct:][:space:][:blank:]]", replacement = "", x = sub(pattern = pattern1, replacement = "\\2", x=libdf$design))
+  
+  libdf$sgRNAidentifier <- sub(pattern = "[[:punct:][:space:][:blank:]]", replacement = "", x = sub(pattern = extract_geneID, replacement = "\\2", x=libdf$design))
   
   write(paste(userID, ": Optimize sgRNA library - 9"), logFile, append = TRUE)
   
