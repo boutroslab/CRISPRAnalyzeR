@@ -87,6 +87,66 @@ if( !grepl( ".*\n$", a, perl = TRUE) ){
 
 
 
+###################
+### Optimize FASTA
+###################
+if(info$optimizeFASTA == TRUE)
+{
+  libpath <- info$libPath
+  write(paste(userID, ": Optimize sgRNA library"), logFile, append = TRUE)
+  
+  extract_geneID = info$libRegex # extract gene ID in first capture group and sgRNA identifier in second capture group
+  # we need to get the _ from the second capture
+  sub(pattern = ".*\\(.+\\)\\((.{1}).+\\).*",x = extract_geneID, replacement = "\\1")
+  
+  library(ShortRead)
+  library(seqinr)
+  
+  # Load lib
+  lib <- seqinr::read.fasta(file=libpath, seqtype = "DNA", as.string = TRUE, forceDNAtolower = FALSE,set.attributes = TRUE, legacy.mode = TRUE, seqonly = FALSE, strip.desc = FALSE, bfa = FALSE, apply.mask = TRUE)
+  write(paste(userID, ": Optimize sgRNA library - 6"), logFile, append = TRUE)
+  # Make df
+  libdf <- data.frame(
+    design = seqinr::getName(object = lib),
+    sgrna = toupper(unlist(seqinr::getSequence(object = lib, as.string = TRUE))),
+    stringsAsFactors = FALSE
+  )
+  write(paste(userID, ": Optimize sgRNA library - 7"), logFile, append = TRUE)
+  
+  
+  # extract identifiers and remove unwanted characters
+  libdf$Genes <- sub(pattern = "[[:space:][:blank:]]", replacement = "", x = sub(pattern = extract_geneID, replacement = "\\1", x=libdf$design))
+  
+  libdf$sgRNAidentifier <- sub(pattern = "[[:punct:][:space:][:blank:]]", replacement = "", x = sub(pattern = extract_geneID, replacement = "\\2", x=libdf$design))
+  
+  
+  # check for uniqueness
+  
+  if(any(duplicated(libdf$sgrna)))
+  {
+    duplicated <- libdf[duplicated(libdf$sgrna),]
+    # Remove duplicated
+    libdf <- libdf[!duplicated(libdf$sgrna),]
+  }
+  
+  # rewrite sgRNA identifier to use sgrna sequence
+  libdf$design <- apply(libdf,1, function(x){
+    
+    return(paste(as.character(x["Genes"]), "_", as.character(x["sgrna"]), sep=""))
+  })
+  write(paste(userID, ": Optimize sgRNA library - 11"), logFile, append = TRUE)
+  
+  libdf$sgrna <- tolower(libdf$sgrna)
+  write(paste(userID, ": Optimize sgRNA library - 12"), logFile, append = TRUE)
+  
+  # Write back to FASTA
+  oligos <- as.list(libdf$sgrna)
+  names(oligos) <- libdf$design
+  write(paste(userID, ": Optimize sgRNA library - 13"), logFile, append = TRUE)
+  seqinr::write.fasta(sequences = oligos,names = names(oligos) ,file.out =  libpath)
+  
+}
+
 
 
 ####################

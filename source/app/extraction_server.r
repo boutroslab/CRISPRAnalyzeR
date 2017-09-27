@@ -207,7 +207,7 @@ observeEvent(input$submit_seqFiles, {
               paste("bt2Threads", paste(config$car.bt2.threads, collapse = ";"), sep = ";"),
               paste("RQCreport", paste(rqc_report, collapse = ";"), sep = ";"),
               paste("RUSTtools", paste(rust_tools, collapse = ";"), sep = ";"),
-              paste("optimizeFASTA", paste(optimize_fasta, collapse = ";"), sep = ";")
+              paste("optimizeFASTA", paste(libFile()$optimizeFASTA, collapse = ";"), sep = ";")
               )
     write(info2, infoFiles$fastq)
     
