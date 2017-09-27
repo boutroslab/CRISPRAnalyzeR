@@ -393,19 +393,30 @@ if( nfiles > 1 ){
       file.rename(info$paths[i], paste0(info$paths[i], ".gz"))
       
       # FASTQ QC file to add to report
-      if(!exists("file.rqc"))
+      if( info$RQCreport == TRUE ) # Did user want to have FASTQ report?
       {
-        file.rqc <-  list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) 
+        if(!exists("file.rqc"))
+        {
+          file.rqc <-  list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) 
+        }
+        else
+        {
+          file.rqc <-  c(file.rqc, list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) )
+        }
       }
-      else
-      {
-        file.rqc <-  c(file.rqc, list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) )
-      }
+      
       
       ## extract
       # check if RUST or PERL needs to be used
       # check for RUST
-      rust <- try(system2(command = "fastq_parser", args = c("--help")))
+      if(info$rust_tools == TRUE) # user can disable rust tools
+      {
+        rust <- try(system2(command = "fastq_parser", args = c("--help")))
+      } else 
+      {
+        rust <- 127
+      }
+      
       
       # DEBUG: disable rust
       
@@ -468,7 +479,14 @@ if( nfiles > 1 ){
       tryFun(system2("bowtie2", args = arguments, stderr = file.path(paste(info$oldpaths[i],"_bt2_error.log", sep="")), stdout = file.path(paste(info$oldpaths[i],"_bt2.log", sep=""))), "map", info$names[i], path = info$oldpaths[i])
     
       # check for RUST
-      rust <- try(system2(command = "sam_mapper", args = c("--help")))
+      if(info$rust_tools == TRUE)
+      {
+        rust <- try(system2(command = "sam_mapper", args = c("--help")))
+      } else 
+      {
+        rust <- 127
+      }
+      
       # if RUST is not present, we switch back to PERL
       
       # DEBUG: disable rust
@@ -577,21 +595,30 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
   file.rename(info$paths[i], paste0(info$paths[i], ".gz"))
   
   # FASTQ QC file to add to report
-  if(!exists("file.rqc"))
+  if( info$RQCreport == TRUE ) # Did user want to have FASTQ report?
   {
-    file.rqc <-  list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) 
-  }
-  else
-  {
-    file.rqc <-  c(file.rqc, list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) )
+    if(!exists("file.rqc"))
+    {
+      file.rqc <-  list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) 
+    }
+    else
+    {
+      file.rqc <-  c(file.rqc, list(file.path(userDir, paste0(info$gen_names[i], ".fastq.gz")) ) )
+    }
   }
   
   
-
   ## extract
   # check if RUST or PERL needs to be used
   # check for RUST
-  rust <- try(system2(command = "fastq_parser", args = c("--help")))
+  if(info$rust_tools == TRUE)
+  {
+    rust <- try(system2(command = "fastq_parser", args = c("--help")))
+  } else 
+  {
+    rust <- 127
+  }
+  
 
   write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
   
@@ -649,7 +676,14 @@ if( grepl(".*\\.fastq\\.gz$", tolower(info$names[i]), perl = TRUE) ){
 
 
   # check for RUST
-  rust <- try(system2(command = "sam_mapper", args = c("--help")))
+  if(info$rust_tools == TRUE)
+  {
+    rust <- try(system2(command = "sam_mapper", args = c("--help")))
+  } else 
+  {
+    rust <- 127
+  }
+  
   # if RUST is not present, we switch back to PERL
   write(paste(userID, ": RUST parser status", rust), logFile, append = TRUE)
   

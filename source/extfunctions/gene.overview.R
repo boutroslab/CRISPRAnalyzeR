@@ -432,7 +432,8 @@ sgrna.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens",
     #print("sgrna.ranges")
     shiny::incProgress(amount = 0.1)
     deseq.sgrna <- as.data.frame(deseq$data$sgRNA)
-    sgrna.ranges <- GenomicRanges::makeGRangesFromDataFrame(ecrisp[ecrisp$design %in% readcount[readcount$gene == genes,"design"] & ecrisp$chr == paste("chr",unique(gene.info$chromosome_name), sep=""),], 
+    ## CHANGE: added unique
+    sgrna.ranges <- GenomicRanges::makeGRangesFromDataFrame(unique(ecrisp[ecrisp$design %in% readcount[readcount$gene == genes,"design"] & ecrisp$chr == paste("chr",unique(gene.info$chromosome_name), sep=""),]), 
                                                             seqnames.field = "chr",
                                                             start.field = "Start",
                                                             end.field = "End",

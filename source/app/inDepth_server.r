@@ -1611,7 +1611,8 @@ output$idvioline_readcountuntreated <- renderPlot({
   
   if( status$results == TRUE && status$info == TRUE ){
     if( length(input$hit_select_violine) != 0 ){
-      
+      print(compare()$neg)
+      print(compare()$pos)
       # call violine plot
       violin(df = info()$rawGenes, target = compare()$pos, nontarget = compare()$neg, genes = input$hit_select_violine, type = "untreated", range=1.5,h=NULL,ylim=NULL, horizontal=FALSE, 
                        border="black", lty=1, lwd=1, rectCol=rgb(0,0,0,150, maxColorValue=255), colMed="white", pchMed=16, add=FALSE, wex=1, 

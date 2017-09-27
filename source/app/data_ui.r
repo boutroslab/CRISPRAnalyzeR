@@ -336,8 +336,23 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
            shiny::helpText("By default, CRISPRAnalyzeR prevents you from data analysis in case the alignment rate is below 30%. However you can override this to also use samples of such low quality."),
            shiny::tags$p(class="text text-danger", "This is only for expert users."),
            shiny::tags$strong("Do you really want to override the alignment quality check?"),
-           shinyWidgets::switchInput(inputId = "override_low_alignment",value = FALSE, onStatus = "danger")
+           shinyWidgets::switchInput(inputId = "override_low_alignment",value = FALSE, onStatus = "danger"),
            #shiny::tags$img(src="./images/CA_UserRegex.gif", class="img-responsive", width="80%")
+           shiny::tags$br(),
+           
+           # make FASTQ quality report optional
+           shiny::tags$hr(width="50%"),
+           shiny::tags$h4("Create a FASTQ data quality report"),
+           shiny::helpText("By default, CRISPRAnalyzeR generates a FASTQ data quality report, which can take some time.
+                           However, you can turn it off in case you are in a hurry."),
+           shinyWidgets::switchInput(inputId = "generateRQC",value = TRUE, onStatus = "danger"),
+           
+           # Make a fallback switch for FASTQ extraction using PERL
+           shiny::tags$br(),
+           shiny::tags$hr(width="50%"),
+           shiny::tags$h4("Perform FASTQ extraction in fast mode"),
+           shiny::helpText("By default, CRISPRAnalyzeR processes FASTQ files using a specialized tool for faster processing. In case you have issues with FASTQ extraction (e.g. all read counts are 0), you can try to disable the fast processing of FASTQ files and revert back to the old method."),
+           shinyWidgets::switchInput(inputId = "RUSTtools",value = TRUE, onStatus = "danger")
            )
     )
     # other half

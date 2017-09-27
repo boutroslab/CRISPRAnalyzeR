@@ -38,6 +38,8 @@ observe({
       shinyjs::disable("seqFiles_bt2quali")
       shinyjs::disable("custom_fastqregex")
       shinyjs::disable("override_low_alignment")
+      shinyjs::disable("generateRQC")
+      shinyjs::disable("RUSTtools")
       shinyjs::hide("fastqsettings")
       
       
@@ -49,6 +51,8 @@ observe({
       shinyjs::enable("seqFiles_bt2quali")
       shinyjs::enable("custom_fastqregex")
       shinyjs::enable("override_low_alignment")
+      shinyjs::enable("generateRQC")
+      shinyjs::enable("RUSTtools")
       shinyjs::show("fastqsettings")
       
     } else {
@@ -59,6 +63,8 @@ observe({
       shinyjs::disable("seqFiles_bt2quali")
       shinyjs::disable("custom_fastqregex")
       shinyjs::disable("override_low_alignment")
+      shinyjs::disable("generateRQC")
+      shinyjs::disable("RUSTtools")
       shinyjs::hide("fastqsettings")
     } 
   }
@@ -72,7 +78,9 @@ observe({
 extract <- reactive({
   status$extract <- FALSE
   
+  # EXTRACT FASTQ
   needed <- extract_fastq$needed
+  
   # get fastq regex or custom regex
   if(input$seqFiles_regexTargetcustom != "")
   {
@@ -167,9 +175,16 @@ observeEvent(input$submit_seqFiles, {
     
     shinyjs::disable("custom_libregex")
     shinyjs::disable("override_low_alignment")
+    shinyjs::disable("generateRQC")
+    shinyjs::disable("RUSTtools")
     
     shinyjs::disable("download_readcounts")
     shinyjs::disable("download_fastq_report")
+    
+    
+    # Make FASTQ QC?
+    rqc_report <- input$generateRQC
+    rust_tools <- input$RUSTtools
     
     info2 <- c(paste("progress", paste(0, collapse = ";"), sep = ";"),
               paste("info", paste("", collapse = ";"), sep = ";"),
@@ -188,7 +203,10 @@ observeEvent(input$submit_seqFiles, {
               paste("reverse", paste(extract()$reverse, collapse = ";"), sep = ";"),
               paste("bt2Quality", paste(extract()$bt2Quality, collapse = ";"), sep = ";"),
               paste("bt2Sensitivity", paste(extract()$bt2Sensitivity, collapse = ";"), sep = ";"),
-              paste("bt2Threads", paste(config$car.bt2.threads, collapse = ";"), sep = ";"))
+              paste("bt2Threads", paste(config$car.bt2.threads, collapse = ";"), sep = ";"),
+              paste("RQCreport", paste(rqc_report, collapse = ";"), sep = ";"),
+              paste("RUSTtools", paste(rust_tools, collapse = ";"), sep = ";")
+              )
     write(info2, infoFiles$fastq)
     
     scriptpath <- file.path(config$scriptpath, "fastq_extraction.r") 
@@ -549,6 +567,8 @@ observeEvent(input$reset_data, {
   shinyjs::enable("seqFiles_bt2quali")
   shinyjs::enable("custom_fastqregex")
   shinyjs::enable("override_low_alignment")
+  shinyjs::enable("generateRQC")
+  shinyjs::enable("RUSTtools")
   shinyjs::disable("download_readcounts")
   shinyjs::disable("download_fastq_report")
   
