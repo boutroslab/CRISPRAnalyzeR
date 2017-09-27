@@ -392,6 +392,7 @@ libFile <- eventReactive(input$submit_seqFiles, {
   
   status$libFile <- TRUE
   error$libFile <- test$message
+  print(input$optimizeFASTA)
   list("name" = name, "path" = path, "regex" = regex, "organism" = organism, "ID" = ID, "URL" = URL, "optimizeFASTA" = input$optimizeFASTA)
 })
 

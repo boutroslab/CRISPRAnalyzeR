@@ -314,7 +314,6 @@ if(info$optimizeFASTA == TRUE)
   # we need to get the _ from the second capture
   sub(pattern = ".*\\(.+\\)\\((.{1}).+\\).*",x = extract_geneID, replacement = "\\1")
   
-  replace_sgRNAidentifierbysequence = TRUE # if TRUE, this will replace the sgRNA identifier with the sgRNA sequence (default)
   
   library(ShortRead)
   library(seqinr)
@@ -330,23 +329,11 @@ if(info$optimizeFASTA == TRUE)
   )
   
   
-  # make sgRNA short?
-  if(makeshort)
-  {
-    libdf$sgrna <- sub(pattern = makeshortpattern, replacement = "\\1", x=libdf$sgrna)
-  }
-  
-  
   
   # extract identifiers and remove unwanted characters
   libdf$Genes <- sub(pattern = "[[:space:][:blank:]]", replacement = "", x = sub(pattern = extract_geneID, replacement = "\\1", x=libdf$design))
+  libdf$sgRNAidentifier <- sub(pattern = "[[:punct:][:space:][:blank:]]", replacement = "", x = sub(pattern = pattern1, replacement = "\\2", x=libdf$design))
   
-  if(replace_sgRNAidentifierbysequence)
-  {
-    libdf$sgRNAidentifier <- libdf$sgrna
-  } else {
-    libdf$sgRNAidentifier <- sub(pattern = "[[:punct:][:space:][:blank:]]", replacement = "", x = sub(pattern = pattern1, replacement = "\\2", x=libdf$design))
-  }
   
   
   # check for uniqueness
