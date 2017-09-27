@@ -301,12 +301,87 @@ progress <- 0.03
 outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
 write(outInfo, file.path(userDir, "analysis.info"))
 
+
+
+###################
+### Optimize FASTA
+###################
+if(info$optimizeFASTA == TRUE)
+{
+  write(paste(userID, ": Optimize sgRNA library"), logFile, append = TRUE)
+  extract_geneID = info$libregex # extract gene ID in first capture group and sgRNA identifier in second capture group
+  
+  # we need to get the _ from the second capture
+  sub(pattern = ".*\\(.+\\)\\((.{1}).+\\).*",x = extract_geneID, replacement = "\\1")
+  
+  replace_sgRNAidentifierbysequence = TRUE # if TRUE, this will replace the sgRNA identifier with the sgRNA sequence (default)
+  
+  library(ShortRead)
+  library(seqinr)
+  
+  # Load lib
+  lib <- seqinr::read.fasta(file=libpath, seqtype = "DNA", as.string = TRUE, forceDNAtolower = FALSE,set.attributes = TRUE, legacy.mode = TRUE, seqonly = FALSE, strip.desc = FALSE, bfa = FALSE, apply.mask = TRUE)
+  
+  # Make df
+  libdf <- data.frame(
+    design = seqinr::getName(object = lib),
+    sgrna = toupper(unlist(seqinr::getSequence(object = lib, as.string = TRUE))),
+    stringsAsFactors = FALSE
+  )
+  
+  
+  # make sgRNA short?
+  if(makeshort)
+  {
+    libdf$sgrna <- sub(pattern = makeshortpattern, replacement = "\\1", x=libdf$sgrna)
+  }
+  
+  
+  
+  # extract identifiers and remove unwanted characters
+  libdf$Genes <- sub(pattern = "[[:space:][:blank:]]", replacement = "", x = sub(pattern = extract_geneID, replacement = "\\1", x=libdf$design))
+  
+  if(replace_sgRNAidentifierbysequence)
+  {
+    libdf$sgRNAidentifier <- libdf$sgrna
+  } else {
+    libdf$sgRNAidentifier <- sub(pattern = "[[:punct:][:space:][:blank:]]", replacement = "", x = sub(pattern = pattern1, replacement = "\\2", x=libdf$design))
+  }
+  
+  
+  # check for uniqueness
+  
+  if(any(duplicated(libdf$sgrna)))
+  {
+    duplicated <- libdf[duplicated(libdf$sgrna),]
+    # Remove duplicated
+    libdf <- libdf[!duplicated(libdf$sgrna),]
+  }
+  
+  # rewrite sgRNA identifier to use sgrna sequence
+  libdf$design <- apply(libdf,1, function(x){
+    
+    return(paste(as.character(x["Genes"]), "_", as.character(x["sgrna"]), sep=""))
+  })
+  
+  libdf$sgrna <- tolower(libdf$sgrna)
+  
+  
+  # Write back to FASTA
+  oligos <- as.list(libdf$sgrna)
+  names(oligos) <- libdf$design
+  seqinr::write.fasta(sequences = oligos,names = names(oligos) ,file.out =  libpath)
+  
+}
+
+
 ####################
 #### load Files ####
 ####################
 # load files
 # create objects in cp
 # arrange groups
+
 local({
   files <- cp$miaccs$files
   files.names <- cp$miaccs$file.names
@@ -534,24 +609,24 @@ progress <- 0.08
 outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
 write(outInfo, file.path(userDir, "analysis.info"))
 
-# get randoms samples
-sampledraw <- sample(10:nrow(cp$readcount), 5)
-
-# log outcome
-#write(paste(userID, ": Colnames of cp$readcount:",  colnames(cp$readcount)), logFile, append = TRUE)
-#write(paste(userID, ": 5 random lines of cp$readcount:",  cp$readcount[sampledraw,]), logFile, append = TRUE)
-#write(paste(userID, ": 5 random lines of cp$libFILE:",  cp$libFILE[sampledraw,]), logFile, append = TRUE)
 
 ## aggregate to genes
 write(paste(userID, ": creating object aggregatetogenes"), logFile, append = TRUE)
 aggregateok <- tryFunction(aggregatetogenes(agg.function = sum, 
                                             extractpattern = cp$miaccs$g.extractpattern), "aggregate")
 
+write(paste(userID, ": Check for unique genes"), logFile, append = TRUE)
 ## Save unique genes
 uniquegenes <- unique(cp$readcount$gene)
 
-sampleaggregated <- cp$readcount[sampledraw,"gene"]
-sampledraw <- NULL
+write(paste(userID,": ", length(uniquegenes)), logFile, append = TRUE)
+
+# get randoms samples
+#sampledraw <- sample(10:nrow(cp$readcount), 5)
+#sampleaggregated <- cp$readcount[sampledraw,"gene"]
+#sampledraw <- NULL
+
+write(paste(userID, ": Check for Gene level read counts"), logFile, append = TRUE)
 
 #write(paste(userID, ": 5 random lines of cp$aggregated.readcount:",  cp$aggregated.readcount[cp$aggregated.readcount$gene %in% sampleaggregated,]), logFile, append = TRUE)
 

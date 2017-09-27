@@ -299,10 +299,12 @@ observe(
     shinyjs::show(id = "customfastqregex")
     shinyjs::enable(id = "seqFiles_regexTargetcustom")
     shinyjs::disable("seqFiles_regexTarget")
+  
   } else {
     shinyjs::hide(id = "customfastqregex")
     shinyjs::disable(id = "seqFiles_regexTargetcustom")
     shinyjs::enable("seqFiles_regexTarget")
+    
   }
 )
 
@@ -312,10 +314,12 @@ observe(
     shinyjs::show(id = "customlibregex")
     shinyjs::enable(id = "libFile_regexCustom")
     shinyjs::disable("libFile_regex")
+    shinyjs::enable("optimizeFASTA")
   } else {
     shinyjs::hide(id = "customlibregex")
     shinyjs::disable(id = "libFile_regexCustom")
     shinyjs::enable("libFile_regex")
+    shinyjs::enable("optimizeFASTA")
   }
 )
 
@@ -388,7 +392,7 @@ libFile <- eventReactive(input$submit_seqFiles, {
   
   status$libFile <- TRUE
   error$libFile <- test$message
-  list("name" = name, "path" = path, "regex" = regex, "organism" = organism, "ID" = ID, "URL" = URL)
+  list("name" = name, "path" = path, "regex" = regex, "organism" = organism, "ID" = ID, "URL" = URL, "optimizeFASTA" = input$optimizeFASTA)
 })
 
 

@@ -108,30 +108,32 @@ else
 	}
 }
 
+#open ($LOG, ">", $logfile) or die "Cannot open log file";
 
-
+#print $LOG "Read Library"."\n######\n";
 
 # go through both target list and blastoutput to parse it for matching sequences or slight /hard mismatches
 	while ($inputline = <$targetdesigns>){
 	#chomp($inputline);
 		if ($inputline=~/^>(.+)$/)	# get the design ID and initialize the hash
 		{
-			#print $LOG $1."\n";
 			$targetid = $1;
-			
+			#print($inputline."\n###\n");
 			# remove all special chars
 			chomp($targetid);
 			$targetid =~ s/\0//;
 			$targetid =~ s/\r//;
 			$targetid =~ s/\n//;
-			
+			#print $targetid."\n";
 			#print $LOG $targetid."\n";
 			$libID{$targetid}{"match"} = 0;	# perfect match
 			$libID{$targetid}{"total"} = 0;	# total reads for a given design
 			$libID{$targetid}{"sequence"} = "";
 
 			@geneid = split($genepattern, $targetid);
-			
+
+			#print $LOG $geneid[0]."\n";
+
 			$reads{$geneid[0]}{"genematch"} = 0;
 			$reads{$geneid[0]}{"genetotal"} = 0;
 
@@ -355,6 +357,8 @@ my $numbertargetstotal=0;
 	
 #Sort hash and put it into file
 
+#print $LOG "Make Output Files \n\n\n";
+
 print $seqdesign "sgRNA\tCount\n";
 print $seqgene "Gene\tCount\tdesigns-present\n";
 
@@ -367,6 +371,7 @@ foreach $target (sort keys %libID) {
 	$target =~ s/\0//;
 	$target =~ s/\r//;
 	$target =~ s/\n//;
+	
 	#calculate the number of targets per gene present in the run
 	#and exclude any target of the gene that was already counted
 	if (!defined $exclude{$target})
@@ -409,7 +414,7 @@ close($stats);
 
 close($seqdesign);
 close($seqgene);
-#close($LOG)
+#close($LOG);
 
 
 	

@@ -116,6 +116,8 @@ observeEvent(input$startAnalysis, {
           
           paste("libName", extractedFiles()$libName, sep = ";"),
           paste("libPath", extractedFiles()$libPath, sep = ";"),
+          paste("libregex", libFile()$regex, sep = ";"),
+          paste("optimizeFASTA", libFile()$optimizeFASTA, sep = ";"),
           
           paste("seqNames", paste(extractedFiles()$names, collapse = ";"), sep = ";"),
           paste("seqPaths", paste(extractedFiles()$paths, collapse = ";"), sep = ";"),

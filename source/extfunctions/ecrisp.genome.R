@@ -192,6 +192,7 @@ if(!exists("ecrispresult"))
 
  #remove missing strand informaiton with *
  ecrispresult[ecrispresult$Direction == "","Direction"] <- "*"
+ 
  # make chromosomes work with gviz
  
  if(!grepl(pattern = "^chr.*" , x=ecrispresult$chr, perl=TRUE))

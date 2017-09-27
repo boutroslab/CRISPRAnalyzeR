@@ -186,7 +186,13 @@ tabItem(tabName = "data", align = "center",
                             shiny::tags$div(id="customlibregex",
                                             shiny::textInput(inputId = "libFile_regexCustom",label = "Please enter a custom regular expression", placeholder = "Please enter a custom regular expression"),
                                             shiny::tags$br()
-                            )
+                            ),
+                            shiny::tags$br(),
+                            shiny::tags$hr(),
+                            shiny::tags$br(),
+                            shiny::tags$h4("Optimize sgRNA Library File"),
+                            shiny::helpText("By default, CRISPRAnalyzeR optimizes and performs consistency checks. If you have problems, you can disable the optimization procedure."),
+                            shinyWidgets::switchInput(inputId = "optimizeFASTA",value = TRUE, onStatus = "success")
                             #shiny::tags$img(src = "./images/regex2.png", class="img-responsive", width="90%")
                             
                             )
@@ -294,10 +300,13 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
       width = 12,
       status = "primary",
       
+      column(width=12,
+             helpText("This is relevant if you upload compressed FASTQ files.", 
+                      "These defaults should work fine in most cases.")
+             ),
       
       column(width=6,
-      helpText("This is relevant if you upload compressed FASTQ files.", 
-               "These defaults should work fine in most cases."),
+     
       # MODAL HELP
       #actionLink("fastqextractionhelp", label="", icon = icon("question-sign", lib = "glyphicon"), width=100 , style="font-size: 1.3em", class="primary"),
       # HELP MODAL
@@ -317,6 +326,7 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
       
     ),
     column(width=6,
+           shiny::tags$br(),
            selectInput("seqFiles_bt2Sens", "Bowtie2 sensitivity", choices = list("very-sensitive-local", "local", "very-sensitive")),
            selectInput("seqFiles_bt2quali", "Bowtie2 quality", choices = list("perfect", "high", "seed")),
            helpText("If you have a really low overall read count, you can try to go down with these parameters
@@ -327,7 +337,7 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
            shiny::tags$h3(class="text text-success", "Expert Options")
            ),
     column(width = 6,
-           
+           shiny::tags$hr(width="50%"),
            shiny::tags$h4("You can modify / add your own regular expression"),
            shiny::tags$br(),
            shiny::tags$strong("Do you want to use a custom regular expression?"),
@@ -355,14 +365,14 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
            shiny::tags$h4("Create a FASTQ data quality report"),
            shiny::helpText("By default, CRISPRAnalyzeR generates a FASTQ data quality report, which can take some time.
                            However, you can turn it off in case you are in a hurry."),
-           shinyWidgets::switchInput(inputId = "generateRQC",value = TRUE, onStatus = "danger"),
+           shinyWidgets::switchInput(inputId = "generateRQC",value = TRUE, onStatus = "success"),
            
            # Make a fallback switch for FASTQ extraction using PERL
            shiny::tags$br(),
            shiny::tags$hr(width="50%"),
            shiny::tags$h4("Perform FASTQ extraction in fast mode"),
            shiny::helpText("By default, CRISPRAnalyzeR processes FASTQ files using a specialized tool for faster processing. In case you have issues with FASTQ extraction (e.g. all read counts are 0), you can try to disable the fast processing of FASTQ files and revert back to the old method."),
-           shinyWidgets::switchInput(inputId = "RUSTtools",value = TRUE, onStatus = "danger")
+           shinyWidgets::switchInput(inputId = "RUSTtools",value = TRUE, onStatus = "success")
            )
       
     )

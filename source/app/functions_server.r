@@ -388,6 +388,7 @@ Check_libFile <- function(name, path, regex, messages = config$messages) {
     check.fasta <- try(seqinr::read.fasta(file=path, seqtype = "DNA", as.string = TRUE, forceDNAtolower = FALSE,set.attributes = TRUE, legacy.mode = TRUE, seqonly = FALSE, strip.desc = FALSE, bfa = FALSE, apply.mask = TRUE))
     # Extract gene identifier
     check.fasta.names <- try(seqinr::getName(object = check.fasta))
+    check.fasta.sgrna <- try(seqinr::getSequence(object = check.fasta, as.string=TRUE))
     
     if(class(check.fasta) == "try-error")
     {
@@ -419,6 +420,13 @@ Check_libFile <- function(name, path, regex, messages = config$messages) {
     
     # check for unwanted whitespaces in name
     if(grepl(pattern = "\\s+",x = check.fasta.names))
+    {
+      out$error <- TRUE
+      out$message <- paste0(out$message,messages$checklibfile16$String) 
+    }
+    
+    # check for unwanted whitespaces in name
+    if(grepl(pattern = "\\s+", x = check.fasta.sgrna))
     {
       out$error <- TRUE
       out$message <- paste0(out$message,messages$checklibfile16$String) 

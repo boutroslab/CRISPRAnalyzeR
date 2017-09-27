@@ -185,6 +185,7 @@ observeEvent(input$submit_seqFiles, {
     # Make FASTQ QC?
     rqc_report <- input$generateRQC
     rust_tools <- input$RUSTtools
+    optimize_fasta <- input$optimizeFASTA
     
     info2 <- c(paste("progress", paste(0, collapse = ";"), sep = ";"),
               paste("info", paste("", collapse = ";"), sep = ";"),
@@ -205,7 +206,8 @@ observeEvent(input$submit_seqFiles, {
               paste("bt2Sensitivity", paste(extract()$bt2Sensitivity, collapse = ";"), sep = ";"),
               paste("bt2Threads", paste(config$car.bt2.threads, collapse = ";"), sep = ";"),
               paste("RQCreport", paste(rqc_report, collapse = ";"), sep = ";"),
-              paste("RUSTtools", paste(rust_tools, collapse = ";"), sep = ";")
+              paste("RUSTtools", paste(rust_tools, collapse = ";"), sep = ";"),
+              paste("optimizeFASTA", paste(optimize_fasta, collapse = ";"), sep = ";")
               )
     write(info2, infoFiles$fastq)
     
