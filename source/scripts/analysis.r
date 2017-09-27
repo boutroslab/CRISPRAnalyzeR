@@ -612,6 +612,7 @@ write(outInfo, file.path(userDir, "analysis.info"))
 
 ## aggregate to genes
 write(paste(userID, ": creating object aggregatetogenes"), logFile, append = TRUE)
+write(paste(userID, ": ",paste(cp$readcount[1:4,"gene"], collapse = ";") ), logFile, append = TRUE)
 aggregateok <- tryFunction(aggregatetogenes(agg.function = sum, 
                                             extractpattern = cp$miaccs$g.extractpattern), "aggregate")
 
