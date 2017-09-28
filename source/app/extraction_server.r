@@ -746,7 +746,7 @@ output$download_readcounts <- downloadHandler(
     }
     
     # Add FASTA File
-    file.copy(file.path(userDir, "libFile"), file.path(userDir, paste(libFile()$name, ".fasta", sep="") ))
+    file.copy(file.path(userDir, "libFile"), file.path(userDir, paste(libFile()$name, sep="") ))
     filestozip <- c(filestozip, paste(libFile()$name) )
     
     arguments <- c("-czf", file.path(userDir, paste("Readcount_",userID,".tar.gz", sep="")), paste("-C", file.path(userDir), sep=" "), paste(filestozip, collapse = " "))
