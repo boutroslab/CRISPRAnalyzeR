@@ -60,8 +60,8 @@ tabItem(tabName = "id_sgRNAs", align = "center",
           helpText("Readcount of each sgRNA targeting the gene of interest."),
           fluidRow(
             #box( title = NULL,  width = 5, color = "gray", fluidRow(
-            column(6, align = "right", checkboxInput("idReadcount_norm", "normalized", value = TRUE)),
-            column(6, align = "left", checkboxInput("idReadcount_pol", "polar plot"))
+            column(6, align = "right", shinyWidgets::awesomeCheckbox("idReadcount_norm", "normalized", value = TRUE)),
+            column(6, align = "left", shinyWidgets::awesomeCheckbox("idReadcount_pol", "polar plot"))
             #))
           ),
           shiny::tags$h3("sgRNA readcounts"),
@@ -72,7 +72,7 @@ tabItem(tabName = "id_sgRNAs", align = "center",
           helpText("Foldchange of sgRNAs for the gene of interest."),
           fluidRow(
             #box( title = NULL,  width = 5, color = "gray", fluidRow(
-            column(6, align = "right", checkboxInput("idEffect_sort", "Sort according to Foldchange?", value = TRUE))#,
+            column(6, align = "right", shinyWidgets::awesomeCheckbox("idEffect_sort", "Sort according to Foldchange?", value = TRUE))#,
             #column(6, align = "left", radioButtons("idEffect_radio", NULL, 
             #    choices = list("fold change" = "fc", "z ratio" = "zr")))
             #))
@@ -85,8 +85,8 @@ tabItem(tabName = "id_sgRNAs", align = "center",
           helpText("These are predicted binding sites of each sgRNA for the gene of interest."),
           fluidRow(
             #box( title = NULL,  width = 5, color = "gray", fluidRow(
-            column(6, align = "right", checkboxInput("idOfftarget_sort", "sorted", value = TRUE)),
-            column(6, align = "left", checkboxInput("idOfftarget_pol", "polar plot"))
+            column(6, align = "right", shinyWidgets::awesomeCheckbox("idOfftarget_sort", "sorted", value = TRUE)),
+            column(6, align = "left", shinyWidgets::awesomeCheckbox("idOfftarget_pol", "polar plot"))
             #))
           ),
           h3("Predicted genomic binding sites of sgRNAs (based on E-CRISP.org)"),
@@ -98,7 +98,7 @@ tabItem(tabName = "id_sgRNAs", align = "center",
           helpText("Some scores for each sgRNA for the gene of interest."),
           fluidRow(
             #box( title = NULL,  width = 3, color = "gray",
-            checkboxInput("idZscore_sort", "sort treated group", value = TRUE)
+            shinyWidgets::awesomeCheckbox("idZscore_sort", "sort treated group", value = TRUE)
             #)
           ),
           h3("Z-Score of sgRNAs"),
@@ -109,7 +109,7 @@ tabItem(tabName = "id_sgRNAs", align = "center",
           helpText("Some scores for each sgRNA for the gene of interest."),
           fluidRow(
             #box( title = NULL,  width = 3, color = "gray",
-            checkboxInput("idEscores_pol", "polar")
+            shinyWidgets::awesomeCheckbox("idEscores_pol", "polar")
             #)
           ),
           h3("Efficiency scores of sgRNAs"),
@@ -120,7 +120,7 @@ tabItem(tabName = "id_sgRNAs", align = "center",
           helpText("Some scores for each sgRNA for the gene of interest."),
           fluidRow(
             #box( title = NULL,  width = 3, color = "gray",
-            checkboxInput("idCscores_pol", "polar")
+            shinyWidgets::awesomeCheckbox("idCscores_pol", "polar")
             #)
           ),
           h3("E-CRISP Scores of sgRNAs"),

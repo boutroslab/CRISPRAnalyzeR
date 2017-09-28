@@ -322,7 +322,7 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
       
       shiny::uiOutput(outputId = "InputseqFiles_regexTarget"),
      
-      checkboxInput("seqFiles_rev", "Is data in FASTQ in reverse complement?", value = FALSE)
+      shinyWidgets::awesomeCheckbox("seqFiles_rev", "Is data in FASTQ in reverse complement?", value = FALSE)
       
     ),
     column(width=6,

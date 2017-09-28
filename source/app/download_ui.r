@@ -76,31 +76,31 @@ tabItem(tabName = "downloads", align = "center",
                 helpText("Please select the components to be included in your report:"),
                 HTML("<table id='downloads_table'>"),
                 shiny::tags$tr(
-                  shiny::tags$th(shiny::checkboxInput("report_sqCheck", "Add Screen Quality to Report", value = TRUE)),
+                  shiny::tags$th(shinyWidgets::awesomeCheckbox("report_sqCheck", "Add Screen Quality to Report", value = TRUE)),
                   shiny::tags$th(shiny::tags$div(id = "report_sq", "Include plots and tables that represent your screen in various ways.", uiOutput("report_sqList")))
                 ),
                shiny::tags$tr(
-                 shiny::tags$th(checkboxInput("report_hcCheck", "Add Hit Calling to Report", value = TRUE)),
+                 shiny::tags$th(shinyWidgets::awesomeCheckbox("report_hcCheck", "Add Hit Calling to Report", value = TRUE)),
                  shiny::tags$th(shiny::tags$div(id = "report_hc", "Include plots and tables of different differential expression analyses employed on your screen."))
                ),
                shiny::tags$tr(
-                 shiny::tags$th(checkboxInput("report_ovCheck", "Add Gene Overviews to Report", value = TRUE)),
+                 shiny::tags$th(shinyWidgets::awesomeCheckbox("report_ovCheck", "Add Gene Overviews to Report", value = TRUE)),
                  shiny::tags$th(shiny::tags$div(id = "report_ov", uiOutput("report_ovList")))
                ),
                shiny::tags$tr(
-                 shiny::tags$th(checkboxInput("report_sgCheck", "Add sgRNA plots to Report", value = TRUE)),
+                 shiny::tags$th(shinyWidgets::awesomeCheckbox("report_sgCheck", "Add sgRNA plots to Report", value = TRUE)),
                  shiny::tags$th(shiny::tags$div(id = "report_sg", uiOutput("report_sgList")))
                ),
                shiny::tags$tr(
-                 shiny::tags$th(checkboxInput("report_coCheck", "Add Gene Comparisons to Report", value = TRUE)),
+                 shiny::tags$th(shinyWidgets::awesomeCheckbox("report_coCheck", "Add Gene Comparisons to Report", value = TRUE)),
                  shiny::tags$th(shiny::tags$div(id = "report_co", uiOutput("report_coList")))
                ),
                shiny::tags$tr(
-                 shiny::tags$th(checkboxInput("report_anCheck", "Add Gene Annotations to Report", value = TRUE)),
+                 shiny::tags$th(shinyWidgets::awesomeCheckbox("report_anCheck", "Add Gene Annotations to Report", value = TRUE)),
                  shiny::tags$th(shiny::tags$div(id = "report_an", uiOutput("report_anList")))
                ),
                shiny::tags$tr(
-                 shiny::tags$th(checkboxInput("report_enCheck", "Add Gene Set Analysis to Report", value = TRUE)),
+                 shiny::tags$th(shinyWidgets::awesomeCheckbox("report_enCheck", "Add Gene Set Analysis to Report", value = TRUE)),
                  shiny::tags$th(shiny::tags$div(id = "report_en", uiOutput("report_enList")))
                ),
                HTML("</table>")
@@ -167,10 +167,9 @@ tabItem(tabName = "downloads", align = "center",
              HTML("Depending on the size of your screen the <strong>report generation might take several minutes up to an hour</strong>.</br>
                   <strong>Please be patient</strong> - the report will be <strong>ready for download </strong> as soon as it is finished.</br>
                   </br>
-                  <hr>
                   </br>
                   <strong>For genome-wide screens, the report generation might fail due to memory limitations.</br>
-                  You can find a solution <a href='https://github.com/boutroslab/CRISPRAnalyzeR#increasing-the-core-ulimit' target='_blank' >at the Github page</a></strong>.")
+                  You can find a solution <a class='text' href='https://github.com/boutroslab/CRISPRAnalyzeR#increasing-the-core-ulimit' target='_blank' >at the Github page</a></strong>.")
            )
     )
   ),
