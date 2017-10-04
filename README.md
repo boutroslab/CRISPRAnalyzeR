@@ -5,6 +5,18 @@ Welcome to the CRISPRAnalyzeR Github page!
 CRISPRAnalyeR is a web-based, interactive suite for the analysis and documentation of pooled CRISPR Screens.
 
 
+---
+
+---
+# Attention !
+
+# CRISPRAnalyzeR Web-interface / Live Demo is OFFLINE for maintenance from 2017-10-04 until 2017-10-05
+
+---
+
+---
+
+
 **See [CRISPRAnalyzeR](http://crispr-analyzer.dkfz.de) in action!**
 
 **Check out the [Wiki Page](https://github.com/boutroslab/crispr-analyzer/wiki) or scroll down for more information and help**
