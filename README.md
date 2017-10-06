@@ -10,7 +10,7 @@ CRISPRAnalyeR is a web-based, interactive suite for the analysis and documentati
 ---
 # Attention !
 
-# CRISPRAnalyzeR Web-interface / Live Demo is OFFLINE for maintenance from 2017-10-04 until 2017-10-05
+# CRISPRAnalyzeR Web-interface / Live Demo is OFFLINE for maintenance from 2017-10-04 until 2017-10-09
 
 ---
 
