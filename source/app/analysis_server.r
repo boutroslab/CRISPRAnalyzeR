@@ -113,7 +113,10 @@ observeEvent(input$startAnalysis, {
           
           paste("proxyurl", proxurl, sep = ";"),
           paste("proxyport", proxport, sep = ";"),
+          # Add library information for pre-made re-evaluation files
+          paste("libsAvailable", paste(unique(config$screeninglibraries$Library) , collapse = ";"), sep = ";"),
           
+          paste("libSelected", input$screeninglibrary, sep = ";"),
           paste("libName", extractedFiles()$libName, sep = ";"),
           paste("libPath", extractedFiles()$libPath, sep = ";"),
           paste("libregex", libFile()$regex, sep = ";"),

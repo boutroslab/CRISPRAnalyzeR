@@ -178,6 +178,8 @@ observeEvent(input$restartevaluation, {
     }
     filepath <- file.path(userDir, "get_info.info")
     info <- ""
+    
+    # Also add library information
     print(status$signature)
     info <- c(paste("progress", 0, sep = ";"),
               paste("info", "", sep = ";"),
@@ -193,7 +195,12 @@ observeEvent(input$restartevaluation, {
               paste("bt2Threads",config$car.bt2.threads, sep = ";"),
               paste("proxyurl", proxurl, sep = ";"),
               paste("proxyport", proxport, sep = ";"),
-              paste("ecrisp", config$ecrisp, sep = ";")
+              paste("ecrisp", config$ecrisp, sep = ";"),
+              # Add library information for pre-made re-evaluation files
+              paste("libsAvailable", paste(unique(config$screeninglibraries$Library) , collapse = ";"), sep = ";"),
+              paste("libSelected", input$screeninglibrary, sep = ";"),
+              paste("libName", paste(libFile()$name, collapse = ";"), sep = ";"),
+              paste("libPath", paste(libFile()$path, collapse = ";"), sep = ";")
     )
     
     write(info, filepath)

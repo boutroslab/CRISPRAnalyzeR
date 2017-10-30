@@ -120,23 +120,3 @@ CUSTOM	symbol	NULL
 CUSTOM	organism	NULL
 CUSTOM	URL	NULL
 CUSTOM	negcontrol	NULL
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

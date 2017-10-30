@@ -119,88 +119,140 @@ outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, se
 Write(outInfo, file.path(userDir, "get_info.info"), bAppend = FALSE)
 
 
-#########################
-#### contact E-CRISP ####
-#########################
+###########################################################################
+#### contact E-CRISP or get pre-defined reannotation file ####
+###########################################################################
 # call E-CRISP and write on cp environment and create R object
 # writes: cp$ecrisp, cp$genomic.gene, cp$genomic.sgrna
 # debug = TRUE : print debug information
 # value is saved in CRISPRAnalyzeRpools.genomic.view
-# that function runs for 10 mins!
+# that function runs for > 10 mins if re-annotation needs to be retrieved from E-CRISP.org!
 Write(paste(userID, ": reannotating sgRNAs"), logFile, bAppend = TRUE)
 Write(paste(userID, ": Databasepath is ", info$databasepath), logFile, bAppend = TRUE)
 Write(paste(userID, ": Access to it is ", file.access(info$databasepath)), logFile, bAppend = TRUE)
 
-# Check if local installation of E-CRISP Re-evaluation is present
-if(file.access(file.path(info$scriptDir, "reannotate_crispr.pl"), mode=0) == 0 && file.access(file.path(info$databasepath), mode = 4) == 0 && info$databasepath != "")
+# First we check for a pre-made reannotation file for all supplied CRISPR libraries, if custom we have to go for re-evaluation
+if(info$libSelected %in% info$libsAvailable && info$libSelected != "CUSTOM")
 {
-  Write(paste(userID, ": Access to local reannotate_crispr.pl and database folder is set"), logFile, bAppend = TRUE)
-  res <- try(car.genome(
-    outputdir=userDir, sequencefiles="libFile", databasepath=info$databasepath, organism = info$organism, nonseedlength = 0, mismatchesallowed = 2, reannotatescriptpath = info$scriptDir, logfile = logFile, btthreads = info$bt2Threads
-  ))
-  
-  progress <- 0.5
-  outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
-  Write(outInfo, file.path(userDir, "get_info.info"), bAppend = FALSE)
-  
-  # local re annotation NOT successfull!
-  if(class(res) == "try-error")
+  Write(paste(userID, ": Pre-selected Screening Library used -  ", info$libName), logFile, bAppend = TRUE)
+  Write(paste(userID, ": Pre-selected Screening Library used -  ", info$libPath), logFile, bAppend = TRUE)
+  lib_load <- sub(pattern = "\\.fasta",x = info$libName,replacement = ".RDS")
+  # So we go and load the pre-annotated file!
+  ecrispresult <- try(readRDS(file = file.path(info$scriptDir, "external", lib_load)))
+  if(class(ecrispresult) == "try-error")
   {
-    Write(paste(userID, ": Local reannotation was not successfull, sending to E-CRISP"), logFile, bAppend = TRUE)
-    Write(paste(userID, ": Error # ", res[1]), logFile, bAppend = TRUE)
+    preload <- 0
     
-    Write(paste(userID, ": Proxy set? - ", info$proxyurl, info$proxyport), logFile, bAppend = TRUE)
-    #Write(paste(userID, ": Proxy set? - ", str(info$proxyurl), str(info$proxyport)), logFile, bAppend = TRUE)
-   
-    if(info$proxyurl != "NULL" && info$proxyport != "NULL")
+  } else {
+    preload <- 1
+    # We go and proceed with loaded file
+    
+    ecrispresult <- merge.data.frame(ecrispresult, cp$readcount[,c("gene","design")], by.x = "design", by.y="design",all.x = TRUE, all.y=FALSE)
+    #print("merged ecrisp")
+    
+    #remove missing strand informaiton with *
+    ecrispresult[ecrispresult$Direction == "","Direction"] <- "*"
+    
+    # make chromosomes work with gviz
+    
+    if(!grepl(pattern = "^chr.*" , x=ecrispresult$chr, perl=TRUE))
     {
+      ecrispresult$chr <- sapply(ecrispresult$chr, function(x){
+        if(length(grep(expression("^([\\d\\w]+)"),as.character(x),perl=TRUE)) > 0)
+        {
+          return(paste("chr",as.character(x),sep="",collapse=""))
+        }
+        else
+        {
+          return(as.character(x))
+        }
+      })
+    }
+    
+    # Store ecrispt table
+    cp$ecrisp <- ecrispresult
+  }
+  
+}
+
+# PRE-LOAD DID NOT WORK OR CUSTOM LIBRARY USED
+if(preload == 0)
+{
+  
+
+  # Check if local installation of E-CRISP Re-evaluation is present
+  if( file.access(file.path(info$scriptDir, "reannotate_crispr.pl"), mode=0) == 0 && file.access(file.path(info$databasepath), mode = 4) == 0 && info$databasepath != "")
+  {
+    Write(paste(userID, ": Access to local reannotate_crispr.pl and database folder is set"), logFile, bAppend = TRUE)
+    res <- try(car.genome(
+      outputdir=userDir, sequencefiles="libFile", databasepath=info$databasepath, organism = info$organism, nonseedlength = 0, mismatchesallowed = 2, reannotatescriptpath = info$scriptDir, logfile = logFile, btthreads = info$bt2Threads
+    ))
+    
+    progress <- 0.5
+    outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
+    Write(outInfo, file.path(userDir, "get_info.info"), bAppend = FALSE)
+    
+    # local re annotation NOT successfull!
+    if(class(res) == "try-error")
+    {
+      Write(paste(userID, ": Local reannotation was not successfull, sending to E-CRISP"), logFile, bAppend = TRUE)
+      Write(paste(userID, ": Error # ", res[1]), logFile, bAppend = TRUE)
       
-      if(info$proxyurl != "" && info$proxyport != "")
+      Write(paste(userID, ": Proxy set? - ", info$proxyurl, info$proxyport), logFile, bAppend = TRUE)
+      #Write(paste(userID, ": Proxy set? - ", str(info$proxyurl), str(info$proxyport)), logFile, bAppend = TRUE)
+     
+      if(info$proxyurl != "NULL" && info$proxyport != "NULL")
       {
-        Write(paste(userID, ": Calling www.ecrisp.org with proxy"), logFile, bAppend = TRUE)
-        res <- try( httr::with_config(httr::use_proxy(url = info$proxyurl, port = as.numeric(info$proxyport)),ecrisp.genome(
-          debug = FALSE, dataframe = TRUE, reannotate=TRUE, write = FALSE, ecrisp = eCRISP, database=cp$miaccs$a.database, dataset = info$annoDataset, userid = userID, outputdir=userDir
-        )))
+        
+        if(info$proxyurl != "" && info$proxyport != "")
+        {
+          Write(paste(userID, ": Calling www.ecrisp.org with proxy"), logFile, bAppend = TRUE)
+          res <- try( httr::with_config(httr::use_proxy(url = info$proxyurl, port = as.numeric(info$proxyport)),ecrisp.genome(
+            debug = FALSE, dataframe = TRUE, reannotate=TRUE, write = FALSE, ecrisp = eCRISP, database=cp$miaccs$a.database, dataset = info$annoDataset, userid = userID, outputdir=userDir
+          )))
+        } else {
+          Write(paste(userID, ": Calling www.ecrisp.org without proxy"), logFile, bAppend = TRUE)
+          res <- try(ecrisp.genome(
+            debug = FALSE, dataframe = TRUE, reannotate=TRUE, write = FALSE, ecrisp = eCRISP, database=cp$miaccs$a.database, dataset = info$annoDataset, userid = userID, outputdir=userDir
+          ))
+        }
+       
       } else {
+        
         Write(paste(userID, ": Calling www.ecrisp.org without proxy"), logFile, bAppend = TRUE)
+        
         res <- try(ecrisp.genome(
           debug = FALSE, dataframe = TRUE, reannotate=TRUE, write = FALSE, ecrisp = eCRISP, database=cp$miaccs$a.database, dataset = info$annoDataset, userid = userID, outputdir=userDir
         ))
       }
-     
+      
+      
+    }
+    
+  } else # no execute permission of file or not there, so fallback to E-CRISP
+  {
+    Write(paste(userID, ": no access to local sgRNA re-evaluation - using E-CRISP"), logFile, bAppend = TRUE)
+    
+    if(info$proxyurl != "NULL" && info$proxyport != "NULL")
+    {
+      Write(paste(userID, ": Calling www.ecrisp.org with proxy"), logFile, bAppend = TRUE)
+      res <- try( httr::with_config(httr::use_proxy(url = info$proxyurl, port = as.numeric(info$proxyport)),ecrisp.genome(
+        debug = FALSE, dataframe = TRUE, reannotate=TRUE, write = FALSE, ecrisp = eCRISP, database=cp$miaccs$a.database, dataset = info$annoDataset, userid = userID, outputdir=userDir
+      )))
+      
     } else {
-      
       Write(paste(userID, ": Calling www.ecrisp.org without proxy"), logFile, bAppend = TRUE)
-      
       res <- try(ecrisp.genome(
         debug = FALSE, dataframe = TRUE, reannotate=TRUE, write = FALSE, ecrisp = eCRISP, database=cp$miaccs$a.database, dataset = info$annoDataset, userid = userID, outputdir=userDir
       ))
     }
     
     
-  }
-  
-} else # no execute permission of file or not there, so fallback to E-CRISP
-{
-  Write(paste(userID, ": no access to local sgRNA re-evaluation - using E-CRISP"), logFile, bAppend = TRUE)
-  
-  if(info$proxyurl != "NULL" && info$proxyport != "NULL")
-  {
-    Write(paste(userID, ": Calling www.ecrisp.org with proxy"), logFile, bAppend = TRUE)
-    res <- try( httr::with_config(httr::use_proxy(url = info$proxyurl, port = as.numeric(info$proxyport)),ecrisp.genome(
-      debug = FALSE, dataframe = TRUE, reannotate=TRUE, write = FALSE, ecrisp = eCRISP, database=cp$miaccs$a.database, dataset = info$annoDataset, userid = userID, outputdir=userDir
-    )))
     
-  } else {
-    Write(paste(userID, ": Calling www.ecrisp.org without proxy"), logFile, bAppend = TRUE)
-    res <- try(ecrisp.genome(
-      debug = FALSE, dataframe = TRUE, reannotate=TRUE, write = FALSE, ecrisp = eCRISP, database=cp$miaccs$a.database, dataset = info$annoDataset, userid = userID, outputdir=userDir
-    ))
   }
-  
-  
-  
+
 }
+
 
 
 if( class(res) == "try-error" ){

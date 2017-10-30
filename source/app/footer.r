@@ -14,7 +14,7 @@ shiny::fluidRow(style="margin-top:100px",
          shiny::tags$hr(),
          column(width=4,
                 shiny::tags$p(class="lead text-left", style="color:#4CAF50;", "CRISPRAnalyzeR"),
-                shiny::tags$p(class="text-left","Version: 1.30 BETA")
+                shiny::tags$p(class="text-left","Version: 1.40")
          ),
          column(width=4,
                 # Other Resources

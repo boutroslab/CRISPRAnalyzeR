@@ -6,7 +6,7 @@
 config <- list()
 
 # Version
-config[["version"]] <- 1.30
+config[["version"]] <- 1.40
 config[["versionfile"]] <- "https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/version.txt"
 
 # maximum upload size in MB

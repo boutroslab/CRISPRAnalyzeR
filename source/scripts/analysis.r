@@ -1537,6 +1537,11 @@ info <- c(paste("progress", 0, sep = ";"),
           paste("bt2Threads", info$bt2Threads, sep = ";"),
           paste("proxyurl", info$proxyurl, sep = ";"),
           paste("proxyport", info$proxyport, sep = ";"),
+          # Add library information for pre-made re-evaluation files
+          paste("libsAvailable", paste(info$libsAvailable , collapse = ";"), sep = ";"),
+          paste("libSelected", info$libSelected, sep = ";"),
+          paste("libName", info$libName, sep = ";"),
+          paste("libPath", info$libPath, sep = ";"),
           paste("ecrisp", info$ecrisp, sep = ";")
 )
 write(info, filepath)
