@@ -22,8 +22,6 @@ source("config.r", local = TRUE)
 
 
 # load ui functions
-print(file.path(config$appDir, "functions_ui.r"))
-print(config$appDir)
 source(file.path(config$appDir, "functions_ui.r"), local = TRUE)
 
 # repeated ui stuff for modals
@@ -182,7 +180,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
 body <- dashboardBody(
   shiny::tags$head(
     shiny::tags$style(HTML(config$stylesheet)),
-    shiny::includeScript(file.path(config$wd,"tooltip-delay.js"))
+    shiny::includeScript("tooltip-delay.js")
   ),
   #busyIndicator(),
   

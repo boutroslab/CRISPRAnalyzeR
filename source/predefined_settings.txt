@@ -48,9 +48,6 @@ TKO V1 85K supplement	regexFASTQ	ACCG(.{20})
 TKO V1 85K supplement	symbol	hgnc_symbol
 TKO V1 85K supplement	organism	homo_sapiens
 TKO V1 85K supplement	URL	https://www.addgene.org/pooled-library/moffat-crispr-knockout/
-WangV2 185K	FASTA	pilotscreen.fasta
-WangV2 185K	regexFASTA	^(.+?)(_.*)$
-WangV2 185K	regexFASTQ	ACC(.{20,21})G
 Brie	FASTA	FASTA_Brie.fasta
 Brie	regexFASTA	^(.+?)(_.*)$
 Brie	regexFASTQ	ACACC(.{20})
@@ -64,7 +61,7 @@ Brunello	symbol	hgnc_symbol
 Brunello	organism	homo_sapiens
 Brunello	URL	https://www.addgene.org/pooled-library/broadgpp-human-knockout-brunello/
 Brunello	negcontrol	Control
-Brie Kinome	FASTA	Broad_GPP_Brie.fasta
+Brie Kinome	FASTA	FASTA_Brie_Kinome.fasta
 Brie Kinome	regexFASTA	^(.+?)(_.*)$
 Brie Kinome	regexFASTQ	ACACCG(.{20})
 Brie Kinome	symbol	mgi_symbol
