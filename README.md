@@ -8,13 +8,6 @@ CRISPRAnalyeR is a web-based, interactive suite for the analysis and documentati
 ---
 
 ---
-# Attention !
-
-# CRISPRAnalyzeR Web-interface / Live Demo is OFFLINE for maintenance from 2017-10-04 until 2017-10-09
-
----
-
----
 
 
 **See [CRISPRAnalyzeR](http://crispr-analyzer.dkfz.de) in action!**
@@ -154,7 +147,15 @@ __It is your responsibility to obtain all required licenses in case of commercia
 
 
 ```
-Version 1.20 (latest)
+Version 1.40 (latest)
+- added new library interface for pre-selection of screens
+- added pre-made library re-evaluation for addgene-provide libraries
+- fixed smaller bugs
+- speed increase for some functions
+- improved essential genes information
+- added Advanced Options to skip FASTQ Quality Report, create own regular expression, use bad-quality libraries
+
+Version 1.20
 - added new user interface for data upload
 - fixed many sgRNA libraries
 - added Addgene sgRNA libraries for easier use
@@ -274,15 +275,15 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
 4. Open a terminal or command line (macOS: Terminal; Windows: cmd.exe)
 4. Download and run the CRISPRAnalyzeR directly from the online repository (without additional settings)
    ```
-   docker run --rm -p 80:3838 boutroslab/crispranalyzer:latest
+   docker run --rm -p 80:8000 boutroslab/crispranalyzer:latest
    ```
-   It is important to keep the __80:3838__ as this tells the software how to access it via the browser.  
+   It is important to keep the __80:8000__ as this tells the software how to access it via the browser.  
    By default, CRISPRAnalyzeR can be accessed by the web-browser using __http://localhost/CRISPRAnalyzeR__.
    
    If you want to run a specific version, just replace the `latest` with the specific version number
    
    ```
-   docker run --rm -p 80:3838 boutroslab/crispranalyzer:1.08
+   docker run --rm -p 80:8000 boutroslab/crispranalyzer:1.40
    ```
    
    All pre-configured versions are listed at the [Docker Hub](https://hub.docker.com/r/boutroslab/crispranalyzer/tags/).  
@@ -316,7 +317,7 @@ In case you would like to update CRISPRAnalyzer to the latest version, just type
 to download the latest version and then run it as described above:
 
  ```
-   docker run --rm -p 80:3838 boutroslab/crispranalyzer:latest
+   docker run --rm -p 80:8000 boutroslab/crispranalyzer:latest
  ```
 
 ## How to Start and Restart the CRISPRAnalyzeR
@@ -357,7 +358,7 @@ Be sure to hit the save button and start/restart CRISPRAnalyzeR.
 All parameters can be set during the start by the following:
 
 ```bash
-docker run --rm -e PARAMETER1 -e PARAMETER2 -e PARAMETER3 -p 80:3838 boutroslab/crispranalyzer:latest
+docker run --rm -e PARAMETER1 -e PARAMETER2 -e PARAMETER3 -p 80:8000 boutroslab/crispranalyzer:latest
 ```
 
 this means you always need to add `-e` in front of the parameters, e.g.:
@@ -369,7 +370,7 @@ this means you always need to add `-e` in front of the parameters, e.g.:
 e.g.
 
 ```bash
-docker run --rm -e bowtie_threads=4 -e proxy_url="http://thisismyproxy.com" -e proxy_port=80 -p 80:3838 boutroslab/crispranalyzer:latest
+docker run --rm -e bowtie_threads=4 -e proxy_url="http://thisismyproxy.com" -e proxy_port=80 -p 80:8000 boutroslab/crispranalyzer:latest
 ```
 
 
@@ -439,7 +440,7 @@ docker build -t CRISPRAnalyzeR .
 ## Test the image
 
 ```bash
-docker run --rm -p 80:3838 CRISPRAnalyzeR
+docker run --rm -p 80:8000 CRISPRAnalyzeR
 ```
 
 Check it by opening a browser tab and navigating to 
@@ -473,7 +474,7 @@ In case you want to use the COSMIC database, please proceed as follows.
 Please replace  _*DATABASEFOLDER*_ byt the full path to the directory where you have placed the CosmicMutantExport.tsv!
 
   ```bash
-  docker run --rm -v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database -e COSMIC_database="CosmicMutantExport.tsv" -p 80:3838 boutroslab/crispranalyzer:latest
+  docker run --rm -v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database -e COSMIC_database="CosmicMutantExport.tsv" -p 80:8000 boutroslab/crispranalyzer:latest
   ```
 
 *Please note that the COSMIC database is loaded during the analysis procedure and requires 1 GB of RAM.*
@@ -483,7 +484,7 @@ Please replace  _*DATABASEFOLDER*_ byt the full path to the directory where you 
 By default, CRISPRAnalyzeR has the Enrichr API access ENABLED.
 You can DISBALE the Enrichr API access during the start by setting the paratemer __-e disable_EnrichR=TRUE__
 ```bash
- docker run --rm -e disable_EnrichR=TRUE -p 80:3838 boutroslab/crispranalyzer:latest
+ docker run --rm -e disable_EnrichR=TRUE -p 80:8000 boutroslab/crispranalyzer:latest
 ```
 
 Please not that you require a license for commercial use.
@@ -531,7 +532,7 @@ __Please note: if you have setup the COSMIC database already, just extract the f
 Again, replace _*DATABASEFOLDER*_ with your absolute path.  
 
 ```bash
-docker run --rm -v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database -p 80:3838 boutroslab/crispranalyzer:latest
+docker run --rm -v *DATABASEFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/database -p 80:8000 boutroslab/crispranalyzer:latest
 ```
 
 
@@ -584,15 +585,17 @@ In order to use these files, you need to adjust the gene identifier from `Ensemb
 CRISPRAnalyzeR offers pre-made sgRNA library files in FASTA format for use.
 You can use them along with your read count (please see the format) or raw NGS sequencing files (.fastq.fz).
 
+__All pre-made libraries can be found [here](https://github.com/boutroslab/CRISPRAnalyzeR/tree/master/fasta)__
+
+
 |Library Name |	Lab |	Pubmed ID |	Addgene |	Download |
 |-------------|-----|-----------|---------|----------|
-|CLD Benchmarking |	Boutros |	27013184 |	NA |	[FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_CLD_library.fasta) |
+|CLD Benchmarking |	Boutros |	27013184 |	NA |	[FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/pilotscreen.fasta) |
 |Gecko V2	| Zhang |	25075903 |	[here](https://www.addgene.org/crispr/libraries/geckov2/)	| [A+B FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_all.fasta) [A FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_HGLib_A.fasta) [B FASTA](https://github.com/boutroslab/crispr-analyzer/tree/master/fasta/FASTA_GeckoV2_HGLib_B.fasta) |
-|Gecko V2	MOUSE| Zhang |	25075903 |	[here](https://www.addgene.org/pooled-library/zhang-mouse-gecko-v2/)	|  [A FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_MGLib_A.fasta) [B FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_MGLib_B.fasta) |
+|Gecko V2	MOUSE| Zhang |	25075903 |	[here](https://www.addgene.org/pooled-library/zhang-mouse-gecko-v2/)	|  [A FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_Mouse_A.fasta) [B FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_GeckoV2_Mouse_B.fasta) |
 |Torronto KnockOut Library (TKOv1) |	Moffat |	26627737 | [here](https://www.addgene.org/pooled-library/moffat-crispr-knockout/) |	[90K FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_TKO_90K_library.fasta) & [85K FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_TKO_85Ksupp_library.fasta) |
-|Brunello	| Doench |	26780180	| [here](https://www.addgene.org/pooled-library/broadgpp-crispr-knockout/) |	[FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_brunello_library.fasta) |
-|CRISPRa / CRISPRi	| Weissmann	| 25307932 | [here](https://www.addgene.org/crispr/libraries/)	|	not available yet |
-|Human Lentiviral sgRNA library high cleavage activity	| Sabatini |	26472758 | [here](https://www.addgene.org/crispr/libraries/)	|	[185K FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_Wang_v2__185K_library.fasta) |
+|Brunello	| Doench |	26780180	| [here](https://www.addgene.org/pooled-library/broadgpp-crispr-knockout/) |	[FASTA](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_Brunello.fasta) |
+|CRISPRa / CRISPRi	| Weissmann	| 25307932 | [here](https://www.addgene.org/crispr/libraries/)	|	[CRISPRa V2](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_CRISPRa_V2.fasta) [CRISPRi V2](https://rawgit.com/boutroslab/CRISPRAnalyzeR/master/fasta/FASTA_CRISPRi_V2.fasta) |
 |Human Lentiviral sgRNA sub libraries |	Sabatini |	24336569	| [here](https://www.addgene.org/crispr/libraries/) |	not available yet |
 
 
@@ -699,7 +702,7 @@ _*LOGFOLDER*_ is a local folder you create to which CRISPRAnalyzeR will save and
 
 Start CRISPRAnalyzeR using the `-v` command, e.g.  
 ```bash
-docker run --rm -v *LOGFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/log -p 80:3838 boutroslab/crispranalyzer:latest
+docker run --rm -v *LOGFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/log -p 80:8000 boutroslab/crispranalyzer:latest
 ```
 # Increasing the core ulimit
 
@@ -708,7 +711,7 @@ For some genome-wide screens, CRISPRAnalyzeR can abort the report generation due
 For 8 GB of the so called `c stack space`, you need to set the value of 8GB in Kb - 8.589.934.592 with `--ulimit stack=8589934592:8589934592`.  
 
 ```bash
-docker run --rm --ulimit stack=8589934592:8589934592 -v *LOGFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/log -p 80:3838 boutroslab/crispranalyzer:latest
+docker run --rm --ulimit stack=8589934592:8589934592 -v *LOGFOLDER*:/srv/shiny-server/CRISPRAnalyzeR/log -p 80:8000 boutroslab/crispranalyzer:latest
 ```
 
 
