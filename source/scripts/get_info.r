@@ -5,7 +5,7 @@
 
 
 
-
+library(tidyverse)
 
 
 ##############
@@ -135,51 +135,80 @@ Write(paste(userID, ": Access to it is ", file.access(info$databasepath)), logFi
 if(info$libSelected %in% info$libsAvailable && info$libSelected != "CUSTOM")
 {
   Write(paste(userID, ": Pre-selected Screening Library used -  ", info$libName), logFile, bAppend = TRUE)
-  Write(paste(userID, ": Pre-selected Screening Library used -  ", info$libPath), logFile, bAppend = TRUE)
+  Write(paste(userID, ": Libpath -  ", info$libPath), logFile, bAppend = TRUE)
   lib_load <- sub(pattern = "\\.fasta",x = info$libName,replacement = ".RDS")
   # So we go and load the pre-annotated file!
+  Write(paste(userID, ": Loading Pre-selected Screening Library -  ", file.path(info$scriptDir, "external", lib_load)), logFile, bAppend = TRUE)
   ecrispresult <- try(readRDS(file = file.path(info$scriptDir, "external", lib_load)))
+  
   if(class(ecrispresult) == "try-error")
   {
     preload <- 0
+    Write(paste(userID, ": Annotation could not be loaded, reverting to re-annoation"), logFile, bAppend = TRUE)
     
   } else {
     preload <- 1
     # We go and proceed with loaded file
+    Write(paste(userID, ": Annotation Loaded - merging with analysis data"), logFile, bAppend = TRUE)
+    
+    progress <- 0.5
+    outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
+    Write(outInfo, file.path(userDir, "get_info.info"), bAppend = FALSE)
+    
+    if(identical(cp$miaccs$g.convert, TRUE) )
+    {
+      #ecrispresult$design <-
+      sgrnas <- data.frame("design.old" = rownames(cp$readcount),
+                           "design.new" = cp$readcount$design)
+      colnames(sgrnas) <- c("design.old","design.new")
+      #rownames(sgrnas) <- sgrnas$design
+      
+      ecrispresult <- merge(x = ecrispresult, y = sgrnas, by.x="design", by.y="design.old", all.x = TRUE)
+      ecrispresult$design <- ecrispresult$design.new
+      ecrispresult$design.new <- NULL
+      ecrispresult$design.old <- NULL
+      sgrnas <- NULL
+      
+    }
     
     ecrispresult <- merge.data.frame(ecrispresult, cp$readcount[,c("gene","design")], by.x = "design", by.y="design",all.x = TRUE, all.y=FALSE)
     #print("merged ecrisp")
+    Write(paste(userID, ": Annotation successfully merged"), logFile, bAppend = TRUE)
+    progress <- 0.6
+    outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
+    Write(outInfo, file.path(userDir, "get_info.info"), bAppend = FALSE)
+    
+    #remove missing strand informaiton with *
+    Write(paste(userID, ": Replace missing strand information"), logFile, bAppend = TRUE)
+    
     
     #remove missing strand informaiton with *
     ecrispresult[ecrispresult$Direction == "","Direction"] <- "*"
+    ecrispresult[ecrispresult$Direction == "fw","Direction"] <- "+"
+    ecrispresult[ecrispresult$Direction == "rc","Direction"] <- "-"
     
     # make chromosomes work with gviz
+    Write(paste(userID, ": Make chromosomes working with Ensembl"), logFile, bAppend = TRUE)
     
-    if(!grepl(pattern = "^chr.*" , x=ecrispresult$chr, perl=TRUE))
-    {
-      ecrispresult$chr <- sapply(ecrispresult$chr, function(x){
-        if(length(grep(expression("^([\\d\\w]+)"),as.character(x),perl=TRUE)) > 0)
-        {
-          return(paste("chr",as.character(x),sep="",collapse=""))
-        }
-        else
-        {
-          return(as.character(x))
-        }
-      })
-    }
+    ecrispresult <- ecrispresult %>% dplyr::mutate(chr = ifelse( test = grepl(pattern = "chr.*" , x=chr), yes = chr, no = sub(x=chr , pattern = "^(\\d+|\\w)$",replacement = "chr\\1" ) )) 
     
-    # Store ecrispt table
-    cp$ecrisp <- ecrispresult
+    Write(paste(userID, ": store in cp environment"), logFile, bAppend = TRUE)
+    # Store ecrisp table
+    cp$ecrisp = as.data.frame(ecrispresult, stringsAsFactors = FALSE)
+    
+    progress <- 0.7
+    outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
+    Write(outInfo, file.path(userDir, "get_info.info"), bAppend = FALSE)
   }
   
+} else {
+  preload = 0
 }
 
 # PRE-LOAD DID NOT WORK OR CUSTOM LIBRARY USED
+Write(paste(userID, ": Preload Status is ", preload), logFile, bAppend = TRUE)
 if(preload == 0)
 {
-  
-
   # Check if local installation of E-CRISP Re-evaluation is present
   if( file.access(file.path(info$scriptDir, "reannotate_crispr.pl"), mode=0) == 0 && file.access(file.path(info$databasepath), mode = 4) == 0 && info$databasepath != "")
   {
@@ -251,25 +280,25 @@ if(preload == 0)
     
   }
 
-}
-
-
-
-if( class(res) == "try-error" ){
-  outlog <- c(paste(userID, ": try-error occured"), 
-      paste(userID, ":", res[1]), 
-      paste(userID, ": get_info.r quit at", Sys.time()))
-  Write(outlog, logFile, bAppend = TRUE)
+  if( class(res) == "try-error" ){
+    outlog <- c(paste(userID, ": try-error occured"), 
+                paste(userID, ":", res[1]), 
+                paste(userID, ": get_info.r quit at", Sys.time()))
+    Write(outlog, logFile, bAppend = TRUE)
     
-  infos <- "Sorry, CRISPRAnalyzeR had trouble communicating with E-CRISP / Re-evaluation tool.<br/>"
-  outInfo <- c(paste("progress", 1, sep = ";"), paste("info", infos, sep = ";"))
-  Write(outInfo, file.path(userDir, "get_info.info"), bAppend = FALSE)
+    infos <- "Sorry, CRISPRAnalyzeR had trouble communicating with E-CRISP / Re-evaluation tool.<br/>"
+    outInfo <- c(paste("progress", 1, sep = ";"), paste("info", infos, sep = ";"))
+    Write(outInfo, file.path(userDir, "get_info.info"), bAppend = FALSE)
+    
+    quit(save = "no", status = 1)
+  }
   
-  quit(save = "no", status = 1)
+  
+  
 }
 
 
-# Check E-CRISP Result is OK
+
 
 progress <- 0.8
 outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))

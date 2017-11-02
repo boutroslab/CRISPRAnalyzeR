@@ -93,20 +93,7 @@ car.genome <- function(outputdir=NULL, sequencefiles=NULL, databasepath=NULL, or
   cp$ecrisp[cp$ecrisp$Direction == "rc","Direction"] <- "-"
   # make chromosomes work with gviz
   
-  if(!grepl(pattern = "^chr.*" , x=cp$ecrisp$chr, perl=TRUE))
-  {
-
-    cp$ecrisp$chr <- sapply(cp$ecrisp$chr, function(x){
-      if(length(grep(expression("^([\\d\\w]+)"),as.character(x),perl=TRUE)) > 0)
-      {
-        return(paste("chr",as.character(x),sep="",collapse=""))
-      }
-      else
-      {
-        return(as.character(x))
-      }
-    })
-  }
+  cp$ecrisp <- cp$ecrisp %>% dplyr::mutate(chr = ifelse( test = grepl(pattern = "chr.*" , x=chr), yes = chr, no = sub(x=chr , pattern = "^(\\d+|\\w)$",replacement = "chr\\1" ) )) 
   
   # finished, return TRUE, cp environment needs to be saved afterwards and cp$ ecrisp stored separately
   return(TRUE)

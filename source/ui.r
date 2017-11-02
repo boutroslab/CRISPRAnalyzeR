@@ -180,7 +180,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
 body <- dashboardBody(
   shiny::tags$head(
     shiny::tags$style(HTML(config$stylesheet)),
-    shiny::includeScript("tooltip-delay.js")
+    shiny::includeScript(file.path(config$wd,"tooltip-delay.js"))
   ),
   #busyIndicator(),
   

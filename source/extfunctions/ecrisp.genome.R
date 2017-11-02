@@ -189,25 +189,32 @@ if(!exists("ecrispresult"))
  
  ecrispresult <- merge.data.frame(ecrispresult, cp$readcount[,c("gene","design")], by.x = "design", by.y="design",all.x = TRUE, all.y=FALSE)
 #print("merged ecrisp")
+ 
+ if(identical(cp$miaccs$g.convert, TRUE) )
+ {
+   #ecrispresult$design <-
+   sgrnas <- data.frame("design.old" = rownames(cp$readcount),
+                        "design.new" = cp$readcount$design)
+   colnames(sgrnas) <- c("design.old","design.new")
+   #rownames(sgrnas) <- sgrnas$design
+   
+   ecrispresult <- merge(x = ecrispresult, y = sgrnas, by.x="design", by.y="design.old", all.x = TRUE)
+   ecrispresult$design <- ecrispresult$design.new
+   ecrispresult$design.new <- NULL
+   ecrispresult$design.old <- NULL
+   sgrnas <- NULL
+   
+ }
+
 
  #remove missing strand informaiton with *
  ecrispresult[ecrispresult$Direction == "","Direction"] <- "*"
+ ecrispresult[ecrispresult$Direction == "fw","Direction"] <- "+"
+ ecrispresult[ecrispresult$Direction == "rc","Direction"] <- "-"
  
  # make chromosomes work with gviz
  
- if(!grepl(pattern = "^chr.*" , x=ecrispresult$chr, perl=TRUE))
- {
-   ecrispresult$chr <- sapply(ecrispresult$chr, function(x){
-     if(length(grep(expression("^([\\d\\w]+)"),as.character(x),perl=TRUE)) > 0)
-     {
-       return(paste("chr",as.character(x),sep="",collapse=""))
-     }
-     else
-     {
-       return(as.character(x))
-     }
-   })
- }
+ ecrispresult <- ecrispresult %>% dplyr::mutate(chr = ifelse( test = grepl(pattern = "chr.*" , x=chr), yes = chr, no = sub(x=chr , pattern = "^(\\d+|\\w)$",replacement = "chr\\1" ) )) 
 
  
  

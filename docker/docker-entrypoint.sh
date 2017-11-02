@@ -7,8 +7,6 @@ CRISPR_CFG=/srv/shiny-server/CRISPRAnalyzeR/config.r
 # subs definition go here
 
 # usage: key_value_to_cfg key value
-#    ie: file_env 'car_proxy_url' 'www-int2.dkfz-heidelberg.de'
-# (will write the key/value pair car_proxy_url www-int2.dkfz-heidelberg.de
 # to the crispranalyzer config file
 # example: key_value_to_cfg "car.proxy" "'value'" "/srv/shiny-server/CRISPRAnalyzeR/config.r" 
 key_value_to_cfg() {
@@ -74,5 +72,18 @@ if [ "$1" = 'crispranalyzer' ]; then
     echo "[CUSTOM] setting PROXY PORT"
     key_value_to_cfg "car.proxy.port" "$proxy_port" "$CRISPR_CFG"
   fi
+  if [ "$downloadlogs" ]; then
+    echo "[CUSTOM] setting Logs"
+    key_value_to_cfg "downloadlogs" "$downloadlogs" "$CRISPR_CFG"
+  fi
+  # Copy config.r to all copies
+  cp /srv/shiny-server/CRISPRAnalyzeR/config.r /srv/shiny-server/CRISPRAnalyzeR2/config.r
+  cp /srv/shiny-server/CRISPRAnalyzeR/config.r /srv/shiny-server/CRISPRAnalyzeR3/config.r
+  cp /srv/shiny-server/CRISPRAnalyzeR/config.r /srv/shiny-server/CRISPRAnalyzeR4/config.r
+  cp /srv/shiny-server/CRISPRAnalyzeR/config.r /srv/shiny-server/CRISPRAnalyzeR5/config.r
+  
+  echo "Starting Shiny-Server"
+  echo "As a default, please navigate to http://localhost:8000/CRISPRAnalyzeR/ to access CRISPRAnalyzeR"
   exec /usr/bin/shiny-server.sh
+  echo "Shiny-Server started"
 fi

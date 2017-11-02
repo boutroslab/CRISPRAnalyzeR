@@ -548,12 +548,12 @@ observeEvent(input$createReport, {
       setwd(userDir)
       
       system2("echo", args = c("start rendering"), stdout = "/tmp/render")
-      res <- try(withProgress(
-        bookdown::render_book( file.path(userDir, "report.Rmd"), 
+      res <- withProgress(
+        try(bookdown::render_book( file.path(userDir, "report.Rmd"), 
           bookdown::gitbook(split_by = "section", self_contained = FALSE, number_sections = TRUE,
             config = list(sharing = NULL, toc = list(collapse = "section"))),
-          params = list(info = infoFiles$report)),
-          message = "Compiling Report") )
+          params = list(info = infoFiles$report))
+          ), message = "Compiling Report" )
       
       if( inherits(res, "try-error") ){
         

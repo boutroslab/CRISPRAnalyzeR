@@ -59,7 +59,7 @@ source(file.path(config$appDir, "functions_server.r"))
 ############################
 ## Load language messages ##
 ############################
-config$messages <- as.data.frame(readr::read_tsv(file = "messages.txt", col_names = TRUE), stringsAsFactors = FALSE)
+config$messages <- as.data.frame(readr::read_tsv(file = file.path(config$wd,"messages.txt"), col_names = TRUE), stringsAsFactors = FALSE)
 rownames(config$messages) <- config$messages$ID
 config$messages$ID <- NULL
 config$messages <- setNames(split(config$messages, seq(nrow(config$messages))), rownames(config$messages))
