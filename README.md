@@ -213,9 +213,20 @@ __Individual Steps__
 	![CA_overview](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_overview.png)  
 	
 11. Hit the __START__ button to start CRISPRAnalyzeR
-12. __Copy the URL to the web browser__ to access CRISPRAnalyzeR as shown in this picture:   
+
+12. __Adjust the port__ :
 	
-	![CA_url](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_URL.png)
+	Before using CRISPRAnalyzeR, you need to adjust the ports by going to Settings -> Ports as illustrated below:  
+	
+	![CA_port1](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_ports_new.png)
+	
+	Then proceed by clicking on __SAVE__, which will update the software:
+	
+	![CA_port2](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_ports_new2.png)
+
+12. __Copy http://localhost:8000/CRISPRAnalyzeR/ to the webbrowser__ to access CRISPRAnalyzeR.
+	
+	
 
 13. __Now you successfully installed and started CRISPRAnalyzeR!__
 
@@ -336,6 +347,7 @@ CRISPRAnalyzeR has been designed to be installed once on a machine and then acce
 Parameter | Meaning | Default Value | Accepted Values 
 ----------|---------|---------------|-----------------
 __websockets_behind_proxy__ | use Websocket protocol | TRUE | TRUE or FALSE
+__downloadlogs__ | Allow the download of LOG files | RTRUE| TRUE or FALSE
 __verbose_logfiles__ | output of log files | TRUE | TRUE or FALSE
 __COSMIC_database__ | Filename of the COSMIC Mutant database (CosmicMutantExport.tsv) | NULL | CosmicMutantExport.tsv
 __EnrichR__ | Whether to enable or disable the Enrichr API access | TRUE | TRUE or FALSE
@@ -348,7 +360,7 @@ __proxy_port__ | Proxy server Port | NULL |Port number of NULL to inactivate
 ## How to use the parameters with the recommended Kitematic installation
 
 In Kitematic, just go to the settings tab and adjust the options.  
-Be sure to hit the save button and start/restart CRISPRAnalyzeR.
+__Be sure to hit the save button__ after you have adjusted the settings.
 
 ![CA_Options](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_settings.png)
 
