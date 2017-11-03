@@ -90,31 +90,7 @@ column(width=10, offset=1,
                   CRISPRAnalyzeR does not store personal information.
                   All uploaded data is deleted immediately once the browser is closed or the connection is lost for any reason.")
 ),
-column(width=10,offset=1,
-       shiny::tags$hr(),
-  shiny::tags$h2(class="text-success text-left", "Impressum / Imprint (German Only)"),
-  shiny::tags$h4(class="text-left","Angaben gemäß § 5 TMG:"),
-  
-  shiny::tags$p(class="text-left",
-                "Deutsches Krebsforschungszentrum (dkfz)", shiny::tags$br(),
-                "Im Neuenheimer Feld 280",shiny::tags$br(),
-                "69120 Heidelberg", shiny::tags$br()
-                ),
-  shiny::tags$br(),
-  shiny::tags$h4(class=" text-left", "Vertreten durch:"),
-  shiny::tags$p(class="text-left", "Prof. Dr. Michael Baumann (wissenschaftlicher Vorstand)", shiny::tags$br(),
-                "Prof. Dr. Josef Puchta (Kaufmännischer Vorstand)"),
-  shiny::tags$br(),
-  shiny::tags$h4(class=" text-left", "Kontakt:"),
-  shiny::tags$p(class="text-left",
-                "Telefon:", shiny::tags$br(), shiny::tags$strong("06221421953"), shiny::tags$br(),
-                "Telefax:", shiny::tags$br(), shiny::tags$strong("06221421959") , shiny::tags$br(),
-                "Email:", shiny::tags$br(), shiny::tags$strong("jan.winter@dkfz-heidelberg.de")
-                ),
-  shiny::tags$br(),
-  shiny::tags$h4(class=" text-left", "Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz"),
-  shiny::tags$p(class="text-left","DE 143293537")
-),
+
 column(width=10,offset=1,
        shiny::tags$hr(),
        shiny::tags$h2(class="text-success text-left", "What data is stored?"),
@@ -126,13 +102,6 @@ column(width=10,offset=1,
                      "Moreover, CRISPRAnalyzeR logs the following information ", shiny::tags$strong("anonymously"), " for maintenance purposes:"
                      ),
        shiny::tags$p(class="text-left", "Occuring error messages, file names, selected gene identifier, number of uploaded files, submit button activity and timestamps")
-),
-column(width=10,offset=1,
-       shiny::tags$hr(),
-       shiny::tags$h2(class="text-success text-left", "Does CRISPRAnalyzeR use Google Analytics?"),
-       shiny::tags$p(class="lead text-left",
-                     "This website uses Google Analytics, to turn it off please ", HTML("<strong><a href='javascript:gaOptout()' >click here</a></strong>"))
-       
 ),
 
 column(width=10,offset=1,
