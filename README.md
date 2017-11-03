@@ -224,11 +224,11 @@ __Individual Steps__
 	
 	![CA_port2](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_ports_new2.png)
 
-12. __Copy http://localhost:8000/CRISPRAnalyzeR/ to the webbrowser__ to access CRISPRAnalyzeR.
+13. __Copy http://localhost:8000/CRISPRAnalyzeR/ to the webbrowser__ to access CRISPRAnalyzeR.
 	
 	
 
-13. __Now you successfully installed and started CRISPRAnalyzeR!__
+14. __Now you successfully installed and started CRISPRAnalyzeR!__
 
 
 
@@ -284,7 +284,7 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
 3. Start Docker on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
    A small docker symbol in the taskbar will tell you that docker is ready.
 4. Open a terminal or command line (macOS: Terminal; Windows: cmd.exe)
-4. Download and run the CRISPRAnalyzeR directly from the online repository (without additional settings)
+5. Download and run the CRISPRAnalyzeR directly from the online repository (without additional settings)
    ```
    docker run --rm -p 8000:8000 boutroslab/crispranalyzer:latest
    ```
@@ -303,9 +303,9 @@ Open Kitematic and click on the CRISPRAnalyzeR image - you will see a SETTING bu
 
    
    
-5. __Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.__
+6. __Familiarize with the parameters you can use to start the CRISPRanalyzeR - they offer proxy settings or additional databases and local sgRNA re-evaluation.__
 
-6. Access CRISPRAnalyzeR using your web-browser - __http://localhost/CRISPRAnalyzeR__
+7. Access CRISPRAnalyzeR using your web-browser - __http://localhost/CRISPRAnalyzeR__
 
 #### ATTENTION: For some genome-wide screens, the available "C Stack" memory might not be sufficient to render the report. In this case, [please increase the stack limit as shown HERE](https://github.com/boutroslab/CRISPRAnalyzeR/#increasing-the-core-ulimit).
 
