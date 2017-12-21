@@ -206,6 +206,7 @@ if(!exists("ecrispresult"))
    
  }
 
+ ecrispresult <- merge.data.frame(ecrispresult, cp$readcount[,c("gene","design")], by.x = "design", by.y="design",all.x = TRUE, all.y=FALSE)
 
  #remove missing strand informaiton with *
  ecrispresult[ecrispresult$Direction == "","Direction"] <- "*"
