@@ -39,6 +39,13 @@ car.normalize = function(norm.function = "deseq", extractpattern = cp$miaccs$g.e
     deseq_ncounts=as.data.frame(DESeq2::counts(dds, normalized=TRUE))
     deseq_ncounts$design <- rownames(deseq_ncounts)
     
+    # Variance stabilization
+    # dds2 <- DESeq2::estimateDispersions(dds)
+    # dds2 <- DESeq2::varianceStabilizingTransformation(dds2, blind = TRUE,
+                                                     # fitType = "parametric")
+    # dds2_counts <- assay(dds2)
+    # dds2_counts$design <- rownames(dds2_counts)
+    
     # Store in new data frame cp$normalized
     design.old = data.frame(
       design = cp$readcount$design,
@@ -60,6 +67,23 @@ car.normalize = function(norm.function = "deseq", extractpattern = cp$miaccs$g.e
     # set colnames
     colnames(cp$normalized.readcount) <- c("design",colnames(cp$readcount)[2:(length(unlist(strsplit(cp$miaccs$files,",")))+1)],"gene")
     
+    # also store stabilized data in cp$stabilized.readcount
+    
+    # cp$stabilized.readcount <- data.frame(
+    #   "design" = as.character(cp$readcount$design),
+    #   stringsAsFactors = FALSE)
+    # 
+    # cp$stabilized.readcount <- merge(
+    #   cp$stabilized.readcount,
+    #   dds2_counts, by="design", all.x = TRUE)
+    # 
+    # cp$stabilized.readcount <- merge(
+    #   cp$stabilized.readcount,
+    #   cp$readcount[,c("design","gene")], by="design", all.x = TRUE)
+    # 
+    # # set colnames
+    # colnames(cp$stabilized.readcount) <- c("design",colnames(cp$readcount)[2:(length(unlist(strsplit(cp$miaccs$files,",")))+1)],"gene")
+    # 
     
     ## Genes
     coldata = data.frame(rep("counts",(length(unlist(strsplit(cp$miaccs$files,","))))) )

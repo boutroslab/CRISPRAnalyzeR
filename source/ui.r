@@ -150,8 +150,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
            collapsible = TRUE,
            menuSubItem("Tutorials", tabName = "help_tutorials"),
              menuSubItem("Ask us for help", tabName = "help_ticket"),
-             menuSubItem("Forum", tabName = "help_forum"),
-           menuSubItem("Help", tabName = "help_analyzer")
+             menuSubItem("Forum", tabName = "help_forum")
            ),
   
   
@@ -180,7 +179,9 @@ sidebar <- dashboardSidebar(sidebarMenu(
 body <- dashboardBody(
   shiny::tags$head(
     shiny::tags$style(HTML(config$stylesheet)),
-    shiny::includeScript(file.path(config$wd,"tooltip-delay.js"))
+    shiny::includeScript("tooltip-delay.js"),
+    shiny::includeScript("analytics.js")
+    
   ),
   #busyIndicator(),
   
@@ -259,7 +260,7 @@ body <- dashboardBody(
     source(file.path(config$appDir, "help_ui.r"), local = TRUE)$value,
     source(file.path(config$appDir, "tutorials_ui.r"), local = TRUE)$value,
     source(file.path(config$appDir, "helpforum_ui.r"), local = TRUE)$value,
-    source(file.path(config$appDir, "help_analyzer.r"), local = TRUE)$value,
+    
     
     # Impressum
     source(file.path(config$appDir, "impressum_ui.r"), local = TRUE)$value,
