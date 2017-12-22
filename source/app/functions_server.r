@@ -4233,7 +4233,13 @@ check_version <- function(url = "https://rawgit.com/boutroslab/CRISPRAnalyzeR/ma
     {
       # Compare Version Info
       versionfile <- as.numeric(httr::content(versionfile))
-      out <- paste("<span class='text'>Installed Version: <strong>", version , "</strong></span></br><span class='text'>The latest version is <strong>", versionfile ,"</strong></span>", sep="")
+      if(version < versionfile)
+      {
+        out <- paste("<span class='text'>Installed Version: <strong>", version , "</strong></span></br></br><i class='fa fa-exclamation-triangle fa-4x'></i></br><span class='text'>ATTENTION!</br></br>The latest version is <strong>", versionfile ,"</strong></span>", sep="")
+      } else {
+        out <- paste("<span class='text'>Installed Version: <strong>", version , "</strong></span></br><span class='text'>The latest version is <strong>", versionfile ,"</strong></span>", sep="")
+      }
+      
       # Output Version with notice if new version is available
     } else {
       
