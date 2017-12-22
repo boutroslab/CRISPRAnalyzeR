@@ -69,23 +69,27 @@ car.genome <- function(outputdir=NULL, sequencefiles=NULL, databasepath=NULL, or
                            "Anno.Score","Eff.Score","Matchstring","Sequence","Direction","CDS_score",
                            "exon_score","seed_GC","doench_score","xu_score","doench_30_mer")
   
-  if(identical(cp$miaccs$g.convert, TRUE) )
-  {
-    
-    #ecrispresult$design <-
-    sgrnas <- data.frame("design.old" = rownames(cp$readcount),
-                         "design.new" = cp$readcount$design)
-    colnames(sgrnas) <- c("design.old","design.new")
-    #rownames(sgrnas) <- sgrnas$design
-    
-    cp$ecrisp <- merge(x = cp$ecrisp, y = sgrnas, by.x="design", by.y="design.old", all.x = TRUE)
-    cp$ecrisp$design <- cp$ecrisp$design.new
-    cp$ecrisp$design.new <- NULL
-    cp$ecrisp$design.old <- NULL
-    sgrnas <- NULL
-    
-  }
+  # if(identical(cp$miaccs$g.convert, TRUE) )
+  # {
+  #   
+  #   #ecrispresult$design <-
+  #   sgrnas <- data.frame("design.old" = rownames(cp$readcount),
+  #                        "design.new" = cp$readcount$design)
+  #   colnames(sgrnas) <- c("design.old","design.new")
+  #   #rownames(sgrnas) <- sgrnas$design
+  #   
+  #   cp$ecrisp <- merge(x = cp$ecrisp, y = sgrnas, by.x="design", by.y="design.old", all.x = TRUE)
+  #   cp$ecrisp$design <- cp$ecrisp$design.new
+  #   cp$ecrisp$design.new <- NULL
+  #   cp$ecrisp$design.old <- NULL
+  #   sgrnas <- NULL
+  #   
+  # }
   cp$ecrisp <- merge.data.frame(cp$ecrisp, cp$readcount[,c("gene","design")], by.x = "design", by.y="design",all.x = TRUE, all.y=FALSE)
+  # ecrispresult$gene.y <-  NULL
+  # colnames(ecrispresult) <- c("design", "chr","Start", "End", "Gene.targets", "Spec.Score",
+  #                             "Anno.Score","Eff.Score","Matchstring","Sequence","Direction","CDS_score",
+  #                             "exon_score","seed_GC","doench_score","xu_score","doench_30_mer","gene")
   
   #remove missing strand informaiton with *
   cp$ecrisp[cp$ecrisp$Direction == "","Direction"] <- "*"

@@ -187,24 +187,24 @@ if(!exists("ecrispresult"))
                            "Anno.Score","Eff.Score","Matchstring","Sequence","Direction","CDS_score",
                            "exon_score","seed_GC","doench_score","xu_score","doench_30_mer")
  
- ecrispresult <- merge.data.frame(ecrispresult, cp$readcount[,c("gene","design")], by.x = "design", by.y="design",all.x = TRUE, all.y=FALSE)
+ #ecrispresult <- merge.data.frame(ecrispresult, cp$readcount[,c("gene","design")], by.x = "design", by.y="design",all.x = TRUE, all.y=FALSE)
 #print("merged ecrisp")
  
- if(identical(cp$miaccs$g.convert, TRUE) )
- {
-   #ecrispresult$design <-
-   sgrnas <- data.frame("design.old" = rownames(cp$readcount),
-                        "design.new" = cp$readcount$design)
-   colnames(sgrnas) <- c("design.old","design.new")
-   #rownames(sgrnas) <- sgrnas$design
-   
-   ecrispresult <- merge(x = ecrispresult, y = sgrnas, by.x="design", by.y="design.old", all.x = TRUE)
-   ecrispresult$design <- ecrispresult$design.new
-   ecrispresult$design.new <- NULL
-   ecrispresult$design.old <- NULL
-   sgrnas <- NULL
-   
- }
+ # if(identical(cp$miaccs$g.convert, TRUE) )
+ # {
+ #   #ecrispresult$design <-
+ #   sgrnas <- data.frame("design.old" = rownames(cp$readcount),
+ #                        "design.new" = cp$readcount$design)
+ #   colnames(sgrnas) <- c("design.old","design.new")
+ #   #rownames(sgrnas) <- sgrnas$design
+ #   
+ #   ecrispresult <- merge(x = ecrispresult, y = sgrnas, by.x="design", by.y="design.old", all.x = TRUE)
+ #   ecrispresult$design <- ecrispresult$design.new
+ #   ecrispresult$design.new <- NULL
+ #   ecrispresult$design.old <- NULL
+ #   sgrnas <- NULL
+ #   
+ # }
 
  ecrispresult <- merge.data.frame(ecrispresult, cp$readcount[,c("gene","design")], by.x = "design", by.y="design",all.x = TRUE, all.y=FALSE)
 
@@ -228,4 +228,4 @@ if(!exists("ecrispresult"))
 # 
 
  
- }
+}

@@ -41,7 +41,7 @@ tabItem(tabName = "welcome", align = "center",
           
           fluidRow(
                    column(width=4, offset=4,
-                          shiny::tags$h4("Last Update: 2017-11-01 ", shiny::tags$span(class="label label-default", "Version 1.40"))
+                          shiny::tags$h4("Last Update: 2017-12-24 ", shiny::tags$span(class="label label-default", "Version 1.41"))
                           
                           )),
         
