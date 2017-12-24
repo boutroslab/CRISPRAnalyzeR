@@ -866,7 +866,7 @@ observe({
     # add BAGEL and Screenbeam if available
     if(!is.null(results()$screenbeam$info))
     {
-      l_all <- c(l_all, "ScreenBEAM" = as.data.frame(results()$screenbeam$data))
+      l_all <- c(l_all, "ScreenBEAM" = list(as.data.frame(results()$screenbeam$data)))
     }
     
     if(!is.null(results()$bagel$info))
@@ -878,7 +878,7 @@ observe({
         "Essential?" =  results()$bagel$data$BAGEL.Essential,
         stringsAsFactors = FALSE
       )
-      l_all <- c(l_all, "BAGEL" = bageldf)
+      l_all <- c(l_all, "BAGEL" = list(bageldf))
       
       bageldf <- NULL
     }
