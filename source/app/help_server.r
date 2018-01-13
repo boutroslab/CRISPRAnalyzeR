@@ -26,8 +26,10 @@
 observeEvent(input$help_submit, {
   shinyjs::disable("help_submit")
   write(paste(userID, ": clicked on help_submit at", Sys.time()), logFile, append = TRUE)
+  write(paste(userID, ": " , file.path(config$ticketDir, paste(userID,".txt",sep="") )), logFile, append = TRUE)
+  
   out <- input$help_inputForm
-  write(x = out, file = file.path(config$ticketDir, paste(userID,".txt",sep="") ))
+  write(x = out, file = file.path(config$ticketDir, paste(userID,".txt",sep="") ), append = FALSE)
   
   # Send Email
   if(identical(config[["activate.mail"]],TRUE))

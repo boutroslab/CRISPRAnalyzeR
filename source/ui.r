@@ -149,7 +149,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Help", tabName = "help", icon = icon("question"),
            collapsible = TRUE,
            menuSubItem("Tutorials", tabName = "help_tutorials"),
-             menuSubItem("Ask us for help", tabName = "help_ticket"),
+             #menuSubItem("Ask us for help", tabName = "help_ticket"),
              menuSubItem("Forum", tabName = "help_forum")
            ),
   
