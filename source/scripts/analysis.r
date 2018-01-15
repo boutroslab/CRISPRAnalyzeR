@@ -1094,6 +1094,7 @@ write(outInfo, file.path(userDir, "analysis.info"))
 wilcox[["data"]] <- tryFunction(stat.wilcox(normalize = FALSE, controls = cp$miaccs$controls.nontarget, 
   control.picks = cp$miaccs$control.picks, sorting = FALSE, groups = cp$groups.compare, logfile = NULL), "wilcox") #logfile=logFile if logging is used
 
+
 GSE_methodlist <- list("Wilcox" = "wilcox")
 
 ### progress 45%
@@ -1340,6 +1341,9 @@ write(outInfo, file.path(userDir, "analysis.info"))
 
 #### Hit Candidates Overview 
 write(paste(userID, ": creating object hitOverview"), logFile, append = TRUE)
+
+#DEBUG
+save(cp, file = file.path(userDir, "cp.rds"))
 
 saveRDS(wilcox, file = file.path(userDir, "wilcox.rds"))
 saveRDS(deseq, file = file.path(userDir, "deseq.rds"))
