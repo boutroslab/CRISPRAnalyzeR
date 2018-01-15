@@ -322,7 +322,7 @@ local({
   ## sgRNA library
   write(paste(userID, ": reading sgRNA library"), logFile, append = TRUE)
   file.raw <- seqinr::read.fasta(file = libpath, seqtype = "DNA", as.string = TRUE, forceDNAtolower = FALSE,set.attributes = TRUE, legacy.mode = TRUE, seqonly = FALSE, strip.desc = FALSE, bfa = FALSE, apply.mask = TRUE)
-  seqinr::getName(object = file.raw)
+  #seqinr::getName(object = file.raw)
   #file.raw = file.raw[unique(names(file.raw))]
   #names(file.raw) <- lapply( file.raw, function(x) attr(x,"name") )
   cp$libFILE <- data.frame(
@@ -558,13 +558,14 @@ write(paste(userID,": ", length(uniquegenes)), logFile, append = TRUE)
 progress <- 0.09
 outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
 write(outInfo, file.path(userDir, "analysis.info"))
-write(paste(userID, ": Check for Gene level read counts"), logFile, append = TRUE)
+write(paste(userID, ": Check for sgRNAs per Gene"), logFile, append = TRUE)
 
 #write(paste(userID, ": 5 random lines of cp$aggregated.readcount:",  cp$aggregated.readcount[cp$aggregated.readcount$gene %in% sampleaggregated,]), logFile, append = TRUE)
 
 # first we check how many sgRNAs are there for each gene
 test <- cp$readcount %>% dplyr::group_by(gene) %>% dplyr::count(gene)
 test <- test %>% dplyr::filter(n < 2)
+
 
 if(nrow(test) > 0)
 {
@@ -580,8 +581,8 @@ if(nrow(test) > 0)
 
 ### CHECK if readcount is not 0! In this case -> throw error message
 # get colnames apart from design
-
-test <- cp$aggregated.readcount %>% select_(.dots = cp$miaccs$file.names) %>% summarise_all(mean) %>% filter_all(any_vars(. > 1))
+write(paste(userID, ": Check for Gene level read counts"), logFile, append = TRUE)
+test <- cp$aggregated.readcount %>% dplyr::select_(.dots = cp$miaccs$file.names) %>% dplyr::summarise_all(base::mean) %>% dplyr::filter_all(any_vars(. > 1))
 
 if(nrow(test) == 0)
 {
