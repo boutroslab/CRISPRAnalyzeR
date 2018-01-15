@@ -10,10 +10,6 @@
 
 sendmail_car <- function(message, title, from, to, attach=NULL, type){
 
-
-  
- 
-  
   # PROXY?  
   if(!is.null(config[["car.proxy"]]) || config[["car.proxy"]]=="")
   {
@@ -33,10 +29,10 @@ sendmail_car <- function(message, title, from, to, attach=NULL, type){
   # Get auth from JSON file
   if(identical(setproxy,TRUE))
   {
-    httr::with_config(httr::use_proxy(url = proxyhttr, port=as.numeric(proxyhttrport), auth="basic"), gmailr::gmail_auth(secret_file = config[["gmailjson"]], scope = 'compose'))
+    httr::with_config(httr::use_proxy(url = proxyhttr, port=as.numeric(proxyhttrport), auth="basic"), gmailr::gmail_auth(secret_file = file.path(config[["wd"]],config[["gmailjson"]]), scope = 'compose'))
   }
   else {
-    gmailr::gmail_auth(secret_file = config[["gmailjson"]], scope = 'compose')  
+    gmailr::gmail_auth(secret_file = file.path(config[["wd"]],config[["gmailjson"]]), scope = 'compose')  
   }
   
   
@@ -79,10 +75,11 @@ sendmail_car <- function(message, title, from, to, attach=NULL, type){
           gmailr::from(from) %>%
           gmailr::subject(title) %>%
           gmailr::text_body(message)
-        
+        print(attach)
         # Add all attachmants one by one
         for(i in 1:length(attach))
         {
+          print(attach[i])
           email <- gmailr::attach_file(email, filename = attach[i])
         }
           
@@ -106,10 +103,12 @@ sendmail_car <- function(message, title, from, to, attach=NULL, type){
   # Send mail
   if(identical(setproxy,TRUE))
   {
-    httr::with_config(httr::use_proxy(url = proxyhttr, port=as.numeric(proxyhttrport), auth="basic"), gmailr::send_message(email))
+    print("Send mail with proxy")
+    httr::with_config(httr::use_proxy(url = proxyhttr, port=as.numeric(proxyhttrport), auth="basic"), gmailr::send_message(email, type = "multipart"))
   }
   else
   {
+    print("Send mail no proxy")
     gmailr::send_message(email)  
   }
   

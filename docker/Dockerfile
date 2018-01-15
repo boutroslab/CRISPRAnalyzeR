@@ -1,4 +1,4 @@
-FROM rocker/r-ver:3.4.1
+FROM rocker/r-ver:3.4.3
 
 MAINTAINER Jan Winter "jan.winter@dkfz.de"
 
@@ -51,11 +51,17 @@ RUN R -e 'install.packages("devtools", repos = "http://cloud.r-project.org/")'
 # install all the packages we need from cran, bioconductor and github
 
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite()'
+# We have to retrieve thise package as it is not available anymore, but required by some packages
+RUN wget http://www.omegahat.net/XMLRPC/XMLRPC_0.3-0.tar.gz -P /tmp/
+RUN R -e 'install.packages("/tmp/XMLRPC_0.3-0.tar.gz", repos = NULL, type="source")'
+RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("RCytoscape")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("BiocParallel")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("rtracklayer")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("RamiGO")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("BiocGenerics")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("limma")'
+RUN R -e 'devtools::install_version("RMySQL", repos = "http://cloud.r-project.org/")'
+RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("GenomicFeatures")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("Rqc")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("IRanges")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("ShortRead")'
@@ -66,9 +72,9 @@ RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("DESeq2")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("edgeR")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("Gviz")'
 RUN R -e 'source("http://bioconductor.org/biocLite.R");biocLite("STRINGdb")'
-RUN R -e 'devtools::install_version("dplyr", version = "0.7.2", repos = "http://cloud.r-project.org/")'
+RUN R -e 'devtools::install_version("dplyr", version = "0.7.4", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_github("jyyu/ScreenBEAM", ref = "d6204b3")'
-RUN R -e 'devtools::install_version("readr", version = "1.1.1", repos = "http://cloud.r-project.org/")'
+#RUN R -e 'devtools::install_version("readr", version = "1.1.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("shinydashboard", version = "0.5.3", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("jsonlite", version = "1.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("shinyBS", version = "0.61", repos = "http://cloud.r-project.org/")'
@@ -82,23 +88,23 @@ RUN R -e 'devtools::install_version("reshape2", version = "1.4.2", repos = "http
 RUN R -e 'devtools::install_version("MESS", version = "0.4-3", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("igraph", version = "1.0.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("data.table", version = "1.10.4", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_github("jimhester/gmailr", ref = "d5ee3c2")'
+RUN R -e 'devtools::install_github("jimhester/gmailr", ref = "59dac01")'
 RUN R -e 'devtools::install_version("d3heatmap", version = "0.6.1.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("DEoptim", version = "2.2-3", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("httr", version = "1.2.1", repos = "http://cloud.r-project.org/")'
+RUN R -e 'devtools::install_version("httr", version = "1.3.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("sgRSEA", version = "0.1", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("plyr", version = "1.8.4", repos = "http://cloud.r-project.org/")'
+#RUN R -e 'devtools::install_version("plyr", version = "1.8.4", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("VennDiagram", version = "1.6.17", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("tidyverse", version = "1.1.1", repos = "http://cloud.r-project.org/")'
+RUN R -e 'devtools::install_version("tidyverse", version = "1.2.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("htmltools", version = "0.3.6", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("DT", version = "0.2", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("tidyr", version = "0.6.3", repos = "http://cloud.r-project.org/")'
+#RUN R -e 'devtools::install_version("tidyr", version = "0.6.3", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("sm", version = "2.2-5.4", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("shinyjs", version = "0.9.1", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("ggplot2", version = "2.2.1", repos = "http://cloud.r-project.org/")'
+#RUN R -e 'devtools::install_version("ggplot2", version = "2.2.1", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("markdown", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("knitr", version = "1.16", repos = "http://cloud.r-project.org/")'
-RUN R -e 'devtools::install_version("shiny", version = "1.0.4", repos = "http://cloud.r-project.org/")'
+RUN R -e 'devtools::install_version("shiny", version = "1.0.5", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("bookdown", version = "0.4", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("R.utils", version = "2.5.0", repos = "http://cloud.r-project.org/")'
 RUN R -e 'devtools::install_version("shinyWidgets", repos = "http://cloud.r-project.org/")'
@@ -212,7 +218,7 @@ ARG CACHEBUST=1
 
 # install CRISPRAnalyzeR
 RUN mkdir /srv/shiny-server/CRISPRAnalyzeR 
-RUN git clone https://github.com/boutroslab/CRISPRAnalyzeR.git /tmp/CRISPRAnalyzeR
+RUN git clone --depth=1 https://github.com/boutroslab/CRISPRAnalyzeR.git /tmp/CRISPRAnalyzeR
 RUN cp -r /tmp/CRISPRAnalyzeR/source/* /srv/shiny-server/CRISPRAnalyzeR/ 
 
 # Generate Directories
