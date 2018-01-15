@@ -338,10 +338,13 @@ output$analysis_progressBar <- renderUI({
     if(progress_analysis()$progress >= 0.1 && progress_analysis()$progress < 0.4)
     { 
       title = "Performing Screen Quality Calculations"
-    } else if(progress_analysis()$progress >= 0.05 && progress_analysis()$progress < 0.1 )
+    } else if(progress_analysis()$progress >= 0.05 && progress_analysis()$progress < 0.08 )
     {
       title = "Converting Gene Identifiers"
-    } else if(progress_analysis()$progress >= 0.4 && progress_analysis()$progress < 0.45)
+    } else if(progress_analysis()$progress >= 0.08 && progress_analysis()$progress < 0.1 )
+    {
+      title = "Check Gene and sgRNA Readcount for consistency"
+    }  else if(progress_analysis()$progress >= 0.4 && progress_analysis()$progress < 0.45)
     {
       title = "Performing Hit Calculations - Wilcoxon"
     } else if(progress_analysis()$progress >= 0.45 && progress_analysis()$progress < 0.55)

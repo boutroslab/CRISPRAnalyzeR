@@ -555,15 +555,33 @@ write(paste(userID,": ", length(uniquegenes)), logFile, append = TRUE)
 #sampleaggregated <- cp$readcount[sampledraw,"gene"]
 #sampledraw <- NULL
 
+progress <- 0.09
+outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
+write(outInfo, file.path(userDir, "analysis.info"))
 write(paste(userID, ": Check for Gene level read counts"), logFile, append = TRUE)
 
 #write(paste(userID, ": 5 random lines of cp$aggregated.readcount:",  cp$aggregated.readcount[cp$aggregated.readcount$gene %in% sampleaggregated,]), logFile, append = TRUE)
 
+# first we check how many sgRNAs are there for each gene
+test <- cp$readcount %>% dplyr::group_by(gene) %>% dplyr::count(gene)
+test <- test %>% dplyr::filter(n < 2)
+
+if(nrow(test) > 0)
+{
+  write(paste(userID, ": Some genes have only 1 sgRNA"), logFile, append = TRUE)
+  
+  # outInfo <- c(paste("progress", 1, sep = ";"), paste("info", "Mean gene-level read count is 0. Please check the Regular Expressions used, as an alternative you can remove low read counts from the analsys. Please try it again.", sep = ";"))
+  # write(outInfo, file.path(dir, "analysis.info"))
+  # 
+  # write(paste(userID, ": analysis.r quit at", Sys.time()), logFile, append = TRUE)
+  # quit(save = "no", status = 1)
+}
+
+
 ### CHECK if readcount is not 0! In this case -> throw error message
 # get colnames apart from design
 
-test <- cp$aggregated.readcount %>% select_(.dots = cp$miaccs$file.names) %>% summarise_all(mean)
-test <- test %>% filter_all(any_vars(. > 1))
+test <- cp$aggregated.readcount %>% select_(.dots = cp$miaccs$file.names) %>% summarise_all(mean) %>% filter_all(any_vars(. > 1))
 
 if(nrow(test) == 0)
 {
