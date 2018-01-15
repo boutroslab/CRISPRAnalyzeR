@@ -587,7 +587,7 @@ testgenelevelreadcount <- function(df, filenames = cp$miaccs$file.names)
   test <-  df %>% dplyr::select_(.dots = filenames) %>% dplyr::summarise_all(base::mean()) %>% dplyr::filter_all(any_vars(. > 1))
   return(test)
 }
-test <- try(testgenelevelreadcount)#cp$aggregated.readcount %>% dplyr::select_(.dots = cp$miaccs$file.names) %>% dplyr::summarise_all(base::mean) %>% dplyr::filter_all(any_vars(. > 1))
+test <- try(testgenelevelreadcount(df = cp$aggregated.readcount))#cp$aggregated.readcount %>% dplyr::select_(.dots = cp$miaccs$file.names) %>% dplyr::summarise_all(base::mean) %>% dplyr::filter_all(any_vars(. > 1))
 if(class(test) == "try-error")
 {
   outInfo <- c(paste("progress", 1, sep = ";"), paste("info", paste("Error while checking the consistency of gene read count levels.", paste(test[[1]], collapse = " "), sep="</br>"), sep = ";"))
