@@ -1342,8 +1342,6 @@ write(outInfo, file.path(userDir, "analysis.info"))
 #### Hit Candidates Overview 
 write(paste(userID, ": creating object hitOverview"), logFile, append = TRUE)
 
-#DEBUG
-save(cp, file = file.path(userDir, "cp.rds"))
 
 saveRDS(wilcox, file = file.path(userDir, "wilcox.rds"))
 saveRDS(deseq, file = file.path(userDir, "deseq.rds"))

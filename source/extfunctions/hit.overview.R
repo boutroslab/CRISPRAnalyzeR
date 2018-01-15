@@ -156,6 +156,19 @@ hit.overview = function( cutoff.deseq = cp$miaccs$sig.pval.deseq, cutoff.wilcox 
     } else {return(x)}
   })
   
+  df.plot$wilcox.pval <- sapply(df.plot$wilcox.pval, function(x) {
+    if(is.na(x))
+    {
+      return(1)
+    } else {return(x)}
+  })
+  df.plot$wilcox.log2fc <- sapply(df.plot$wilcox.log2fc, function(x) {
+    if(is.na(x))
+    {
+      return(0)
+    } else {return(x)}
+  })
+  
   
   #View(df.plot)
   ## Add color
