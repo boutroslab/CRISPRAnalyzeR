@@ -39,7 +39,8 @@ observeEvent(input$help_submit, {
     text <- paste("New Ticket<br/> for User",userID,"<br/><br/>", out, sep=" ")
     title <- paste("[CRISPRAnalyzeR][ticket]", userID, sep=" ")
     
-    sendmail_car(message = text, title = title, from=NULL, to=NULL, attach=logstoattach, type = "error")
+    sendmail_car(message = text, title = title, from=NULL, to=NULL, attach=NULL, type = "error")
+    #sendmail_car(message = text, title = title, from=NULL, to=NULL, attach=logstoattach, type = "error")
   }
  
   # Disable input form

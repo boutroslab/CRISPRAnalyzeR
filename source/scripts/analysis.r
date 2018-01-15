@@ -578,6 +578,10 @@ if(nrow(test) > 0)
   # quit(save = "no", status = 1)
 }
 
+# DEBUG
+
+save(cp, file = file.path(userDir, "cp.rds"))
+
 
 ### CHECK if readcount is not 0! In this case -> throw error message
 # get colnames apart from design
