@@ -147,7 +147,12 @@ __It is your responsibility to obtain all required licenses in case of commercia
 
 
 ```
-Version 1.40 (latest)
+Version 1.50 (latest)
+- many fixes with mouse libraries
+- improoved speed
+- added new sample data for cell fittnes screen
+
+Version 1.40
 - added new library interface for pre-selection of screens
 - added pre-made library re-evaluation for addgene-provide libraries
 - fixed smaller bugs
