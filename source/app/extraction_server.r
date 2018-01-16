@@ -291,6 +291,9 @@ extractedFiles <- eventReactive(progress_fastq(), {
         
       }
       write(paste(userID, ": check if QC information for NGS files is present"), logFile, append = TRUE)
+      write(paste(userID, ": ", out), logFile, append = TRUE)
+      if("rqc" %in% names(out))
+      {
         if(out[["rqc"]] != "empty")
         {
           write(paste(userID, ": RQC information present"), logFile, append = TRUE)
@@ -303,6 +306,10 @@ extractedFiles <- eventReactive(progress_fastq(), {
           write(paste(userID, ": RQC information NOT present"), logFile, append = TRUE)
           out$rqc <- ""
         }
+      } else {
+        write(paste(userID, ": RQC information NOT present"), logFile, append = TRUE)
+        out$rqc <- ""
+      }
       
       shinyjs::enable("download_readcounts")
       
@@ -361,10 +368,11 @@ extractedFiles <- eventReactive(progress_fastq(), {
           # since mapping was done we have a large FASTQ file, which we want to delte for space purposes.
           # This is not done in case readcount files are uploaded, as wee need them later on.
           command <- "rm"
-          arguments <- file.path(userDir, out$oldpaths[i] ) 
-          system2(command, arguments)
+          arguments <- file.path(userDir, paste(i, ".seqFile", sep="") ) 
+          try(system2(command, arguments))
           
         }
+        write(paste(userID, ": extractedFiles Check Ratio"), logFile, append = TRUE)
         # check extractRatio
         if(file.access(file.path(paste(out$oldpaths[i],"_stats.txt", sep="")), mode = 4) == 0)
         {
@@ -377,6 +385,7 @@ extractedFiles <- eventReactive(progress_fastq(), {
         } else {
           out$extractRatio[[i]] <- NA
         }
+        write(paste(userID, ": extractedFiles Check Mapping"), logFile, append = TRUE)
         
         # check map match
         if(file.access(file.path(paste(out$oldpaths[i],"_map_stats.txt", sep="")), mode = 4) == 0)
@@ -422,6 +431,8 @@ extractedFiles <- eventReactive(progress_fastq(), {
       
       # save to userdir
       saveRDS(object = out, file = file.path(userDir, "extractedFiles.rds"))
+      
+      write(paste(userID, ": extractedFiles saved"), logFile, append = TRUE)
       
       # SAM FILES
       command <- "rm"
