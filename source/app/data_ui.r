@@ -215,7 +215,7 @@ tabItem(tabName = "data", align = "center",
              ),
              
              column(width=6,
-                    HTML('<a class="btn btn-block btn-danger btn-md" href="https://cdn.rawgit.com/boutroslab/CRISPRAnalyzeR/f7e5153d/sampledata/caR_Readcount_sample-data.zip"
+                    HTML('<a class="btn btn-block btn-danger btn-md" href="https://cdn.rawgit.com/boutroslab/CRISPRAnalyzeR/fc2d9b6b/sampledata/caR_Readcount_sample-data.zip"
                          target="_blank"><i class="fa fa-download fa-fw"></i>Read Count Package&nbsp;&nbsp;<span class="badge">0.5 MB</span></a>')
                     ),
              column(width=6,
