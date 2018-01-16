@@ -361,7 +361,7 @@ extractedFiles <- eventReactive(progress_fastq(), {
           # since mapping was done we have a large FASTQ file, which we want to delte for space purposes.
           # This is not done in case readcount files are uploaded, as wee need them later on.
           command <- "rm"
-          arguments <- file.path(userDir, "*.seqFile") 
+          arguments <- file.path(userDir, out$oldpaths[i] ) 
           system2(command, arguments)
           
         }
