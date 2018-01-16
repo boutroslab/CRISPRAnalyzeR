@@ -51,7 +51,7 @@ output$selectedFASTA <- renderUI({
                           )
                    )
     )
-  } else if(input$screeninglibrary == "Example")
+  } else if(input$screeninglibrary %in% c("Example TRAIL Resistance","Example Cell Fitness") )
   {
     # show the link to Addgene and tell the user that pre-defined settings have been loaded
     HTML <- column(width=12,
@@ -98,7 +98,7 @@ observe({
     shinyjs::show("libFile_upload")
     shinyjs::hide("example_data1")
     
-  } else if(input$screeninglibrary == "Example")
+  } else if(input$screeninglibrary  %in% c("Example TRAIL Resistance","Example Cell Fitness") )
   {
     shinyjs::show("example_data1")
     shinyjs::hide("dataUpload_step1a")
