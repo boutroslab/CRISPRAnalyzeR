@@ -547,6 +547,7 @@ indepth_GVIZ_gene_data <- eventReactive(input$indepthOverviewGene, {
       }
       
       if( class(res) == "try-error" ){
+        print("Error in GVIZ Gene Data")
         return(NA)
       } else {
         
@@ -595,7 +596,7 @@ indepth_GVIZ_sgrna_data <- eventReactive(input$indepthOverviewGene, {
       
       #res <- try(sgrna.gviz(genes = input$indepthOverviewGene, database=config$car.bm.database, dataset=annos()$dataset, filter = annos()$IDnew, host="www.ensembl.org", region = 1000, data.only=TRUE, deseq=results()$deseq, readcount = results()$readcount, ecrisp = info()$ecrisp))
       if( class(res) == "try-error" ){
-        
+        print("Error in GVIZ sgRNA Data")
         return(NA)
       } else {
         return(res)
@@ -617,6 +618,8 @@ output$indepth_GVIZ_sgrna <- renderPlot(res = 72, height = 1000, {
     return(Plot_blank("base", msg = config$messages$statusinfo$String))
   }
   res <- indepth_GVIZ_sgrna_data()
+  print("Plotting sgRNA")
+  
   if( is.null(res[["sgrnaTrack"]]) || is.null(res[["dTrack"]]) || is.null(res[["featureTrack"]]) || is.null(res[["motifTrack"]]) ) {
     return(Gviz::plotTracks(c(res[["iTrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]]), from = res[["from"]] , to = res[["to"]] ))
   } else {

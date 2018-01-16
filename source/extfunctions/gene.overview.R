@@ -295,7 +295,6 @@ gene.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens", 
   # plot track and give back dataframe with all results
   return.list <- list("info" = gene.info, "region" = region.info, "iTrack" = itrack, "refTrack" = ref.track , "generegionTrack" = generegiontrack, "biomTrack" = biomTrack, "dTrack" = dtrack, "chromosome" = paste("chr", unique(gene.info$chromosome_name), sep="") )
   
-  
   ## Return
   if(data.only == TRUE)
   {
@@ -355,7 +354,7 @@ sgrna.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens",
         values = unique(genes),
         mart = handling)
   
-  
+    
   ###
   
  
@@ -389,6 +388,7 @@ sgrna.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens",
   #  } 
   #  } )
   # Get log2 FC from deseq$data$genes
+  
   GenomicRanges::elementMetadata(gene.region)$log2fc <- sapply(GenomicRanges::elementMetadata(gene.region)[,1], function(x){
     toreturn = NULL
     toreturn <- deseq$data$genes[deseq$data$genes$genes == as.character(x),"log2FoldChange"]
@@ -425,7 +425,7 @@ sgrna.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens",
                                    stacking = "squish")
       
   #}
-  
+    
   # make sgRNAs 
   sgrnatrack <- NULL
   dtrack <- NULL
@@ -447,7 +447,6 @@ sgrna.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens",
                                                             ignore.strand=TRUE,
                                                             starts.in.df.are.0based=TRUE)
     
-    #print("Add log2FC")
      GenomicRanges::elementMetadata(sgrna.ranges)$log2fc <- sapply(GenomicRanges::elementMetadata(sgrna.ranges)$design, function(x) {
       return(deseq.sgrna[deseq.sgrna$sgRNA == x,"log2FoldChange"])
     })
@@ -465,7 +464,7 @@ sgrna.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens",
     )
     shiny::incProgress(amount = 0.1)
     # log2 FC plot
-    #print("dtrack")
+    
     dtrack <- Gviz::DataTrack(range = sgrna.ranges, chromosome = paste("chr", unique(gene.info$chromosome_name), sep=""),
                               type = c("p","g"),
                               genome = genome,
@@ -482,6 +481,7 @@ sgrna.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens",
                                         mart = ensembl)
     
     #sort
+
     annotate.features <- annotate.features[order(annotate.features$feature_type_name),]
     shiny::incProgress(amount = 0.1)
     featureTrack <- list()
@@ -510,7 +510,6 @@ sgrna.gviz <- function(genes = NULL, database="ensembl", dataset="homo_sapiens",
     ensembl <- biomaRt::useEnsembl(biomart="regulation", dataset=dataset.motif)
     
     ensembl <- biomaRt::useEnsembl(biomart="regulation", dataset=dataset.motif)
-    
     
     motif.features <- biomaRt::getBM(c("binding_matrix_id", "display_label", "score", "feature_type_name","chromosome_start","chromosome_end"),
                                       filters = c("chromosome_name","start","end"),

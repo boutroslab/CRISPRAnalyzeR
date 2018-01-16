@@ -155,21 +155,21 @@ if(info$libSelected %in% info$libsAvailable && info$libSelected != "CUSTOM")
     outInfo <- c(paste("progress", progress, sep = ";"), paste("info", info$info, sep = ";"))
     Write(outInfo, file.path(userDir, "get_info.info"), bAppend = FALSE)
     
-    # if(identical(cp$miaccs$g.convert, TRUE) )
-    # {
-    #   #ecrispresult$design <-
-    #   sgrnas <- data.frame("design.old" = rownames(cp$readcount),
-    #                        "design.new" = cp$readcount$design)
-    #   colnames(sgrnas) <- c("design.old","design.new")
-    #   #rownames(sgrnas) <- sgrnas$design
-    #   
-    #   ecrispresult <- merge(x = ecrispresult, y = sgrnas, by.x="design", by.y="design.old", all.x = TRUE)
-    #   ecrispresult$design <- ecrispresult$design.new
-    #   ecrispresult$design.new <- NULL
-    #   ecrispresult$design.old <- NULL
-    #   sgrnas <- NULL
-    #   
-    # }
+    if(identical(cp$miaccs$g.convert, TRUE) )
+    {
+      #ecrispresult$design <-
+      sgrnas <- data.frame("design.old" = rownames(cp$readcount),
+                           "design.new" = cp$readcount$design)
+      colnames(sgrnas) <- c("design.old","design.new")
+      #rownames(sgrnas) <- sgrnas$design
+
+      ecrispresult <- merge(x = ecrispresult, y = sgrnas, by.x="design", by.y="design.old", all.x = TRUE)
+      ecrispresult$design <- ecrispresult$design.new
+      ecrispresult$design.new <- NULL
+      ecrispresult$design.old <- NULL
+      sgrnas <- NULL
+
+    }
     
     ecrispresult <- merge.data.frame(ecrispresult, cp$readcount[,c("gene","design")], by.x = "design", by.y="design",all.x = TRUE, all.y=FALSE)
     # ecrispresult$gene.y <-  NULL
