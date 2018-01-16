@@ -1,10 +1,16 @@
 Library	Setting	Value
-Example	FASTA	pilotscreen.fasta
-Example	regexFASTA	^(.+?)(_.*)$
-Example	regexFASTQ	ACC(.{20,21})G
-Example	symbol	ensembl_gene_id
-Example	organism	homo_sapiens
-Example	URL	https://github.com/boutroslab/cld
+Example TRAIL Resistance	FASTA	pilotscreen_TRAIL.fasta
+Example TRAIL Resistance	regexFASTA	^(.+?)(_.*)$
+Example TRAIL Resistance	regexFASTQ	ACC(.{20,21})G
+Example TRAIL Resistance	symbol	ensembl_gene_id
+Example TRAIL Resistance	organism	homo_sapiens
+Example TRAIL Resistance	URL	https://github.com/boutroslab/cld
+Example Cell Fitness	FASTA	pilotscreen_Fitness.fasta
+Example Cell Fitness	regexFASTA	^(.+?)(_.*)$
+Example Cell Fitness	regexFASTQ	ACC(.{20,21})G
+Example Cell Fitness	symbol	ensembl_gene_id
+Example Cell Fitness	organism	homo_sapiens
+Example Cell Fitness	URL	https://github.com/boutroslab/cld
 GeckoV2 A+B	FASTA	GeckoV2_HGLib_A-B.fasta
 GeckoV2 A+B	regexFASTA	^(.+?)(_.*)$
 GeckoV2 A+B	regexFASTQ	CACC(.{20})
