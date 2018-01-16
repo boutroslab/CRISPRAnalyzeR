@@ -69,15 +69,20 @@ gene.annotation <- function(genes = NULL, database="ensembl", dataset="homo_sapi
       
       # call biomart in loop
       for(i in 1:length(annotation.list)){
-        handling <- try(biomaRt::useEnsembl(biomart=database, dataset = dataset, host = host, version = NULL, GRCh, mirror = NULL, verbose = FALSE))
+        handling <- try(biomaRt::useEnsembl(biomart = database, dataset = dataset, host = host, version = NULL, GRCh, mirror = NULL, verbose = FALSE))
         #handling <- try(biomaRt::useEnsembl(biomart = database, dataset, host, version = NULL, GRCh, mirror = NULL, verbose = FALSE))
         
         #system2("echo", args = c(getwd(), "-" , print(handling)), stdout = "/tmp/id_geneannotation3")
         
         if(class(handling) == "try-error")
         {
-          #system2("echo", args = c(class(handling)), stdout = "/tmp/id_geneannotation4")
-          stop("biomaRt connection is not working. This can be a connectivity issue (e.g. proxy settings, internet connection) or the biomaRt service is currently not avaible.")}
+          handling <- try(biomaRt::useEnsembl(biomart = "uswest.ensembl.org", dataset = dataset, host = host, version = NULL, GRCh, mirror = NULL, verbose = FALSE))
+          
+          if(class(handling) == "try-error")
+          {
+          stop("biomaRt connection is not working. This can be a connectivity issue (e.g. proxy settings, internet connection) or the biomaRt service is currently not avaible.")
+          }
+        }
         
         # check if filter is in attributes, if not we will add it.
         # also make sure it is unique

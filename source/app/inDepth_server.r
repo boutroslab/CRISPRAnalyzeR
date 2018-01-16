@@ -571,7 +571,7 @@ output$indepth_GVIZ_gene <- renderPlot(res = 72, height = 1000, {
   }
   res <- indepth_GVIZ_gene_data()
   #if(!is.null(res[["itrack"]]))
-  try(Gviz::plotTracks(c(res[["itrack"]], res[["refTrack"]], res[["generegionTrack"]], res[["biomTrack"]], res[["dTrack"]]),  
+  try(Gviz::plotTracks(c(res[["iTrack"]], res[["refTrack"]], res[["generegionTrack"]], res[["biomTrack"]], res[["dTrack"]]),  
                        groupAnnotation = "id", red="darkred", green="grey"))
 })
 
@@ -618,9 +618,9 @@ output$indepth_GVIZ_sgrna <- renderPlot(res = 72, height = 1000, {
   }
   res <- indepth_GVIZ_sgrna_data()
   if( is.null(res[["sgrnaTrack"]]) || is.null(res[["dTrack"]]) || is.null(res[["featureTrack"]]) || is.null(res[["motifTrack"]]) ) {
-    return(Gviz::plotTracks(c(res[["itrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]]), from = res[["from"]] , to = res[["to"]] ))
+    return(Gviz::plotTracks(c(res[["iTrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]]), from = res[["from"]] , to = res[["to"]] ))
   } else {
-    return(Gviz::plotTracks(c(res[["itrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]], res[["sgrnaTrack"]], res[["dTrack"]], res[["featureTrack"]], res[["motifTrack"]]), from = res[["from"]] , to = res[["to"]], chromosome = res[["chromosome"]] ))
+    return(Gviz::plotTracks(c(res[["iTrack"]], res[["generegionTrack"]], res[["refTrack"]], res[["biomTrack"]], res[["sgrnaTrack"]], res[["dTrack"]], res[["featureTrack"]], res[["motifTrack"]]), from = res[["from"]] , to = res[["to"]], chromosome = res[["chromosome"]] ))
   }
 })
 
