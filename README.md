@@ -200,9 +200,9 @@ __Individual Steps__
 3. __Start Docker__ on your machine (e.g. by double clicking on the Docker icon on windows or Mac). 
 	A small docker symbol in the taskbar will tell you that docker is ready.
 	
-5. __Download the [Docker Toolbox](https://www.docker.com/products/docker-toolbox)__ from the docker [website](https://www.docker.com/products/docker-toolbox)
-6. __Install the Docker Toolbox__
-7. __Start Kitematic__, which comes with the docker toolbox
+5. __Download the [Docker Community Edition (CE)](https://www.docker.com/community-edition)__ from the docker [website](https://www.docker.com/)
+6. __Install the Docker COmmunity Edition
+7. __Start Kitematic__, which comes with it, otherwise you can get it [here](https://kitematic.com/)
 8. __Search for CRISPRAnalyzeR__  
 	  
 	![Search for CRISPRAnalyzeR](https://github.com/boutroslab/crispr-analyzer/blob/master/images/CA_kitematic_search.png)  
