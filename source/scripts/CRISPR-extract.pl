@@ -116,6 +116,7 @@ while($inputline = <$readfastq>)
 		# found a read, increase counting
 		$counttotal++;
 	
+		#print "Found a read"."\n";
 	
 		# create read file, as we reached a line with a new readID
 		$fastq{'readID'}=$1;
@@ -130,11 +131,14 @@ while($inputline = <$readfastq>)
       	if($inputline2=~m/$pattern/ )	
 		{ 	
 		
+		#print "found pattern\n";
 			# found the required pattern, count this
 			$countextracted++;
 			
 			$sequenceline = $inputline2;
 			$fastq{'sequence'} = $1;
+		
+		#print $1."\n";
 		
 			$patternlength = length($1);
 		
@@ -155,17 +159,21 @@ while($inputline = <$readfastq>)
 		# check nextline
 		$inputline2 = <$readfastq>;
 		
-		if($inputline2=~m/^\+$/ && $fastq{'seqvalid'}==1 && $fastq{'count'}==2)
+		if($inputline2=~m/^\+.*$/ && $fastq{'seqvalid'}==1 && $fastq{'count'}==2)
 		{
 			# look for the + only to know that next line is QC
 			$fastq{'qcfound'}=1;
 			$fastq{'count'}=3;
+			
+			#print "fuound qc\n";
 		}	
 		# check nextline
+		
+		
 		$inputline2 = <$readfastq>;
 		if ($inputline2=~m/.{2,}/ && $fastq{'seqvalid'}==1 && $fastq{'qcfound'}== 1 && $fastq{'count'}==3)
 			{
-			
+			#print "check nextline\n";
 				$fastq{'valid'}=1;	
 				$fastq{'quality'} = substr($inputline2, $fastq{'stringstart'}, $patternlength);
 			
@@ -177,7 +185,9 @@ while($inputline = <$readfastq>)
 			
 				#write to new fastqfile
 				print $fastqout "@".$fastq{'readID'}."\n".$fastq{'sequence'}."\n+\n".$fastq{'quality'}."\n";
-		
+				
+				#print "@".$fastq{'readID'}."\n".$fastq{'sequence'}."\n+\n".$fastq{'quality'}."\n";
+				
 				## Free space		
 				%fastq=();
 				$fastq{'qcfound'}=0;

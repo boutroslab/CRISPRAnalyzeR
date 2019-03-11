@@ -365,14 +365,14 @@ GGGGGGGEGGGGGGGGGDGGFGGGEEGGFFGGFFCFFF=AFF<CEFFF@EFE
            shiny::tags$h4("Create a FASTQ data quality report"),
            shiny::helpText("By default, CRISPRAnalyzeR generates a FASTQ data quality report, which can take some time.
                            However, you can turn it off in case you are in a hurry."),
-           shinyWidgets::switchInput(inputId = "generateRQC",value = TRUE, onStatus = "success"),
+           shinyWidgets::switchInput(inputId = "generateRQC",value = FALSE, onStatus = "success"),
            
            # Make a fallback switch for FASTQ extraction using PERL
            shiny::tags$br(),
            shiny::tags$hr(width="50%"),
            shiny::tags$h4("Perform FASTQ extraction in fast mode"),
            shiny::helpText("By default, CRISPRAnalyzeR processes FASTQ files using a specialized tool for faster processing. In case you have issues with FASTQ extraction (e.g. all read counts are 0), you can try to disable the fast processing of FASTQ files and revert back to the old method."),
-           shinyWidgets::switchInput(inputId = "RUSTtools",value = TRUE, onStatus = "success")
+           shinyWidgets::switchInput(inputId = "RUSTtools",value = FALSE, onStatus = "success")
            )
       
     )

@@ -147,7 +147,11 @@ __It is your responsibility to obtain all required licenses in case of commercia
 
 
 ```
-Version 1.50 (latest)
+Version 1.51 (latest)
+- fixes regarding FASTQ handling, now supports NCBI type of FASTQ
+- deactivated fast FASTQ handling due to incopatibility
+
+Version 1.50
 - many fixes with mouse libraries
 - improoved speed
 - added new sample data for cell fittnes screen
