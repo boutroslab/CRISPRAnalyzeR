@@ -6,7 +6,11 @@ CRISPRAnalyeR is a web-based, interactive suite for the analysis and documentati
 
 
 ---
+---
 
+** Attention: CRISPRAnalyzeR is currently with limited support.
+
+---
 ---
 
 
